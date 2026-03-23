@@ -1,0 +1,489 @@
+{
+  "identity": {
+    "primary_name": "Bongo Seakhoa",
+    "alternate_names": [
+      "Bongo Kosa"
+    ],
+    "full_name_variants": [
+      "Bongo Bokoa Seakhoa",
+      "Bongo Bokoa Kosa"
+    ],
+    "headline": "Data Scientist, Data Engineer, and Technical Mentor",
+    "location": "Debrecen, Hungary",
+    "availability": "Open to remote, contract, and globally distributed opportunities",
+    "email": "bongokosa@gmail.com",
+    "phone": "+27 73 590 7659",
+    "summary": [
+      "Bongo Seakhoa, also publicly known as Bongo Kosa, is a data scientist and data engineer focused on reliable analytics systems, applied machine learning, and cloud-enabled data workflows.",
+      "His background combines hands-on technical delivery with mentoring and learner support across remote teams. He works across Python, SQL, GCP, AWS, analytics tooling, and technical communication for operators, students, and stakeholders.",
+      "He is currently pursuing a BSc in Engineering Management at the University of Debrecen while continuing to build a public portfolio of cloud, analytics, and machine learning work. He has also completed University of Colorado Boulder coursework via Coursera covering data mining, statistical inference, and probability foundations."
+    ],
+    "identity_note": "Bongo Seakhoa and Bongo Kosa refer to the same professional profile. Seakhoa is the surname used across LinkedIn, Coursera, and GitHub, while Kosa remains an important public-facing surname for discovery and continuity.",
+    "profile_highlights": [
+      "Cloud data engineering and analytics delivery",
+      "Applied machine learning and model deployment",
+      "Technical mentoring, tutoring, and learner support",
+      "Cross-border remote work spanning Africa, Australia, and Europe"
+    ]
+  },
+  "entry_points": [
+    {
+      "slug": "bongo-seakhoa",
+      "display_name": "Bongo Seakhoa",
+      "intro": "If you know me as Bongo Seakhoa, you are in the right place. This is my primary public professional profile name across LinkedIn, Coursera, and GitHub."
+    },
+    {
+      "slug": "bongo-kosa",
+      "display_name": "Bongo Kosa",
+      "intro": "If you know me as Bongo Kosa, you are in the right place. This profile connects directly to the same professional identity also published as Bongo Seakhoa."
+    }
+  ],
+  "links": [
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/bongo-seakhoa/",
+      "icon": "linkedin",
+      "description": "Primary public professional network"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Bongo-Seakhoa",
+      "icon": "github",
+      "description": "Public code portfolio and project work"
+    },
+    {
+      "label": "Coursera",
+      "url": "https://www.coursera.org/user/63159c17757584840fceb411c51c47e7",
+      "icon": "coursera",
+      "description": "Public course and certificate profile"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:bongokosa@gmail.com",
+      "icon": "email",
+      "description": "Direct professional contact"
+    }
+  ],
+  "focus_areas": [
+    {
+      "title": "Cloud Data Engineering",
+      "icon": "cloud",
+      "description": "Builds reliable data flows, improves data quality, and supports decision-making with Python, SQL, and cloud-first tooling."
+    },
+    {
+      "title": "Applied Machine Learning",
+      "icon": "brain",
+      "description": "Works on predictive systems, recommender logic, data preparation, and model-oriented problem solving across structured datasets."
+    },
+    {
+      "title": "Analytics Communication",
+      "icon": "chart",
+      "description": "Translates technical work into practical guidance through tutoring, mentoring, dashboards, and stakeholder-friendly explanations."
+    },
+    {
+      "title": "Continuous Credential Growth",
+      "icon": "badge",
+      "description": "Maintains a broad learning footprint across data science, cloud, analytics, and adjacent cybersecurity foundations."
+    }
+  ],
+  "experience": [
+    {
+      "company": "MetaPOS",
+      "role": "Data Engineering Scientist",
+      "location": "Cape Town, South Africa (Remote)",
+      "dates": "September 2023 - Present",
+      "summary": "Contributes to data engineering work that improves data reliability, operational reporting, and decision support within a retail point-of-sale environment.",
+      "highlights": [
+        "Works with Python, SQL, and data modeling to support data pipelines and analytics workflows.",
+        "Improves accuracy and efficiency in transaction, inventory, and sales-related data processes.",
+        "Collaborates across functions to strengthen data-driven operational decisions."
+      ]
+    },
+    {
+      "company": "2U / edX",
+      "role": "Learning Specialist",
+      "location": "Cape Town, South Africa (Remote)",
+      "dates": "October 2023 - June 2025",
+      "summary": "Supported boot camp learners through technical tutoring, platform guidance, homework assessment, and empathetic remote education delivery.",
+      "highlights": [
+        "Tutored students in Git, GitHub, FinTech, Python, and machine learning topics.",
+        "Answered learner questions on the AskBCS platform and graded work against structured rubrics.",
+        "Helped sustain a supportive learning environment built on clarity, encouragement, and technical precision."
+      ]
+    },
+    {
+      "company": "Blossom Academy",
+      "role": "Superagent Mentor",
+      "location": "Greater Accra Region, Ghana (Remote)",
+      "dates": "November 2024 - Present",
+      "summary": "Mentors emerging talent pursuing paid freelance work and stronger market readiness.",
+      "highlights": [
+        "Guides mentees toward paid freelancing opportunities and stronger positioning.",
+        "Supports professional confidence, direction, and practical momentum."
+      ]
+    },
+    {
+      "company": "1Eight",
+      "role": "Data Analyst Consultant",
+      "location": "New South Wales, Australia (Remote)",
+      "dates": "December 2022 - April 2023",
+      "summary": "Delivered analytical insight and recommendations from complex datasets for client-facing business contexts.",
+      "highlights": [
+        "Used SQL, GCP, Streamlit, visualization, and statistical analysis to interpret business data.",
+        "Turned technical outputs into actionable recommendations for stakeholders."
+      ]
+    },
+    {
+      "company": "Turing.com",
+      "role": "Freelance Data Scientist",
+      "location": "Remote",
+      "dates": "May 2022 - September 2023",
+      "summary": "Delivered freelance analytics and data science work across varied remote projects and client needs.",
+      "highlights": [
+        "Worked across Python, SQL, visualization, and statistical analysis.",
+        "Contributed independently to data-driven solutions across multiple project contexts."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Debrecen",
+      "qualification": "BSc in Engineering Management",
+      "dates": "September 2025 - Present",
+      "location": "Debrecen, Hungary",
+      "details": [
+        "Undergraduate study combining engineering fundamentals with management principles and systems thinking."
+      ]
+    },
+    {
+      "institution": "Explore AI Academy",
+      "qualification": "Data Science Certificate",
+      "dates": "January 2022 - December 2022",
+      "location": "Cape Town, South Africa",
+      "details": [
+        "Completed immersive data science training with an 85 percent result."
+      ]
+    }
+  ],
+  "coursework": [
+    {
+      "title": "Data Science Foundations: Statistical Inference Specialization",
+      "provider": "University of Colorado Boulder via Coursera",
+      "type": "Specialization",
+      "completed": "April 2023",
+      "verify": "2G7446T74FUF",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/2G7446T74FUF",
+      "courses": [
+        "Statistical Inference and Hypothesis Testing in Data Science Applications",
+        "Probability Foundations for Data Science and AI",
+        "Statistical Estimation for Data Science and AI"
+      ]
+    },
+    {
+      "title": "Data Mining Methods",
+      "provider": "University of Colorado Boulder via Coursera",
+      "type": "Course",
+      "completed": "September 2024",
+      "verify": "VNPZ1CY9N14A",
+      "link": "https://www.coursera.org/account/accomplishments/verify/VNPZ1CY9N14A"
+    },
+    {
+      "title": "Data Mining Pipeline",
+      "provider": "University of Colorado Boulder via Coursera",
+      "type": "Course",
+      "completed": "September 2024",
+      "verify": "005QAN5GFNSH",
+      "link": "https://www.coursera.org/account/accomplishments/verify/005QAN5GFNSH"
+    }
+  ],
+  "learning": [
+    {
+      "title": "Visualizing Filters of a CNN using TensorFlow",
+      "provider": "Coursera",
+      "completed": "May 2023",
+      "verify": "P6AQM43T3NYQ",
+      "link": "https://www.coursera.org/account/accomplishments/verify/P6AQM43T3NYQ"
+    },
+    {
+      "title": "Create Your First Python Program From UST",
+      "provider": "Coursera",
+      "completed": "May 2023",
+      "verify": "G5FBWCFX3MTA",
+      "link": "https://www.coursera.org/account/accomplishments/verify/G5FBWCFX3MTA"
+    },
+    {
+      "title": "Google Data Analytics Capstone: Complete a Case Study",
+      "provider": "Google via Coursera",
+      "completed": "June 2022",
+      "verify": "34RF7W8VQR5W",
+      "link": "https://www.coursera.org/account/accomplishments/verify/34RF7W8VQR5W"
+    },
+    {
+      "title": "Data Analysis with R Programming",
+      "provider": "Google via Coursera",
+      "completed": "June 2022",
+      "verify": "7NWCMACYWB9B",
+      "link": "https://www.coursera.org/account/accomplishments/verify/7NWCMACYWB9B"
+    },
+    {
+      "title": "Statistical Estimation for Data Science and AI",
+      "provider": "University of Colorado Boulder via Coursera",
+      "completed": "June 2022",
+      "verify": "9V62MAPPCPV7",
+      "link": "https://www.coursera.org/account/accomplishments/verify/9V62MAPPCPV7"
+    }
+  ],
+  "certifications": [
+    {
+      "title": "Associate Cloud Engineer Certification",
+      "issuer": "Google Cloud",
+      "group": "Current Cloud Credentials",
+      "issued": "1 March 2024",
+      "expires": "1 March 2027",
+      "status": "Active through 1 March 2027",
+      "link": "https://google.accredible.com/7c15d2f5-b56f-4d33-ac87-b1ce19df554a#acc.RXG3jh2b"
+    },
+    {
+      "title": "Cloud Digital Leader Certification",
+      "issuer": "Google Cloud",
+      "group": "Current Cloud Credentials",
+      "issued": "12 January 2024",
+      "expires": "12 January 2027",
+      "status": "Active through 12 January 2027",
+      "link": "https://www.credential.net/8dc139f9-8f18-41f8-a612-82c2bf484ab9"
+    },
+    {
+      "title": "Professional Data Scientist",
+      "issuer": "DataCamp",
+      "group": "Selected Professional Credentials",
+      "issued": "Public credential available",
+      "expires": "",
+      "status": "Professional credential",
+      "link": "https://www.datacamp.com/certificate/DS0013072279282"
+    },
+    {
+      "title": "Advanced Data Science Specialization",
+      "issuer": "IBM via Coursera",
+      "group": "Selected Professional Credentials",
+      "issued": "30 August 2021",
+      "expires": "",
+      "status": "Completed specialization",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/UW5FES76HTZ2"
+    },
+    {
+      "title": "Applied Data Science Lab",
+      "issuer": "WorldQuant University",
+      "group": "Selected Professional Credentials",
+      "issued": "31 December 2022",
+      "expires": "",
+      "status": "Completed program",
+      "link": "https://www.credly.com/badges/cee8a4c6-3f12-4494-9fcc-5a4aef900428/linked_in_profile"
+    },
+    {
+      "title": "IBM Data Science Professional Certificate",
+      "issuer": "IBM via Coursera",
+      "group": "Selected Professional Credentials",
+      "issued": "November 2021",
+      "expires": "",
+      "status": "Professional certificate",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/BTQ2Y428ZNY2"
+    },
+    {
+      "title": "Google Data Analytics Professional Certificate",
+      "issuer": "Google via Coursera",
+      "group": "Selected Professional Credentials",
+      "issued": "June 2022",
+      "expires": "",
+      "status": "Professional certificate",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/SVU7EV58RLF5"
+    },
+    {
+      "title": "IBM Cybersecurity Analyst Professional Certificate",
+      "issuer": "IBM via Coursera",
+      "group": "Selected Professional Credentials",
+      "issued": "July 2020",
+      "expires": "",
+      "status": "Foundational cybersecurity credential",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/BNKNVC75PZGH"
+    },
+    {
+      "title": "Introduction to Data Science Specialization",
+      "issuer": "IBM via Coursera",
+      "group": "Selected Professional Credentials",
+      "issued": "June 2021",
+      "expires": "",
+      "status": "Completed specialization",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/VXE25A69MHC3"
+    },
+    {
+      "title": "IT Fundamentals for Cybersecurity Specialization",
+      "issuer": "IBM via Coursera",
+      "group": "Additional Specializations",
+      "issued": "July 2020",
+      "expires": "",
+      "status": "Completed specialization",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/93AJEBKQ569S"
+    },
+    {
+      "title": "Security Analyst Fundamentals Specialization",
+      "issuer": "IBM via Coursera",
+      "group": "Additional Specializations",
+      "issued": "July 2020",
+      "expires": "",
+      "status": "Completed specialization",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/3HWT8EJPGR2M"
+    },
+    {
+      "title": "AWS Certified Cloud Practitioner",
+      "issuer": "Amazon Web Services",
+      "group": "Credential History",
+      "issued": "7 November 2021",
+      "expires": "7 November 2024",
+      "status": "Historical credential valid through 7 November 2024",
+      "link": "https://www.credly.com/badges/2be3992d-c0d5-4850-873e-d743bfaa53ae?source=linked_in_profile"
+    }
+  ],
+  "projects": [
+    {
+      "title": "FxPM 1.4 - Forex Portfolio Manager",
+      "type": "Full-stack trading platform",
+      "description": "Optimized forex portfolio management system with a Python backend, JavaScript frontend, and integrated analytics dashboard. Manages live signal trading workflows, position tracking, and risk controls.",
+      "tech": [
+        "Python",
+        "JavaScript",
+        "HTML/CSS",
+        "Trading Systems"
+      ],
+      "link": "https://github.com/Bongo-Seakhoa/FxPM-1.4---Obtimized"
+    },
+    {
+      "title": "MQL5 Expert Advisor",
+      "type": "Algorithmic trading (community project)",
+      "description": "Community-driven expert advisor for automated forex trading on the MetaTrader 5 platform. Open-source collaboration for strategy development and backtesting.",
+      "tech": [
+        "MQL5",
+        "Jupyter",
+        "Algorithmic Trading",
+        "MT5"
+      ],
+      "link": "https://github.com/Bongo-Seakhoa/mql5_ea"
+    },
+    {
+      "title": "FxPM Backtester",
+      "type": "Quantitative analysis tool",
+      "description": "Backtesting engine built to validate forex trading strategies against historical data before live deployment in the FxPM portfolio manager.",
+      "tech": [
+        "Python",
+        "Data Analysis",
+        "Backtesting"
+      ],
+      "link": "https://github.com/Bongo-Seakhoa/FxPM-backtester"
+    },
+    {
+      "title": "Institutional LS/SR Trading EA",
+      "type": "Advanced trading system",
+      "description": "Expert advisor simulating institutional-level trading logic with liquidity sweep and supply/demand zone detection for MetaTrader platforms.",
+      "tech": [
+        "MQL5",
+        "MQL4",
+        "Institutional Trading"
+      ],
+      "link": "https://github.com/Bongo-Seakhoa/insti_LS_SR"
+    },
+    {
+      "title": "MetaPOS App Data Management",
+      "type": "Professional contribution",
+      "description": "Supported retail point-of-sale data management work aimed at improving transaction flow, inventory visibility, sales reporting, and data accuracy.",
+      "tech": [
+        "GCP",
+        "Python",
+        "SQL"
+      ],
+      "link": "https://metapos.co.za/"
+    },
+    {
+      "title": "Streamlit-Based Recommender System",
+      "type": "Applied machine learning project",
+      "description": "Collaborative and content-based filtering recommender system with a Streamlit web interface for interactive exploration and AWS deployment.",
+      "tech": [
+        "Python",
+        "SQL",
+        "Streamlit",
+        "AWS"
+      ],
+      "link": "https://github.com/JS6-World/unsupervised-predict-streamlit-template"
+    },
+    {
+      "title": "Regression Predict API",
+      "type": "Model deployment",
+      "description": "Flask-based REST API serving a trained regression model for energy load shortfall prediction, demonstrating end-to-end ML deployment.",
+      "tech": [
+        "Python",
+        "Flask",
+        "API Design",
+        "Model Serving"
+      ],
+      "link": "https://github.com/Bongo-Seakhoa/load-shortfall-regression-predict-api"
+    },
+    {
+      "title": "OpenAI Trader Experiment",
+      "type": "AI-powered trading research",
+      "description": "Experimental integration of OpenAI language models with trading strategy logic to explore AI-assisted market analysis and decision support.",
+      "tech": [
+        "Python",
+        "OpenAI API",
+        "Jupyter",
+        "Trading"
+      ],
+      "link": "https://github.com/Bongo-Seakhoa/Open_ai_trader_test"
+    },
+    {
+      "title": "Visualizing Filters of a CNN",
+      "type": "Deep learning exploration",
+      "description": "Convolutional filter visualization with TensorFlow and VGG16 to interpret learned image features and understand deep network internals.",
+      "tech": [
+        "TensorFlow",
+        "Deep Learning",
+        "Computer Vision"
+      ],
+      "link": "https://github.com/Bongo-Seakhoa/Visualizing_Filters_CNN"
+    },
+    {
+      "title": "AirQo Environmental Data Exploration",
+      "type": "Notebook-based analysis",
+      "description": "Air-quality and environmental data analysis notebook exploring sensor data patterns, anomaly detection, and data storytelling.",
+      "tech": [
+        "Jupyter",
+        "Data Analysis",
+        "Visualization"
+      ],
+      "link": "https://github.com/Bongo-Seakhoa/AirQo"
+    }
+  ],
+  "resume": {
+    "tagline": "Professional resume generated from the same structured profile data that powers the site.",
+    "identity_line": "Generated as matched surname variants for both Bongo Seakhoa and Bongo Kosa"
+  },
+  "seo": {
+    "site_title": "Bongo Seakhoa | Bongo Kosa | Professional Profile",
+    "site_description": "Professional identity hub for Bongo Seakhoa, also known publicly as Bongo Kosa. Data science, data engineering, credentials, portfolio, resume, and GitHub Pages profile."
+  },
+  "sources": [
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/bongo-seakhoa/"
+    },
+    {
+      "label": "Coursera",
+      "url": "https://www.coursera.org/user/63159c17757584840fceb411c51c47e7"
+    },
+    {
+      "label": "Old Portfolio",
+      "url": "https://bongokosa.wixsite.com/website"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Bongo-Seakhoa"
+    }
+  ]
+}

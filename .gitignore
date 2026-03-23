@@ -1,0 +1,7 @@
+/__pycache__/
+*.pyc
+Thumbs.db
+.DS_Store
+/.claude/
+/source/private/*
+!/source/private/.gitkeep
