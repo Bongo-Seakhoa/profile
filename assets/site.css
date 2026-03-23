@@ -1260,6 +1260,47 @@ img {
   line-height: 1.45;
 }
 
+.resume-item a,
+.resume-mini-item a,
+.resume-contact a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.resume-item a:hover,
+.resume-item a:focus-visible,
+.resume-mini-item a:hover,
+.resume-mini-item a:focus-visible,
+.resume-contact a:hover,
+.resume-contact a:focus-visible {
+  color: #1a6b5a;
+}
+
+.skill-group strong {
+  letter-spacing: 0.01em;
+}
+
+.skill-group span {
+  line-height: 1.55;
+}
+
+.resume-subsection + .resume-subsection {
+  margin-top: 1rem;
+}
+
+.resume-subsection h3 {
+  margin: 0 0 0.5rem;
+  color: #1a6b5a;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cv-page .resume-document {
+  max-width: 72rem;
+}
+
 /* ===================================================================
    404 Page
    =================================================================== */
@@ -1471,7 +1512,7 @@ img {
 
 /* ===================================================================
    Print Styles (for PDF generation + browser print)
-   Target: 1-2 page resume PDF
+   Target: ATS-friendly resume/CV PDF output
    =================================================================== */
 @media print {
   @page {
@@ -1685,6 +1726,16 @@ img {
 
   .resume-section {
     break-inside: auto;
+  }
+
+  .resume-subsection + .resume-subsection {
+    margin-top: 0.35rem;
+  }
+
+  .resume-subsection h3 {
+    margin: 0.2rem 0 0.15rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
   }
 
   a {

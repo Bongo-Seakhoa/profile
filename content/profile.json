@@ -86,6 +86,28 @@
       "description": "Maintains a broad learning footprint across data science, cloud, analytics, and adjacent cybersecurity foundations."
     }
   ],
+  "skill_groups": [
+    {
+      "label": "Languages",
+      "items": ["Python", "SQL", "R"]
+    },
+    {
+      "label": "Data & ML",
+      "items": ["Pandas", "NumPy", "SciPy", "Scikit-learn", "TensorFlow", "PyTorch", "Apache Spark"]
+    },
+    {
+      "label": "Cloud & Delivery",
+      "items": ["Google Cloud Platform", "AWS", "Docker", "Git", "GitHub", "Streamlit", "Flask"]
+    },
+    {
+      "label": "Analytics & BI",
+      "items": ["Tableau", "Power BI", "Looker", "Matplotlib", "Seaborn", "Plotly"]
+    },
+    {
+      "label": "Databases",
+      "items": ["PostgreSQL", "MySQL", "MongoDB", "SQLite", "Oracle", "Microsoft SQL Server", "Amazon RDS"]
+    }
+  ],
   "experience": [
     {
       "company": "MetaPOS",
@@ -461,8 +483,8 @@
     }
   ],
   "resume": {
-    "tagline": "Professional resume generated from the same structured profile data that powers the site.",
-    "identity_line": "Generated as matched surname variants for both Bongo Seakhoa and Bongo Kosa"
+    "tagline": "Professional resume and CV documents generated from the same structured profile data that powers the site.",
+    "identity_line": "Generated as matched surname variants for both Bongo Seakhoa and Bongo Kosa, with the same underlying professional record."
   },
   "seo": {
     "site_title": "Bongo Seakhoa | Bongo Kosa | Professional Profile",

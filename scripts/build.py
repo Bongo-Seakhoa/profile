@@ -66,6 +66,18 @@ def resume_page_href(entry: dict[str, str], prefix: str = "") -> str:
     return f"{prefix}resume/{entry['slug']}/"
 
 
+def cv_pdf_name(entry: dict[str, str]) -> str:
+    return f"{entry['slug']}-cv.pdf"
+
+
+def cv_pdf_href(entry: dict[str, str], prefix: str = "") -> str:
+    return f"{prefix}assets/files/{cv_pdf_name(entry)}"
+
+
+def cv_page_href(entry: dict[str, str], prefix: str = "") -> str:
+    return f"{prefix}resume/cv/{entry['slug']}/"
+
+
 # --- SVG icons for focus areas ---
 FOCUS_ICONS = {
     "cloud": '<svg viewBox="0 0 24 24"><path d="M6.5 20a4.5 4.5 0 0 1-.42-8.98A7 7 0 0 1 19.5 10h.5a3.5 3.5 0 0 1 0 7H18"/><path d="M6.5 17h11"/></svg>',
@@ -343,31 +355,43 @@ def select_items_by_title(
 
 
 def render_resume_summary(display_name: str) -> str:
-    other_name = other_public_name(display_name)
     return (
-        f"{display_name}, also publicly known as {other_name}, is a data scientist and "
-        "data engineer focused on cloud data workflows, applied machine learning, analytics "
-        "delivery, and technical mentoring for distributed teams. Recent work spans data "
-        "engineering, analytics consulting, learner support, and mentoring, alongside ongoing "
-        "BSc study in Engineering Management at the University of Debrecen and completed "
-        "University of Colorado Boulder coursework via Coursera."
+        f"{display_name} is a data scientist and data engineer with remote experience across "
+        "production data workflows, analytics consulting, applied machine learning, and "
+        "technical learner support. He works across Python, SQL, Google Cloud, AWS, and "
+        "stakeholder-facing analytics, while completing a BSc in Engineering Management at the "
+        "University of Debrecen and maintaining current Google Cloud certifications."
     )
 
 
 def select_resume_experience() -> list[dict[str, str]]:
-    return DATA["experience"][:4]
+    preferred_companies = ["MetaPOS", "2U / edX", "Turing.com", "1Eight"]
+    selected = []
+    for company in preferred_companies:
+        item = next(
+            (experience for experience in DATA["experience"] if experience["company"] == company),
+            None,
+        )
+        if item:
+            selected.append(item)
+    return selected
 
 
 def resume_highlights_for(index: int, item: dict[str, str]) -> list[str]:
-    return item["highlights"][:1]
+    extra_bullets = {0: 2, 1: 2, 2: 1, 3: 1}.get(index, 1)
+    return [item["summary"], *item["highlights"][:extra_bullets]]
+
+
+def cv_highlights_for(item: dict[str, str]) -> list[str]:
+    return [item["summary"], *item["highlights"]]
 
 
 def select_resume_credentials() -> list[dict[str, str]]:
     preferred_titles = [
         "Associate Cloud Engineer Certification",
         "Cloud Digital Leader Certification",
+        "Professional Data Scientist",
         "IBM Data Science Professional Certificate",
-        "Google Data Analytics Professional Certificate",
     ]
     return select_items_by_title(DATA["certifications"], preferred_titles, 4)
 
@@ -381,14 +405,102 @@ def select_resume_projects() -> list[dict[str, str]]:
     return select_items_by_title(DATA["projects"], preferred_titles, 3)
 
 
-def render_resume_variant_switcher(prefix: str, current_slug: str) -> str:
+def render_document_variant_switcher(
+    prefix: str, current_slug: str, current_kind: str
+) -> str:
     links = []
     for entry in DATA["entry_points"]:
+        href = resume_page_href(entry, prefix) if current_kind == "resume" else cv_page_href(entry, prefix)
         class_name = "resume-switch is-current" if entry["slug"] == current_slug else "resume-switch"
         links.append(
-            f'<a class="{class_name}" href="{h(resume_page_href(entry, prefix))}">{h(entry["display_name"])}</a>'
+            f'<a class="{class_name}" href="{h(href)}">{h(entry["display_name"])}</a>'
         )
     return "".join(links)
+
+
+def render_document_kind_switcher(
+    entry: dict[str, str], prefix: str, current_kind: str
+) -> str:
+    kinds = [
+        ("resume", "Resume", resume_page_href(entry, prefix)),
+        ("cv", "CV", cv_page_href(entry, prefix)),
+    ]
+    links = []
+    for kind, label, href in kinds:
+        class_name = "resume-switch is-current" if kind == current_kind else "resume-switch"
+        links.append(f'<a class="{class_name}" href="{h(href)}">{h(label)}</a>')
+    return "".join(links)
+
+
+def render_skill_groups(compact: bool = False) -> str:
+    cards = []
+    class_name = "resume-mini-item skill-group compact" if compact else "resume-mini-item skill-group"
+    for group in DATA.get("skill_groups", []):
+        items = ", ".join(group["items"])
+        cards.append(
+            f"""
+            <div class="{class_name}">
+              <strong>{h(group["label"])}</strong>
+              <span>{h(items)}</span>
+            </div>
+            """
+        )
+    return "".join(cards)
+
+
+def render_cv_summary(display_name: str) -> str:
+    return (
+        f"{display_name} is a data scientist, data engineer, and technical mentor with remote "
+        "experience spanning production data workflows, analytics consulting, machine-learning "
+        "delivery, and learner support. His work combines Python, SQL, cloud platforms, and "
+        "clear stakeholder communication across commercial, educational, and mentoring contexts, "
+        "alongside ongoing BSc study in Engineering Management at the University of Debrecen and "
+        "completed University of Colorado Boulder coursework via Coursera."
+    )
+
+
+def select_cv_projects() -> list[dict[str, str]]:
+    preferred_titles = [
+        "MetaPOS App Data Management",
+        "FxPM 1.4 - Forex Portfolio Manager",
+        "MQL5 Expert Advisor",
+        "Streamlit-Based Recommender System",
+        "Regression Predict API",
+        "OpenAI Trader Experiment",
+    ]
+    return select_items_by_title(DATA["projects"], preferred_titles, 6)
+
+
+def render_coursework_item(item: dict[str, str], *, show_courses: bool) -> str:
+    extra_lines = []
+    if show_courses and item.get("courses"):
+        extra_lines.append(
+            f'<span>{"; ".join(h(course) for course in item["courses"])}</span>'
+        )
+    title = h(item["title"])
+    if item.get("link"):
+        title = (
+            f'<a href="{h(item["link"])}"{external_attrs(item["link"])}>{h(item["title"])}</a>'
+        )
+    return f"""
+    <div class="resume-mini-item">
+      <strong>{title}</strong>
+      <span>{h(item["provider"])} | {h(item["completed"])}</span>
+      {''.join(extra_lines)}
+    </div>
+    """
+
+
+def render_learning_item(item: dict[str, str]) -> str:
+    title = h(item["title"])
+    if item.get("link"):
+        title = f'<a href="{h(item["link"])}"{external_attrs(item["link"])}>{h(item["title"])}</a>'
+    return f"""
+    <div class="resume-mini-item">
+      <strong>{title}</strong>
+      <span>{h(item["provider"])} | {h(item["completed"])}</span>
+    </div>
+    """
 
 
 def person_schema(display_name: str) -> str:
@@ -505,7 +617,7 @@ def render_footer(prefix: str) -> str:
           <p>{h(DATA["identity"]["identity_note"])}</p>
         </div>
         <div class="footer-links">
-          <a href="{h(prefix + 'resume/')}">Resume</a>
+          <a href="{h(prefix + 'resume/')}">Resume & CV</a>
           <a href="{h(prefix + 'bongo-seakhoa/')}">Bongo Seakhoa</a>
           <a href="{h(prefix + 'bongo-kosa/')}">Bongo Kosa</a>
         </div>
@@ -529,7 +641,7 @@ def render_hub_page() -> str:
             <h1>One professional identity, two public surnames.</h1>
             <p class="lead">This profile hub makes it easy to find the right public entry point whether you know me as <strong>Bongo Seakhoa</strong> or <strong>Bongo Kosa</strong>.</p>
             <div class="button-row">
-              {render_button('Choose Resume Variant', resume_selector_href, 'primary')}
+              {render_button('Open Resume & CV', resume_selector_href, 'primary')}
               {render_button('Contact by Email', 'mailto:' + identity['email'], 'secondary')}
             </div>
             <ul class="highlight-list">
@@ -657,13 +769,13 @@ def render_hub_page() -> str:
         <div class="shell">
           <div class="cta-panel">
             <div>
-              <p class="eyebrow">Resume</p>
-              <h2>Open the resume that matches the surname your visitor knows</h2>
+              <p class="eyebrow">Documents</p>
+              <h2>Open the resume or CV that matches the surname your visitor knows</h2>
               <p>{h(DATA["resume"]["tagline"])}</p>
             </div>
             <div class="button-row">
-              {render_button('Open Resume Options', resume_selector_href, 'secondary')}
-              {render_button('Download Primary PDF', primary_resume_pdf, 'primary')}
+              {render_button('Open Document Hub', resume_selector_href, 'secondary')}
+              {render_button('Download Primary Resume PDF', primary_resume_pdf, 'primary')}
             </div>
           </div>
         </div>
@@ -697,6 +809,8 @@ def render_alias_page(entry: dict[str, str]) -> str:
     prefix = "../"
     resume_page = resume_page_href(entry, prefix)
     resume_pdf = resume_pdf_href(entry, prefix)
+    cv_page = cv_page_href(entry, prefix)
+    cv_pdf = cv_pdf_href(entry, prefix)
     is_primary = entry["display_name"] == DATA["identity"]["primary_name"]
     complementary = (
         DATA["identity"]["alternate_names"][0]
@@ -714,8 +828,8 @@ def render_alias_page(entry: dict[str, str]) -> str:
             <p class="lead">{h(DATA["identity"]["headline"])}</p>
             <p>{h(entry["intro"])}</p>
             <div class="button-row">
-              {render_button('Open Resume Page', resume_page, 'secondary')}
-              {render_button('Download Resume PDF', resume_pdf, 'primary')}
+              {render_button('Open Resume', resume_page, 'secondary')}
+              {render_button('Open CV', cv_page, 'secondary')}
               {render_button('View Hub Home', '../index.html', 'secondary')}
             </div>
           </div>
@@ -806,13 +920,13 @@ def render_alias_page(entry: dict[str, str]) -> str:
         <div class="shell">
           <div class="cta-panel">
             <div>
-              <p class="eyebrow">Resume Access</p>
+              <p class="eyebrow">Documents</p>
               <h2>Need a downloadable version?</h2>
               <p>{h(DATA["resume"]["identity_line"])}</p>
             </div>
             <div class="button-row">
-              {render_button('Open Resume Page', resume_page, 'secondary')}
-              {render_button('Download PDF Resume', resume_pdf, 'primary')}
+              {render_button('Download Resume PDF', resume_pdf, 'primary')}
+              {render_button('Download CV PDF', cv_pdf, 'secondary')}
             </div>
           </div>
         </div>
@@ -848,12 +962,14 @@ def render_resume_selector_page() -> str:
         cards.append(
             f"""
             <article class="entry-card">
-              <p class="entry-kicker">Resume Variant</p>
+              <p class="entry-kicker">Document Suite</p>
                 <h3>{h(entry["display_name"])}</h3>
-              <p>Open or download the resume version that matches this public surname. The profile content stays aligned across both variants.</p>
+              <p>Choose the HTML or PDF version that matches this public surname. The professional record stays aligned across both surname variants.</p>
               <div class="button-row">
                 {render_button('Open Resume', resume_page_href(entry, '../'), 'secondary')}
-                {render_button('Download PDF', resume_pdf_href(entry, '../'), 'primary')}
+                {render_button('Resume PDF', resume_pdf_href(entry, '../'), 'primary')}
+                {render_button('Open CV', cv_page_href(entry, '../'), 'secondary')}
+                {render_button('CV PDF', cv_pdf_href(entry, '../'), 'primary')}
               </div>
             </article>
             """
@@ -864,9 +980,9 @@ def render_resume_selector_page() -> str:
       <section class="hero">
         <div class="shell">
           <div class="hero-copy reveal">
-            <p class="eyebrow">Resume Options</p>
-            <h1>Choose the surname version you want to open or download.</h1>
-            <p class="lead">Both resume variants describe the same professional background, experience, qualifications, and projects. The displayed surname is the only intentional change.</p>
+            <p class="eyebrow">Resume & CV</p>
+            <h1>Choose the surname version and document type you want to open or download.</h1>
+            <p class="lead">Both surname variants describe the same professional background, experience, qualifications, and projects. The displayed surname is the only intentional change between them.</p>
             <div class="button-row">
               {render_button('Back to Profile Hub', '../index.html', 'secondary')}
             </div>
@@ -880,8 +996,8 @@ def render_resume_selector_page() -> str:
     {render_footer('../')}
     """
     return page_shell(
-        title="Resume Variants | Bongo Seakhoa | Bongo Kosa",
-        description="Choose the surname-matched resume variant for Bongo Seakhoa or Bongo Kosa.",
+        title="Resume & CV | Bongo Seakhoa | Bongo Kosa",
+        description="Choose the surname-matched resume or CV variant for Bongo Seakhoa or Bongo Kosa.",
         prefix="../",
         page_class="profile-page",
         body=body,
@@ -892,9 +1008,7 @@ def render_resume_selector_page() -> str:
 def render_resume_variant_page(entry: dict[str, str]) -> str:
     prefix = "../../"
     display_name = entry["display_name"]
-    other_name = other_public_name(display_name)
     pdf_href = resume_pdf_href(entry, prefix)
-    resume_page = resume_page_href(entry, prefix)
     experience_html = []
     for index, item in enumerate(select_resume_experience()):
         bullets = "".join(
@@ -937,24 +1051,17 @@ def render_resume_variant_page(entry: dict[str, str]) -> str:
             """
         )
 
-    coursework_html = []
-    for item in DATA.get("coursework", []):
-        coursework_html.append(
-            f"""
-            <div class="resume-mini-item">
-              <strong>{h(item["title"])}</strong>
-              <span>{h(item["provider"])}</span>
-              <span>{h(item["completed"])}</span>
-            </div>
-            """
-        )
+    coursework_html = [render_coursework_item(item, show_courses=False) for item in DATA.get("coursework", [])]
 
     credential_html = []
     for item in select_resume_credentials():
+        title = h(item["title"])
+        if item.get("link"):
+            title = f'<a href="{h(item["link"])}"{external_attrs(item["link"])}>{h(item["title"])}</a>'
         credential_html.append(
             f"""
             <div class="resume-mini-item">
-              <strong>{h(item["title"])}</strong>
+              <strong>{title}</strong>
               <span>{h(item["issuer"])} | {h(item["status"])}</span>
             </div>
             """
@@ -962,16 +1069,20 @@ def render_resume_variant_page(entry: dict[str, str]) -> str:
 
     project_html = []
     for item in select_resume_projects():
+        title = h(item["title"])
+        if item.get("link"):
+            title = f'<a href="{h(item["link"])}"{external_attrs(item["link"])}>{h(item["title"])}</a>'
         project_html.append(
             f"""
             <article class="resume-item compact">
               <div class="resume-item-heading">
                 <div>
-                  <h3>{h(item["title"])}</h3>
+                  <h3>{title}</h3>
                   <p>{h(item["type"])}</p>
                 </div>
               </div>
               <p>{h(item["description"])}</p>
+              <p><strong>Tech:</strong> {h(", ".join(item["tech"]))}</p>
             </article>
             """
         )
@@ -983,7 +1094,10 @@ def render_resume_variant_page(entry: dict[str, str]) -> str:
           <a class="resume-back" href="../../index.html">Back to profile hub</a>
           <div class="resume-toolbar-actions">
             <div class="resume-switcher">
-              {render_resume_variant_switcher(prefix, entry["slug"])}
+              {render_document_variant_switcher(prefix, entry["slug"], 'resume')}
+            </div>
+            <div class="resume-switcher">
+              {render_document_kind_switcher(entry, prefix, 'resume')}
             </div>
             {render_button('Resume Options', '../', 'secondary')}
             {render_button('Download PDF', pdf_href, 'primary')}
@@ -999,7 +1113,7 @@ def render_resume_variant_page(entry: dict[str, str]) -> str:
               <h1 class="resume-document-name">{h(display_name)}</h1>
               <p class="resume-document-title">{h(DATA["identity"]["headline"])}</p>
             </div>
-            <p class="resume-document-note">Same professional profile also published as {h(other_name)}.</p>
+            <p class="resume-document-note">{h(DATA["identity"]["availability"])}</p>
           </header>
 
           <div class="resume-contact">
@@ -1008,18 +1122,17 @@ def render_resume_variant_page(entry: dict[str, str]) -> str:
             <span>{h(DATA["identity"]["phone"])}</span>
             <a href="https://www.linkedin.com/in/bongo-seakhoa/" target="_blank" rel="noreferrer">linkedin.com/in/bongo-seakhoa</a>
             <a href="https://github.com/Bongo-Seakhoa" target="_blank" rel="noreferrer">github.com/Bongo-Seakhoa</a>
-            <a href="{resume_page}" class="resume-self-link no-print">open web resume</a>
           </div>
 
           <section class="resume-section">
-            <h2>Profile</h2>
+            <h2>Professional Summary</h2>
             <p>{h(render_resume_summary(display_name))}</p>
           </section>
 
           <section class="resume-section">
-            <h2>Core Strengths</h2>
-            <div class="tag-row">
-              {"".join(f'<span class="tag">{h(item)}</span>' for item in DATA["identity"]["profile_highlights"])}
+            <h2>Technical Toolkit</h2>
+            <div class="resume-mini-list resume-credentials-grid">
+              {render_skill_groups(compact=True)}
             </div>
           </section>
 
@@ -1045,7 +1158,7 @@ def render_resume_variant_page(entry: dict[str, str]) -> str:
           </section>
 
           <section class="resume-section" id="coursework">
-            <h2>UC Boulder Coursework via Coursera</h2>
+            <h2>Selected Coursework</h2>
             <div class="resume-mini-list">
               {"".join(coursework_html)}
             </div>
@@ -1066,6 +1179,214 @@ def render_resume_variant_page(entry: dict[str, str]) -> str:
         description=f"Professional resume for {display_name}.",
         prefix=prefix,
         page_class="resume-page",
+        body=body,
+        display_name=display_name,
+        include_effects=False,
+        include_script=False,
+    )
+
+
+def render_cv_variant_page(entry: dict[str, str]) -> str:
+    prefix = "../../../"
+    display_name = entry["display_name"]
+    pdf_href = cv_pdf_href(entry, prefix)
+    experience_html = []
+    for item in DATA["experience"]:
+        bullets = "".join(f"<li>{h(line)}</li>" for line in cv_highlights_for(item))
+        experience_html.append(
+            f"""
+            <article class="resume-item">
+              <div class="resume-item-heading">
+                <div>
+                  <h3>{h(item["role"])} | {h(item["company"])}</h3>
+                  <p>{h(item["location"])}</p>
+                </div>
+                <span>{h(item["dates"])}</span>
+              </div>
+              <ul class="clean-list">
+                {bullets}
+              </ul>
+            </article>
+            """
+        )
+
+    education_html = []
+    for item in DATA["education"]:
+        details = "".join(f"<li>{h(line)}</li>" for line in item["details"])
+        education_html.append(
+            f"""
+            <article class="resume-item compact">
+              <div class="resume-item-heading">
+                <div>
+                  <h3>{h(item["qualification"])}</h3>
+                  <p>{h(item["institution"])} | {h(item["location"])}</p>
+                </div>
+                <span>{h(item["dates"])}</span>
+              </div>
+              <ul class="clean-list">
+                {details}
+              </ul>
+            </article>
+            """
+        )
+
+    coursework_html = [
+        render_coursework_item(item, show_courses=True) for item in DATA.get("coursework", [])
+    ]
+    learning_html = [render_learning_item(item) for item in DATA.get("learning", [])]
+
+    project_html = []
+    for item in select_cv_projects():
+        title = h(item["title"])
+        if item.get("link"):
+            title = f'<a href="{h(item["link"])}"{external_attrs(item["link"])}>{h(item["title"])}</a>'
+        project_html.append(
+            f"""
+            <article class="resume-item compact">
+              <div class="resume-item-heading">
+                <div>
+                  <h3>{title}</h3>
+                  <p>{h(item["type"])}</p>
+                </div>
+              </div>
+              <p>{h(item["description"])}</p>
+              <p><strong>Tech:</strong> {h(", ".join(item["tech"]))}</p>
+            </article>
+            """
+        )
+
+    grouped_credentials: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for item in DATA["certifications"]:
+        grouped_credentials[item["group"]].append(item)
+
+    credential_sections = []
+    for group, items in grouped_credentials.items():
+        item_html = []
+        for item in items:
+            title = h(item["title"])
+            if item.get("link"):
+                title = (
+                    f'<a href="{h(item["link"])}"{external_attrs(item["link"])}>{h(item["title"])}</a>'
+                )
+            issued = f"Issued {item['issued']}"
+            expiry = f" | Expires {item['expires']}" if item.get("expires") else ""
+            item_html.append(
+                f"""
+                <div class="resume-mini-item">
+                  <strong>{title}</strong>
+                  <span>{h(item["issuer"])} | {h(item["status"])}</span>
+                  <span>{h(issued + expiry)}</span>
+                </div>
+                """
+            )
+        credential_sections.append(
+            f"""
+            <div class="resume-subsection">
+              <h3>{h(group)}</h3>
+              <div class="resume-mini-list">
+                {''.join(item_html)}
+              </div>
+            </div>
+            """
+        )
+
+    body = f"""
+    <main class="resume-main">
+      <section class="resume-toolbar no-print">
+        <div class="shell resume-toolbar-shell">
+          <a class="resume-back" href="../../../index.html">Back to profile hub</a>
+          <div class="resume-toolbar-actions">
+            <div class="resume-switcher">
+              {render_document_variant_switcher(prefix, entry["slug"], 'cv')}
+            </div>
+            <div class="resume-switcher">
+              {render_document_kind_switcher(entry, prefix, 'cv')}
+            </div>
+            {render_button('Resume & CV Hub', '../../', 'secondary')}
+            {render_button('Download PDF', pdf_href, 'primary')}
+          </div>
+        </div>
+      </section>
+
+      <section class="shell">
+        <article class="resume-sheet resume-document">
+          <header class="resume-document-header">
+            <div>
+              <p class="resume-kicker">Curriculum Vitae</p>
+              <h1 class="resume-document-name">{h(display_name)}</h1>
+              <p class="resume-document-title">{h(DATA["identity"]["headline"])}</p>
+            </div>
+            <p class="resume-document-note">Detailed record of experience, credentials, project work, and public learning.</p>
+          </header>
+
+          <div class="resume-contact">
+            <span>{h(DATA["identity"]["location"])}</span>
+            <a href="mailto:{h(DATA["identity"]["email"])}">{h(DATA["identity"]["email"])}</a>
+            <span>{h(DATA["identity"]["phone"])}</span>
+            <a href="https://www.linkedin.com/in/bongo-seakhoa/" target="_blank" rel="noreferrer">linkedin.com/in/bongo-seakhoa</a>
+            <a href="https://github.com/Bongo-Seakhoa" target="_blank" rel="noreferrer">github.com/Bongo-Seakhoa</a>
+          </div>
+
+          <section class="resume-section">
+            <h2>Profile</h2>
+            <p>{h(render_cv_summary(display_name))}</p>
+          </section>
+
+          <section class="resume-section">
+            <h2>Technical Toolkit</h2>
+            <div class="resume-mini-list resume-credentials-grid">
+              {render_skill_groups(compact=False)}
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h2>Professional Experience</h2>
+            <div class="resume-list">
+              {"".join(experience_html)}
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h2>Selected Projects</h2>
+            <div class="resume-list">
+              {"".join(project_html)}
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h2>Education</h2>
+            <div class="resume-list">
+              {"".join(education_html)}
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h2>University of Colorado Boulder Coursework via Coursera</h2>
+            <div class="resume-mini-list">
+              {"".join(coursework_html)}
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h2>Credentials</h2>
+            {"".join(credential_sections)}
+          </section>
+
+          <section class="resume-section">
+            <h2>Additional Learning</h2>
+            <div class="resume-mini-list">
+              {"".join(learning_html)}
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+    """
+    return page_shell(
+        title=f"{display_name} | Curriculum Vitae",
+        description=f"Professional CV for {display_name}.",
+        prefix=prefix,
+        page_class="resume-page cv-page",
         body=body,
         display_name=display_name,
         include_effects=False,
@@ -1106,6 +1427,7 @@ def build_pages() -> None:
     write_file("resume/index.html", render_resume_selector_page())
     for entry in DATA["entry_points"]:
         write_file(f'resume/{entry["slug"]}/index.html', render_resume_variant_page(entry))
+        write_file(f'resume/cv/{entry["slug"]}/index.html', render_cv_variant_page(entry))
     write_file("404.html", render_404())
     write_file(
         "robots.txt",
@@ -1131,9 +1453,26 @@ def build_pdf() -> None:
     output_dir = ROOT / "assets" / "files"
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    jobs = []
     for entry in DATA["entry_points"]:
-        output_pdf = output_dir / resume_pdf_name(entry)
-        source_url = (ROOT / "resume" / entry["slug"] / "index.html").resolve().as_uri()
+        jobs.append(
+            (
+                "resume",
+                entry["display_name"],
+                output_dir / resume_pdf_name(entry),
+                (ROOT / "resume" / entry["slug"] / "index.html").resolve().as_uri(),
+            )
+        )
+        jobs.append(
+            (
+                "cv",
+                entry["display_name"],
+                output_dir / cv_pdf_name(entry),
+                (ROOT / "resume" / "cv" / entry["slug"] / "index.html").resolve().as_uri(),
+            )
+        )
+
+    for kind, display_name, output_pdf, source_url in jobs:
         command = [
             str(browser),
             "--headless=new",
@@ -1147,9 +1486,9 @@ def build_pdf() -> None:
         ]
         try:
             subprocess.run(command, check=True, capture_output=True, text=True)
-            print(f"Generated resume PDF at {output_pdf}")
+            print(f"Generated {kind} PDF for {display_name} at {output_pdf}")
         except subprocess.CalledProcessError as error:
-            print(f"PDF generation failed for {entry['display_name']}.")
+            print(f"PDF generation failed for {display_name} ({kind}).")
             if error.stderr:
                 print(error.stderr.strip())
 

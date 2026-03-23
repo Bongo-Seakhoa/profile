@@ -24,7 +24,7 @@ The `profile.json` file contains these key sections:
 - `learning` - Other individual course completions
 - `certifications` - Grouped credentials with public verification links
 - `projects` - Portfolio items
-- `resume` - Resume copy and surname-matched generation settings
+- `resume` - Resume and CV copy plus surname-matched generation settings
 - `seo` - Page metadata
 
 ## Standard Update Flow
@@ -38,16 +38,20 @@ The `profile.json` file contains these key sections:
    python scripts/build.py
    ```
 
-5. Review the generated pages and resume outputs.
+5. Review the generated pages and document outputs.
 6. Commit the updated structured data and generated output together.
 
-Generated resume outputs include:
+Generated document outputs include:
 
 - `resume/index.html`
 - `resume/bongo-seakhoa/index.html`
 - `resume/bongo-kosa/index.html`
+- `resume/cv/bongo-seakhoa/index.html`
+- `resume/cv/bongo-kosa/index.html`
 - `assets/files/bongo-seakhoa-resume.pdf`
 - `assets/files/bongo-kosa-resume.pdf`
+- `assets/files/bongo-seakhoa-cv.pdf`
+- `assets/files/bongo-kosa-cv.pdf`
 
 ## Rules for Future Updates
 
@@ -59,7 +63,7 @@ Generated resume outputs include:
 - Favor the strongest current positioning over outdated portfolio language.
 - When adding Coursera courses from UC Boulder, place them in the `coursework` section. Other courses go in `learning`.
 - Use specific Coursera verification URLs such as `coursera.org/account/accomplishments/verify/CODE` rather than generic profile links.
-- Keep the two resume variants aligned from the same shared content source. The visible surname is the intended difference between them.
+- Keep the surname-specific resume and CV variants aligned from the same shared content source. The visible surname is the intended difference between them.
 
 ## Prompt Templates
 
@@ -74,7 +78,7 @@ Add this new certification to my profile repo. Update content/profile.json, refr
 ### Update a Role
 
 ```text
-Update my current role in the profile repo using this new information. Refresh the summary, experience section, resume, and any related project or credential references so everything stays consistent.
+Update my current role in the profile repo using this new information. Refresh the summary, experience section, resume, CV, and any related project or credential references so everything stays consistent.
 ```
 
 ### Add a Project
@@ -100,9 +104,9 @@ Review the entire professional profile repo against the latest files and links I
 - Do both surname entry points still work?
 - Does the root page clearly explain the naming duality?
 - Are all credential links public and safe?
-- Does the resume match the website content?
+- Do the resume and CV match the website content?
 - Are dates still accurate?
 - Is expired certification status clearly labeled?
 - Is the profile still coherent as one professional identity?
 - Does the coursework section accurately reflect UC Boulder courses only?
-- Do both surname-specific resume pages and PDFs still build correctly?
+- Do both surname-specific resume and CV pages and PDFs still build correctly?

@@ -13,8 +13,8 @@ The root page acts as a discovery hub so visitors can quickly choose the profile
 
 - A polished static GitHub Pages profile site with animated aurora background, particle effects, and glassmorphism design
 - Dual surname entry points
-- A resume selector page plus two surname-matched resume pages
-- Two generated downloadable PDF resumes
+- A document selector page plus surname-matched resume and CV pages
+- Four generated downloadable PDF documents: two resumes and two CVs
 - Structured profile content in one source-of-truth file
 - Separate sections for education, UC Boulder coursework, certifications, and additional learning
 - Maintenance documentation for future prompt-driven updates
@@ -24,21 +24,29 @@ The root page acts as a discovery hub so visitors can quickly choose the profile
 - `content/profile.json`
   Main source of truth for biography, experience, education, coursework, credentials, links, and featured projects.
 - `scripts/build.py`
-  Generates the site pages and both surname-specific resume PDFs.
+  Generates the site pages plus the surname-specific resume and CV PDFs.
 - `assets/site.css`
   Visual design system: aurora backgrounds, glassmorphism, gradient text, glow effects, staggered animations, responsive layout.
 - `assets/site.js`
   Particle canvas, staggered reveal animations, scroll-triggered effects.
 - `resume/index.html`
-  Resume selector page that links to both surname variants.
+  Document selector page that links to both surname variants and both document types.
 - `resume/bongo-seakhoa/index.html`
   Resume page for the Seakhoa surname variant.
 - `resume/bongo-kosa/index.html`
   Resume page for the Kosa surname variant.
+- `resume/cv/bongo-seakhoa/index.html`
+  CV page for the Seakhoa surname variant.
+- `resume/cv/bongo-kosa/index.html`
+  CV page for the Kosa surname variant.
 - `assets/files/bongo-seakhoa-resume.pdf`
   Generated downloadable PDF for the Seakhoa variant.
 - `assets/files/bongo-kosa-resume.pdf`
   Generated downloadable PDF for the Kosa variant.
+- `assets/files/bongo-seakhoa-cv.pdf`
+  Generated downloadable CV PDF for the Seakhoa variant.
+- `assets/files/bongo-kosa-cv.pdf`
+  Generated downloadable CV PDF for the Kosa variant.
 - `source/private/`
   Local-only evidence and raw materials. This folder is gitignored by default.
 - `docs/update-playbook.md`
@@ -67,6 +75,8 @@ The root page acts as a discovery hub so visitors can quickly choose the profile
    - `resume/index.html`
    - `resume/bongo-seakhoa/index.html`
    - `resume/bongo-kosa/index.html`
+   - `resume/cv/bongo-seakhoa/index.html`
+   - `resume/cv/bongo-kosa/index.html`
 
 ## GitHub Pages Publishing
 
@@ -89,8 +99,8 @@ The public site should link only to safe public credential pages such as:
 ## Notes
 
 - The site intentionally treats **Bongo Seakhoa** and **Bongo Kosa** as the same professional identity.
-- Resume generation keeps both surname variants aligned from one shared content source, with the surname as the intentional visible difference.
+- Resume and CV generation keep both surname variants aligned from one shared content source, with the surname as the intentional visible difference.
 - Public credential links are used instead of exposing raw certificate PDFs.
-- The generated resume is aligned with the same structured content used by the site so updates stay consistent.
+- The generated documents are aligned with the same structured content used by the site so updates stay consistent.
 - Education section reflects the current BSc in Engineering Management at the University of Debrecen.
 - UC Boulder coursework completed via Coursera is listed separately under its own section.
