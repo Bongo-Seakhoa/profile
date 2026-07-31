@@ -1,0 +1,302 @@
+---
+import ContentStyles from "../../../components/content/ContentStyles.astro";
+import ProjectCard from "../../../components/content/ProjectCard.astro";
+import StatusBadge from "../../../components/content/StatusBadge.astro";
+import TechnologyList from "../../../components/content/TechnologyList.astro";
+import ActionLink from "../../../components/primitives/ActionLink.astro";
+import Container from "../../../components/primitives/Container.astro";
+import MetadataList from "../../../components/primitives/MetadataList.astro";
+import PageMasthead from "../../../components/primitives/PageMasthead.astro";
+import SectionIntro from "../../../components/primitives/SectionIntro.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../../lib/content/load-content";
+
+export async function getStaticPaths() {
+  const content = await loadProfileContent();
+
+  return content.projects.map((project) => {
+    const route = content.routes.find(
+      (entry) =>
+        entry.entityRef?.collection === "project" &&
+        entry.entityRef.id === project.id,
+    );
+    if (!route) throw new Error(`Project route missing for ${project.id}`);
+
+    return {
+      params: { slug: project.slug },
+      props: { content, project, route },
+    };
+  });
+}
+
+const { content, project, route } = Astro.props;
+const settings = content.siteSettings[0];
+if (!settings) throw new Error("Site settings are missing.");
+const statusLabel =
+  project.status === "professional"
+    ? "Client-safe summary"
+    : project.status === "experiment"
+      ? "Experiment"
+      : project.status === "archived"
+        ? "Archived"
+        : "Public project";
+const statusTone =
+  project.status === "archived" ? "historical" : project.status;
+const relatedProjects = content.projects
+  .filter((entry) => entry.id !== project.id)
+  .filter((entry) =>
+    entry.technologies.some((technology) =>
+      project.technologies.includes(technology),
+    ),
+  )
+  .slice(0, 2);
+const projectSchema = {
+  "@type": "CreativeWork",
+  name: project.title,
+  description: project.summary,
+  url: project.publicUrl,
+  creator: {
+    "@id": `${settings.siteUrl}#person`,
+  },
+  keywords: project.technologies,
+};
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId="work"
+  updatedDate={project.lastReviewed}
+  ogType="article"
+  structuredData={projectSchema}
+  breadcrumbs={[
+    { label: "Overview", path: "" },
+    { label: "Work", path: "work/" },
+    { label: project.title },
+  ]}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow={project.type}
+    title={project.title}
+    lede={project.summary}
+  >
+    <div slot="metadata">
+      <MetadataList
+        items={[
+          { term: "Status", value: statusLabel },
+          {
+            term: "Evidence",
+            value:
+              project.evidenceState === "public-repository"
+                ? "Public repository"
+                : project.evidenceState === "public-website"
+                  ? "Public website"
+                  : "Client-safe summary",
+          },
+          { term: "Role", value: project.role ?? "Not separately stated" },
+        ]}
+      />
+    </div>
+    <ActionLink href={project.publicUrl} newTab>
+      {
+        project.privacyStatus === "client-safe-summary"
+          ? "Visit organisation"
+          : "Open public evidence"
+      }
+    </ActionLink>
+    <ActionLink href="work/" variant="secondary">
+      Back to work index
+    </ActionLink>
+  </PageMasthead>
+
+  <section class="page-section" aria-labelledby="record-title">
+    <Container>
+      <div class="case-study-layout">
+        <aside aria-labelledby="on-this-page-title">
+          <h2 id="on-this-page-title">On this page</h2>
+          <ol>
+            <li><a href="#record-title">Record scope</a></li>
+            <li><a href="#technical-focus">Technical focus</a></li>
+            <li><a href="#evidence-boundary">Evidence boundary</a></li>
+            <li><a href="#related-work">Related work</a></li>
+          </ol>
+        </aside>
+        <article class="case-study">
+          <section>
+            <div class="case-study__status">
+              <StatusBadge label={statusLabel} tone={statusTone} />
+            </div>
+            <h2 id="record-title">Record scope</h2>
+            <p>{project.summary}</p>
+            {
+              project.role && (
+                <p>
+                  <strong>Recorded role:</strong> {project.role}
+                </p>
+              )
+            }
+          </section>
+
+          <section>
+            <h2 id="technical-focus">Technical focus</h2>
+            <TechnologyList items={project.technologies} />
+            {
+              project.contributions.length > 0 && (
+                <>
+                  <h3>Contributions</h3>
+                  <ul>
+                    {project.contributions.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </>
+              )
+            }
+            {
+              project.validation.length > 0 && (
+                <>
+                  <h3>Validation</h3>
+                  <ul>
+                    {project.validation.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </>
+              )
+            }
+          </section>
+
+          <section class="integrity-note">
+            <h2 id="evidence-boundary">Evidence boundary</h2>
+            {
+              project.privacyStatus === "client-safe-summary" ? (
+                <p>
+                  This page intentionally limits client-sensitive detail. It
+                  records the public purpose, role and technology context
+                  without claiming confidential implementation or outcomes.
+                </p>
+              ) : project.caseStudyDepth === "summary" ? (
+                <p>
+                  This is a concise portfolio record linked to public evidence.
+                  It does not add outcomes, performance claims or individual
+                  contribution details that the approved source does not
+                  establish.
+                </p>
+              ) : (
+                <p>
+                  Evidence, limitations and validation are stated only where the
+                  approved source supports them.
+                </p>
+              )
+            }
+          </section>
+        </article>
+      </div>
+    </Container>
+  </section>
+
+  {
+    relatedProjects.length > 0 && (
+      <section
+        class="page-section page-section--surface"
+        aria-labelledby="related-work"
+      >
+        <Container>
+          <SectionIntro
+            id="related-work"
+            eyebrow="Continue exploring"
+            title="Related work"
+          />
+          <div class="project-archive-grid">
+            {relatedProjects.map((entry) => (
+              <ProjectCard project={entry} variant="archive" />
+            ))}
+          </div>
+        </Container>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .case-study-layout {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.65fr) minmax(0, 2.35fr);
+    align-items: start;
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+
+  aside {
+    padding: var(--space-5);
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  aside h2 {
+    font-size: var(--step-0);
+  }
+
+  aside ol {
+    display: grid;
+    margin: var(--space-3) 0 0;
+    padding-inline-start: 1.25rem;
+    gap: var(--space-2);
+  }
+
+  aside a {
+    display: inline-flex;
+    min-block-size: var(--target-size);
+    padding-block: 0.65rem;
+    align-items: center;
+    color: var(--rust-strong);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .case-study {
+    max-inline-size: var(--case-study-measure);
+  }
+
+  .case-study > section + section {
+    margin-block-start: var(--space-8);
+  }
+
+  .case-study h2 {
+    font-size: var(--step-2);
+  }
+
+  .case-study h3 {
+    margin-block: var(--space-5) var(--space-3);
+    color: var(--indigo);
+    font-size: var(--step-1);
+  }
+
+  .case-study p {
+    margin-block-start: var(--space-4);
+    color: var(--ink-soft);
+    font-size: var(--step-0);
+  }
+
+  .case-study ul {
+    display: grid;
+    padding-inline-start: 1.2rem;
+    gap: var(--space-2);
+  }
+
+  .case-study li::marker {
+    color: var(--gold);
+  }
+
+  .case-study__status {
+    margin-block-end: var(--space-4);
+  }
+
+  @media (max-width: 48rem) {
+    .case-study-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

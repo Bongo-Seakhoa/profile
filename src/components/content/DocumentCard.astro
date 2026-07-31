@@ -1,0 +1,94 @@
+---
+import { sitePath } from "../../lib/urls";
+
+export interface Props {
+  label: string;
+  description: string;
+  previewPath: string;
+  pdfPath: string;
+  pageCount: number;
+  primary?: boolean;
+}
+
+const {
+  label,
+  description,
+  previewPath,
+  pdfPath,
+  pageCount,
+  primary = false,
+} = Astro.props;
+---
+
+<article class:list={["document-card", primary && "document-card--primary"]}>
+  <p class="document-card__format">A4 · {pageCount} pages</p>
+  <h2>{label}</h2>
+  <p>{description}</p>
+  <div class="document-card__actions">
+    <a href={sitePath(pdfPath)} download>Download PDF</a>
+    <a href={sitePath(previewPath)}>View browser preview</a>
+  </div>
+</article>
+
+<style>
+  .document-card {
+    display: flex;
+    min-inline-size: 0;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    flex-direction: column;
+    gap: var(--space-4);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-medium);
+    background: var(--surface);
+  }
+
+  .document-card--primary {
+    border-block-start: 0.35rem solid var(--rust);
+    background: var(--surface);
+  }
+
+  .document-card__format {
+    color: var(--rust-strong) !important;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-size: var(--step-2);
+  }
+
+  article > p {
+    max-inline-size: 52ch;
+    color: var(--ink-soft);
+  }
+
+  .document-card__actions {
+    display: flex;
+    margin-block-start: auto;
+    padding-block-start: var(--space-3);
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+  }
+
+  a {
+    display: inline-flex;
+    min-block-size: var(--target-size);
+    padding-block: 0.65rem;
+    align-items: center;
+    color: var(--rust-strong);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  a:first-child {
+    padding-inline: 1rem;
+    border: 0.12rem solid var(--rust);
+    border-radius: var(--radius-small);
+    color: var(--surface);
+    background: var(--rust);
+    text-decoration: none;
+  }
+</style>

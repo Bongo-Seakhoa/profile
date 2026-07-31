@@ -55,7 +55,8 @@ The current portfolio baseline confirms the owner’s concern:
 5. Automatic browser pagination is not trusted to choose major section starts.
 6. The build waits for fonts and images, then validates every content box before printing.
 7. The PDF script fails on overflow, font fallback, unexpected page count, missing links, stale output or content mismatch.
-8. Poppler renders every page to PNG for visual review and provides independent PDF inspection.
+8. Playwright captures every browser-rendered sheet to PNG for visual review;
+   `pdf-lib` independently verifies the generated PDF structure and page geometry.
 9. `pdf-lib` may be used only for JavaScript metadata or merging when a deliberate multi-pass design needs it.
 10. Python remains only as a legacy or independent audit utility. It does not build the site, resume or CV.
 
@@ -97,7 +98,7 @@ scripts/
 - Paper: exact A4, 210×297 mm.
 - One-column semantic reading order for ATS compatibility.
 - Editorial hierarchy without decorative clutter.
-- Local font files and stable metrics.
+- A restrained professional sans-serif family, local font files and stable metrics.
 - Section title kept with meaningful following content.
 - Records split only at approved item boundaries.
 - Selectable text and clickable links.

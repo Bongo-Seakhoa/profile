@@ -1,0 +1,198 @@
+---
+import ContentStyles from "../../components/content/ContentStyles.astro";
+import CredentialRecord from "../../components/content/CredentialRecord.astro";
+import ActionLink from "../../components/primitives/ActionLink.astro";
+import Container from "../../components/primitives/Container.astro";
+import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import SectionIntro from "../../components/primitives/SectionIntro.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../lib/content/load-content";
+
+const content = await loadProfileContent();
+const route = content.routes.find((entry) => entry.id === "education");
+
+if (!route) throw new Error("Education route content is missing.");
+
+const education = [...content.education].sort((left, right) => {
+  if (left.current !== right.current) return left.current ? -1 : 1;
+  return left.featuredOrder - right.featuredOrder;
+});
+const currentCredentials = content.credentials
+  .filter((credential) => credential.category === "current-cloud")
+  .sort(
+    (left, right) =>
+      (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.featuredOrder ?? Number.MAX_SAFE_INTEGER),
+  );
+const monthFormatter = new Intl.DateTimeFormat("en-GB", {
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
+const formatMonth = (value: string) => {
+  const [yearPart, monthPart] = value.split("-");
+  const year = Number(yearPart);
+  const month = Number(monthPart);
+  if (!Number.isInteger(year) || !Number.isInteger(month)) {
+    throw new TypeError(`Invalid education date: ${value}`);
+  }
+  return monthFormatter.format(new Date(Date.UTC(year, month - 1, 1)));
+};
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId={route.id}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow="Formal study"
+    title={route.title}
+    lede="Current undergraduate study and completed data science training, followed by active professional cloud credentials."
+  >
+    <ActionLink href="credentials/">All credentials</ActionLink>
+    <ActionLink href="documents/" variant="secondary">
+      Resume and CV
+    </ActionLink>
+  </PageMasthead>
+
+  <section class="page-section" aria-labelledby="formal-education-title">
+    <Container>
+      <SectionIntro
+        id="formal-education-title"
+        eyebrow="Academic record"
+        title="Formal education"
+      />
+      <div class="education-records">
+        {
+          education.map((record) => (
+            <article data-record-id={record.id}>
+              <div class="education-records__status">
+                {record.current ? "Current study" : "Completed"}
+              </div>
+              <div>
+                <h3>{record.qualification}</h3>
+                <p class="education-records__institution">
+                  {record.institution}
+                </p>
+                <p>{record.details[0]}</p>
+              </div>
+              <dl>
+                <div>
+                  <dt>Dates</dt>
+                  <dd>
+                    {formatMonth(record.dateStart)} to{" "}
+                    {record.current
+                      ? "Present"
+                      : formatMonth(record.dateEnd ?? record.dateStart)}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Location</dt>
+                  <dd>{record.location}</dd>
+                </div>
+                {record.result && (
+                  <div>
+                    <dt>Result</dt>
+                    <dd>{record.result}</dd>
+                  </div>
+                )}
+              </dl>
+            </article>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface"
+    aria-labelledby="active-credentials-title"
+  >
+    <Container>
+      <SectionIntro
+        id="active-credentials-title"
+        eyebrow="Current credentials"
+        title="Active Google Cloud certifications"
+        description="Expiry dates and public verification links are shown directly."
+      />
+      <div class="credential-list">
+        {
+          currentCredentials.map((credential) => (
+            <CredentialRecord credential={credential} />
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .education-records {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .education-records > article {
+    display: grid;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    grid-template-columns: 9rem minmax(0, 1.35fr) minmax(14rem, 0.65fr);
+    gap: var(--space-5);
+    border-block-start: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .education-records__status {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .education-records h3 {
+    font-size: var(--step-2);
+  }
+
+  .education-records__institution {
+    margin-block: var(--space-2) var(--space-3);
+    color: var(--indigo) !important;
+    font-weight: 700;
+  }
+
+  .education-records p {
+    color: var(--ink-soft);
+  }
+
+  .education-records dl {
+    display: grid;
+    margin: 0;
+    gap: var(--space-3);
+  }
+
+  .education-records dt {
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .education-records dd {
+    margin: var(--space-1) 0 0;
+    font-weight: 650;
+  }
+
+  .credential-list {
+    display: grid;
+  }
+
+  @media (max-width: 54rem) {
+    .education-records > article {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,155 @@
+---
+import ContentStyles from "../../components/content/ContentStyles.astro";
+import ProjectCard from "../../components/content/ProjectCard.astro";
+import StatusBadge from "../../components/content/StatusBadge.astro";
+import Container from "../../components/primitives/Container.astro";
+import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import SectionIntro from "../../components/primitives/SectionIntro.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../lib/content/load-content";
+
+const content = await loadProfileContent();
+const route = content.routes.find((entry) => entry.id === "research");
+
+if (!route) throw new Error("Research route content is missing.");
+
+const researchIds = new Set([
+  "visualizing-filters-cnn",
+  "airqo-environmental-data",
+  "openai-trader-experiment",
+  "fxpm-backtester",
+  "institutional-ls-sr-trading-ea",
+]);
+const researchProjects = content.projects.filter((project) =>
+  researchIds.has(project.id),
+);
+const experiments = researchProjects.filter(
+  (project) => project.status === "experiment",
+);
+const technicalStudies = researchProjects.filter(
+  (project) => project.status !== "experiment",
+);
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId={route.id}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow="Inquiry and experimentation"
+    title={route.title}
+    lede="Public notebooks, model interpretation work and trading-system experiments. Status labels distinguish evidence without presenting experiments as publications."
+  />
+
+  <section
+    class="page-section page-section--compact"
+    aria-labelledby="status-legend-title"
+  >
+    <Container>
+      <div class="research-legend">
+        <div>
+          <h2 id="status-legend-title">Status legend</h2>
+          <p>
+            Labels describe the record type. They do not imply peer review or
+            publication.
+          </p>
+        </div>
+        <div>
+          <StatusBadge label="Public project" tone="public" />
+          <StatusBadge label="Experiment" tone="experiment" />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface"
+    aria-labelledby="publications-title"
+  >
+    <Container>
+      <div class="empty-state">
+        <h2 id="publications-title">Publications</h2>
+        <p>
+          No approved publication record is currently listed. Public technical
+          projects and experiments appear below with direct source links.
+        </p>
+      </div>
+    </Container>
+  </section>
+
+  <section class="page-section" aria-labelledby="technical-studies-title">
+    <Container>
+      <SectionIntro
+        id="technical-studies-title"
+        eyebrow="Technical studies"
+        title="Analysis and model interpretation"
+      />
+      <div class="project-archive-grid">
+        {
+          technicalStudies.map((project) => (
+            <ProjectCard project={project} variant="standard" />
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--muted"
+    aria-labelledby="experiments-title"
+  >
+    <Container>
+      <SectionIntro
+        id="experiments-title"
+        eyebrow="Experiments"
+        title="Exploratory technical work"
+        description="These records explore an idea or integration. They are not production claims."
+      />
+      <div class="project-archive-grid">
+        {
+          experiments.map((project) => (
+            <ProjectCard project={project} variant="archive" />
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .research-legend {
+    display: flex;
+    padding: var(--space-5);
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    border-block: 1px solid var(--line-strong);
+  }
+
+  .research-legend h2 {
+    font-size: var(--step-1);
+  }
+
+  .research-legend p {
+    max-inline-size: 58ch;
+    margin-block-start: var(--space-2);
+    color: var(--ink-soft);
+  }
+
+  .research-legend > div:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  @media (max-width: 42rem) {
+    .research-legend {
+      align-items: start;
+      flex-direction: column;
+    }
+  }
+</style>

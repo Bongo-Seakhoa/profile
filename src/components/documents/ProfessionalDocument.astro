@@ -1,0 +1,1048 @@
+---
+import "@fontsource-variable/ibm-plex-sans/wght.css";
+import "@fontsource/ibm-plex-mono/500.css";
+
+import type {
+  Credential,
+  DocumentManifest,
+  Education,
+  Experience,
+  Identity,
+  ProfileContent,
+  Project,
+  SkillGroup,
+} from "../../lib/content/schemas";
+import { absoluteUrl, sitePath } from "../../lib/urls";
+
+type DocumentSection = DocumentManifest["pages"][number]["sections"][number];
+
+interface Props {
+  content: ProfileContent;
+  document: DocumentManifest;
+  displayName: string;
+  pdfPath: string;
+}
+
+const { content, document, displayName, pdfPath } = Astro.props;
+const identity = content.identity[0] as Identity;
+const settings = content.siteSettings[0];
+
+if (!settings) {
+  throw new Error("Site settings are missing from the document content model.");
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const withBase = (path: string) => `${base}/${path.replace(/^\/+/, "")}`;
+const routePath = Astro.url.pathname
+  .replace(new RegExp(`^${settings.basePath}/?`), "")
+  .replace(/^\/+/, "");
+const route = content.routes.find((entry) => entry.path === routePath);
+const canonicalRoute = route?.canonicalRouteId
+  ? content.routes.find((entry) => entry.id === route.canonicalRouteId)
+  : route;
+
+if (!route || !canonicalRoute) {
+  throw new Error(`Document route metadata is missing for ${routePath}.`);
+}
+
+const canonicalUrl = absoluteUrl(canonicalRoute.path, settings.siteUrl);
+const socialImageUrl = absoluteUrl(
+  `assets/social/${route.id}.jpg`,
+  settings.siteUrl,
+);
+const socialImageAlt = `${route.title}. Professional document by Bongo Seakhoa.`;
+const faviconUrl = sitePath("favicon.svg");
+const faviconPngUrl = sitePath("favicon-32.png");
+const appleTouchIconUrl = sitePath("apple-touch-icon.png");
+const manifestUrl = sitePath("site.webmanifest");
+const sitemapUrl = absoluteUrl("sitemap-index.xml", settings.siteUrl);
+
+const collections = {
+  identity: new Map<string, Identity>(
+    content.identity.map((item) => [item.id, item]),
+  ),
+  skills: new Map<string, SkillGroup>(
+    content.skills.map((item) => [item.id, item]),
+  ),
+  experience: new Map<string, Experience>(
+    content.experience.map((item) => [item.id, item]),
+  ),
+  projects: new Map<string, Project>(
+    content.projects.map((item) => [item.id, item]),
+  ),
+  education: new Map<string, Education>(
+    content.education.map((item) => [item.id, item]),
+  ),
+  credentials: new Map<string, Credential>(
+    content.credentials.map((item) => [item.id, item]),
+  ),
+};
+
+const getItems = (section: DocumentSection) => {
+  const collection =
+    section.kind === "profile"
+      ? collections.identity
+      : collections[section.kind];
+  return section.itemIds.map((id) => collection.get(id)).filter(Boolean);
+};
+
+const monthFormatter = new Intl.DateTimeFormat("en-GB", {
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function formatMonth(value: string | null): string {
+  if (value === null) return "Present";
+  const [yearPart, monthPart] = value.split("-");
+  const year = Number(yearPart);
+  const month = Number(monthPart);
+  if (!Number.isInteger(year) || !Number.isInteger(month)) {
+    throw new TypeError(`Invalid document date: ${value}`);
+  }
+  return monthFormatter.format(new Date(Date.UTC(year, month - 1, 1)));
+}
+
+function formatRange(
+  start: string,
+  end: string | null,
+  current: boolean,
+): string {
+  return `${formatMonth(start)} to ${current ? "Present" : formatMonth(end)}`;
+}
+
+function isIdentity(value: unknown): value is Identity {
+  return typeof value === "object" && value !== null && "primaryName" in value;
+}
+
+function isSkill(value: unknown): value is SkillGroup {
+  return typeof value === "object" && value !== null && "items" in value;
+}
+
+function isExperience(value: unknown): value is Experience {
+  return typeof value === "object" && value !== null && "company" in value;
+}
+
+function isProject(value: unknown): value is Project {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "technologies" in value &&
+    "slug" in value
+  );
+}
+
+function isEducation(value: unknown): value is Education {
+  return typeof value === "object" && value !== null && "institution" in value;
+}
+
+function isCredential(value: unknown): value is Credential {
+  return typeof value === "object" && value !== null && "issuer" in value;
+}
+
+const documentLabel =
+  document.id === "cv" ? "Curriculum vitae" : "Professional resume";
+const profileParagraphCount = document.id === "resume" ? 1 : 2;
+const currentYear = new Date().getUTCFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={route.description} />
+    <meta name="robots" content="noindex,follow" />
+    <meta name="theme-color" content={settings.themeColor} />
+    <title>{route.title} | Bongo Seakhoa</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href={faviconUrl} type="image/svg+xml" />
+    <link rel="icon" href={faviconPngUrl} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={appleTouchIconUrl} sizes="180x180" />
+    <link rel="manifest" href={manifestUrl} />
+    <link rel="sitemap" href={sitemapUrl} type="application/xml" />
+
+    <meta property="og:site_name" content={settings.siteName} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={`${route.title} | Bongo Seakhoa`} />
+    <meta property="og:description" content={route.description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:secure_url" content={socialImageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialImageAlt} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${route.title} | Bongo Seakhoa`} />
+    <meta name="twitter:description" content={route.description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
+  </head>
+  <body
+    data-document-kind={document.id}
+    data-document-pages={document.pageCount}
+    data-document-name={displayName}
+  >
+    <nav class="document-toolbar" aria-label="Document actions">
+      <a href={withBase("documents/")}>← All documents</a>
+      <span>{documentLabel} · A4 · {document.pageCount} pages</span>
+      <a class="document-toolbar__download" href={withBase(pdfPath)} download>
+        Download PDF
+      </a>
+    </nav>
+
+    <main class="document-stack">
+      {
+        document.pages.map((page, pageIndex) => (
+          <article
+            class:list={[
+              "document-sheet",
+              `document-sheet--${document.id}`,
+              pageIndex === 0 && "document-sheet--first",
+            ]}
+            data-document-page
+            data-page-number={page.number}
+            aria-label={`${documentLabel}, page ${page.number} of ${document.pageCount}`}
+          >
+            <div class="document-sheet__edge" aria-hidden="true" />
+            <div class="document-page__canvas" data-page-canvas>
+              {pageIndex === 0 ? (
+                <header class="identity-header">
+                  <div class="identity-header__main">
+                    <p class="identity-header__eyebrow">{documentLabel}</p>
+                    <h1>{displayName}</h1>
+                    <p class="identity-header__headline">{identity.headline}</p>
+                  </div>
+                  <address class="identity-header__contact">
+                    <span>{identity.location}</span>
+                    <a href={`mailto:${identity.email}`}>{identity.email}</a>
+                    {identity.links
+                      .filter((link) =>
+                        ["linkedin", "github"].includes(link.id),
+                      )
+                      .map((link) => (
+                        <a href={link.url}>{link.label}</a>
+                      ))}
+                  </address>
+                </header>
+              ) : (
+                <header class="continuation-header">
+                  <div>
+                    <p>{displayName}</p>
+                    <span>{documentLabel}</span>
+                  </div>
+                  <p
+                    aria-label={`Page ${page.number} of ${document.pageCount}`}
+                  >
+                    {String(page.number).padStart(2, "0")} /{" "}
+                    {String(document.pageCount).padStart(2, "0")}
+                  </p>
+                </header>
+              )}
+
+              <div class="document-sections">
+                {page.sections.map((section, sectionIndex) => {
+                  const items = getItems(section);
+                  return (
+                    <section
+                      class:list={[
+                        "document-section",
+                        `document-section--${section.kind}`,
+                      ]}
+                      data-document-section={section.id}
+                      data-section-kind={section.kind}
+                    >
+                      {section.kind !== "identity" && (
+                        <header class="document-section__header">
+                          <span aria-hidden="true">
+                            {String(sectionIndex + 1).padStart(2, "0")}
+                          </span>
+                          <h2>{section.label}</h2>
+                        </header>
+                      )}
+
+                      {section.kind === "identity" &&
+                        items
+                          .filter(isIdentity)
+                          .map((item) => (
+                            <p class="identity-note">{item.valueStatement}</p>
+                          ))}
+
+                      {section.kind === "profile" &&
+                        items.filter(isIdentity).map((item) => (
+                          <div class="profile-copy">
+                            {item.summary
+                              .slice(0, profileParagraphCount)
+                              .map((paragraph) => (
+                                <p>{paragraph}</p>
+                              ))}
+                          </div>
+                        ))}
+
+                      {section.kind === "skills" && (
+                        <dl class="skill-matrix">
+                          {items.filter(isSkill).map((item) => (
+                            <div data-record-id={item.id}>
+                              <dt>{item.label}</dt>
+                              <dd>{item.items.join(" · ")}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      )}
+
+                      {section.kind === "experience" && (
+                        <div class="record-list record-list--experience">
+                          {items.filter(isExperience).map((item) => (
+                            <article
+                              class="record record--experience"
+                              data-record-id={item.id}
+                            >
+                              <header class="record__heading">
+                                <div>
+                                  <h3>{item.role}</h3>
+                                  <p>{item.company}</p>
+                                </div>
+                                <p class="record__meta">
+                                  <span>
+                                    {formatRange(
+                                      item.dateStart,
+                                      item.dateEnd,
+                                      item.current,
+                                    )}
+                                  </span>
+                                  <span>
+                                    {item.remote ? "Remote · " : ""}
+                                    {item.location}
+                                  </span>
+                                </p>
+                              </header>
+                              <p class="record__summary">{item.summary}</p>
+                              <ul>
+                                {item.highlights
+                                  .slice(0, document.id === "resume" ? 2 : 3)
+                                  .map((highlight) => (
+                                    <li>{highlight}</li>
+                                  ))}
+                              </ul>
+                              <p class="record__tools">
+                                {item.tools.join(" · ")}
+                              </p>
+                            </article>
+                          ))}
+                        </div>
+                      )}
+
+                      {section.kind === "projects" && (
+                        <div class="project-grid">
+                          {items.filter(isProject).map((item) => (
+                            <article
+                              class="record record--project"
+                              data-record-id={item.id}
+                            >
+                              <div
+                                class="record--project__index"
+                                aria-hidden="true"
+                              >
+                                {String(
+                                  section.itemIds.indexOf(item.id) + 1,
+                                ).padStart(2, "0")}
+                              </div>
+                              <div>
+                                <header class="record__heading">
+                                  <div>
+                                    <h3>{item.title}</h3>
+                                    <p>{item.type}</p>
+                                  </div>
+                                </header>
+                                <p class="record__summary">{item.summary}</p>
+                                <p class="record__tools">
+                                  {item.technologies.join(" · ")}
+                                </p>
+                              </div>
+                            </article>
+                          ))}
+                        </div>
+                      )}
+
+                      {section.kind === "education" && (
+                        <div class="education-grid">
+                          {items.filter(isEducation).map((item) => (
+                            <article
+                              class="record record--education"
+                              data-record-id={item.id}
+                            >
+                              <header class="record__heading">
+                                <div>
+                                  <h3>{item.qualification}</h3>
+                                  <p>{item.institution}</p>
+                                </div>
+                                <p class="record__meta">
+                                  <span>
+                                    {formatRange(
+                                      item.dateStart,
+                                      item.dateEnd,
+                                      item.current,
+                                    )}
+                                  </span>
+                                  <span>{item.location}</span>
+                                </p>
+                              </header>
+                              <p class="record__summary">{item.details[0]}</p>
+                              {item.result && (
+                                <p class="record__tools">
+                                  Result: {item.result}
+                                </p>
+                              )}
+                            </article>
+                          ))}
+                        </div>
+                      )}
+
+                      {section.kind === "credentials" && (
+                        <div class="credential-grid">
+                          {items.filter(isCredential).map((item) => (
+                            <article
+                              class="credential-record"
+                              data-record-id={item.id}
+                            >
+                              <div>
+                                <h3>{item.title}</h3>
+                                <p>{item.issuer}</p>
+                              </div>
+                              <p class="credential-record__status">
+                                {item.statusLabel}
+                              </p>
+                            </article>
+                          ))}
+                        </div>
+                      )}
+                    </section>
+                  );
+                })}
+              </div>
+
+              <footer class="document-footer">
+                <p>{identity.email}</p>
+                <p>
+                  Verified source content · reviewed {document.lastReviewed}
+                </p>
+                <p>{currentYear}</p>
+              </footer>
+            </div>
+          </article>
+        ))
+      }
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --doc-paper: #fffaf0;
+    --doc-ink: #27211c;
+    --doc-soft: #67584a;
+    --doc-rust: #985132;
+    --doc-indigo: #344e60;
+    --doc-gold: #c49a55;
+    --doc-line: rgb(74 51 39 / 20%);
+    font-family: "IBM Plex Sans Variable", "Arial", sans-serif;
+    color: var(--doc-ink);
+    background: #d8d1c6;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+    margin: 0;
+  }
+
+  body {
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 0.16em;
+  }
+
+  .document-toolbar {
+    position: sticky;
+    z-index: 10;
+    top: 1rem;
+    display: flex;
+    width: min(210mm, calc(100vw - 2rem));
+    min-height: 3rem;
+    margin: 0 auto 1.5rem;
+    padding: 0.5rem 0.65rem 0.5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid rgb(255 255 255 / 60%);
+    border-radius: 0.8rem;
+    color: #fff;
+    background: #2f2924;
+    box-shadow: 0 14px 35px rgb(39 33 28 / 22%);
+    font-size: 0.8rem;
+  }
+
+  .document-toolbar__download {
+    display: inline-flex;
+    min-height: 2.25rem;
+    padding: 0.45rem 0.9rem;
+    align-items: center;
+    border-radius: 0.55rem;
+    color: #27211c;
+    background: #f0c77d;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .document-stack {
+    display: grid;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .document-sheet {
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    overflow: hidden;
+    color: var(--doc-ink);
+    background:
+      linear-gradient(90deg, rgb(152 81 50 / 4%), transparent 22%),
+      var(--doc-paper);
+    box-shadow: 0 24px 70px rgb(39 33 28 / 22%);
+  }
+
+  .document-sheet__edge {
+    position: absolute;
+    z-index: 1;
+    inset: 0 auto 0 0;
+    width: 3.2mm;
+    background: linear-gradient(
+      180deg,
+      var(--doc-indigo) 0 33%,
+      var(--doc-rust) 33% 71%,
+      var(--doc-gold) 71% 100%
+    );
+  }
+
+  .document-page__canvas {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 13mm 16mm 12mm 18mm;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .identity-header {
+    display: grid;
+    padding: 0 0 5mm;
+    grid-template-columns: minmax(0, 1fr) 50mm;
+    gap: 7mm;
+    border-bottom: 0.35mm solid var(--doc-indigo);
+  }
+
+  .identity-header__eyebrow,
+  .continuation-header span {
+    margin: 0 0 1.2mm;
+    color: var(--doc-rust);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 7.2pt;
+    font-weight: 500;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .identity-header h1 {
+    max-width: 120mm;
+    margin: 0;
+    font-family: "IBM Plex Sans Variable", "Arial Black", Arial, sans-serif;
+    font-size: 29pt;
+    font-variation-settings: "wght" 650;
+    font-weight: 650;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+  }
+
+  .identity-header__headline {
+    margin: 2.3mm 0 0;
+    color: var(--doc-indigo);
+    font-size: 10.4pt;
+    font-weight: 620;
+  }
+
+  .identity-header__contact {
+    display: grid;
+    align-content: end;
+    justify-items: end;
+    gap: 1.2mm;
+    color: var(--doc-soft);
+    font-size: 7.4pt;
+    font-style: normal;
+    line-height: 1.25;
+    text-align: right;
+  }
+
+  .continuation-header {
+    display: flex;
+    min-height: 13mm;
+    padding-bottom: 3.2mm;
+    align-items: start;
+    justify-content: space-between;
+    border-bottom: 0.3mm solid var(--doc-indigo);
+  }
+
+  .continuation-header p {
+    margin: 0;
+  }
+
+  .continuation-header > div > p {
+    font-family: "IBM Plex Sans Variable", "Arial Black", Arial, sans-serif;
+    font-size: 15pt;
+    font-weight: 650;
+    line-height: 1;
+  }
+
+  .continuation-header > p {
+    color: var(--doc-soft);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 7.2pt;
+    letter-spacing: 0.08em;
+  }
+
+  .document-sections {
+    display: flex;
+    min-height: 0;
+    padding-top: 3.6mm;
+    flex: 1;
+    flex-direction: column;
+    gap: 4.4mm;
+  }
+
+  .document-section {
+    break-inside: avoid;
+  }
+
+  .document-section__header {
+    display: grid;
+    margin: 0 0 2.8mm;
+    grid-template-columns: 8mm minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .document-section__header > span {
+    color: var(--doc-rust);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 6.6pt;
+  }
+
+  .document-section h2 {
+    display: flex;
+    margin: 0;
+    align-items: center;
+    gap: 3mm;
+    color: var(--doc-indigo);
+    font-family: "IBM Plex Sans Variable", "Arial Black", Arial, sans-serif;
+    font-size: 13.2pt;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  .document-section h2::after {
+    height: 0.25mm;
+    flex: 1;
+    background: linear-gradient(90deg, var(--doc-line), transparent);
+    content: "";
+  }
+
+  .identity-note {
+    margin: 0;
+    padding: 2.5mm 3.2mm;
+    border-left: 0.8mm solid var(--doc-gold);
+    color: var(--doc-ink);
+    background: rgb(196 154 85 / 10%);
+    font-family: "IBM Plex Sans Variable", Arial, sans-serif;
+    font-size: 10.8pt;
+    font-weight: 540;
+    line-height: 1.28;
+  }
+
+  .profile-copy {
+    display: grid;
+    gap: 1.8mm;
+  }
+
+  .profile-copy p,
+  .record__summary {
+    margin: 0;
+    color: var(--doc-soft);
+    font-size: 8.45pt;
+    line-height: 1.4;
+  }
+
+  .skill-matrix {
+    display: grid;
+    margin: 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.3mm 5mm;
+  }
+
+  .skill-matrix > div {
+    display: grid;
+    grid-template-columns: 33mm minmax(0, 1fr);
+    gap: 2mm;
+  }
+
+  .skill-matrix dt,
+  .skill-matrix dd {
+    margin: 0;
+    font-size: 7.85pt;
+    line-height: 1.32;
+  }
+
+  .skill-matrix dt {
+    color: var(--doc-indigo);
+    font-weight: 650;
+  }
+
+  .skill-matrix dd {
+    color: var(--doc-soft);
+  }
+
+  .record-list,
+  .project-grid,
+  .education-grid,
+  .credential-grid {
+    display: grid;
+  }
+
+  .record-list {
+    gap: 3.5mm;
+  }
+
+  .record {
+    break-inside: avoid;
+  }
+
+  .record--experience {
+    padding-left: 3.4mm;
+    border-left: 0.35mm solid var(--doc-line);
+  }
+
+  .record__heading {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 4mm;
+  }
+
+  .record__heading h3,
+  .credential-record h3 {
+    margin: 0;
+    color: var(--doc-ink);
+    font-size: 8.8pt;
+    font-weight: 670;
+    line-height: 1.18;
+  }
+
+  .record__heading > div > p {
+    margin: 0.4mm 0 0;
+    color: var(--doc-rust);
+    font-size: 7.7pt;
+    font-weight: 620;
+    line-height: 1.15;
+  }
+
+  .record__meta {
+    display: grid;
+    min-width: 42mm;
+    margin: 0;
+    justify-items: end;
+    color: var(--doc-soft);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 6.65pt;
+    line-height: 1.3;
+    text-align: right;
+  }
+
+  .record__summary {
+    margin-top: 1.4mm;
+  }
+
+  .record ul {
+    display: grid;
+    margin: 1.3mm 0 0;
+    padding: 0;
+    gap: 0.7mm;
+    color: var(--doc-ink);
+    font-size: 7.65pt;
+    line-height: 1.32;
+    list-style: none;
+  }
+
+  .record li {
+    position: relative;
+    padding-left: 3mm;
+  }
+
+  .record li::before {
+    position: absolute;
+    top: 0.53em;
+    left: 0;
+    width: 1.25mm;
+    height: 0.3mm;
+    background: var(--doc-gold);
+    content: "";
+  }
+
+  .record__tools {
+    margin: 1.3mm 0 0;
+    color: var(--doc-indigo);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 6.55pt;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3.7mm 5mm;
+  }
+
+  .record--project {
+    display: grid;
+    padding-top: 3mm;
+    grid-template-columns: 7mm minmax(0, 1fr);
+    gap: 1.5mm;
+    border-top: 0.25mm solid var(--doc-line);
+  }
+
+  .record--project__index {
+    padding-top: 0.25mm;
+    color: var(--doc-gold);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 6.6pt;
+  }
+
+  .education-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+  }
+
+  .record--education {
+    padding: 4mm;
+    border: 0.25mm solid var(--doc-line);
+    background: rgb(52 78 96 / 3%);
+  }
+
+  .record--education .record__heading {
+    display: block;
+  }
+
+  .record--education .record__meta {
+    display: flex;
+    margin-top: 1.2mm;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .credential-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.8mm 5mm;
+  }
+
+  .credential-record {
+    display: grid;
+    min-height: 10.8mm;
+    padding: 1.7mm 0;
+    grid-template-columns: minmax(0, 1fr) 34mm;
+    align-items: start;
+    gap: 2mm;
+    break-inside: avoid;
+    border-bottom: 0.2mm solid var(--doc-line);
+  }
+
+  .credential-record p {
+    margin: 0.35mm 0 0;
+    color: var(--doc-soft);
+    font-size: 6.9pt;
+    line-height: 1.2;
+  }
+
+  .credential-record__status {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 6.1pt !important;
+    text-align: right;
+  }
+
+  .document-footer {
+    display: flex;
+    min-height: 6mm;
+    margin-top: 3mm;
+    padding-top: 1.8mm;
+    align-items: end;
+    justify-content: space-between;
+    gap: 3mm;
+    border-top: 0.2mm solid var(--doc-line);
+    color: var(--doc-soft);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 5.7pt;
+    line-height: 1;
+  }
+
+  .document-footer p {
+    margin: 0;
+  }
+
+  .document-sheet[data-page-number="2"] .document-sections {
+    gap: 5.6mm;
+  }
+
+  .document-sheet[data-page-number="2"] .document-section__header {
+    margin-bottom: 3.4mm;
+  }
+
+  .document-sheet[data-page-number="2"] .record-list {
+    gap: 4.6mm;
+  }
+
+  .document-sheet[data-page-number="2"] .project-grid {
+    gap: 4.8mm 5mm;
+  }
+
+  .document-sheet[data-page-number="2"] .record--project {
+    padding-top: 3.6mm;
+  }
+
+  .document-sheet[data-page-number="2"] .record__summary {
+    line-height: 1.46;
+  }
+
+  .document-sheet--resume[data-page-number="2"] .record--education {
+    padding: 4.7mm;
+  }
+
+  .document-sheet--resume[data-page-number="2"] .credential-record {
+    min-height: 12.2mm;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .document-sections {
+    gap: 2.6mm;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .document-section__header {
+    margin-bottom: 2mm;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .document-section h2 {
+    font-size: 12.2pt;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .record--education {
+    padding: 2.7mm 3mm;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .credential-grid {
+    gap: 1.2mm 5mm;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .credential-record {
+    min-height: 8.55mm;
+    padding: 1.15mm 0 1.25mm;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .credential-record h3 {
+    font-size: 8pt;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .credential-record p {
+    font-size: 6.25pt;
+  }
+
+  .document-sheet--cv[data-page-number="3"] .credential-record__status {
+    font-size: 5.6pt !important;
+  }
+
+  @media screen and (max-width: 900px) {
+    body {
+      padding-inline: 0;
+    }
+
+    .document-toolbar {
+      position: relative;
+      top: 0;
+      width: calc(100vw - 2rem);
+      flex-wrap: wrap;
+    }
+
+    .document-sheet {
+      transform-origin: top center;
+    }
+
+    .document-stack {
+      width: 210mm;
+      margin-inline: auto;
+      zoom: min(1, calc((100vw - 2rem) / 210mm));
+    }
+
+    @supports not (zoom: calc(100vw / 210mm)) {
+      .document-stack {
+        width: calc(100vw - 2rem);
+        overflow-x: auto;
+        justify-content: start;
+      }
+    }
+  }
+
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    :root {
+      background: #fff;
+    }
+
+    html,
+    body {
+      width: 210mm;
+      min-height: 0;
+      padding: 0;
+      background: #fff;
+    }
+
+    .document-toolbar {
+      display: none !important;
+    }
+
+    .document-stack {
+      display: block;
+    }
+
+    .document-sheet {
+      width: 210mm;
+      height: 297mm;
+      break-after: page;
+      box-shadow: none;
+    }
+
+    .document-sheet:last-child {
+      break-after: auto;
+    }
+  }
+</style>

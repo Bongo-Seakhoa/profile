@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /profile/
+
+Sitemap: https://bongo-seakhoa.github.io/profile/sitemap-index.xml

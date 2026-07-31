@@ -14,7 +14,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$heartbeatDirectory = Join-Path $Root 'heartbeats'
+$heartbeatDirectory = Join-Path $Root '.watch-state\heartbeats'
 $heartbeatPath = Join-Path $heartbeatDirectory "$Agent.json"
 $temporaryPath = "$heartbeatPath.tmp"
 

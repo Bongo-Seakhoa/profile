@@ -1,106 +1,129 @@
-# Professional Profile Hub
+# Bongo Seakhoa Profile
 
-This repository replaces the older Wix portfolio and serves as the main public professional identity hub for **Bongo Seakhoa** and **Bongo Kosa**.
+Production portfolio for [bongo-seakhoa.github.io/profile](https://bongo-seakhoa.github.io/profile/).
 
-It is designed for GitHub Pages and supports both surname entry points cleanly:
+Release 1 is a complete, semantic Static View with an Anzania-inspired editorial
+system, conventional professional routes, and polished browser-native Resume and
+CV downloads. The opt-in immersive Anzania experience follows as required
+production work; Static View remains its accessible and professional fallback.
 
-- `/bongo-seakhoa/`
-- `/bongo-kosa/`
+## Production architecture
 
-The root page acts as a discovery hub so visitors can quickly choose the profile link that matches the surname they know.
+- Astro 6 and TypeScript generate every public route as static HTML.
+- Static View renders without client JavaScript, canvas, WebGL, decorative
+  animation or immersive asset requests.
+- One validated content model feeds the website, document previews and PDFs.
+- Resume and CV PDFs are created with JavaScript, print CSS, Chromium and
+  `pdf-lib`. Python is not part of the production build or document pipeline.
+- Responsive Anzania artwork is generated with Sharp from an approved,
+  hash-verified allowlist.
+- The site is built for the GitHub Pages `/profile/` base path.
+- Playwright, Axe, Vitest, Astro Check, TypeScript, ESLint and release validators
+  form the quality gate.
 
-## What This Repo Contains
+## Source map
 
-- A polished static GitHub Pages profile site with animated aurora background, particle effects, and glassmorphism design
-- Dual surname entry points
-- A document selector page plus surname-matched resume and CV pages
-- Four generated downloadable PDF documents: two resumes and two CVs
-- Structured profile content in one source-of-truth file
-- Separate sections for education, UC Boulder coursework, certifications, and additional learning
-- Maintenance documentation for future prompt-driven updates
+- `src/data/profile/`
+  Evidence-bound identity, work, experience, education, credential, route and
+  document manifests.
+- `src/data/static-art/`
+  Typed Anzania location registry, derivative manifest and provenance records.
+- `src/pages/`
+  Static routes, project detail pages and browser document previews.
+- `src/components/`
+  Site shell, content, media and professional document components.
+- `src/immersive/`
+  Full-body camera and animation runtime contracts for the later opt-in mode.
+- `public/assets/images/anzania/`
+  Approved responsive artwork derivatives only.
+- `scripts/build-documents.mjs`
+  Browser-native Resume and CV PDF generator.
+- `scripts/build-static-art.mjs`
+  Hash-checked responsive art pipeline.
+- `scripts/validate-public-output.mjs`
+  Public artifact, base-path, PDF-link and prohibited-output checks.
+- `AI-COLLAB/`
+  Plans, decisions, audits, risks, status, handoffs, communications and watcher
+  protocol for Codex and Claude.
 
-## Structure
+The older root HTML, asset folders and `scripts/build.py` are retained only as
+historical rollback material. They are not invoked by package scripts, CI or the
+GitHub Pages artifact.
 
-- `content/profile.json`
-  Main source of truth for biography, experience, education, coursework, credentials, links, and featured projects.
-- `scripts/build.py`
-  Generates the site pages plus the surname-specific resume and CV PDFs.
-- `assets/site.css`
-  Visual design system: aurora backgrounds, glassmorphism, gradient text, glow effects, staggered animations, responsive layout.
-- `assets/site.js`
-  Particle canvas, staggered reveal animations, scroll-triggered effects.
-- `resume/index.html`
-  Document selector page that links to both surname variants and both document types.
-- `resume/bongo-seakhoa/index.html`
-  Resume page for the Seakhoa surname variant.
-- `resume/bongo-kosa/index.html`
-  Resume page for the Kosa surname variant.
-- `resume/cv/bongo-seakhoa/index.html`
-  CV page for the Seakhoa surname variant.
-- `resume/cv/bongo-kosa/index.html`
-  CV page for the Kosa surname variant.
-- `assets/files/bongo-seakhoa-resume.pdf`
-  Generated downloadable PDF for the Seakhoa variant.
-- `assets/files/bongo-kosa-resume.pdf`
-  Generated downloadable PDF for the Kosa variant.
-- `assets/files/bongo-seakhoa-cv.pdf`
-  Generated downloadable CV PDF for the Seakhoa variant.
-- `assets/files/bongo-kosa-cv.pdf`
-  Generated downloadable CV PDF for the Kosa variant.
-- `source/private/`
-  Local-only evidence and raw materials. This folder is gitignored by default.
-- `docs/update-playbook.md`
-  Repeatable update process and prompt templates.
+## Requirements
 
-## Local Workflow
+- Node.js 24.14.x
+- pnpm 11.9.0
+- Google Chrome or a compatible Playwright Chromium runtime
 
-1. Update `content/profile.json`.
-2. Run:
+Install dependencies:
 
-   ```powershell
-   python scripts/build.py
-   ```
+```powershell
+pnpm install --frozen-lockfile
+```
 
-3. Preview locally:
+## Local development
 
-   ```powershell
-   python -m http.server 8000
-   ```
+```powershell
+pnpm run dev
+```
 
-4. Open `http://localhost:8000`.
-5. Review:
-   - `index.html`
-   - `bongo-seakhoa/index.html`
-   - `bongo-kosa/index.html`
-   - `resume/index.html`
-   - `resume/bongo-seakhoa/index.html`
-   - `resume/bongo-kosa/index.html`
-   - `resume/cv/bongo-seakhoa/index.html`
-   - `resume/cv/bongo-kosa/index.html`
+Astro serves the site under `/profile/`. Use the URL printed by the development
+server.
 
-## GitHub Pages Publishing
+## Build and quality gates
 
-1. Push this repository to GitHub.
-2. In repository settings, enable GitHub Pages.
-3. Set the source to deploy from the repository root.
-4. Your public hub will then expose the root identity selector plus the two surname-specific routes.
+Create the production site, four PDFs and release metadata:
 
-## Public vs Private Material
+```powershell
+pnpm run build
+```
 
-Sensitive raw files should remain in `source/private/` and stay out of the published site.
+Run the complete release-quality suite:
 
-The public site should link only to safe public credential pages such as:
+```powershell
+pnpm run qa
+```
 
-- Credly
-- Coursera profile or accomplishment pages
-- Google credential pages
-- DataCamp certificate pages
+The full gate covers:
 
-## Notes
+- content and route integrity;
+- formatting, linting and TypeScript;
+- immersive camera and animation contract tests;
+- responsive static-art integrity;
+- A4 page counts, overflow, section boundaries, fonts, metadata and PDF links;
+- desktop, mobile, no-JavaScript and accessibility browser tests;
+- GitHub Pages base paths, sitemap, robots, icons and release metadata; and
+- absence of public em dash characters, canvas, decorative motion and
+  unrequested immersive assets.
 
-- The site intentionally treats **Bongo Seakhoa** and **Bongo Kosa** as the same professional identity.
-- Resume and CV generation keep both surname variants aligned from one shared content source, with the surname as the intentional visible difference.
-- Public credential links are used instead of exposing raw certificate PDFs.
-- The generated documents are aligned with the same structured content used by the site so updates stay consistent.
-- Education section reflects the current BSc in Engineering Management at the University of Debrecen.
-- UC Boulder coursework completed via Coursera is listed separately under its own section.
+Generated PDFs are written to:
+
+- `dist/documents/bongo-seakhoa-resume.pdf`
+- `dist/documents/bongo-kosa-resume.pdf`
+- `dist/documents/bongo-seakhoa-cv.pdf`
+- `dist/documents/bongo-kosa-cv.pdf`
+
+## Deployment and rollback
+
+`.github/workflows/deploy-pages.yml` builds and validates the exact `dist/`
+artifact before GitHub Pages deployment from `main`. The deployed artifact
+includes `version.json` with its release revision and build identity.
+
+The previous production state is preserved by the
+`legacy-pages-baseline-20260730` tag. A failed release can redeploy the last
+known-good artifact without rebuilding it from unreviewed source.
+
+## Content and asset boundaries
+
+- Do not publish private phone numbers or raw certificate files.
+- Do not infer contract type, contribution, outcome or metrics without evidence.
+- Keep both surname document variants aligned from the shared manifest.
+- Never copy reference masters directly into `public/`.
+- Never ship assets marked `SUPERSEDED_DO_NOT_SHIP` or noncanonical character
+  concepts.
+- Full character production waits for the approved canonical character reference
+  pack. This dependency does not remove the required immersive milestones.
+
+See `AI-COLLAB/plans/MASTER-EXECUTION-PLAN.md` and
+`AI-COLLAB/status/STATUS.md` for the current production sequence and blockers.

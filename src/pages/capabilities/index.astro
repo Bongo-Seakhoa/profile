@@ -1,0 +1,66 @@
+---
+import CapabilityRecord from "../../components/content/CapabilityRecord.astro";
+import ContentStyles from "../../components/content/ContentStyles.astro";
+import ActionLink from "../../components/primitives/ActionLink.astro";
+import Container from "../../components/primitives/Container.astro";
+import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../lib/content/load-content";
+
+const content = await loadProfileContent();
+const route = content.routes.find((entry) => entry.id === "capabilities");
+
+if (!route) throw new Error("Capabilities route content is missing.");
+
+const capabilities = [...content.capabilities].sort(
+  (left, right) => left.featuredOrder - right.featuredOrder,
+);
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId={route.id}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow="How I can contribute"
+    title={route.title}
+    lede="Data systems, analysis, applied models and technical guidance connected to evidence rather than isolated tool lists."
+  >
+    <ActionLink href="work/">View selected work</ActionLink>
+    <ActionLink href="contact/" variant="secondary">
+      Discuss a project
+    </ActionLink>
+  </PageMasthead>
+
+  <section class="page-section" aria-label="Capability records">
+    <Container>
+      <div class="capability-list">
+        {
+          capabilities.map((capability, index) => (
+            <CapabilityRecord capability={capability} index={index + 1} />
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface"
+    aria-labelledby="working-boundary-title"
+  >
+    <Container size="content">
+      <div class="integrity-note">
+        <h2 id="working-boundary-title">Working boundary</h2>
+        <p>
+          The portfolio describes established tools and public or client-safe
+          evidence. Project scope, access and delivery expectations are agreed
+          for each engagement.
+        </p>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

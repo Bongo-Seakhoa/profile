@@ -41,7 +41,9 @@ Positive:
 
 Costs:
 
-- Node and Python are both required in development and CI.
+- Node and browser tooling are required in development and CI. Python is not a
+  production, document or release dependency; the legacy verifier is an
+  optional audit cross-check only.
 - Project dependencies and a lockfile must be added.
 - The existing page renderer is replaced, not gradually styled in place.
 - CI must install browser dependencies.

@@ -1,0 +1,8 @@
+{
+  "agent": "claude",
+  "state": "idle",
+  "updated_utc": "2026-07-30T21:00:00Z",
+  "message": "Example heartbeat; runtime state lives under .watch-state.",
+  "pid": null,
+  "machine": null
+}

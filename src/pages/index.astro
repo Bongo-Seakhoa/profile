@@ -1,0 +1,579 @@
+---
+import CapabilityRecord from "../components/content/CapabilityRecord.astro";
+import ContentStyles from "../components/content/ContentStyles.astro";
+import ExperienceRecord from "../components/content/ExperienceRecord.astro";
+import ProjectCard from "../components/content/ProjectCard.astro";
+import AnzaniaPlate from "../components/media/AnzaniaPlate.astro";
+import ActionLink from "../components/primitives/ActionLink.astro";
+import Container from "../components/primitives/Container.astro";
+import SectionIntro from "../components/primitives/SectionIntro.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../lib/content/load-content";
+import { sitePath } from "../lib/urls";
+
+const content = await loadProfileContent();
+const identity = content.identity[0];
+const route = content.routes.find((entry) => entry.id === "home");
+
+if (!identity || !route) {
+  throw new Error("Homepage identity or route content is missing.");
+}
+
+const featuredProjects = content.projects
+  .filter((project) => project.featured)
+  .sort(
+    (left, right) =>
+      (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.featuredOrder ?? Number.MAX_SAFE_INTEGER),
+  );
+const leadProject =
+  featuredProjects.find(
+    (project) => project.id === "fxpm-1-4-forex-portfolio-manager",
+  ) ?? featuredProjects[0];
+const supportingProjects = featuredProjects.filter(
+  (project) => project.id !== leadProject?.id,
+);
+const featuredExperience = content.experience
+  .filter((experience) => experience.featured)
+  .sort(
+    (left, right) =>
+      (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.featuredOrder ?? Number.MAX_SAFE_INTEGER),
+  );
+const activeCloudCredentials = content.credentials.filter(
+  (credential) =>
+    credential.category === "current-cloud" && credential.status === "active",
+);
+const linkedin = identity.links.find((link) => link.id === "linkedin");
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId={route.id}
+  updatedDate={identity.lastReviewed}
+>
+  <ContentStyles />
+
+  <section class="home-hero" aria-labelledby="home-title">
+    <Container>
+      <div class="home-hero__grid">
+        <div class="home-hero__copy">
+          <p class="home-hero__eyebrow">{identity.headline}</p>
+          <h1 id="home-title">{identity.primaryName}</h1>
+          <p class="home-hero__statement">{identity.valueStatement}</p>
+          <div class="home-hero__actions">
+            <ActionLink href="work/">View selected work</ActionLink>
+            <ActionLink href="contact/" variant="secondary">Contact</ActionLink>
+            <ActionLink href="documents/" variant="quiet">
+              Resume and CV
+            </ActionLink>
+          </div>
+          <dl class="home-hero__facts">
+            <div>
+              <dt>Based in</dt>
+              <dd>{identity.location}</dd>
+            </div>
+            <div>
+              <dt>Availability</dt>
+              <dd>{identity.availability}</dd>
+            </div>
+          </dl>
+        </div>
+        <figure class="home-hero__figure">
+          <AnzaniaPlate
+            id="threshold-dunes-outer"
+            use="home-hero"
+            priority
+            preload
+            decorative={false}
+            sizes="(min-width: 60rem) 55vw, 100vw"
+          />
+          <figcaption>
+            Threshold Dunes, an Anzania setting used as editorial artwork.
+          </figcaption>
+        </figure>
+      </div>
+    </Container>
+  </section>
+
+  <section class="proof-section" aria-label="Professional overview">
+    <Container>
+      <div class="evidence-band">
+        <div class="evidence-band__item">
+          <span class="evidence-band__index">01</span>
+          <p>Current data engineering work at MetaPOS</p>
+        </div>
+        <div class="evidence-band__item">
+          <span class="evidence-band__index">02</span>
+          <p>Data engineering, analytics and applied machine learning</p>
+        </div>
+        <div class="evidence-band__item">
+          <span class="evidence-band__index">03</span>
+          <p>Engineering Management study at the University of Debrecen</p>
+        </div>
+        <div class="evidence-band__item">
+          <span class="evidence-band__index">04</span>
+          <p>
+            {activeCloudCredentials.length} current Google Cloud credentials, active
+            through 2027
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="page-section" aria-labelledby="featured-work-title">
+    <Container>
+      <SectionIntro
+        id="featured-work-title"
+        eyebrow="Selected work"
+        title="Systems, analysis and applied models"
+        description="Public evidence and client-safe summaries, with scope and status stated clearly."
+      />
+      <div class="featured-work-grid">
+        {leadProject && <ProjectCard project={leadProject} variant="lead" />}
+        <div class="featured-work-grid__supporting">
+          {
+            supportingProjects.map((project) => (
+              <ProjectCard project={project} variant="standard" />
+            ))
+          }
+        </div>
+      </div>
+      <figure class="editorial-art editorial-art--work">
+        <AnzaniaPlate
+          id="archive-echoes-outer"
+          use="work-evidence"
+          decorative
+          loading="lazy"
+          sizes="(min-width: 80rem) 1248px, 100vw"
+        />
+        <figcaption>
+          Archive of Echoes artwork. Project evidence is linked within each
+          record above.
+        </figcaption>
+      </figure>
+      <div class="section-actions">
+        <ActionLink href="work/" variant="secondary">
+          Browse the complete work index
+        </ActionLink>
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface"
+    aria-labelledby="capabilities-title"
+  >
+    <Container>
+      <SectionIntro
+        id="capabilities-title"
+        eyebrow="Capabilities"
+        title="Practical technical work, communicated clearly"
+        description="Each capability starts with the problem, then connects delivery to public or client-safe evidence."
+      />
+      <div class="home-capabilities">
+        {
+          content.capabilities.map((capability, index) => (
+            <CapabilityRecord capability={capability} index={index + 1} />
+          ))
+        }
+      </div>
+      <div class="section-actions">
+        <ActionLink href="capabilities/" variant="quiet">
+          Read the capability detail
+        </ActionLink>
+      </div>
+    </Container>
+  </section>
+
+  <section class="page-section" aria-labelledby="experience-title">
+    <Container>
+      <SectionIntro
+        id="experience-title"
+        eyebrow="Experience"
+        title="Delivery across data and learning"
+        description="Reverse-chronological records show overlapping remote work directly, without inferring employment type."
+      />
+      <div class="record-stack">
+        {
+          featuredExperience.map((experience) => (
+            <ExperienceRecord experience={experience} compact />
+          ))
+        }
+      </div>
+      <div class="section-actions">
+        <ActionLink href="experience/" variant="secondary">
+          View full experience
+        </ActionLink>
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--muted"
+    aria-labelledby="research-education-title"
+  >
+    <Container>
+      <SectionIntro
+        id="research-education-title"
+        eyebrow="Learning and inquiry"
+        title="Research experiments and formal study"
+      />
+      <div class="home-split-panels">
+        <article>
+          <p class="home-split-panels__label">Research and experiments</p>
+          <h3>Public technical explorations</h3>
+          <p>
+            CNN filter visualisation, environmental data analysis and trading
+            experiments are labelled by evidence state. They are not presented
+            as publications.
+          </p>
+          <a href={sitePath("research/")}>Review research and experiments</a>
+        </article>
+        <article>
+          <p class="home-split-panels__label">Education and credentials</p>
+          <h3>Current study and verified learning</h3>
+          <p>
+            Formal study at the University of Debrecen, Explore AI Academy
+            training and active Google Cloud credentials are recorded with dates
+            and verification links.
+          </p>
+          <div>
+            <a href={sitePath("education/")}>View education</a>
+            <a href={sitePath("credentials/")}>Verify credentials</a>
+          </div>
+        </article>
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--compact"
+    aria-labelledby="about-preview-title"
+  >
+    <Container size="content">
+      <div class="about-preview">
+        <p class="about-preview__label">About</p>
+        <div>
+          <h2 id="about-preview-title">
+            Reliable data work depends on technical care and useful
+            communication.
+          </h2>
+          <p>{identity.summary[0]}</p>
+          <a href={sitePath("about/")}>More about my work and background</a>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="page-section" aria-labelledby="contact-close-title">
+    <Container>
+      <div class="home-contact">
+        <div class="contact-panel">
+          <div>
+            <p class="contact-panel__eyebrow">Start a conversation</p>
+            <h2 id="contact-close-title">Bring a data problem into focus.</h2>
+            <p>{identity.availability}</p>
+          </div>
+          <div class="contact-panel__links">
+            <a href={`mailto:${identity.email}`}>Email Bongo</a>
+            {linkedin && <a href={linkedin.url}>LinkedIn profile</a>}
+            <a href={sitePath("documents/")}>Resume and CV</a>
+            <a href={sitePath("contact/")}>Contact details</a>
+          </div>
+        </div>
+        <figure class="editorial-art editorial-art--contact">
+          <AnzaniaPlate
+            id="oasis-audience-inner"
+            use="contact-call-to-action"
+            decorative
+            loading="lazy"
+            sizes="(min-width: 60rem) 42vw, 100vw"
+          />
+          <figcaption>
+            Oasis of Audience artwork, paired with direct contact paths.
+          </figcaption>
+        </figure>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-hero {
+    padding-block: clamp(3.5rem, 8vw, 7.5rem);
+    border-block-end: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .home-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .home-hero__copy {
+    min-inline-size: 0;
+  }
+
+  .home-hero__eyebrow,
+  .about-preview__label,
+  .home-split-panels__label,
+  .contact-panel__eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.085em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-inline-size: 9ch;
+    font-size: var(--step-5);
+    letter-spacing: -0.045em;
+    line-height: 0.94;
+  }
+
+  .home-hero__statement {
+    max-inline-size: 48ch;
+    margin-block-start: var(--space-5);
+    color: var(--ink-soft);
+    font-size: var(--step-1);
+    line-height: 1.5;
+  }
+
+  .home-hero__actions {
+    display: flex;
+    margin-block-start: var(--space-6);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .home-hero__facts {
+    display: grid;
+    margin: var(--space-7) 0 0;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .home-hero__facts > div {
+    display: grid;
+    padding-block-start: var(--space-3);
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: var(--space-3);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .home-hero__facts dt {
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .home-hero__facts dd {
+    margin: 0;
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+
+  .home-hero__figure,
+  .editorial-art {
+    margin: 0;
+  }
+
+  .home-hero__figure :global(.anzania-plate) {
+    aspect-ratio: 5 / 4;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-medium);
+  }
+
+  figcaption {
+    margin-block-start: var(--space-2);
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+  }
+
+  .proof-section {
+    background: var(--canvas);
+  }
+
+  .featured-work-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-5);
+  }
+
+  .featured-work-grid__supporting {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .editorial-art--work {
+    margin-block-start: var(--space-7);
+  }
+
+  .editorial-art--work :global(.anzania-plate) {
+    aspect-ratio: 3 / 1;
+    border: 1px solid var(--line-strong);
+  }
+
+  .home-capabilities :global(.capability-record) {
+    padding-block: var(--space-6);
+  }
+
+  .home-split-panels {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--space-5);
+  }
+
+  .home-split-panels article {
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .home-split-panels h3 {
+    max-inline-size: 22ch;
+    font-size: var(--step-2);
+  }
+
+  .home-split-panels article > p:not(.home-split-panels__label) {
+    max-inline-size: 56ch;
+    margin-block-start: var(--space-4);
+    color: var(--ink-soft);
+  }
+
+  .home-split-panels article > a,
+  .home-split-panels article > div {
+    margin-block-start: var(--space-5);
+  }
+
+  .home-split-panels a {
+    display: inline-flex;
+    min-block-size: var(--target-size);
+    margin-inline-end: var(--space-4);
+    padding-block: 0.65rem;
+    align-items: center;
+    color: var(--rust-strong);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .about-preview {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.4fr) minmax(0, 1.6fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .about-preview h2 {
+    max-inline-size: 28ch;
+    font-size: var(--step-3);
+  }
+
+  .about-preview div > p {
+    max-inline-size: 62ch;
+    margin-block-start: var(--space-4);
+    color: var(--ink-soft);
+    font-size: var(--step-1);
+  }
+
+  .about-preview a {
+    display: inline-flex;
+    min-block-size: var(--target-size);
+    margin-block-start: var(--space-4);
+    padding-block: 0.65rem;
+    align-items: center;
+    color: var(--rust-strong);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .home-contact {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: stretch;
+  }
+
+  .home-contact > * {
+    min-inline-size: 0;
+  }
+
+  .home-contact .contact-panel {
+    border-radius: var(--radius-medium) 0 0 var(--radius-medium);
+  }
+
+  .contact-panel__eyebrow {
+    color: var(--gold-light);
+  }
+
+  .editorial-art--contact :global(.anzania-plate) {
+    block-size: 100%;
+    min-block-size: 22rem;
+    border-radius: 0 var(--radius-medium) var(--radius-medium) 0;
+  }
+
+  .editorial-art--contact {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editorial-art--contact figcaption {
+    max-inline-size: 40ch;
+  }
+
+  @media (max-width: 60rem) {
+    .home-hero__grid,
+    .featured-work-grid,
+    .home-split-panels,
+    .home-contact {
+      grid-template-columns: 1fr;
+    }
+
+    .home-hero__copy {
+      max-inline-size: 44rem;
+    }
+
+    .home-contact {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .home-hero__figure :global(.anzania-plate) {
+      aspect-ratio: 16 / 10;
+    }
+
+    .home-contact .contact-panel {
+      border-radius: var(--radius-medium) var(--radius-medium) 0 0;
+    }
+
+    .editorial-art--contact :global(.anzania-plate) {
+      min-block-size: 16rem;
+      aspect-ratio: 16 / 9;
+      border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .home-hero__actions :global(.action-link) {
+      inline-size: 100%;
+    }
+
+    .home-hero__facts > div,
+    .about-preview {
+      grid-template-columns: 1fr;
+    }
+
+    .home-hero__facts > div {
+      gap: var(--space-1);
+    }
+  }
+</style>

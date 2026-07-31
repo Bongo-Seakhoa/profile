@@ -1,0 +1,36 @@
+[
+  {
+    "id": "university-debrecen-engineering-management",
+    "institution": "University of Debrecen",
+    "qualification": "BSc in Engineering Management",
+    "dateStart": "2025-09",
+    "dateEnd": null,
+    "current": true,
+    "location": "Debrecen, Hungary",
+    "details": [
+      "Undergraduate study combining engineering fundamentals with management principles and systems thinking."
+    ],
+    "result": null,
+    "evidenceLinks": [],
+    "evidenceState": "owner-supplied-profile",
+    "featuredOrder": 1,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "explore-ai-data-science",
+    "institution": "Explore AI Academy",
+    "qualification": "Data Science Certificate",
+    "dateStart": "2022-01",
+    "dateEnd": "2022-12",
+    "current": false,
+    "location": "Cape Town, South Africa",
+    "details": ["Completed immersive data science training."],
+    "result": "85 percent",
+    "evidenceLinks": [],
+    "evidenceState": "owner-supplied-profile",
+    "featuredOrder": 2,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  }
+]

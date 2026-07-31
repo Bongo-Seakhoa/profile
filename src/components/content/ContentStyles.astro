@@ -1,0 +1,203 @@
+<style is:global>
+  .page-section {
+    padding-block: var(--section-space);
+  }
+
+  .page-section--surface {
+    border-block: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .page-section--muted {
+    border-block: 1px solid var(--line);
+    background: var(--surface-muted);
+  }
+
+  .page-section--compact {
+    padding-block: clamp(2.75rem, 6vw, 5rem);
+  }
+
+  .section-actions {
+    display: flex;
+    margin-block-start: var(--space-6);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .section-actions a {
+    display: inline-flex;
+    min-block-size: var(--target-size);
+    padding: 0.65rem 0;
+    align-items: center;
+    color: var(--rust-strong);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+  }
+
+  .editorial-grid > * {
+    min-inline-size: 0;
+  }
+
+  .evidence-band {
+    display: grid;
+    padding-block: var(--space-5);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-block: 1px solid var(--line-strong);
+  }
+
+  .evidence-band__item {
+    padding: var(--space-4) var(--space-5);
+    border-inline-start: 1px solid var(--line);
+  }
+
+  .evidence-band__item:first-child {
+    border-inline-start: 0;
+  }
+
+  .evidence-band__index {
+    display: block;
+    margin-block-end: var(--space-2);
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .evidence-band__item p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+
+  .route-intro-note,
+  .empty-state,
+  .integrity-note {
+    max-inline-size: 70ch;
+    padding: var(--space-5);
+    border: 1px solid var(--line-strong);
+    border-inline-start: 0.35rem solid var(--gold);
+    background: var(--surface);
+  }
+
+  .route-intro-note h2,
+  .empty-state h2,
+  .integrity-note h2 {
+    font-size: var(--step-1);
+  }
+
+  .route-intro-note p,
+  .empty-state p,
+  .integrity-note p {
+    margin-block-start: var(--space-2);
+    color: var(--ink-soft);
+  }
+
+  .record-stack {
+    display: grid;
+    gap: 0;
+  }
+
+  .project-archive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .contact-panel {
+    display: grid;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    border-radius: var(--radius-large);
+    color: var(--surface);
+    background: var(--indigo);
+  }
+
+  .contact-panel h2 {
+    max-inline-size: 20ch;
+    color: inherit;
+    font-size: var(--step-3);
+  }
+
+  .contact-panel p {
+    max-inline-size: 56ch;
+    margin-block-start: var(--space-4);
+    color: rgb(255 249 238 / 82%);
+  }
+
+  .contact-panel__links {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .contact-panel__links a {
+    display: flex;
+    min-block-size: var(--target-size);
+    padding: 0.65rem 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    border-block-end: 1px solid rgb(255 249 238 / 24%);
+    color: var(--surface);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .contact-panel__links a::after {
+    color: var(--gold-light);
+    content: "↗";
+  }
+
+  .visually-hidden {
+    position: absolute !important;
+    inline-size: 1px !important;
+    block-size: 1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  @media (max-width: 58rem) {
+    .evidence-band {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .evidence-band__item:nth-child(3) {
+      border-inline-start: 0;
+    }
+
+    .evidence-band__item:nth-child(n + 3) {
+      border-block-start: 1px solid var(--line);
+    }
+
+    .contact-panel {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .evidence-band,
+    .project-archive-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .evidence-band__item {
+      border-block-start: 1px solid var(--line);
+      border-inline-start: 0;
+    }
+
+    .evidence-band__item:first-child {
+      border-block-start: 0;
+    }
+  }
+</style>

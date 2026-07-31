@@ -1,9 +1,11 @@
 # Heartbeat protocol
 
-Each active agent owns one JSON file:
+Each active agent owns one runtime JSON file:
 
-- `heartbeats/codex.json`
-- `heartbeats/claude.json`
+- `.watch-state/heartbeats/codex.json`
+- `.watch-state/heartbeats/claude.json`
+
+Runtime heartbeats are intentionally ignored by Git so the watcher does not dirty the worktree. Tracked `heartbeats/*.example.json` files document the format.
 
 Required fields:
 

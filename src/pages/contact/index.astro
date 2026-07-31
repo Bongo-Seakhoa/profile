@@ -1,0 +1,225 @@
+---
+import ContentStyles from "../../components/content/ContentStyles.astro";
+import AnzaniaPlate from "../../components/media/AnzaniaPlate.astro";
+import ActionLink from "../../components/primitives/ActionLink.astro";
+import Container from "../../components/primitives/Container.astro";
+import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import SectionIntro from "../../components/primitives/SectionIntro.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../lib/content/load-content";
+
+const content = await loadProfileContent();
+const route = content.routes.find((entry) => entry.id === "contact");
+const identity = content.identity[0];
+
+if (!route || !identity) throw new Error("Contact route content is missing.");
+
+const linkedin = identity.links.find((link) => link.id === "linkedin");
+const github = identity.links.find((link) => link.id === "github");
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId={route.id}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow="Direct contact"
+    title={route.title}
+    lede="Email is the direct contact path. LinkedIn, GitHub and polished professional documents are available without a form or JavaScript."
+  >
+    <ActionLink href={`mailto:${identity.email}`}>Email Bongo</ActionLink>
+    <ActionLink href="documents/" variant="secondary">
+      Resume and CV
+    </ActionLink>
+  </PageMasthead>
+
+  <section class="page-section" aria-labelledby="contact-methods-title">
+    <Container>
+      <div class="contact-layout">
+        <div>
+          <SectionIntro
+            id="contact-methods-title"
+            eyebrow="Contact methods"
+            title="Choose the path that fits"
+            description={identity.availability}
+          />
+          <dl class="contact-methods">
+            <div>
+              <dt>Email</dt>
+              <dd><a href={`mailto:${identity.email}`}>{identity.email}</a></dd>
+              <dd class="contact-methods__note">
+                Best for roles, project discussions and direct enquiries.
+              </dd>
+            </div>
+            {
+              linkedin && (
+                <div>
+                  <dt>LinkedIn</dt>
+                  <dd>
+                    <a href={linkedin.url}>Bongo Seakhoa on LinkedIn</a>
+                  </dd>
+                  <dd class="contact-methods__note">
+                    Professional background and network context.
+                  </dd>
+                </div>
+              )
+            }
+            {
+              github && (
+                <div>
+                  <dt>GitHub</dt>
+                  <dd>
+                    <a href={github.url}>Bongo-Seakhoa on GitHub</a>
+                  </dd>
+                  <dd class="contact-methods__note">
+                    Public repositories and technical experiments.
+                  </dd>
+                </div>
+              )
+            }
+            <div>
+              <dt>Location</dt>
+              <dd>{identity.location}</dd>
+              <dd class="contact-methods__note">
+                Available for remote and globally distributed work.
+              </dd>
+            </div>
+          </dl>
+        </div>
+        <figure>
+          <AnzaniaPlate
+            id="oasis-audience-inner"
+            use="contact-call-to-action"
+            decorative
+            loading="eager"
+            sizes="(min-width: 60rem) 42vw, 100vw"
+          />
+          <figcaption>
+            Oasis of Audience artwork used as a calm setting for direct contact.
+          </figcaption>
+        </figure>
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface"
+    aria-labelledby="collaboration-title"
+  >
+    <Container size="content">
+      <SectionIntro
+        id="collaboration-title"
+        eyebrow="Good starting points"
+        title="Useful context for an enquiry"
+      />
+      <ul class="collaboration-list">
+        <li>
+          The data, analytics or machine learning problem you are solving.
+        </li>
+        <li>The expected outcome and who needs to use it.</li>
+        <li>Relevant timing, access constraints and working arrangement.</li>
+      </ul>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: start;
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+
+  .contact-methods {
+    display: grid;
+    margin: 0;
+  }
+
+  .contact-methods > div {
+    display: grid;
+    padding-block: var(--space-5);
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: var(--space-2) var(--space-4);
+    border-block-start: 1px solid var(--line-strong);
+  }
+
+  .contact-methods dt {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .contact-methods dd {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .contact-methods__note {
+    grid-column: 2;
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  .contact-methods a {
+    color: var(--indigo);
+    text-underline-offset: 0.2em;
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figure :global(.anzania-plate) {
+    min-block-size: 34rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-medium);
+  }
+
+  figcaption {
+    margin-block-start: var(--space-2);
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+  }
+
+  .collaboration-list {
+    display: grid;
+    margin: 0;
+    padding-inline-start: 1.2rem;
+    gap: var(--space-3);
+    color: var(--ink-soft);
+    font-size: var(--step-1);
+  }
+
+  .collaboration-list li::marker {
+    color: var(--gold);
+  }
+
+  @media (max-width: 56rem) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+
+    figure :global(.anzania-plate) {
+      min-block-size: 0;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .contact-methods > div {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-methods__note {
+      grid-column: 1;
+    }
+  }
+</style>

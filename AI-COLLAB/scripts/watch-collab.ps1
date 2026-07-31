@@ -23,7 +23,7 @@ $ErrorActionPreference = 'Stop'
 $peer = if ($Agent -eq 'codex') { 'claude' } else { 'codex' }
 $inbox = Join-Path $Root "inbox\$Agent"
 $heartbeatScript = Join-Path $PSScriptRoot 'heartbeat.ps1'
-$peerHeartbeatPath = Join-Path $Root "heartbeats\$peer.json"
+$peerHeartbeatPath = Join-Path $Root ".watch-state\heartbeats\$peer.json"
 $watchStateDirectory = Join-Path $Root '.watch-state'
 $watchStatePath = Join-Path $watchStateDirectory "$Agent.json"
 

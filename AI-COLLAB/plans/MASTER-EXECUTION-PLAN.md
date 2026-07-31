@@ -1,11 +1,11 @@
 # Profile Upgrade master execution plan
 
-**Plan owner:** Codex, lead implementation agent  
-**Review owner:** Claude Code, independent architecture and quality reviewer  
-**Product owner:** Bongo Seakhoa  
-**Plan date:** 2026-07-30  
-**Plan status:** Approved for staged execution by the lead, pending continuous Claude review  
-**Working repository:** `C:\Users\Bongo\OneDrive\Desktop\Projects\Me- Profile`  
+**Plan owner:** Codex, lead implementation agent
+**Review owner:** Claude Code, independent architecture and quality reviewer
+**Product owner:** Bongo Seakhoa
+**Plan date:** 2026-07-30
+**Plan status:** Approved for staged execution by the lead, pending continuous Claude review
+**Working repository:** `C:\Users\Bongo\OneDrive\Desktop\Projects\Me- Profile`
 **Reference library:** `C:\Users\Bongo\OneDrive\Desktop\Projects\Profile Upgrade\Reference & inspiration material`
 
 ## 1. Outcome
@@ -32,18 +32,19 @@ The release must:
 
 These assumptions keep work moving and are deliberately reversible.
 
-| ID | Decision or assumption | Rationale | Reversal point |
-| --- | --- | --- | --- |
-| A-01 | Keep the supplied production URL and `/profile/` base path. | The owner named this URL as the upgrade target and did not request a domain or repository rename. | Change `site` and `base` before release-candidate sign-off. |
-| A-02 | Static View is Release 1 and the canonical renderer. | The newest addendum makes it first-class; it satisfies users, search engines and accessibility without unresolved character dependencies. | The immersive mode may be added only as an opt-in enhancement after Release 1. |
-| A-03 | Astro + TypeScript own the complete production build. | Best fit for typed content, static routes, images, SEO, documents, base paths and future isolated Anzania loading. | A legacy build remains recoverable until one stable production cycle passes. |
-| A-04 | Resume and CV are browser-native JavaScript assets. | The owner explicitly prioritised editorial quality over the current Python-to-browser pipeline. The Nielsen Sports method proves that shared HTML, print CSS and headless Chromium can produce small, selectable, brand-quality PDFs. | Templates and page plans remain versioned and previewable in the browser. |
-| A-05 | Personal phone is removed from indexable HTML and generated public PDFs by default. | Privacy-safe and reversible; email and LinkedIn remain direct contact paths. | Restore only after explicit owner approval. |
-| A-06 | `07_59_39 PM (2).png` is the Threshold Dunes inner plate. | Independent filename audit plus direct visual inspection show the exact camp/waystation described by the brief. | Registry and workbook retain source provenance for correction. |
-| A-07 | Reference masters remain outside the public site. | The library contains large PDFs, ZIPs, source PNGs, workbooks and specifications that are not public runtime assets. | Only approved, traceable derivatives are copied into the repository. |
-| A-08 | No invented metrics, job facts, publications or outcomes. | Programmatic LinkedIn access is blocked; existing first-party content remains the baseline until owner-supplied evidence improves it. | New claims enter through the content review workflow with evidence. |
-| A-09 | Full immersive roster and character production are outside Release 1. | The canonical character reference pack is absent and the 15-character scope is studio-scale. | Begin after Release 1 and receipt of the canonical pack. |
-| A-10 | Blender is an audited production tool, not a Static View runtime dependency. | Static View is explicitly still, HTML-first and WebGL-free. | Blender output may enter the later immersive asset pipeline or approved static renders. |
+| ID   | Decision or assumption                                                              | Rationale                                                                                                                                                                                                                             | Reversal point                                                                          |
+| ---- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| A-01 | Keep the supplied production URL and `/profile/` base path.                         | The owner named this URL as the upgrade target and did not request a domain or repository rename.                                                                                                                                     | Change `site` and `base` before release-candidate sign-off.                             |
+| A-02 | Static View is Release 1 and the canonical renderer.                                | The newest addendum makes it first-class; it satisfies users, search engines and accessibility without unresolved character dependencies.                                                                                             | The required immersive mode follows Release 1 as an opt-in enhancement.                 |
+| A-03 | Astro + TypeScript own the complete production build.                               | Best fit for typed content, static routes, images, SEO, documents, base paths and future isolated Anzania loading.                                                                                                                    | A legacy build remains recoverable until one stable production cycle passes.            |
+| A-04 | Resume and CV are browser-native JavaScript assets.                                 | The owner explicitly prioritised editorial quality over the current Python-to-browser pipeline. The Nielsen Sports method proves that shared HTML, print CSS and headless Chromium can produce small, selectable, brand-quality PDFs. | Templates and page plans remain versioned and previewable in the browser.               |
+| A-05 | Personal phone is removed from indexable HTML and generated public PDFs by default. | Privacy-safe and reversible; email and LinkedIn remain direct contact paths.                                                                                                                                                          | Restore only after explicit owner approval.                                             |
+| A-06 | `07_59_39 PM (2).png` is the Threshold Dunes inner plate.                           | Independent filename audit plus direct visual inspection show the exact camp/waystation described by the brief.                                                                                                                       | Registry and workbook retain source provenance for correction.                          |
+| A-07 | Reference masters remain outside the public site.                                   | The library contains large PDFs, ZIPs, source PNGs, workbooks and specifications that are not public runtime assets.                                                                                                                  | Only approved, traceable derivatives are copied into the repository.                    |
+| A-08 | No invented metrics, job facts, publications or outcomes.                           | Programmatic LinkedIn access is blocked; existing first-party content remains the baseline until owner-supplied evidence improves it.                                                                                                 | New claims enter through the content review workflow with evidence.                     |
+| A-09 | Full immersive roster and character production follow Release 1.                    | The canonical character reference pack is absent and the approved roster is studio-scale.                                                                                                                                             | Begin after Release 1 and receipt of the canonical pack; this work remains required.    |
+| A-10 | Blender is an audited production tool, not a Static View runtime dependency.        | Static View is explicitly still, HTML-first and WebGL-free.                                                                                                                                                                           | Blender output may enter the later immersive asset pipeline or approved static renders. |
+| A-11 | Immersive mode has one distant full-body exploration camera and no OTS variation.   | The owner explicitly superseded all previous camera-framing language. Complete animated bounds, not root position or fixed distance, govern the responsive composition.                                                               | Locked product direction; changes require a later explicit owner correction.            |
 
 Decision details live in `AI-COLLAB/decisions/`.
 
@@ -258,10 +259,12 @@ For this portfolio:
 ### 5.2 Deployment settings
 
 ```js
-site: "https://bongo-seakhoa.github.io"
-base: "/profile"
-trailingSlash: "always"
-build: { format: "directory" }
+site: "https://bongo-seakhoa.github.io";
+base: "/profile";
+trailingSlash: "always";
+build: {
+  format: "directory";
+}
 ```
 
 All internal links use one helper. A generated-output test rejects links that escape the configured project base.
@@ -348,11 +351,11 @@ All dependency versions are pinned. Installation is performed only after this pl
 
 ### 6.3 Human responsibilities
 
-| Owner | Responsibilities |
-| --- | --- |
-| Codex | Lead architecture, implementation, content migration, testing, commits, release and recovery. |
-| Claude Code | Independent plan review, architecture critique, focal/safe-zone review, adversarial QA and gate verification. |
-| Bongo | Owner authority for disputed professional facts, optional phone publication, new domain decisions, canonical character pack and final creative acceptance. |
+| Owner       | Responsibilities                                                                                                                                           |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Codex       | Lead architecture, implementation, content migration, testing, commits, release and recovery.                                                              |
+| Claude Code | Independent plan review, architecture critique, focal/safe-zone review, adversarial QA, complete-avatar camera verification and gate verification.         |
+| Bongo       | Owner authority for disputed professional facts, optional phone publication, new domain decisions, canonical character pack and final creative acceptance. |
 
 Claude silence never blocks Codex. If no Claude heartbeat is observed for more than three hours, status changes to offline and Codex proceeds from written review artefacts.
 
@@ -360,8 +363,8 @@ Claude silence never blocks Codex. If no Claude heartbeat is observed for more t
 
 ### M0 — Freeze, audit and recovery baseline
 
-**Owner:** Codex  
-**Reviewer:** Claude  
+**Owner:** Codex
+**Reviewer:** Claude
 **Status:** In progress
 
 Deliverables:
@@ -384,7 +387,7 @@ Commit intent:
 
 ### M1 — Content safety and build contracts
 
-**Owner:** Codex  
+**Owner:** Codex
 **Reviewer:** Claude content discrepancy review
 
 Deliverables:
@@ -414,7 +417,7 @@ Commit intent:
 
 ### M2 — Static shell and design system
 
-**Owner:** Codex  
+**Owner:** Codex
 **Reviewer:** Claude design-system and accessibility critique
 
 Deliverables:
@@ -438,7 +441,7 @@ Commit intent:
 
 ### M3 — Homepage and professional routes
 
-**Owner:** Codex  
+**Owner:** Codex
 **Reviewer:** Claude information-architecture review
 
 Deliverables:
@@ -462,7 +465,7 @@ Commit intent:
 
 ### M4 — Anzania still-asset integration
 
-**Owner:** Codex  
+**Owner:** Codex
 **Reviewer:** Claude safe-zone and art-direction review
 
 Deliverables:
@@ -488,7 +491,7 @@ Commit intent:
 
 ### M5 — Documents, SEO and automation
 
-**Owner:** Codex  
+**Owner:** Codex
 **Reviewer:** Claude metadata and document consistency review
 
 Deliverables:
@@ -514,7 +517,7 @@ Commit intent:
 
 ### M6 — Full quality gate and controlled cutover
 
-**Owner:** Codex  
+**Owner:** Codex
 **Independent verifier:** Claude
 
 Deliverables:
@@ -539,9 +542,9 @@ Commit intent:
 
 ### M7 — Immersive vertical-slice gate
 
-**Owner:** Codex  
-**Reviewer:** Claude  
-**Dependency:** canonical character pack and owner scope decision
+**Owner:** Codex
+**Reviewer:** Claude
+**Dependency:** canonical character pack and approved roster/slice inputs
 
 Deliverables after dependencies arrive:
 
@@ -550,12 +553,217 @@ Deliverables after dependencies arrive:
 - Per-plate lighting profile.
 - Blender-to-glTF validation.
 - Opt-in, lazy immersive bundle that preserves route and Static View.
+- `AnimatedBoundsTracker` that samples after skinning/secondary motion and unions meshes, LOD transitions, accessories, authored motion proxies and power silhouettes for every visible frame.
+- `FullBodyFramingController` that solves target, radius and elevation from the complete projected bounds rather than a fixed distance.
+- `ViewportSafeZoneService` and DOM bridge that use the visual viewport, safe-area insets and complete panel animation sweep rectangles to keep ordinary states in a lower-third home pocket away from active HTML content.
+- Predictive traversal pullback, full-body look-back orbit and a safely cancellable long-idle edge lean.
+- Authored power composition intents that may temporarily use safe middle/upper pockets and deterministically return to the lower-third home stage.
+- Typed, duration-limited authored visibility-suppression rules and conservative maximum fallbacks for missing or stale bound contributors.
+- Compact animation manifest, explicit interruption state machine, three owner-directed shared locomotion profiles and measured LOD/runtime budgets from D005.
+- Debug telemetry and a deterministic full-animation, traversal, viewport, content-state and browser test matrix.
+- Structural and runtime assertions that reject every OTS preset or fallback, shoulder-relative target and head/neck/clavicle/shoulder camera target.
 
 Exit:
 
 - Production-quality browser/Blender gate passes.
 - Static View metrics are unaffected when Anzania is not selected.
-- The slice is either approved to scale or retired without harming Release 1.
+- Every intentionally visible animation frame contains the complete avatar, including accessories and power-relevant silhouette.
+- Steady desktop/laptop framing is browser-tuned near 14–20% of visual-viewport height; containment may pull below 14%, while every non-selection state remains at or below 24%.
+- Gestures, look-back, traversal and idle edge lean preserve the same distant full-body composition without upper-body zoom.
+- Ordinary states stay in the lower-third home stage; power crossover/hover phases may use middle or upper safe pockets while preserving containment and returning home.
+- Claude independently signs the cross-browser, cross-animation containment matrix, or Codex completes the same written matrix after the heartbeat timeout for later Claude audit.
+- The slice is approved before asset production scales. A failed slice returns
+  to implementation and review; it does not remove immersive production from
+  project scope.
+
+### M8 - Canonical character production
+
+**Owner:** Codex
+**Independent reviewer:** Claude
+**Dependency:** `DN-CHAR-001`, the approved canonical character reference pack
+
+Scope:
+
+- Evaluate every supplied character source against the canon, silhouette,
+  cultural, gender-presentation and production-readiness requirements.
+- Record accept, revise or reject decisions with source hashes and review images.
+- Build the complete approved roster rather than substituting one recoloured
+  base model.
+- Sculpt/model, retopologise, UV, texture, shade and rig every canonical
+  character in Blender 5.2.
+- Build required headwear, scarves, garments, garment tails, pouches, footwear,
+  tools and power-relevant accessories.
+- Produce selection-view presentation plus LOD0, LOD1 and LOD2 runtime variants.
+- Create shared rig conventions while preserving distinct faces, bodies and
+  silhouettes.
+- Create the declared shared male, female and nonbinary locomotion profiles
+  without implying a gender identity that the approved character record does not
+  assign.
+- Export versioned glTF assets with material, skeleton, morph, scale, orientation
+  and naming checks.
+
+Acceptance:
+
+- Every approved character matches its canonical reference turnarounds.
+- No noncanonical concept sheet or superseded character ships.
+- Complete full-body bounds include every accessory at every LOD.
+- Skinning, cloth proxies, garment clearance and facial shapes pass deformation
+  poses and representative animations.
+- Geometry, texture, draw-call, joint and material budgets pass D005.
+- Character-selection presentation is readable and remains within its dedicated
+  35 to 55 percent framing envelope.
+- Source `.blend`, export settings, glTF files, hashes and review renders are
+  recorded for every character.
+
+### M9 - Location sets, lighting and background enhancement
+
+**Owner:** Codex
+**Independent reviewer:** Claude
+**Dependencies:** verified plate registry and M7 lighting-profile approval
+
+Scope:
+
+- Evaluate all 16 approved Anzania location plates and classify the 3D set,
+  projection, collision, occlusion, motion-mask and effect requirements.
+- Build the complete location-set geometry needed for exploration, interactions
+  and traversal while preserving the painted plate composition.
+- Author foreground anchors, walkable surfaces, contact shadows, proxy collision,
+  depth partitions and authored camera-safe corridors.
+- Match plate-specific key direction, colour temperature, horizon luminance,
+  ambient fill, fog and grade.
+- Add restrained environmental motion, atmosphere, particles, cloth, water,
+  dust, light shafts and background effects where the location brief calls for
+  them.
+- Build entrance, exit and inter-location transitions.
+- Create quality tiers and fallbacks so low-power devices retain the composition
+  without essential motion or costly effects.
+
+Acceptance:
+
+- Every set is traceable to the verified workbook and source hash.
+- The avatar is grounded by lighting, scale, shadow and contact cues.
+- Background enhancement never obscures HTML, causes unreadable contrast or
+  changes the professional facts.
+- Depth and occlusion behaviour agree with authored masks and collision.
+- No plate is upscaled beyond its approved presentation.
+- EEVEE review renders, representative browser captures and quality-tier
+  comparisons are approved for each location.
+
+### M10 - Animation, interaction, traversal and power effects
+
+**Owner:** Codex
+**Independent reviewer:** Claude
+**Dependencies:** M8 rig contract, Animation Addendum and D005
+
+Scope:
+
+- Implement the complete compact animation library: locomotion, gestures, idles,
+  traversal, interaction, impact, recovery, selection and state transitions.
+- Build shared walk cycles for the declared male, female and nonbinary
+  presentation groups and character-specific adjustments only where canon or
+  silhouette requires them.
+- Implement pointing, presenting and turning without changing the distant
+  full-body composition.
+- Implement hold-to-look-back as an orbit around the avatar at approximately the
+  same radius.
+- Implement long-idle hourglass and safe edge-lean behaviour with immediate
+  interaction recovery.
+- Implement Solar Propulsion, Sand Teleportation, surfing, launches, landings
+  and every other approved traversal power.
+- Author power-specific silhouette proxies, particles, trails, light, distortion,
+  sound hooks and state markers.
+- Permit typed Solar and other authored power excursions through middle or upper
+  screen safe zones, followed by deterministic return to the lower-third home
+  stage.
+- Permit visibility suppression only for named, duration-limited authored phases
+  such as Sand Teleportation.
+
+Acceptance:
+
+- Every clip has named state, loop policy, priority, blend timings, cancellation
+  rule and reduced-motion behaviour.
+- No unapproved animation can move the complete bounds outside the visual
+  viewport.
+- Power effects are reviewed with the avatar mask so glow or particles cannot
+  hide clipping.
+- Launch, acceleration, turns, jump apex, landing and recovery pass predictive
+  camera pullback.
+- Blends have no foot slide, limb pop, garment collision or unintended
+  disappearance at tested playback rates.
+- Audio remains optional and never carries essential information.
+
+### M11 - Immersive browser runtime, streaming and fallbacks
+
+**Owner:** Codex
+**Independent reviewer:** Claude
+**Dependencies:** M8 to M10 approved runtime assets
+
+Scope:
+
+- Integrate the asset loader, scene state machine, selection flow, location
+  routing, interaction system, camera controller and animation coordinator.
+- Keep the immersive bundle opt-in and absent from every Static View request.
+- Stream characters, locations, animation clips, audio and effects by destination
+  with cancellation, retry and recovery.
+- Implement GPU and memory budgets, LOD switching, texture residency, effect
+  scaling, reduced-motion mode and low-power fallback.
+- Preserve the current professional route when entering and leaving Anzania.
+- Restore Static View after WebGL loss, load failure, unsupported hardware or an
+  explicit user exit.
+- Add instrumentation for asset timing, frame time, memory pressure, animation
+  state, camera envelope and recovery.
+
+Acceptance:
+
+- Static View bundle and performance remain unchanged when immersive mode is not
+  selected.
+- No essential content exists only in Anzania.
+- First interaction, progressive load and destination changes meet the written
+  budgets on the target device matrix.
+- WebGL loss, failed chunk, offline revisit and back/forward navigation recover
+  without losing the professional route.
+- Low-power and reduced-motion modes remain complete, stable and honest.
+
+### M12 - Full immersive evaluation and production release
+
+**Owner:** Codex
+**Independent reviewer:** Claude
+**Dependencies:** M8 to M11 exit gates
+
+Evaluation matrix:
+
+- every canonical character;
+- every LOD and quality tier;
+- every location and transition;
+- every animation, interaction and power;
+- every supported desktop, laptop, tablet and mobile viewport ratio;
+- ordinary, opening, open, closing and planned HTML content rectangles;
+- keyboard, pointer, touch, reduced-motion and visibility recovery;
+- Chrome plus the supported Firefox and WebKit paths;
+- Blender source scenes, EEVEE review renders and exported browser assets.
+
+Required evidence:
+
+- object-ID and silhouette-mask containment reports for every tested frame;
+- reference-to-model turntable comparisons;
+- animation contact sheets and blend reviews;
+- set lighting, atmosphere and effect comparisons;
+- browser screenshots and videos at the required viewport matrix;
+- performance traces, transfer reports, memory and LOD evidence;
+- accessibility and fallback reports;
+- asset provenance, hashes, Blender versions and export logs;
+- independent Claude review, or a queued written review if Claude is offline
+  under the three-hour protocol.
+
+Exit:
+
+- No avatar crop, unapproved disappearance, OTS path, unsafe HTML overlap or
+  power-effect framing failure remains.
+- Characters, sets, materials, lighting, effects and animation meet the visual
+  review bar as one coherent world.
+- Runtime performance and recovery gates pass on the agreed device matrix.
+- Static View remains the complete professional fallback.
+- The deployed immersive release SHA and rollback artifact are recorded.
 
 ## 8. Acceptance criteria
 
@@ -651,25 +859,82 @@ Exit:
 - All four variants have the expected page count and matching content apart from the approved name field.
 - All pages are rendered to PNG after every meaningful design change and receive visual inspection.
 - The final page images show no clipping, collision, black boxes, broken glyphs, widows, orphan headings or accidental HTML-browser chrome.
+
+### 8.10 Immersive character and rig quality
+
+- Every canonical character has approved model, materials, rig, accessories and
+  LODs.
+- Distinct faces, bodies and silhouettes are preserved.
+- Shared locomotion is mapped only through the approved presentation groups.
+- Deformation, garment clearance, morphs, skeleton naming and glTF export pass.
+- Complete animated bounds include skin, accessories, cloth, power proxies and
+  LOD transition extrema.
+
+### 8.11 Environment, animation and effects quality
+
+- Every approved location has evaluated depth, collision, lighting, atmosphere
+  and camera-safe space.
+- Environmental effects strengthen the plate without obscuring content.
+- Every animation and power has a versioned manifest entry, state transition,
+  cancellation path, bounds proxy and reduced-motion treatment.
+- Solar Propulsion and other approved powers may travel through middle or upper
+  safe zones only during their authored phases, then return to the lower-third
+  home stage.
+- Sand Teleportation and any other disappearance use only typed, timed visibility
+  suppression markers.
+
+### 8.12 Immersive runtime and evaluation quality
+
+- Immersive assets load only after explicit selection.
+- Streaming, retry, WebGL-loss recovery, back/forward history and Static View
+  fallback pass.
+- Every character, location, animation, power, viewport and quality tier appears
+  in the automated and visual review matrix.
+- Browser frame-time, memory, transfer, texture, draw-call and LOD budgets pass.
+- Object-ID mask checks prove full silhouette containment for every intentionally
+  visible frame.
+- Blender sources and exported browser assets remain reproducible and traceable.
 - The PDF file carries title, author, subject, keywords, language and producer metadata.
+
+### 8.10 Immersive camera and avatar containment
+
+- Immersive mode contains no OTS configuration, code path, transition, cinematic shot or fallback, and the camera cannot parent to or target a head, neck, clavicle or shoulder node.
+- Powers, destinations and animation clips provide bounded composition hints only; the framing solver is the sole authority for final target and radius.
+- The full animated avatar envelope remains inside the responsive safe zone on every intentionally visible frame.
+- The envelope is sampled after animation/world-matrix/secondary-motion updates and includes headwear, soles, hands, scarves, garment tails, pouches, held objects, LOD/blend unions and power-relevant silhouette proxies.
+- Missing or stale contributors activate a conservative maximum fallback and a recorded pullback; absence of a registered fallback fails closed.
+- Steady desktop/laptop framing is approximately 14–20% of visual-viewport height. Pullback below 14% is permitted for containment; every non-selection state has a hard 24% ceiling.
+- The avatar’s home/navigation composition is the lower third with clear space above and below and an offset from active HTML content whenever a valid safe pocket exists.
+- Only authored traversal power phases may request middle or upper safe pockets; every arrival/recovery returns to the lower-third home pocket.
+- Panel/menu opening and closing use their complete transition sweep rectangles before motion begins; no one-frame overlap or side oscillation is allowed.
+- Pointing, presenting and turning remain visible without an upper-body zoom.
+- Hold-to-look-back preserves full-body containment through the orbit, hold and return at approximately the same radius.
+- Acceleration, turning, jumping, surfing, launching and landing trigger predictive pullback when needed; no fast-movement crop is allowed.
+- Only a typed, whitelisted traversal phase with matching power, phase, marker and maximum duration may temporarily hide the avatar; a generic Boolean is invalid.
+- The complete long-idle edge-lean animation stays on screen and interaction restores the normal composition immediately.
+- Foreground environment geometry never fully hides the avatar outside an authorised traversal phase.
+- Landscape, portrait, square, ultrawide and short-height matrices pass across supported browser engines, breakpoints, animation blends and major HTML-content states.
+- Each test run records projected bounds, safe-zone insets, viewport ratio, framing ratio, camera radius, active state and any authorised visibility suppression.
+- Independent avatar/accessory/power object-ID masks agree with the complete-bounds telemetry; controller telemetry cannot certify itself.
 
 ## 9. Test strategy
 
-| Layer | Checks | Tooling |
-| --- | --- | --- |
-| Content | Schema, dates, duplicates, privacy, expiry, evidence, route drift | TypeScript unit tests and validator |
-| Components | Render states, long/missing fields, semantics | Astro/TypeScript tests and static inspection |
-| Build | Clean build, deterministic manifest, no drift, asset allowlist | pnpm scripts and TypeScript |
-| Routes | Status, deep link, refresh, back/forward, exact base path | Playwright |
-| No-JS | Readability, links, documents, contact, filters fallback | Playwright with JavaScript disabled |
-| Accessibility | axe, keyboard, focus, landmarks, zoom, reflow, contrast, print | axe + Playwright + manual review |
-| Visual | Required viewports, image failure, long content, screenshots | Real Chrome and Playwright |
-| Performance | Budgets, LCP, CLS, INP, transfer, unrequested immersive assets | Lighthouse CI + performance assertions |
-| SEO | Metadata uniqueness, canonical, sitemap, robots, JSON-LD | Static validators + browser |
-| Documents | Fonts, overflow, orphan headings, freshness, page count, selectable text, links, phone absence, page images | Playwright/Chromium + Poppler + JavaScript checks |
-| Assets | Hash, dimensions, status allowlist, derivative provenance | TypeScript verifier; legacy Python verifier is an audit cross-check |
-| Blender | Headless file open, dependency scan, render/export, glTF checks | Blender 5.2 CLI and browser |
-| Production | URL/deep-link smoke, resource paths, version SHA | Playwright against GitHub Pages |
+| Layer            | Checks                                                                                                                                                                                                                                                     | Tooling                                                                                                                                          |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Content          | Schema, dates, duplicates, privacy, expiry, evidence, route drift                                                                                                                                                                                          | TypeScript unit tests and validator                                                                                                              |
+| Components       | Render states, long/missing fields, semantics                                                                                                                                                                                                              | Astro/TypeScript tests and static inspection                                                                                                     |
+| Build            | Clean build, deterministic manifest, no drift, asset allowlist                                                                                                                                                                                             | pnpm scripts and TypeScript                                                                                                                      |
+| Routes           | Status, deep link, refresh, back/forward, exact base path                                                                                                                                                                                                  | Playwright                                                                                                                                       |
+| No-JS            | Readability, links, documents, contact, filters fallback                                                                                                                                                                                                   | Playwright with JavaScript disabled                                                                                                              |
+| Accessibility    | axe, keyboard, focus, landmarks, zoom, reflow, contrast, print                                                                                                                                                                                             | axe + Playwright + manual review                                                                                                                 |
+| Visual           | Required viewports, image failure, long content, screenshots                                                                                                                                                                                               | Real Chrome and Playwright                                                                                                                       |
+| Performance      | Budgets, LCP, CLS, INP, transfer, unrequested immersive assets                                                                                                                                                                                             | Lighthouse CI + performance assertions                                                                                                           |
+| SEO              | Metadata uniqueness, canonical, sitemap, robots, JSON-LD                                                                                                                                                                                                   | Static validators + browser                                                                                                                      |
+| Documents        | Fonts, overflow, orphan headings, freshness, page count, selectable text, links, phone absence, page images                                                                                                                                                | Playwright/Chromium + Poppler + JavaScript checks                                                                                                |
+| Assets           | Hash, dimensions, status allowlist, derivative provenance                                                                                                                                                                                                  | TypeScript verifier; legacy Python verifier is an audit cross-check                                                                              |
+| Blender          | Headless file open, dependency scan, render/export, glTF checks                                                                                                                                                                                            | Blender 5.2 CLI and browser                                                                                                                      |
+| Immersive camera | Complete animated-bound containment, post-skinning/LOD/proxy coverage, hard size ceiling, sweep-safe pockets, look-back, traversal pullback, idle restore, typed suppression, structural no-OTS rules, occlusion and independent silhouette-mask agreement | TypeScript unit/property tests + Playwright frame telemetry + Chrome/Firefox/WebKit recordings + Blender animation inventory and object-ID masks |
+| Production       | URL/deep-link smoke, resource paths, version SHA                                                                                                                                                                                                           | Playwright against GitHub Pages                                                                                                                  |
 
 Every milestone adds tests before its release commit. Final QA runs from a fresh checkout and against the deployed URL.
 
@@ -689,6 +954,7 @@ The live register is `AI-COLLAB/risks/RISK-REGISTER.md`. Release-blocking risks 
 - Pages configuration or deployment failure.
 - OneDrive file contention.
 - Missing canonical character pack.
+- Avatar cropping, unauthorised disappearance or accidental OTS camera drift.
 
 Each risk has a trigger, prevention, contingency, owner and recovery action.
 

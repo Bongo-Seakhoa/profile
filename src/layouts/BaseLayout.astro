@@ -1,0 +1,280 @@
+---
+import "@fontsource-variable/source-serif-4/wght.css";
+import "@fontsource-variable/ibm-plex-sans/wght.css";
+import "@fontsource/ibm-plex-mono/400.css";
+
+import "../styles/global.css";
+import "../styles/tokens.css";
+import "../styles/primitives.css";
+import "../styles/shell.css";
+import "../styles/print.css";
+
+import Breadcrumbs from "../components/shell/Breadcrumbs.astro";
+import SiteFooter from "../components/shell/SiteFooter.astro";
+import SiteHeader from "../components/shell/SiteHeader.astro";
+import { loadProfileContent } from "../lib/content/load-content";
+import { absoluteUrl, sitePath } from "../lib/urls";
+
+export interface BreadcrumbItem {
+  label: string;
+  path?: string;
+}
+
+export type StructuredData = Record<string, unknown>;
+
+export interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  ogType?: "website" | "article" | "profile";
+  updatedDate?: string;
+  noIndex?: boolean;
+  activeRouteId?: string;
+  breadcrumbs?: BreadcrumbItem[];
+  structuredData?: StructuredData | StructuredData[];
+  showExploreAnzania?: boolean;
+  exploreAnzaniaPath?: string;
+  pageClass?: string;
+}
+
+const content = await loadProfileContent();
+const settings = content.siteSettings[0];
+const identity = content.identity[0];
+
+if (!settings || !identity) {
+  throw new Error("Static View requires site settings and identity content.");
+}
+
+const {
+  title = settings.defaultTitle,
+  description = settings.defaultDescription,
+  canonicalPath = Astro.url.pathname,
+  ogImage,
+  ogImageAlt,
+  ogType = "website",
+  updatedDate,
+  noIndex = false,
+  activeRouteId,
+  breadcrumbs = [],
+  structuredData = [],
+  showExploreAnzania = false,
+  exploreAnzaniaPath = "explore/",
+  pageClass,
+} = Astro.props;
+
+const documentTitle =
+  title === settings.defaultTitle ||
+  title.includes("| Bongo Seakhoa") ||
+  title.startsWith("Bongo Seakhoa")
+    ? title
+    : `${title} | Bongo Seakhoa`;
+
+const routePath = Astro.url.pathname
+  .replace(new RegExp(`^${settings.basePath}/?`), "")
+  .replace(/^\/+/, "");
+const declaredRoutePath = canonicalPath
+  .replace(new RegExp(`^${settings.basePath}/?`), "")
+  .replace(/^\/+/, "");
+const requestedRoute =
+  content.routes.find((route) => route.path === routePath) ??
+  content.routes.find((route) => route.path === declaredRoutePath);
+const socialCardId = requestedRoute?.staticRenderable
+  ? requestedRoute.id
+  : "home";
+const resolvedSocialImage = ogImage ?? `assets/social/${socialCardId}.jpg`;
+const resolvedSocialImageAlt =
+  ogImageAlt ?? `${documentTitle}. Professional portfolio by Bongo Seakhoa.`;
+const canonicalUrl = absoluteUrl(canonicalPath, settings.siteUrl);
+const socialImageUrl = absoluteUrl(resolvedSocialImage, settings.siteUrl);
+const faviconUrl = sitePath("favicon.svg");
+const faviconPngUrl = sitePath("favicon-32.png");
+const appleTouchIconUrl = sitePath("apple-touch-icon.png");
+const manifestUrl = sitePath("site.webmanifest");
+const sitemapUrl = absoluteUrl("sitemap-index.xml", settings.siteUrl);
+const navigationRoutes = content.routes
+  .filter(
+    (route) =>
+      route.navigation &&
+      route.id !== "credentials" &&
+      route.id !== "documents",
+  )
+  .sort(
+    (left, right) =>
+      (left.navigationOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.navigationOrder ?? Number.MAX_SAFE_INTEGER),
+  );
+const footerRoutes = content.routes
+  .filter((route) => route.navigation)
+  .sort(
+    (left, right) =>
+      (left.navigationOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.navigationOrder ?? Number.MAX_SAFE_INTEGER),
+  );
+const documentDownloads = content.documentManifest.flatMap((document) => {
+  const primaryVariant = document.variants.find(
+    (variant) => variant.displayName === identity.primaryName,
+  );
+
+  return primaryVariant
+    ? [
+        {
+          label: `Download ${document.label} PDF`,
+          path: primaryVariant.pdfPath,
+        },
+      ]
+    : [];
+});
+
+const defaultGraph: StructuredData[] = [
+  {
+    "@type": "Person",
+    "@id": `${settings.siteUrl}#person`,
+    name: identity.primaryName,
+    alternateName: identity.alternateNames,
+    description: identity.valueStatement,
+    url: settings.siteUrl,
+    email: identity.email,
+    sameAs: identity.links
+      .map((link) => link.url)
+      .filter((url) => url.startsWith("https://")),
+  },
+  {
+    "@type": "WebSite",
+    "@id": `${settings.siteUrl}#website`,
+    name: settings.siteName,
+    url: settings.siteUrl,
+    image: socialImageUrl,
+    inLanguage: settings.locale,
+    publisher: {
+      "@id": `${settings.siteUrl}#person`,
+    },
+  },
+  {
+    "@type": "ProfilePage",
+    "@id": `${canonicalUrl}#profile-page`,
+    name: documentTitle,
+    description,
+    url: canonicalUrl,
+    inLanguage: settings.locale,
+    mainEntity: {
+      "@id": `${settings.siteUrl}#person`,
+    },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      contentUrl: socialImageUrl,
+      width: 1200,
+      height: 630,
+    },
+    isPartOf: {
+      "@id": `${settings.siteUrl}#website`,
+    },
+    ...(updatedDate ? { dateModified: updatedDate } : {}),
+  },
+];
+
+if (breadcrumbs.length > 0) {
+  defaultGraph.push({
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.label,
+      item: absoluteUrl(item.path ?? canonicalPath, settings.siteUrl),
+    })),
+  });
+}
+
+const suppliedGraph = Array.isArray(structuredData)
+  ? structuredData
+  : [structuredData];
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [...defaultGraph, ...suppliedGraph],
+}).replace(/</g, "\\u003c");
+---
+
+<!doctype html>
+<html lang={settings.locale} data-view="static">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content={settings.themeColor} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="application-name" content={settings.siteName} />
+    <meta
+      name="robots"
+      content={noIndex
+        ? "noindex, nofollow"
+        : "index, follow, max-image-preview:large"}
+    />
+
+    <title>{documentTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href={faviconUrl} type="image/svg+xml" />
+    <link rel="icon" href={faviconPngUrl} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={appleTouchIconUrl} sizes="180x180" />
+    <link rel="manifest" href={manifestUrl} />
+    <link rel="sitemap" href={sitemapUrl} type="application/xml" />
+
+    <meta property="og:site_name" content={settings.siteName} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:secure_url" content={socialImageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={resolvedSocialImageAlt} />
+    {updatedDate && <meta property="og:updated_time" content={updatedDate} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={documentTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={resolvedSocialImageAlt} />
+
+    <script type="application/ld+json" is:inline set:html={jsonLd} />
+    <slot name="head" />
+  </head>
+  <body class={pageClass}>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <SiteHeader
+      primaryName={identity.primaryName}
+      headline={identity.headline}
+      navigation={navigationRoutes}
+      currentPath={Astro.url.pathname}
+      {...activeRouteId ? { activeRouteId } : {}}
+      documentDownloads={documentDownloads}
+      showExploreAnzania={showExploreAnzania}
+      exploreAnzaniaPath={exploreAnzaniaPath}
+    />
+
+    <main id="main-content" tabindex="-1">
+      {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+      <slot name="masthead" />
+      <slot />
+    </main>
+
+    <SiteFooter
+      primaryName={identity.primaryName}
+      valueStatement={identity.valueStatement}
+      identityNote={identity.identityNote}
+      navigation={footerRoutes}
+      links={identity.links}
+      lastReviewed={identity.lastReviewed}
+      showExploreAnzania={showExploreAnzania}
+      exploreAnzaniaPath={exploreAnzaniaPath}
+    />
+  </body>
+</html>

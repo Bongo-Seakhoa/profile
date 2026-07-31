@@ -1,0 +1,120 @@
+@layer print {
+  @media print {
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    :root {
+      --canvas: #ffffff;
+      --surface: #ffffff;
+      --surface-muted: #f1eee8;
+      --surface-quiet: #ffffff;
+      --ink: #000000;
+      --ink-soft: #282828;
+      --line: rgba(0, 0, 0, 0.2);
+      --line-strong: rgba(0, 0, 0, 0.5);
+    }
+
+    html,
+    body {
+      background: #ffffff;
+      color: #000000;
+      font-size: 10.5pt;
+    }
+
+    .skip-link,
+    .site-header__navigation-bar,
+    .site-header__utilities,
+    .site-footer__navigation,
+    .site-footer__connect,
+    [data-print="hide"] {
+      display: none !important;
+    }
+
+    .site-header {
+      position: static;
+      border-block-end: 1px solid #000000;
+      box-shadow: none;
+    }
+
+    .site-header__identity-bar,
+    .site-footer {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .site-header__brand,
+    .site-header__descriptor,
+    .site-footer h2,
+    .site-footer__continuity {
+      color: #000000;
+    }
+
+    .site-footer {
+      border-block-start: 1px solid #000000;
+      padding-block: 8mm 0;
+    }
+
+    .site-footer__grid {
+      display: block;
+    }
+
+    .site-footer__identity {
+      max-inline-size: 100%;
+    }
+
+    .site-footer__meta {
+      border-color: #000000;
+      color: #000000;
+    }
+
+    .page-masthead {
+      border-block-end: 1px solid #000000;
+      background: #ffffff;
+      padding-block: 12mm 8mm;
+    }
+
+    .page-masthead h1 {
+      font-size: 30pt;
+    }
+
+    .section {
+      padding-block: 8mm;
+    }
+
+    .action-link {
+      border-color: #000000;
+      background: #ffffff;
+      color: #000000;
+      box-shadow: none;
+    }
+
+    a {
+      color: #000000;
+      text-decoration: underline;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    figure,
+    blockquote,
+    .metadata-list__item {
+      break-inside: avoid;
+    }
+
+    p,
+    li {
+      orphans: 3;
+      widows: 3;
+    }
+
+    img,
+    picture {
+      max-block-size: 95mm;
+      object-fit: contain;
+    }
+  }
+}

@@ -163,7 +163,7 @@ This is simultaneously a fidelity win and a performance win against the §21.1 b
 
 Found in `content/profile.json` and the generated pages:
 
-**6.1 — Personal mobile number is published.** `+27 73 590 7659` appears on four public HTML pages (`resume/*`, `resume/cv/*`) and is baked into all four public PDFs. A phone number on a resume sent to a named recruiter is normal; a phone number on a permanently indexable public web page and a downloadable PDF is a different exposure and attracts automated scraping. **Recommendation: remove it from the public HTML and PDFs, keep email and LinkedIn as the contact path.** If a phone number is wanted for genuine recruiter convenience, gate it behind the contact page rather than the indexed document. Bongo's call.
+**6.1 — Personal mobile number was published.** The value has been redacted from this review and removed from the current repository content, legacy HTML and replacement PDFs. A phone number on a resume sent to a named recruiter is normal; a phone number on a permanently indexable public web page and a downloadable PDF is a different exposure and attracts automated scraping. **Recommendation: keep email and LinkedIn as the public contact paths.** If a phone number is wanted for genuine recruiter convenience, share it privately rather than through an indexed document.
 
 **6.2 — Contact signals conflict.** Location is Debrecen, Hungary; the phone is a South African number; availability says "remote, contract, and globally distributed". Coherent once explained, confusing when skimmed. The Static View hero explicitly carries "Location | Availability | Primary focus" (§7.3), so this needs a single clear line.
 

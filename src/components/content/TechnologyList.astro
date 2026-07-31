@@ -1,0 +1,57 @@
+---
+export interface Props {
+  items: string[];
+  label?: string;
+}
+
+const { items, label = "Technologies" } = Astro.props;
+---
+
+<div class="technology-list">
+  <span class="technology-list__label">{label}</span>
+  <ul aria-label={label}>
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+</div>
+
+<style>
+  .technology-list {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .technology-list__label {
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    padding-inline-start: 0.85rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  li::before {
+    position: absolute;
+    top: 0.72em;
+    left: 0;
+    inline-size: 0.36rem;
+    block-size: 1px;
+    background: var(--gold);
+    content: "";
+  }
+</style>

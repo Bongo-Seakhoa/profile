@@ -1,0 +1,34 @@
+---
+import ProfessionalDocument from "../../../../components/documents/ProfessionalDocument.astro";
+import { loadProfileContent } from "../../../../lib/content/load-content";
+
+export async function getStaticPaths() {
+  const content = await loadProfileContent();
+
+  return content.documentManifest.flatMap((document) =>
+    document.variants.map((variant) => {
+      const pathParts = variant.previewPath.replace(/\/$/, "").split("/");
+      return {
+        params: {
+          kind: pathParts.at(-2),
+          name: pathParts.at(-1),
+        },
+        props: {
+          content,
+          document,
+          variant,
+        },
+      };
+    }),
+  );
+}
+
+const { content, document, variant } = Astro.props;
+---
+
+<ProfessionalDocument
+  content={content}
+  document={document}
+  displayName={variant.displayName}
+  pdfPath={variant.pdfPath}
+/>

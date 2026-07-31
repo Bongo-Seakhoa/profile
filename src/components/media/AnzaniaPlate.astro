@@ -1,0 +1,157 @@
+---
+import {
+  ANZANIA_DERIVATIVE_FORMATS,
+  ANZANIA_DERIVATIVE_WIDTHS,
+  getDerivativePath,
+  getPublishedAnzaniaPlate,
+  type AnzaniaApprovedUse,
+  type AnzaniaDerivativeFormat,
+  type PublishedAnzaniaPlateId,
+} from "@/data/static-art";
+
+type AccessibilityProps =
+  | {
+      /** Force an empty alternative and hide the image from assistive technology. */
+      decorative: true;
+      alt?: never;
+    }
+  | {
+      /** Use the curated alternative by default, or supply a more contextual one. */
+      decorative?: false;
+      alt?: string;
+    };
+
+type Props = AccessibilityProps & {
+  id: PublishedAnzaniaPlateId;
+  use: AnzaniaApprovedUse;
+  class?: string;
+  imageClass?: string;
+  sizes?: string;
+  priority?: boolean;
+  preload?: boolean;
+  loading?: "eager" | "lazy";
+  fetchPriority?: "high" | "low" | "auto";
+  fit?: "cover" | "contain";
+};
+
+const {
+  id,
+  use: approvedUse,
+  class: className,
+  imageClass,
+  sizes = "(min-width: 80rem) 1248px, (min-width: 48rem) calc(100vw - 4rem), calc(100vw - 2rem)",
+  priority = false,
+  preload = priority,
+  loading = priority || preload ? "eager" : "lazy",
+  fetchPriority = priority || preload ? "high" : "auto",
+  fit = "cover",
+  decorative,
+  alt,
+} = Astro.props;
+
+const plate = getPublishedAnzaniaPlate(id);
+
+if (!plate.approvedUses.includes(approvedUse)) {
+  throw new Error(
+    `Anzania plate "${id}" is not approved for use "${approvedUse}". Approved uses: ${plate.approvedUses.join(", ")}.`,
+  );
+}
+
+const isDecorative = decorative ?? plate.defaultPresentation === "decorative";
+const resolvedAlt = isDecorative ? "" : (alt ?? plate.alt);
+
+if (!isDecorative && resolvedAlt.trim().length === 0) {
+  throw new Error(
+    `Anzania plate "${id}" requires meaningful alternative text unless it is explicitly decorative.`,
+  );
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const withBase = (path: string): string =>
+  `${base}/${path.replace(/^\/+/, "")}`;
+const sourceSet = (format: AnzaniaDerivativeFormat): string =>
+  ANZANIA_DERIVATIVE_WIDTHS.map(
+    (width) => `${withBase(getDerivativePath(plate, width, format))} ${width}w`,
+  ).join(", ");
+const largestWidth = ANZANIA_DERIVATIVE_WIDTHS[3];
+const fallbackPath = withBase(getDerivativePath(plate, largestWidth, "jpg"));
+const avifPath = withBase(getDerivativePath(plate, largestWidth, "avif"));
+const style = [
+  `--anzania-focal-desktop-x:${plate.focalDesktop.xPercent}%`,
+  `--anzania-focal-desktop-y:${plate.focalDesktop.yPercent}%`,
+  `--anzania-focal-mobile-x:${plate.focalMobile.xPercent}%`,
+  `--anzania-focal-mobile-y:${plate.focalMobile.yPercent}%`,
+  `--anzania-object-fit:${fit}`,
+].join(";");
+---
+
+{
+  preload && (
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      href={avifPath}
+      imagesrcset={sourceSet("avif")}
+      imagesizes={sizes}
+      fetchpriority={fetchPriority}
+    />
+  )
+}
+
+<picture
+  class:list={["anzania-plate", className]}
+  data-anzania-asset={id}
+  data-anzania-use={approvedUse}
+  style={style}
+>
+  {
+    ANZANIA_DERIVATIVE_FORMATS.filter((format) => format !== "jpg").map(
+      (format) => (
+        <source
+          type={`image/${format}`}
+          srcset={sourceSet(format)}
+          sizes={sizes}
+        />
+      ),
+    )
+  }
+  <img
+    class:list={["anzania-plate__image", imageClass]}
+    src={fallbackPath}
+    srcset={sourceSet("jpg")}
+    sizes={sizes}
+    width={plate.sourceWidth}
+    height={plate.sourceHeight}
+    alt={resolvedAlt}
+    aria-hidden={isDecorative ? "true" : undefined}
+    loading={loading}
+    decoding="async"
+    fetchpriority={fetchPriority}
+  />
+</picture>
+
+<style>
+  .anzania-plate {
+    display: block;
+    width: 100%;
+    max-width: 1672px;
+    overflow: hidden;
+  }
+
+  .anzania-plate__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: var(--anzania-object-fit);
+    object-position: var(--anzania-focal-desktop-x)
+      var(--anzania-focal-desktop-y);
+  }
+
+  @media (max-width: 47.999rem) {
+    .anzania-plate__image {
+      object-position: var(--anzania-focal-mobile-x)
+        var(--anzania-focal-mobile-y);
+    }
+  }
+</style>
