@@ -72,7 +72,37 @@ function desiredHorizontalRatio(
   preference: HorizontalPreference,
   obstacles: readonly Rect[],
   viewportWidth: number,
+  edgeLean: boolean,
 ): number {
+  if (edgeLean) {
+    if (preference === "left") {
+      return 0;
+    }
+
+    if (preference === "right") {
+      return 1;
+    }
+
+    if (preference === "center") {
+      return 0.5;
+    }
+
+    if (obstacles.length === 0) {
+      return 0;
+    }
+
+    const leftObstruction = obstacles.reduce((area, obstacle) => {
+      const clippedRight = Math.min(obstacle.right, viewportWidth / 2);
+      return area + Math.max(0, clippedRight - obstacle.left);
+    }, 0);
+    const rightObstruction = obstacles.reduce((area, obstacle) => {
+      const clippedLeft = Math.max(obstacle.left, viewportWidth / 2);
+      return area + Math.max(0, obstacle.right - clippedLeft);
+    }, 0);
+
+    return leftObstruction <= rightObstruction ? 0 : 1;
+  }
+
   if (preference === "left") {
     return 0.23;
   }
@@ -220,12 +250,52 @@ function enumerateFreeRectangles(
 export class ViewportSafeZoneService {
   public resolve(request: SafeZoneRequest): SafeZoneResolution {
     if (
+      !(
+        [
+          "exploration",
+          "gesture",
+          "look-back",
+          "traversal",
+          "idle-edge-lean",
+          "character-selection",
+        ] as const
+      ).includes(request.mode) ||
+      !(["auto", "left", "right", "center"] as const).includes(
+        request.horizontalPreference,
+      ) ||
+      !(["lower-third", "middle", "upper"] as const).includes(
+        request.verticalPreference,
+      ) ||
       request.viewport.width <= 0 ||
       request.viewport.height <= 0 ||
       !Number.isFinite(request.viewport.width) ||
-      !Number.isFinite(request.viewport.height)
+      !Number.isFinite(request.viewport.height) ||
+      !Number.isFinite(request.viewport.devicePixelRatio) ||
+      request.viewport.devicePixelRatio <= 0 ||
+      request.viewport.coordinateSpace !== "visual-viewport-css-pixels" ||
+      !Number.isFinite(request.viewport.visualOffsetPx.x) ||
+      !Number.isFinite(request.viewport.visualOffsetPx.y) ||
+      !Number.isFinite(request.viewport.visualScale) ||
+      request.viewport.visualScale <= 0 ||
+      !Number.isFinite(request.estimatedAvatarAspectRatio) ||
+      request.estimatedAvatarAspectRatio <= 0 ||
+      (request.requestedHeightRatio !== null &&
+        (!Number.isFinite(request.requestedHeightRatio) ||
+          request.requestedHeightRatio <= 0)) ||
+      Object.values(request.safeAreaInsets).some(
+        (value) => !Number.isFinite(value) || value < 0,
+      ) ||
+      request.activeContentRegions.some(
+        (region) =>
+          region.id.length === 0 ||
+          region.coordinateSpace !== "visual-viewport-css-pixels" ||
+          !isValidRect(region.rect) ||
+          !Number.isFinite(region.clearancePx) ||
+          region.clearancePx < 0 ||
+          !Number.isFinite(region.priority),
+      )
     ) {
-      throw new RangeError("Viewport dimensions must be positive and finite.");
+      throw new RangeError("Invalid responsive camera safe-zone request.");
     }
 
     const viewportRect: Rect = {
@@ -235,10 +305,16 @@ export class ViewportSafeZoneService {
       bottom: request.viewport.height,
     };
     const compact = request.viewport.width < 768;
-    const sideMargin = Math.max(
-      compact ? 12 : 18,
-      request.viewport.width * (compact ? 0.03 : 0.025),
-    );
+    const edgeLeanInsetPx =
+      request.mode === "idle-edge-lean"
+        ? clamp(request.viewport.width * 0.025, 24, 40)
+        : null;
+    const sideMargin =
+      edgeLeanInsetPx ??
+      Math.max(
+        compact ? 12 : 18,
+        request.viewport.width * (compact ? 0.03 : 0.025),
+      );
     const topMargin = Math.max(
       compact ? 16 : 24,
       request.viewport.height * (compact ? 0.03 : 0.045),
@@ -278,6 +354,7 @@ export class ViewportSafeZoneService {
       request.horizontalPreference,
       obstacles,
       request.viewport.width,
+      request.mode === "idle-edge-lean",
     );
     const effectiveVerticalPreference =
       request.mode === "traversal"
@@ -360,6 +437,7 @@ export class ViewportSafeZoneService {
       .map((region) => region.id);
 
     return {
+      coordinateSpace: "visual-viewport-css-pixels",
       viewportRect,
       containmentRect,
       animationStageRect,
@@ -369,6 +447,7 @@ export class ViewportSafeZoneService {
       maximumHeightRatio: profile.maximumHeightRatio,
       minimumPreferredHeightRatio: profile.minimumPreferredHeightRatio,
       avatarClearancePx,
+      edgeLeanInsetPx,
       side: candidate.side,
       constrained,
       avoidedContentRegionIds,

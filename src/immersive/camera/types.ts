@@ -25,6 +25,9 @@ export interface Viewport {
   readonly width: number;
   readonly height: number;
   readonly devicePixelRatio: number;
+  readonly visualOffsetPx: Vec2;
+  readonly visualScale: number;
+  readonly coordinateSpace: "visual-viewport-css-pixels";
 }
 
 export interface SafeAreaInsets {
@@ -37,14 +40,21 @@ export interface SafeAreaInsets {
 export interface ActiveContentRegion {
   readonly id: string;
   readonly rect: Rect;
+  readonly coordinateSpace: "visual-viewport-css-pixels";
   readonly clearancePx: number;
   readonly priority: number;
 }
 
 export type AnimatedBoundRole =
   | "body"
+  | "hair"
   | "headwear"
   | "hand"
+  | "footwear"
+  | "scarf"
+  | "garment-tail"
+  | "pouch"
+  | "jewellery"
   | "accessory"
   | "cloth-proxy"
   | "held-object"
@@ -73,9 +83,11 @@ export interface ConservativeBoundFallback {
 }
 
 export interface AllowedVisibilitySuppression {
+  readonly characterId: string;
   readonly effectId: string;
   readonly powerId: string;
   readonly phaseId: string;
+  readonly stateId: string;
   readonly marker: "avatar-visibility-authored-v1";
   readonly maximumDurationMs: number;
 }
@@ -90,22 +102,53 @@ export type AvatarVisibility =
       readonly powerId: string;
       readonly phaseId: string;
       readonly marker: "avatar-visibility-authored-v1";
+      readonly occurrenceId: string;
+      readonly startedAtMs: number;
       readonly elapsedMs: number;
       readonly maximumDurationMs: number;
     };
 
+export interface RequiredAnimatedBoundContributor {
+  readonly id: string;
+  readonly role: AnimatedBoundRole;
+}
+
+export interface AnimatedBoundsStateContract {
+  readonly stateId: string;
+  readonly powerState: boolean;
+  readonly requiredContributors: readonly RequiredAnimatedBoundContributor[];
+}
+
+export interface CharacterAnimatedBoundsContract {
+  readonly characterId: string;
+  readonly commonRequiredContributors: readonly RequiredAnimatedBoundContributor[];
+  readonly states: readonly AnimatedBoundsStateContract[];
+}
+
 export interface AnimatedBoundsFrame {
   readonly frameId: number;
+  readonly sampleTimeMs: number;
+  readonly characterId: string;
   readonly stateId: string;
   readonly visibility: AvatarVisibility;
-  readonly expectedContributorIds: readonly string[];
+  /**
+   * Traversal and other fast authored states must provide a complete future
+   * envelope so the camera moves before an extreme pose reaches the frame.
+   */
+  readonly predictiveBoundsRequired: boolean;
+  readonly predictionHorizonMs: number;
+  /** Additional transient contributors; canonical requirements come from the registry. */
+  readonly additionalContributorIds: readonly string[];
   readonly contributions: readonly AnimatedBoundContribution[];
 }
 
 export interface AnimatedEnvelope {
   readonly frameId: number;
+  readonly sampleTimeMs: number;
+  readonly characterId: string;
   readonly stateId: string;
   readonly visibility: AvatarVisibility;
+  readonly predictionHorizonMs: number;
   readonly currentBounds: Bounds3 | null;
   readonly predictiveBounds: Bounds3 | null;
   readonly combinedBounds: Bounds3 | null;
@@ -121,6 +164,8 @@ export type FramingMode =
   | "idle-edge-lean"
   | "character-selection";
 
+export type MotionPreference = "full" | "reduced";
+
 export type HorizontalPreference = "auto" | "left" | "right" | "center";
 export type VerticalPreference = "lower-third" | "middle" | "upper";
 
@@ -129,9 +174,22 @@ export interface CameraCandidate {
   readonly azimuthRadians: number;
   readonly elevationRadians: number;
   readonly anchorPx: Vec2;
+  readonly anchorCoordinateSpace: "visual-viewport-css-pixels";
+}
+
+export interface FullBodyCameraRig {
+  readonly kind: "distant-full-body-perspective";
+  readonly targetSource: "complete-animated-envelope-center";
+  readonly targetWorld: Vec3;
+  readonly verticalFieldOfViewDegrees: number;
+}
+
+export interface SolvedCamera extends CameraCandidate {
+  readonly rig: FullBodyCameraRig;
 }
 
 export interface ProjectedAvatarBounds extends Rect {
+  readonly coordinateSpace: "visual-viewport-css-pixels";
   readonly visible: boolean;
   readonly visiblePixelFraction: number;
 }
@@ -139,9 +197,17 @@ export interface ProjectedAvatarBounds extends Rect {
 export interface ProjectionProbe {
   project(
     envelope: AnimatedEnvelope,
-    candidate: CameraCandidate,
+    candidate: SolvedCamera,
     viewport: Viewport,
   ): ProjectedAvatarBounds;
+}
+
+export interface LookBackFramingIntent {
+  readonly phase: "inactive" | "enter" | "hold" | "exit";
+  readonly orbitDirection: -1 | 1;
+  readonly targetOrbitDegrees: number;
+  readonly orbitProgress: number;
+  readonly presentation: "camera-orbit" | "still-crossfade";
 }
 
 export interface SafeZoneRequest {
@@ -156,6 +222,7 @@ export interface SafeZoneRequest {
 }
 
 export interface SafeZoneResolution {
+  readonly coordinateSpace: "visual-viewport-css-pixels";
   readonly viewportRect: Rect;
   readonly containmentRect: Rect;
   readonly animationStageRect: Rect;
@@ -165,6 +232,7 @@ export interface SafeZoneResolution {
   readonly maximumHeightRatio: number;
   readonly minimumPreferredHeightRatio: number;
   readonly avatarClearancePx: number;
+  readonly edgeLeanInsetPx: number | null;
   readonly side: Exclude<HorizontalPreference, "auto">;
   readonly constrained: boolean;
   readonly avoidedContentRegionIds: readonly string[];
@@ -183,27 +251,35 @@ export interface FramingControllerInput {
   readonly probe: ProjectionProbe;
   readonly estimatedAvatarAspectRatio: number;
   readonly requestedHeightRatio: number | null;
-  readonly lookBackBaselineRadius: number | null;
+  readonly motionPreference: MotionPreference;
+  readonly lookBackIntent: LookBackFramingIntent | null;
   readonly interactionResumed: boolean;
 }
 
 export interface FramingTelemetry {
   readonly frameId: number;
   readonly stateId: string;
+  readonly requestedMode: FramingMode;
   readonly mode: FramingMode;
+  readonly motionPreference: MotionPreference;
   readonly viewport: Viewport;
   readonly safeZone: SafeZoneResolution;
-  readonly camera: CameraCandidate;
+  readonly camera: SolvedCamera;
   readonly projectedBounds: ProjectedAvatarBounds | null;
   readonly heightRatio: number | null;
+  readonly minimumViewportMarginPx: number | null;
+  readonly minimumPocketMarginPx: number | null;
+  readonly lookBackRadiusDeltaRatio: number | null;
+  readonly lookBackOrbitDegrees: number | null;
   readonly containmentPass: boolean;
+  readonly constrained: boolean;
   readonly authoredVisibilitySuppression: boolean;
   readonly fallbackContributorIds: readonly string[];
   readonly reasons: readonly string[];
 }
 
 export interface FramingControllerOutput {
-  readonly camera: CameraCandidate;
+  readonly camera: SolvedCamera;
   readonly safeZone: SafeZoneResolution;
   readonly telemetry: FramingTelemetry;
 }

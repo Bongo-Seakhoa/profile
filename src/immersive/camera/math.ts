@@ -99,6 +99,15 @@ export function containsRect(outer: Rect, inner: Rect, epsilonPx = 0): boolean {
   );
 }
 
+export function minimumRectMargin(outer: Rect, inner: Rect): number {
+  return Math.min(
+    inner.left - outer.left,
+    inner.top - outer.top,
+    outer.right - inner.right,
+    outer.bottom - inner.bottom,
+  );
+}
+
 export function rectCenter(rect: Rect): Vec2 {
   return {
     x: (rect.left + rect.right) / 2,
