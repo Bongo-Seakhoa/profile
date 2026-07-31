@@ -227,3 +227,23 @@ Append concise, evidence-backed entries. Use UTC timestamps.
   zero reliable penetration and unchanged gates. The next trouser pass uses
   controlled seam offsets plus corrected spatial side detection, front rise,
   back seat and crotch junction.
+- Completed the v18 full-body sewn-trouser solve at 90 frames. All cloth gates
+  passed: 0.668 mm convergence, 2.252 mm maximum pre-weld seam/component gap,
+  0.376 mm mean seam gap, zero pin movement and 0.000945 mm reliable visible
+  body penetration.
+- Localized the later 45.108 mm penetration report to an invalid surface
+  snapshot. The fit validator disabled MPFB's `Hide helpers` mask and measured
+  hidden helper-skirt geometry. Modifier ablation and frame comparison ruled
+  out armature pose, frame reset and seam cleanup.
+- Ran one identical five-stage instrumented 90-frame solve. Raw visible-body
+  penetration remained 0.000945 mm before weld, after seam centroids, after
+  weld cleanup, after weight transfer and after finish modifiers. Solidify and
+  subdivision moved the evaluated garment fully outward. Adopted D017 and
+  logged R-033 to keep indexed correspondence meshes out of physical surface
+  gates.
+- Corrected the fit validator to use the evaluated visible MPFB surface without
+  changing D016 thresholds. The trousers remain rejected for true pattern fit:
+  64.704 mm p95 ease, 79.927 mm maximum ease, 62.866 percent support,
+  36.125 percent largest unsupported patch, 29.879 mm waist p95, 66.832 mm
+  loose-leg p95 and 52.232 mm ankle p95. Pattern tuning now proceeds from
+  visible per-row body measurements; no outer layer is authorised.
