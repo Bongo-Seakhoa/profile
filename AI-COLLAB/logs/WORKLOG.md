@@ -130,3 +130,22 @@ Append concise, evidence-backed entries. Use UTC timestamps.
   effect, animation, power, runtime and Blender/browser evaluation scope
   explicit. Claude has no current heartbeat and is offline by protocol; Codex
   continues autonomously while retaining the monitored inbox.
+- Published the production Static View through PR 1. Its hosted quality gate
+  passed, it merged as `f007d7c84222bc099650538143c2081df54ae398`, and the
+  first main-branch Pages deployment completed successfully.
+- Updated the Pages actions to their current Node 24-native major versions
+  through PR 2. Hosted QA passed without annotations, it merged as
+  `e29a4c959c39fff6e93def841c0944db94bf013f`, and warning-clean deployment
+  run `30605182973` completed successfully.
+- Verified the live production artifact at
+  `https://bongo-seakhoa.github.io/profile/`: every one of the 20 sitemap
+  routes, all four direct PDFs, `.nojekyll`, sitemap and robots returned HTTP
+  200. The live site retained zero client JavaScript outside JSON-LD.
+- Downloaded the four live PDFs, rechecked page counts, exact A4 geometry,
+  selectable text and identity markers, then raster-inspected the live resume
+  and all three CV pages for visual integrity.
+- The explicitly selected Chrome extension session could not attach because
+  the extension runtime reported that the browser was unavailable. This did
+  not weaken the release gate: installed Chrome plus Firefox and WebKit passed
+  the local suite, hosted browser QA passed, and the live artifact passed HTTP
+  and PDF verification. No claim of extension-driven live visual QA is made.

@@ -14,13 +14,14 @@ will route any later Claude response through the written review process.
 
 ## Repository state
 
-- Worktree branch: `profile-upgrade-impl`
+- Current record branch: `agent/static-release-record`, based on `origin/main`.
 - Legacy baseline: `df410d5`
 - Recovery tag: `legacy-pages-baseline-20260730`
-- Last project commit before the pending release: `9074ea0`
+- Production implementation merge: `f007d7c84222bc099650538143c2081df54ae398`
+- Current production main revision: `e29a4c959c39fff6e93def841c0944db94bf013f`
 - Live site: `https://bongo-seakhoa.github.io/profile/`
-- Production is unchanged until the pending release commit passes GitHub Actions
-  and the live smoke test.
+- Warning-clean Pages run: `30605182973`
+- Production deployment and live HTTP/PDF smoke verification passed.
 
 ## Completed implementation
 
@@ -35,6 +36,8 @@ will route any later Claude response through the written review process.
 - Distant full-body camera, safe-zone, bounds-tracking and animation-runtime contracts.
 - Verified Desert Nomad v3 handoff and exact 15-character roster.
 - Private DN-M-AFR-01 v2 reconstruction and Blender 5.2 measurement blockout.
+- Production release through PR 1, followed by the Node 24 Pages-action update
+  through PR 2; both hosted quality gates and main deployments passed.
 
 ## Required immersive continuation
 

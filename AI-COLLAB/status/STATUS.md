@@ -3,7 +3,7 @@
 **Updated:** 2026-07-31
 **Lead:** Codex
 **Independent reviewer:** Claude, currently offline by heartbeat protocol
-**Current milestone:** Static View release, followed by the DN-M-AFR-01 pilot gate
+**Current milestone:** DN-M-AFR-01 rights and pilot-silhouette gate
 
 ## Overall
 
@@ -16,7 +16,7 @@
 | Resume and CV | Complete | JavaScript/Chromium pipeline produces four exact-A4, selectable PDFs: two 2-page resumes and two 3-page CVs. |
 | Static release QA | Passed | 58 unit tests, 72 browser tests, public-output validation, metadata validation, budgets and three-run Lighthouse median passed. |
 | Privacy review | Passed for current tree | Retired phone removed from current tree and `dist`; no secrets or U+2014 em dashes found. Historical Git exposure is separately recorded in R-026. |
-| Deployment | Ready to commit | Production remains unchanged until the gated main-branch workflow completes and live smoke tests pass. |
+| Deployment | Complete | Static View is live from main revision `e29a4c9`; warning-clean Pages run `30605182973` and post-deploy HTTP/PDF verification passed. |
 | Canonical character discovery | Complete | Desert Nomad v3 self-contained handoff verifies 32 of 32 manifest entries and defines the exact 15-character roster. |
 | Pilot reconstruction | Private review draft complete | DN-M-AFR-01 v2 orthographic reconstruction and Blender measurement blockout exist under ignored `source/private/`. |
 | Public character derivatives | Blocked externally | Bongo must confirm ownership or derivative and redistribution rights before public character art, meshes or textures ship. |
@@ -24,6 +24,11 @@
 
 ## Static View release evidence
 
+- Production: `https://bongo-seakhoa.github.io/profile/`
+- Main revision: `e29a4c959c39fff6e93def841c0944db94bf013f`.
+- Warning-clean deployment: GitHub Actions run `30605182973`.
+- All 20 sitemap routes, four direct PDFs, `.nojekyll`, sitemap and robots returned HTTP 200 after deployment.
+- Live PDFs remained exact A4, selectable and visually intact after download and raster review.
 - Formatting and linting passed.
 - Astro and TypeScript reported 0 errors.
 - 58 unit tests passed, including character canon, full-body camera and animation-runtime contracts.
