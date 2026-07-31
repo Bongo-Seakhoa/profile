@@ -89,12 +89,21 @@ While active, each agent runs:
 powershell -NoProfile -ExecutionPolicy Bypass -File AI-COLLAB/scripts/watch-collab.ps1 -Agent codex
 ```
 
+When implementation uses a linked worktree, pass the canonical collaboration
+directory with `-AdditionalRoots`:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File AI-COLLAB/scripts/watch-collab.ps1 -Agent codex -AdditionalRoots "C:\path\to\canonical\AI-COLLAB"
+```
+
 Use `-Agent claude` for Claude. The watcher:
 
-- polls the recipient inbox,
-- refreshes an atomic local heartbeat,
+- polls the recipient inbox in every configured root,
+- refreshes atomic heartbeats in both `.watch-state/heartbeats/` and
+  `heartbeats/` in every configured root,
 - reports new Markdown messages,
-- warns when the peer heartbeat is more than three hours old, and
+- resolves peer liveness from the newest heartbeat across all roots,
+- warns when the newest peer heartbeat is more than three hours old, and
 - exits after its bounded `MaxMinutes` duration.
 
 Use `-Once` for a non-blocking check. A manual heartbeat can be written with:
@@ -102,3 +111,17 @@ Use `-Once` for a non-blocking check. A manual heartbeat can be written with:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File AI-COLLAB/scripts/heartbeat.ps1 -Agent codex -State active -Message "Static release and immersive pilot"
 ```
+
+Publish a completed message to every collaboration root with the companion
+helper. It refuses to overwrite a same-named message with different content:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File AI-COLLAB/scripts/publish-collab-message.ps1 `
+  -Recipient claude `
+  -SourcePath AI-COLLAB/inbox/claude/016-example.md `
+  -AdditionalRoots "C:\path\to\canonical\AI-COLLAB"
+```
+
+The watcher detects messages. The publisher makes the same immutable message
+available in every configured root.

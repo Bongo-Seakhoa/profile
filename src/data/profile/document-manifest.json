@@ -4,7 +4,7 @@
     "label": "Resume",
     "paper": "A4",
     "pageCount": 2,
-    "publicPhone": false,
+    "publicPhone": true,
     "variants": [
       {
         "id": "resume-bongo-seakhoa",
@@ -125,7 +125,7 @@
     "label": "Curriculum vitae",
     "paper": "A4",
     "pageCount": 3,
-    "publicPhone": false,
+    "publicPhone": true,
     "variants": [
       {
         "id": "cv-bongo-seakhoa",

@@ -93,7 +93,9 @@
   .page-masthead__rule {
     inline-size: min(9rem, 34vw);
     block-size: 0.28rem;
-    border-block: 1px solid var(--gold);
+    border-block: 1px solid var(--gold-ink);
+    background: var(--gold-texture);
+    box-shadow: inset 0 1px rgb(255 249 238 / 55%);
     margin-block-end: var(--space-6);
   }
 

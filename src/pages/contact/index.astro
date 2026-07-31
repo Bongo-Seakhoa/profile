@@ -1,6 +1,6 @@
 ---
 import ContentStyles from "../../components/content/ContentStyles.astro";
-import AnzaniaPlate from "../../components/media/AnzaniaPlate.astro";
+import AnzaniaBackdrop from "../../components/media/AnzaniaBackdrop.astro";
 import ActionLink from "../../components/primitives/ActionLink.astro";
 import Container from "../../components/primitives/Container.astro";
 import PageMasthead from "../../components/primitives/PageMasthead.astro";
@@ -29,18 +29,30 @@ const github = identity.links.find((link) => link.id === "github");
     slot="masthead"
     eyebrow="Direct contact"
     title={route.title}
-    lede="Email is the direct contact path. LinkedIn, GitHub and polished professional documents are available without a form or JavaScript."
+    lede="Call or email directly. LinkedIn, GitHub and polished professional documents are also available without a form or JavaScript."
   >
     <ActionLink href={`mailto:${identity.email}`}>Email Bongo</ActionLink>
+    <ActionLink href={identity.publicPhone.href} variant="secondary">
+      Call Bongo
+    </ActionLink>
     <ActionLink href="documents/" variant="secondary">
       Resume and CV
     </ActionLink>
   </PageMasthead>
 
-  <section class="page-section" aria-labelledby="contact-methods-title">
+  <section
+    class="page-section anzania-background-section"
+    aria-labelledby="contact-methods-title"
+  >
+    <AnzaniaBackdrop
+      id="oasis-audience-inner"
+      use="contact-call-to-action"
+      veil="quiet"
+      loading="eager"
+    />
     <Container>
       <div class="contact-layout">
-        <div>
+        <div class="contact-layout__content">
           <SectionIntro
             id="contact-methods-title"
             eyebrow="Contact methods"
@@ -53,6 +65,17 @@ const github = identity.links.find((link) => link.id === "github");
               <dd><a href={`mailto:${identity.email}`}>{identity.email}</a></dd>
               <dd class="contact-methods__note">
                 Best for roles, project discussions and direct enquiries.
+              </dd>
+            </div>
+            <div>
+              <dt>Phone</dt>
+              <dd>
+                <a href={identity.publicPhone.href}>
+                  {identity.publicPhone.display}
+                </a>
+              </dd>
+              <dd class="contact-methods__note">
+                Direct business contact for client and role enquiries.
               </dd>
             </div>
             {
@@ -90,18 +113,6 @@ const github = identity.links.find((link) => link.id === "github");
             </div>
           </dl>
         </div>
-        <figure>
-          <AnzaniaPlate
-            id="oasis-audience-inner"
-            use="contact-call-to-action"
-            decorative
-            loading="eager"
-            sizes="(min-width: 60rem) 42vw, 100vw"
-          />
-          <figcaption>
-            Oasis of Audience artwork used as a calm setting for direct contact.
-          </figcaption>
-        </figure>
       </div>
     </Container>
   </section>
@@ -129,10 +140,16 @@ const github = identity.links.find((link) => link.id === "github");
 
 <style>
   .contact-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    align-items: start;
-    gap: clamp(2rem, 6vw, 6rem);
+    max-inline-size: 51rem;
+  }
+
+  .contact-layout__content {
+    border: 1px solid rgb(128 96 32 / 32%);
+    border-block-start: 0.25rem solid var(--gold);
+    border-radius: var(--radius-medium);
+    background: rgb(255 249 238 / 88%);
+    box-shadow: var(--shadow-medium);
+    padding: clamp(1.5rem, 4vw, 3rem);
   }
 
   .contact-methods {
@@ -173,22 +190,6 @@ const github = identity.links.find((link) => link.id === "github");
     text-underline-offset: 0.2em;
   }
 
-  figure {
-    margin: 0;
-  }
-
-  figure :global(.anzania-plate) {
-    min-block-size: 34rem;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-medium);
-  }
-
-  figcaption {
-    margin-block-start: var(--space-2);
-    color: var(--ink-soft);
-    font-size: 0.78rem;
-  }
-
   .collaboration-list {
     display: grid;
     margin: 0;
@@ -204,12 +205,7 @@ const github = identity.links.find((link) => link.id === "github");
 
   @media (max-width: 56rem) {
     .contact-layout {
-      grid-template-columns: 1fr;
-    }
-
-    figure :global(.anzania-plate) {
-      min-block-size: 0;
-      aspect-ratio: 16 / 9;
+      max-inline-size: none;
     }
   }
 

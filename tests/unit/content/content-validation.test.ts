@@ -69,7 +69,12 @@ describe("profile content contract", () => {
     ).toBe(true);
   });
 
-  it("rejects a public phone and the retired Wix source", () => {
+  it("accepts the approved public phone and rejects arbitrary phone drift", () => {
+    expect(canonical.identity[0]?.publicPhone).toEqual({
+      display: "+27 73 590 7659",
+      href: "tel:+27735907659",
+    });
+
     const content = copyContent();
     content.identity[0]!.summary.push(
       "Call +999 000 000 000 or visit https://bongokosa.wixsite.com/website",
@@ -78,7 +83,7 @@ describe("profile content contract", () => {
     const codes = validateProfileContent(content).errors.map(
       ({ code }) => code,
     );
-    expect(codes).toContain("PUBLIC_PHONE");
+    expect(codes).toContain("UNAPPROVED_PUBLIC_PHONE");
     expect(codes).toContain("WIX_SOURCE_FORBIDDEN");
   });
 

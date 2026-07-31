@@ -108,6 +108,11 @@ test.describe("Static View route and accessibility contract", () => {
       ).toBeGreaterThan(0);
     }
 
+    await page.goto("http://127.0.0.1:4321/profile/contact/");
+    await expect(
+      page.getByRole("link", { name: "+27 73 590 7659" }),
+    ).toHaveAttribute("href", "tel:+27735907659");
+
     await context.close();
   });
 
@@ -186,6 +191,52 @@ test.describe("Responsive layout", () => {
   }
 });
 
+test("Anzania environments render as full section backgrounds with a white veil", async ({
+  page,
+}) => {
+  for (const route of ["", "work/", "contact/"]) {
+    await page.goto(route, { waitUntil: "networkidle" });
+
+    const presentations = await page
+      .locator('[data-anzania-presentation="environmental-background"]')
+      .evaluateAll((backdrops) =>
+        backdrops.map((backdrop) => {
+          const section = backdrop.parentElement;
+          const backdropBox = backdrop.getBoundingClientRect();
+          const sectionBox = section?.getBoundingClientRect();
+          const overlayStyle = getComputedStyle(backdrop, "::before");
+
+          return {
+            position: getComputedStyle(backdrop).position,
+            overlay: backdrop.getAttribute("data-anzania-overlay"),
+            overlayImage: overlayStyle.backgroundImage,
+            insideFigure: Boolean(backdrop.closest("figure")),
+            widthDifference: sectionBox
+              ? Math.abs(backdropBox.width - sectionBox.width)
+              : Number.POSITIVE_INFINITY,
+            heightDifference: sectionBox
+              ? Math.abs(backdropBox.height - sectionBox.height)
+              : Number.POSITIVE_INFINITY,
+          };
+        }),
+      );
+
+    expect(presentations.length).toBeGreaterThan(0);
+    expect(
+      presentations.every(
+        (presentation) =>
+          presentation.position === "absolute" &&
+          presentation.overlay === "translucent-white" &&
+          presentation.overlayImage.includes("linear-gradient") &&
+          !presentation.insideFigure &&
+          presentation.widthDifference <= 1 &&
+          presentation.heightDifference <= 1,
+      ),
+    ).toBe(true);
+    await expect(page.locator("figure [data-anzania-asset]")).toHaveCount(0);
+  }
+});
+
 test("document previews and direct PDFs are available", async ({
   page,
   request,
@@ -201,6 +252,9 @@ test("document previews and direct PDFs are available", async ({
       "href",
       /\/profile\/documents\/.+\.pdf$/,
     );
+    await expect(
+      page.getByRole("link", { name: "+27 73 590 7659" }),
+    ).toHaveAttribute("href", "tel:+27735907659");
   }
 
   for (const route of pdfRoutes) {

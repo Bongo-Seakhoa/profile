@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-31
 **Blender:** 5.2.0 LTS
-**Status:** Greybox passed; final sculpt not approved
+**Status:** Greybox passed; v2 silhouette approved; production pilot active
 
 ## Outcome
 
@@ -62,6 +62,6 @@ The private files remain under `source/private/` and are excluded from Git.
   margins and written asymmetry.
 - Add the shared skeleton, sockets and deformation tests.
 - Produce calibrated material spheres and recolour masks.
-- Obtain owner silhouette approval and rights confirmation.
+- Preserve the D010-approved silhouette and portfolio rights boundary.
 - Run the D004 camera controller against post-skinning bounds, not this static
   blockout alone.

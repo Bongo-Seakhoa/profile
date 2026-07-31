@@ -55,6 +55,7 @@ GitHub Pages artifact.
 - Node.js 24.14.x
 - pnpm 11.9.0
 - Google Chrome or a compatible Playwright Chromium runtime
+- `pdftotext` from Poppler for extracted-text PDF privacy checks
 
 Install dependencies:
 
@@ -91,7 +92,8 @@ The full gate covers:
 - formatting, linting and TypeScript;
 - immersive camera and animation contract tests;
 - responsive static-art integrity;
-- A4 page counts, overflow, section boundaries, fonts, metadata and PDF links;
+- A4 page counts, overflow, section boundaries, fonts, metadata, PDF links and
+  extracted-text privacy checks;
 - desktop, mobile, no-JavaScript and accessibility browser tests;
 - GitHub Pages base paths, sitemap, robots, icons and release metadata; and
 - absence of public em dash characters, canvas, decorative motion and
@@ -116,7 +118,8 @@ known-good artifact without rebuilding it from unreviewed source.
 
 ## Content and asset boundaries
 
-- Do not publish private phone numbers or raw certificate files.
+- Publish only the exact owner-approved business phone; do not publish other
+  private phone values or raw certificate files.
 - Do not infer contract type, contribution, outcome or metrics without evidence.
 - Keep both surname document variants aligned from the shared manifest.
 - Never copy reference masters directly into `public/`.

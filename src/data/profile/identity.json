@@ -9,6 +9,10 @@
     "location": "Debrecen, Hungary",
     "availability": "Open to remote, contract and globally distributed opportunities",
     "email": "bongokosa@gmail.com",
+    "publicPhone": {
+      "display": "+27 73 590 7659",
+      "href": "tel:+27735907659"
+    },
     "summary": [
       "I work across data engineering, analytics and applied machine learning, with a focus on dependable workflows and clear decision support.",
       "My background combines technical delivery with remote mentoring and learner support. I use Python, SQL, cloud platforms and analytics tools to help operators, students and stakeholders make sense of complex information.",

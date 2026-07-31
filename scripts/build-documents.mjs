@@ -70,80 +70,115 @@ async function attachMetadata(pdfBytes, { displayName, label }) {
   return pdf.save({ useObjectStreams: false });
 }
 
-async function validateRenderedPages(page, expectedPageCount) {
-  return page.evaluate((expected) => {
-    const millimetresToPixels = (millimetres) => (millimetres * 96) / 25.4;
-    const sheets = [...document.querySelectorAll("[data-document-page]")];
-    const findings = [];
-    const bodyFont = getComputedStyle(document.body).fontFamily;
-    const heading = document.querySelector("h1");
-    const headingFont = heading ? getComputedStyle(heading).fontFamily : "";
+async function validateRenderedPages(page, expectedPageCount, publicPhone) {
+  return page.evaluate(
+    ({ expected, phone }) => {
+      const millimetresToPixels = (millimetres) => (millimetres * 96) / 25.4;
+      const sheets = [...document.querySelectorAll("[data-document-page]")];
+      const findings = [];
+      const bodyFont = getComputedStyle(document.body).fontFamily;
+      const heading = document.querySelector("h1");
+      const headingFont = heading ? getComputedStyle(heading).fontFamily : "";
 
-    if (
-      !document.fonts.check('12px "IBM Plex Sans Variable"') ||
-      !bodyFont.includes("IBM Plex Sans Variable") ||
-      !headingFont.includes("IBM Plex Sans Variable")
-    ) {
-      findings.push(
-        `Expected IBM Plex Sans Variable, received body=${bodyFont} heading=${headingFont}`,
-      );
-    }
-    if (!document.fonts.check('8px "IBM Plex Mono"')) {
-      findings.push("IBM Plex Mono did not load for compact document metadata");
-    }
-
-    if (sheets.length !== expected) {
-      findings.push(
-        `Expected ${expected} rendered sheets, found ${sheets.length}`,
-      );
-    }
-
-    for (const [pageIndex, sheet] of sheets.entries()) {
-      const canvas = sheet.querySelector("[data-page-canvas]");
-      if (!(canvas instanceof HTMLElement)) {
-        findings.push(`Page ${pageIndex + 1} has no measurable canvas`);
-        continue;
-      }
-
-      const overflow = canvas.scrollHeight - canvas.clientHeight;
-      if (overflow > 0.5) {
+      if (
+        !document.fonts.check('12px "IBM Plex Sans Variable"') ||
+        !bodyFont.includes("IBM Plex Sans Variable") ||
+        !headingFont.includes("IBM Plex Sans Variable")
+      ) {
         findings.push(
-          `Page ${pageIndex + 1} overflows its A4 canvas by ${overflow.toFixed(2)}px`,
+          `Expected IBM Plex Sans Variable, received body=${bodyFont} heading=${headingFont}`,
+        );
+      }
+      if (!document.fonts.check('8px "IBM Plex Mono"')) {
+        findings.push(
+          "IBM Plex Mono did not load for compact document metadata",
         );
       }
 
-      const canvasBox = canvas.getBoundingClientRect();
-      const sections = [...canvas.querySelectorAll("[data-document-section]")];
+      if (sheets.length !== expected) {
+        findings.push(
+          `Expected ${expected} rendered sheets, found ${sheets.length}`,
+        );
+      }
 
-      for (const section of sections) {
-        const sectionBox = section.getBoundingClientRect();
-        if (sectionBox.bottom > canvasBox.bottom + 0.5) {
+      for (const [pageIndex, sheet] of sheets.entries()) {
+        const canvas = sheet.querySelector("[data-page-canvas]");
+        if (!(canvas instanceof HTMLElement)) {
+          findings.push(`Page ${pageIndex + 1} has no measurable canvas`);
+          continue;
+        }
+
+        const overflow = canvas.scrollHeight - canvas.clientHeight;
+        if (overflow > 0.5) {
           findings.push(
-            `Section ${section.getAttribute("data-document-section")} crosses page ${pageIndex + 1}`,
+            `Page ${pageIndex + 1} overflows its A4 canvas by ${overflow.toFixed(2)}px`,
           );
         }
 
-        const header = section.querySelector(".document-section__header");
-        if (header) {
-          const remaining =
-            canvasBox.bottom - header.getBoundingClientRect().top;
-          if (remaining < millimetresToPixels(32)) {
+        const canvasBox = canvas.getBoundingClientRect();
+        const sections = [
+          ...canvas.querySelectorAll("[data-document-section]"),
+        ];
+
+        for (const section of sections) {
+          const sectionBox = section.getBoundingClientRect();
+          if (sectionBox.bottom > canvasBox.bottom + 0.5) {
             findings.push(
-              `Section ${section.getAttribute("data-document-section")} starts within the final 32mm of page ${pageIndex + 1}`,
+              `Section ${section.getAttribute("data-document-section")} crosses page ${pageIndex + 1}`,
             );
+          }
+
+          const header = section.querySelector(".document-section__header");
+          if (header) {
+            const remaining =
+              canvasBox.bottom - header.getBoundingClientRect().top;
+            if (remaining < millimetresToPixels(32)) {
+              findings.push(
+                `Section ${section.getAttribute("data-document-section")} starts within the final 32mm of page ${pageIndex + 1}`,
+              );
+            }
           }
         }
       }
-    }
 
-    const bodyText = document.body.innerText;
-    const prohibitedPhone = /\+\d[\d\s().-]{7,}\d/;
-    if (prohibitedPhone.test(bodyText)) {
-      findings.push("A phone-like number appears in the public document");
-    }
+      const bodyText = document.body.innerText;
+      if (!bodyText.includes(phone.display)) {
+        findings.push("The approved public phone is missing from the document");
+      }
 
-    return findings;
-  }, expectedPageCount);
+      const telephoneLinks = [...document.querySelectorAll('a[href^="tel:"]')]
+        .map((link) => link.getAttribute("href"))
+        .filter(Boolean);
+      if (!telephoneLinks.includes(phone.href)) {
+        findings.push(
+          "The approved telephone link is missing from the document",
+        );
+      }
+      const unexpectedTelephoneLink = telephoneLinks.find(
+        (href) => href !== phone.href,
+      );
+      if (unexpectedTelephoneLink) {
+        findings.push(
+          `An unapproved telephone link appears in the document (${unexpectedTelephoneLink})`,
+        );
+      }
+
+      const approvedDigits = phone.href.replace(/\D/gu, "");
+      const unapprovedPhone = [
+        ...bodyText.matchAll(/\+\s?\d(?:[\s().-]*\d){7,}/gu),
+      ]
+        .map(([value]) => ({ value, digits: value.replace(/\D/gu, "") }))
+        .find(({ digits }) => digits !== approvedDigits);
+      if (unapprovedPhone) {
+        findings.push(
+          `An unapproved phone-like value appears in the document (${unapprovedPhone.value})`,
+        );
+      }
+
+      return findings;
+    },
+    { expected: expectedPageCount, phone: publicPhone },
+  );
 }
 
 if (!existsSync(join(distDirectory, "index.html"))) {
@@ -183,6 +218,7 @@ try {
       const renderedFindings = await validateRenderedPages(
         page,
         documentManifest.pageCount,
+        identity.publicPhone,
       );
       if (renderedFindings.length > 0) {
         throw new Error(

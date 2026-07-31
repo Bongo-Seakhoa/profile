@@ -1,7 +1,7 @@
 ---
 import ContentStyles from "../../components/content/ContentStyles.astro";
 import ProjectCard from "../../components/content/ProjectCard.astro";
-import AnzaniaPlate from "../../components/media/AnzaniaPlate.astro";
+import AnzaniaBackdrop from "../../components/media/AnzaniaBackdrop.astro";
 import Container from "../../components/primitives/Container.astro";
 import PageMasthead from "../../components/primitives/PageMasthead.astro";
 import SectionIntro from "../../components/primitives/SectionIntro.astro";
@@ -46,7 +46,16 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
     lede="Professional contributions, public repositories and technical experiments. Each record states its evidence and privacy boundary."
   />
 
-  <section class="page-section" aria-labelledby="lead-work-title">
+  <section
+    class="page-section anzania-background-section"
+    aria-labelledby="lead-work-title"
+  >
+    <AnzaniaBackdrop
+      id="archive-echoes-outer"
+      use="work-evidence"
+      veil="balanced"
+      loading="eager"
+    />
     <Container>
       <SectionIntro
         id="lead-work-title"
@@ -55,19 +64,6 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
       />
       <div class="work-lead">
         {leadProject && <ProjectCard project={leadProject} variant="lead" />}
-        <figure>
-          <AnzaniaPlate
-            id="archive-echoes-outer"
-            use="work-evidence"
-            decorative
-            loading="eager"
-            sizes="(min-width: 60rem) 45vw, 100vw"
-          />
-          <figcaption>
-            Archive of Echoes artwork. It provides visual context only; project
-            evidence remains linked in the project record.
-          </figcaption>
-        </figure>
       </div>
     </Container>
   </section>
@@ -114,39 +110,12 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
 
 <style>
   .work-lead {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    align-items: stretch;
-    gap: var(--space-5);
-  }
-
-  figure {
-    display: flex;
-    margin: 0;
-    flex-direction: column;
-  }
-
-  figure :global(.anzania-plate) {
-    min-block-size: 28rem;
-    flex: 1;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-medium);
-  }
-
-  figcaption {
-    margin-block-start: var(--space-2);
-    color: var(--ink-soft);
-    font-size: 0.78rem;
+    max-inline-size: 54rem;
   }
 
   @media (max-width: 58rem) {
     .work-lead {
-      grid-template-columns: 1fr;
-    }
-
-    figure :global(.anzania-plate) {
-      min-block-size: 0;
-      aspect-ratio: 16 / 9;
+      max-inline-size: none;
     }
   }
 </style>

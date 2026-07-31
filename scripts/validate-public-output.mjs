@@ -3,6 +3,20 @@ import { extname, join, relative, resolve } from "node:path";
 
 const repositoryRoot = process.cwd();
 const distDirectory = resolve(repositoryRoot, "dist");
+const [identity] = JSON.parse(
+  await readFile(
+    resolve(repositoryRoot, "src", "data", "profile", "identity.json"),
+    "utf8",
+  ),
+);
+const documentManifest = JSON.parse(
+  await readFile(
+    resolve(repositoryRoot, "src", "data", "profile", "document-manifest.json"),
+    "utf8",
+  ),
+);
+const approvedPhone = identity.publicPhone;
+const approvedPhoneDigits = approvedPhone.href.replace(/\D/gu, "");
 const sourceRoots = [
   resolve(repositoryRoot, "src", "data", "profile"),
   resolve(repositoryRoot, "src", "components"),
@@ -107,8 +121,31 @@ for (const path of htmlFiles) {
       `${displayPath(path)} contains a client module in Static View`,
     );
   }
-  if (/href=(?:"|')tel:/i.test(html)) {
-    failures.push(`${displayPath(path)} exposes a public telephone link`);
+  const telephoneLinks = [
+    ...html.matchAll(/href=(?:"|')(tel:[^"']+)(?:"|')/giu),
+  ].map(([, href]) => href);
+  const unapprovedTelephoneLink = telephoneLinks.find(
+    (href) => href !== approvedPhone.href,
+  );
+  if (unapprovedTelephoneLink !== undefined) {
+    failures.push(
+      `${displayPath(path)} contains an unapproved telephone link: ${unapprovedTelephoneLink}`,
+    );
+  }
+
+  const visibleText = html
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/giu, " ")
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/giu, " ")
+    .replace(/<[^>]+>/gu, " ");
+  const unapprovedPhone = [
+    ...visibleText.matchAll(/\+\s?\d(?:[\s().-]*\d){7,}/gu),
+  ]
+    .map(([value]) => ({ value, digits: value.replace(/\D/gu, "") }))
+    .find(({ digits }) => digits !== approvedPhoneDigits);
+  if (unapprovedPhone !== undefined) {
+    failures.push(
+      `${displayPath(path)} contains an unapproved phone-like value: ${unapprovedPhone.value}`,
+    );
   }
 
   const attributePattern = /\b(?:href|src)=(?:"|')([^"']+)(?:"|')/gi;
@@ -142,14 +179,34 @@ for (const path of cssFiles) {
   }
 }
 
-const expectedDocuments = [
-  "documents/bongo-seakhoa-resume.pdf",
-  "documents/bongo-kosa-resume.pdf",
-  "documents/bongo-seakhoa-cv.pdf",
-  "documents/bongo-kosa-cv.pdf",
-];
+const expectedDocuments = documentManifest.flatMap((document) =>
+  document.variants.map((variant) => variant.pdfPath),
+);
 const documentsIndex = resolve(distDirectory, "documents", "index.html");
 const documentsHtml = await readFile(documentsIndex, "utf8");
+
+const publicPhonePages = [
+  resolve(distDirectory, "contact", "index.html"),
+  ...documentManifest.flatMap((document) =>
+    document.variants.map((variant) =>
+      resolve(distDirectory, variant.previewPath, "index.html"),
+    ),
+  ),
+];
+
+for (const path of publicPhonePages) {
+  const html = await readFile(path, "utf8");
+  if (!html.includes(approvedPhone.display)) {
+    failures.push(
+      `${displayPath(path)} does not include the approved public phone`,
+    );
+  }
+  if (!html.includes(`href="${approvedPhone.href}"`)) {
+    failures.push(
+      `${displayPath(path)} does not include the approved telephone link`,
+    );
+  }
+}
 
 for (const documentPath of expectedDocuments) {
   const absolutePath = resolve(distDirectory, documentPath);

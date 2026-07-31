@@ -43,3 +43,8 @@ Run:
 powershell -ExecutionPolicy Bypass -File AI-COLLAB/scripts/heartbeat.ps1 -Agent codex -State active -Message "M1 content contracts"
 powershell -ExecutionPolicy Bypass -File AI-COLLAB/scripts/watch-collab.ps1 -Agent codex
 ```
+
+For a linked worktree, prefer the watcher with `-AdditionalRoots` so inboxes
+and heartbeats remain visible in both the implementation worktree and canonical
+repository. The watcher publishes the same heartbeat payload to both supported
+heartbeat locations in every configured root.

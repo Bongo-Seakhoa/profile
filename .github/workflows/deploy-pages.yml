@@ -49,6 +49,11 @@ jobs:
       - name: Install browser runtimes
         run: pnpm exec playwright install --with-deps chrome chromium firefox webkit
 
+      - name: Install PDF text verifier
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends poppler-utils
+
       - name: Run production quality gates
         run: pnpm run qa
 

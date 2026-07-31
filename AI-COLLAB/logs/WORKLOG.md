@@ -149,3 +149,56 @@ Append concise, evidence-backed entries. Use UTC timestamps.
   not weaken the release gate: installed Chrome plus Firefox and WebKit passed
   the local suite, hosted browser QA passed, and the live artifact passed HTTP
   and PDF verification. No claim of extension-driven live visual QA is made.
+- Bongo confirmed ownership of the supplied Desert Nomad images, authorized
+  creation and public redistribution of approved derivatives for this
+  portfolio, and approved the DN-M-AFR-01 v2 silhouette. D010 closes
+  `DN-CHAR-RIGHTS-001` and `DN-ORTHO-001` for the recorded scope.
+- Opened the private DN-M-AFR-01 measurement blockout in Blender 5.2 and
+  confirmed it remains a dimensional greybox rather than a production asset.
+  The active vertical slice is now anatomical form, construction garments,
+  rig, materials, animation, LODs, runtime export and full-body validation.
+- Recorded Bongo's direct approval to publish `+27 73 590 7659` as an
+  intentional business contact. D015 supersedes D008 and closes R-026. The
+  canonical identity now carries an exact display value and `tel:` URI;
+  Contact, every Resume/CV preview and all four PDFs require it. Content, HTML
+  and extracted-PDF validation reject any different phone value while retaining
+  selectable-text, metadata, A4, page-count and no-em-dash gates.
+- Rebuilt 26 Static View pages and all four browser-native PDFs after the phone
+  restoration. Fourteen focused unit tests, content validation, formatting,
+  lint, TypeScript, Astro diagnostics, extracted-PDF verification and public
+  output validation passed. Poppler renders of all ten PDF pages were inspected
+  with no clipping, overflow or layout regression; the approved phone is legible
+  in every variant's first-page contact block.
+- Adopted the owner's physical dressing-order correction as D016 and completed
+  the independent A007 review. The pilot now has a binding dependency DAG,
+  local occlusion rules, distributed contact and penetration thresholds,
+  proxy-to-final parity gates and a neutral/dynamic multi-view evidence matrix.
+  Provisional base garments may be used only for smoke diagnostics and cannot
+  support an accepted outer-layer proof.
+- The v13 diagnostic run stopped correctly before mantle, accessories and
+  rendering when the cowl failed with 96.187 mm convergence, 23.426 mm reliable
+  penetration and a 269.919 mm pre-weld seam gap. The builder returned to the
+  true prerequisite: production-valid sewn tunic and trousers fitted to the
+  body before tabard, belt, proxies, cowl or mantle.
+- Mirrored the direct phone approval, physical layering correction, D016, A007
+  and the v13 diagnostic result into Claude's canonical collaboration inbox.
+  Claude remains inside the three-hour heartbeat window; implementation
+  continues without blocking on the independent response.
+- Added the standalone Blender dressing-stack validator with strict `base` and
+  `full` profiles. It checks the canonical graph and metadata, evaluated-mesh
+  distributed gaps, signed penetration, connected penetration area,
+  attachment roots and proxy-to-final parity while refusing to hide canonical
+  layers behind helper exclusions. Ten focused tests, Python compilation and
+  Blender 5.2 mesh/BVH smokes pass.
+- Added and exercised an atomic multi-root message publisher for the
+  collaboration protocol. It writes the same Markdown message to every
+  configured recipient inbox and refuses to overwrite a same-named message
+  whose SHA-256 differs, closing the manual mirror gap exposed by the missed
+  phone and layering updates.
+- Reworked the sewn-base smoke path to log every Blender stage, cloth cache and
+  gate boundary durably. The v16 isolated-trousers cache completed in about
+  121.5 seconds and rejected the garment: 31.487 mm final-window convergence,
+  23.480 mm reliable penetration, 48.592 mm maximum pre-weld seam gap and
+  9.479 mm mean seam gap. Pin displacement was zero. No render or acceptance
+  asset was produced; the next pass must localize the worst seam and
+  penetration regions rather than relax the gates.

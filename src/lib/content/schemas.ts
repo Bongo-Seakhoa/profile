@@ -46,6 +46,11 @@ export const publicLinkSchema = z.object({
   description: z.string().min(1),
 });
 
+export const publicPhoneSchema = z.object({
+  display: z.literal("+27 73 590 7659"),
+  href: z.literal("tel:+27735907659"),
+});
+
 export const identitySchema = z.object({
   id: z.literal("bongo-seakhoa"),
   primaryName: z.literal("Bongo Seakhoa"),
@@ -56,6 +61,7 @@ export const identitySchema = z.object({
   location: z.string().min(1),
   availability: z.string().min(1),
   email: z.email(),
+  publicPhone: publicPhoneSchema,
   summary: z.array(z.string().min(1)).min(2),
   identityNote: z.string().min(1),
   profileHighlights: z.array(z.string().min(1)).min(3).max(6),
@@ -356,7 +362,7 @@ export const documentManifestSchema = z.object({
   label: z.string().min(1),
   paper: z.literal("A4"),
   pageCount: z.number().int().min(2).max(4),
-  publicPhone: z.literal(false),
+  publicPhone: z.literal(true),
   variants: z.array(documentVariantSchema).length(2),
   selectionPolicy: z.object({
     skills: z.enum(["all", "selected", "none"]),
@@ -385,7 +391,7 @@ export const siteSettingsSchema = z.object({
     resumePages: z.literal(2),
     cvPages: z.literal(3),
     paper: z.literal("A4"),
-    publicPhone: z.literal(false),
+    publicPhone: z.literal(true),
   }),
   sourcePolicy: z.object({
     primarySource: z.literal("content/profile.json"),

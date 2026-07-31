@@ -219,6 +219,9 @@ const currentYear = new Date().getUTCFullYear();
                   <address class="identity-header__contact">
                     <span>{identity.location}</span>
                     <a href={`mailto:${identity.email}`}>{identity.email}</a>
+                    <a href={identity.publicPhone.href}>
+                      {identity.publicPhone.display}
+                    </a>
                     {identity.links
                       .filter((link) =>
                         ["linkedin", "github"].includes(link.id),

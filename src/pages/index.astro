@@ -3,7 +3,7 @@ import CapabilityRecord from "../components/content/CapabilityRecord.astro";
 import ContentStyles from "../components/content/ContentStyles.astro";
 import ExperienceRecord from "../components/content/ExperienceRecord.astro";
 import ProjectCard from "../components/content/ProjectCard.astro";
-import AnzaniaPlate from "../components/media/AnzaniaPlate.astro";
+import AnzaniaBackdrop from "../components/media/AnzaniaBackdrop.astro";
 import ActionLink from "../components/primitives/ActionLink.astro";
 import Container from "../components/primitives/Container.astro";
 import SectionIntro from "../components/primitives/SectionIntro.astro";
@@ -56,7 +56,17 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
 >
   <ContentStyles />
 
-  <section class="home-hero" aria-labelledby="home-title">
+  <section
+    class="home-hero anzania-background-section"
+    aria-labelledby="home-title"
+  >
+    <AnzaniaBackdrop
+      id="threshold-dunes-outer"
+      use="home-hero"
+      veil="copy-left"
+      priority
+      preload
+    />
     <Container>
       <div class="home-hero__grid">
         <div class="home-hero__copy">
@@ -81,19 +91,6 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             </div>
           </dl>
         </div>
-        <figure class="home-hero__figure">
-          <AnzaniaPlate
-            id="threshold-dunes-outer"
-            use="home-hero"
-            priority
-            preload
-            decorative={false}
-            sizes="(min-width: 60rem) 55vw, 100vw"
-          />
-          <figcaption>
-            Threshold Dunes, an Anzania setting used as editorial artwork.
-          </figcaption>
-        </figure>
       </div>
     </Container>
   </section>
@@ -124,7 +121,16 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     </Container>
   </section>
 
-  <section class="page-section" aria-labelledby="featured-work-title">
+  <section
+    class="page-section anzania-background-section"
+    aria-labelledby="featured-work-title"
+  >
+    <AnzaniaBackdrop
+      id="archive-echoes-outer"
+      use="work-evidence"
+      veil="balanced"
+      loading="lazy"
+    />
     <Container>
       <SectionIntro
         id="featured-work-title"
@@ -142,19 +148,6 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
           }
         </div>
       </div>
-      <figure class="editorial-art editorial-art--work">
-        <AnzaniaPlate
-          id="archive-echoes-outer"
-          use="work-evidence"
-          decorative
-          loading="lazy"
-          sizes="(min-width: 80rem) 1248px, 100vw"
-        />
-        <figcaption>
-          Archive of Echoes artwork. Project evidence is linked within each
-          record above.
-        </figcaption>
-      </figure>
       <div class="section-actions">
         <ActionLink href="work/" variant="secondary">
           Browse the complete work index
@@ -269,7 +262,16 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     </Container>
   </section>
 
-  <section class="page-section" aria-labelledby="contact-close-title">
+  <section
+    class="page-section anzania-background-section home-contact-section"
+    aria-labelledby="contact-close-title"
+  >
+    <AnzaniaBackdrop
+      id="oasis-audience-inner"
+      use="contact-call-to-action"
+      veil="quiet"
+      loading="lazy"
+    />
     <Container>
       <div class="home-contact">
         <div class="contact-panel">
@@ -285,18 +287,6 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             <a href={sitePath("contact/")}>Contact details</a>
           </div>
         </div>
-        <figure class="editorial-art editorial-art--contact">
-          <AnzaniaPlate
-            id="oasis-audience-inner"
-            use="contact-call-to-action"
-            decorative
-            loading="lazy"
-            sizes="(min-width: 60rem) 42vw, 100vw"
-          />
-          <figcaption>
-            Oasis of Audience artwork, paired with direct contact paths.
-          </figcaption>
-        </figure>
       </div>
     </Container>
   </section>
@@ -304,20 +294,22 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
 
 <style>
   .home-hero {
-    padding-block: clamp(3.5rem, 8vw, 7.5rem);
+    display: grid;
+    min-block-size: min(48rem, calc(100svh - var(--header-offset)));
+    align-items: center;
+    padding-block: clamp(4.5rem, 10vw, 8.5rem);
     border-block-end: 1px solid var(--line);
-    background: var(--surface);
   }
 
   .home-hero__grid {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-columns: minmax(0, 6.5fr) minmax(0, 5.5fr);
     align-items: center;
-    gap: clamp(2rem, 5vw, 5rem);
   }
 
   .home-hero__copy {
     min-inline-size: 0;
+    grid-column: 1;
   }
 
   .home-hero__eyebrow,
@@ -384,24 +376,6 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     font-weight: 600;
   }
 
-  .home-hero__figure,
-  .editorial-art {
-    margin: 0;
-  }
-
-  .home-hero__figure :global(.anzania-plate) {
-    aspect-ratio: 5 / 4;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-medium);
-    box-shadow: var(--shadow-medium);
-  }
-
-  figcaption {
-    margin-block-start: var(--space-2);
-    color: var(--ink-soft);
-    font-size: 0.78rem;
-  }
-
   .proof-section {
     background: var(--canvas);
   }
@@ -415,15 +389,6 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   .featured-work-grid__supporting {
     display: grid;
     gap: var(--space-5);
-  }
-
-  .editorial-art--work {
-    margin-block-start: var(--space-7);
-  }
-
-  .editorial-art--work :global(.anzania-plate) {
-    aspect-ratio: 3 / 1;
-    border: 1px solid var(--line-strong);
   }
 
   .home-capabilities :global(.capability-record) {
@@ -499,43 +464,27 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   }
 
   .home-contact {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    align-items: stretch;
+    max-inline-size: 68rem;
   }
 
-  .home-contact > * {
-    min-inline-size: 0;
+  .home-contact-section {
+    min-block-size: 34rem;
   }
 
   .home-contact .contact-panel {
-    border-radius: var(--radius-medium) 0 0 var(--radius-medium);
+    border: 1px solid rgb(227 196 119 / 55%);
+    background: rgb(52 78 96 / 95%);
+    box-shadow: var(--shadow-medium);
   }
 
   .contact-panel__eyebrow {
     color: var(--gold-light);
   }
 
-  .editorial-art--contact :global(.anzania-plate) {
-    block-size: 100%;
-    min-block-size: 22rem;
-    border-radius: 0 var(--radius-medium) var(--radius-medium) 0;
-  }
-
-  .editorial-art--contact {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .editorial-art--contact figcaption {
-    max-inline-size: 40ch;
-  }
-
   @media (max-width: 60rem) {
     .home-hero__grid,
     .featured-work-grid,
-    .home-split-panels,
-    .home-contact {
+    .home-split-panels {
       grid-template-columns: 1fr;
     }
 
@@ -543,22 +492,8 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
       max-inline-size: 44rem;
     }
 
-    .home-contact {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .home-hero__figure :global(.anzania-plate) {
-      aspect-ratio: 16 / 10;
-    }
-
     .home-contact .contact-panel {
-      border-radius: var(--radius-medium) var(--radius-medium) 0 0;
-    }
-
-    .editorial-art--contact :global(.anzania-plate) {
-      min-block-size: 16rem;
-      aspect-ratio: 16 / 9;
-      border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+      border-radius: var(--radius-medium);
     }
   }
 

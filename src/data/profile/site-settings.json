@@ -13,7 +13,7 @@
       "resumePages": 2,
       "cvPages": 3,
       "paper": "A4",
-      "publicPhone": false
+      "publicPhone": true
     },
     "sourcePolicy": {
       "primarySource": "content/profile.json",

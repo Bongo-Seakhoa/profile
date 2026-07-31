@@ -38,7 +38,7 @@ These assumptions keep work moving and are deliberately reversible.
 | A-02 | Static View is Release 1 and the canonical renderer.                                | The newest addendum makes it first-class; it satisfies users, search engines and accessibility without unresolved character dependencies.                                                                                             | The required immersive mode follows Release 1 as an opt-in enhancement.                 |
 | A-03 | Astro + TypeScript own the complete production build.                               | Best fit for typed content, static routes, images, SEO, documents, base paths and future isolated Anzania loading.                                                                                                                    | A legacy build remains recoverable until one stable production cycle passes.            |
 | A-04 | Resume and CV are browser-native JavaScript assets.                                 | The owner explicitly prioritised editorial quality over the current Python-to-browser pipeline. The Nielsen Sports method proves that shared HTML, print CSS and headless Chromium can produce small, selectable, brand-quality PDFs. | Templates and page plans remain versioned and previewable in the browser.               |
-| A-05 | Personal phone is removed from indexable HTML and generated public PDFs by default. | Privacy-safe and reversible; email and LinkedIn remain direct contact paths.                                                                                                                                                          | Restore only after explicit owner approval.                                             |
+| A-05 | The exact owner-approved business phone is public on Contact, Resume and CV surfaces. | Bongo directly approved publication for client and recruiter access; D015 supersedes the earlier removal posture.                                                                                                                    | Require the exact display and `tel:` values and reject arbitrary phone drift.            |
 | A-06 | `07_59_39 PM (2).png` is the Threshold Dunes inner plate.                           | Independent filename audit plus direct visual inspection show the exact camp/waystation described by the brief.                                                                                                                       | Registry and workbook retain source provenance for correction.                          |
 | A-07 | Reference masters remain outside the public site.                                   | The library contains large PDFs, ZIPs, source PNGs, workbooks and specifications that are not public runtime assets.                                                                                                                  | Only approved, traceable derivatives are copied into the repository.                    |
 | A-08 | No invented metrics, job facts, publications or outcomes.                           | Programmatic LinkedIn access is blocked; existing first-party content remains the baseline until owner-supplied evidence improves it.                                                                                                 | New claims enter through the content review workflow with evidence.                     |
@@ -61,7 +61,7 @@ Decision details live in `AI-COLLAB/decisions/`.
 - Three to five genuinely evidence-rich featured project treatments, subject to available evidence.
 - Search, social sharing and structured metadata.
 - Resume and CV HTML and PDF generation from the shared content.
-- Phone privacy remediation.
+- Exact public-phone contract and unapproved-contact-data protection.
 - Asset provenance, semantic aliases and responsive AVIF/WebP derivatives.
 - No-JavaScript, accessibility, responsive, performance, print, SEO, link and cross-browser validation.
 - GitHub Actions build, test, Pages artifact deployment and manual rollback.
@@ -355,7 +355,7 @@ All dependency versions are pinned. Installation is performed only after this pl
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Codex       | Lead architecture, implementation, content migration, testing, commits, release and recovery.                                                              |
 | Claude Code | Independent plan review, architecture critique, focal/safe-zone review, adversarial QA, complete-avatar camera verification and gate verification.         |
-| Bongo       | Owner authority for disputed professional facts, optional phone publication, new domain decisions, canonical character pack and final creative acceptance. |
+| Bongo       | Owner authority for disputed professional facts, public contact consent, new domain decisions, canonical character pack and final creative acceptance. |
 
 Claude silence never blocks Codex. If no Claude heartbeat is observed for more than three hours, status changes to offline and Codex proceeds from written review artefacts.
 
@@ -395,7 +395,7 @@ Deliverables:
 - Split and normalize content records.
 - Add schemas and validation.
 - Add privacy and evidence metadata.
-- Remove public phone by default.
+- Publish only the exact owner-approved business phone and reject arbitrary phone drift.
 - Resolve duplicated credential representation.
 - Clarify concurrent engagement types without inventing facts.
 - Create route and compiled manifests.
@@ -506,7 +506,7 @@ Deliverables:
 
 Exit:
 
-- Documents match the manifest and contain no public phone.
+- Documents match the manifest and contain the exact owner-approved public phone.
 - Metadata validation passes.
 - CI builds from a clean checkout.
 - Pages artifact contains only intended public files.
@@ -774,7 +774,7 @@ Exit:
 - Every claim is traceable; no invented metrics.
 - Current/expired/in-progress/confidential statuses are literal.
 - Public PDFs match the shared manifest.
-- Private phone and raw certificates do not ship.
+- Unapproved phone values and raw certificates do not ship.
 - Credential expiry within 90 days is a build warning or release blocker.
 
 ### 8.2 Static and no-JavaScript behaviour
@@ -930,7 +930,7 @@ Exit:
 | Visual           | Required viewports, image failure, long content, screenshots                                                                                                                                                                                               | Real Chrome and Playwright                                                                                                                       |
 | Performance      | Budgets, LCP, CLS, INP, transfer, unrequested immersive assets                                                                                                                                                                                             | Lighthouse CI + performance assertions                                                                                                           |
 | SEO              | Metadata uniqueness, canonical, sitemap, robots, JSON-LD                                                                                                                                                                                                   | Static validators + browser                                                                                                                      |
-| Documents        | Fonts, overflow, orphan headings, freshness, page count, selectable text, links, phone absence, page images                                                                                                                                                | Playwright/Chromium + Poppler + JavaScript checks                                                                                                |
+| Documents        | Fonts, overflow, orphan headings, freshness, page count, selectable text, links, exact approved phone, arbitrary-phone drift and page images                                                                                                               | Playwright/Chromium + Poppler + JavaScript checks                                                                                                |
 | Assets           | Hash, dimensions, status allowlist, derivative provenance                                                                                                                                                                                                  | TypeScript verifier; legacy Python verifier is an audit cross-check                                                                              |
 | Blender          | Headless file open, dependency scan, render/export, glTF checks                                                                                                                                                                                            | Blender 5.2 CLI and browser                                                                                                                      |
 | Immersive camera | Complete animated-bound containment, post-skinning/LOD/proxy coverage, hard size ceiling, sweep-safe pockets, look-back, traversal pullback, idle restore, typed suppression, structural no-OTS rules, occlusion and independent silhouette-mask agreement | TypeScript unit/property tests + Playwright frame telemetry + Chrome/Firefox/WebKit recordings + Blender animation inventory and object-ID masks |

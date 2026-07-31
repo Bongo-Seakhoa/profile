@@ -7,7 +7,7 @@ Live coordination state for the Profile Upgrade project.
 | Agent | Lane | State |
 | --- | --- | --- |
 | Codex | Static View release, canonical pilot, immersive architecture and implementation | Active |
-| Claude | Independent review through `AI-COLLAB/inbox/claude/` | Offline by heartbeat protocol; no source files held |
+| Claude | Independent review through mirrored `AI-COLLAB/inbox/claude/` roots | Active by heartbeat; no source files held |
 
 No implementation file is reserved for Claude. Codex continues autonomously and
 will route any later Claude response through the written review process.
@@ -45,19 +45,17 @@ will route any later Claude response through the written review process.
 The next work is not a future-option backlog. It is the remaining production
 scope:
 
-1. Confirm character derivative and redistribution rights.
-2. Obtain owner approval of the DN-M-AFR-01 pilot silhouette.
-3. Finish the pilot sculpt, garments, materials, rig, deformation, animations,
+1. Finish the approved pilot sculpt, garments, materials, rig, deformation, animations,
    LODs and runtime export.
-4. Scale the approved pipeline to all 15 canonical identities.
-5. Build and enhance the complete Anzania location-set roster.
-6. Author lighting, atmosphere, particles, environmental motion, transitions
+2. Scale the approved pipeline to all 15 canonical identities.
+3. Build and enhance the complete Anzania location-set roster.
+4. Author lighting, atmosphere, particles, environmental motion, transitions
    and background effects.
-7. Complete locomotion, gestures, idle behaviour, interactions, traversal and
+5. Complete locomotion, gestures, idle behaviour, interactions, traversal and
    powers.
-8. Integrate streaming, quality tiers, fallbacks and the full-body camera in the
+6. Integrate streaming, quality tiers, fallbacks and the full-body camera in the
    browser runtime.
-9. Execute the full character by power by location by viewport Blender/browser
+7. Execute the full character by power by location by viewport Blender/browser
    matrix and release only after all required gates pass.
 
 ## Authoritative corrections
@@ -72,15 +70,19 @@ scope:
   ideas, conservative professional typography and direct PDF access.
 - Resume and CV generation remains JavaScript/Chromium only.
 
-## External owner gates
+## Resolved character gates
 
-- `DN-CHAR-RIGHTS-001`: Bongo confirms ownership or applicable permission for
-  public derivatives of the canonical Desert Nomad references.
-- `DN-ORTHO-001`: Bongo approves or comments on the DN-M-AFR-01 v2 silhouette.
+- `DN-CHAR-RIGHTS-001`: resolved by D010 for the portfolio scope. Raw source
+  masters remain private and public derivatives retain provenance controls.
+- `DN-ORTHO-001`: resolved by D010. The DN-M-AFR-01 v2 silhouette is approved
+  for production.
+
+## Remaining owner gates
+
 - `DEP-CONTENT-001`: a LinkedIn export or current professional record can close
   remaining evidence-only content warnings.
-- R-026: complete historical removal of the retired phone requires a separately
-  approved history-rewrite and recovery plan.
+- D015 closes R-026. Bongo directly approved the exact business phone for the
+  Contact page and professional documents, so no history rewrite is required.
 
 ## Recovery
 

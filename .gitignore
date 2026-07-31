@@ -6,6 +6,12 @@ Thumbs.db
 /source/private/*
 !/source/private/.gitkeep
 
+# Owner-supplied character reference crops remain private
+/AI-COLLAB/data/reference/*.jpg
+/AI-COLLAB/data/reference/*.jpeg
+/AI-COLLAB/data/reference/*.png
+/AI-COLLAB/data/reference/*.webp
+
 # Astro / Node
 /node_modules/
 /.astro/

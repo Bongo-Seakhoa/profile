@@ -1,7 +1,7 @@
 # A003 - DN-M-AFR-01 reconstruction draft
 
 **Date:** 2026-07-31
-**Status:** Private review draft, not approved canon
+**Status:** V2 silhouette approved for production by D010
 **Method:** built-in image generation with all four canonical pilot pages as
 references
 
@@ -26,8 +26,9 @@ orthographic, mesh or source-canon replacement.
 | v1 | `8779b4a3552fbf5558e3170f26b14086a15770828e1d7b78275ef2c7906d67af` | Strong identity and three-view consistency; rejected for two blue tassels and closed footwear |
 | v2 | `1aeb2cc934850a69c3a792187500e60795d485dc870626a22f27ec66c5cab26f` | Corrected to one right-side blue tassel and open-toe wrapped sandal-boots; retained as the review candidate |
 
-Both images remain under the ignored `source/private/` boundary. They must not
-enter a public commit while character-reference rights confirmation is pending.
+Both images remain under the ignored `source/private/` boundary. D010 authorizes
+approved portfolio derivatives, but raw reconstruction and reference masters
+remain private.
 
 ## Preserved constraints
 
@@ -48,7 +49,7 @@ enter a public commit while character-reference rights confirmation is pending.
   written left-shoulder-to-opposite-hip rule.
 - Pouch and jewellery placement needs a deliberate construction board rather
   than pixel matching.
-- The face needs owner approval as the pilot identity anchor.
+- The owner approved the v2 face and silhouette as the pilot identity anchor.
 - A Blender overlay must check 184 cm height, 23 cm head, 50 cm shoulders and
   every other canonical measurement.
 
@@ -66,6 +67,6 @@ materials, framing and lighting.
 
 ## Exit
 
-The v2 image may inform the greybox. Final sculpting remains blocked until the
-owner approves the pilot silhouette, rights are confirmed and the Blender
-measurement overlay passes.
+The v2 image is the approved production silhouette. D010 resolves the owner and
+rights gates, and A004 records the passing Blender measurement overlay. Final
+production geometry remains subject to D009's technical and visual gates.

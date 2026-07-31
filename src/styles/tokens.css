@@ -11,6 +11,15 @@
     --gold: #b98b3d;
     --gold-ink: #806020;
     --gold-light: #e3c477;
+    --gold-texture: linear-gradient(
+      105deg,
+      #806020 0%,
+      #c99d49 18%,
+      #efd58e 36%,
+      #a8772c 53%,
+      #dfbd6a 72%,
+      #8b6527 100%
+    );
     --indigo: #344e60;
     --teal: #47716c;
     --teal-strong: #315b56;

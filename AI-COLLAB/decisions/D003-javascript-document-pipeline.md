@@ -132,7 +132,7 @@ The release gate requires:
 - exact approved fonts;
 - text extraction in reading order;
 - valid links and metadata;
-- no personal phone;
+- the exact owner-approved public business phone, with no arbitrary phone drift;
 - PNG render inspection of every page;
 - visual regression within an approved tolerance;
 - clean generation from a fresh checkout.

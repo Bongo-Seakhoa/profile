@@ -3,11 +3,22 @@ import { resolve } from "node:path";
 
 import { PDFDocument } from "pdf-lib";
 
+import {
+  extractPdfText,
+  findPublicPdfTextIssues,
+} from "./lib/pdf-text-verification.mjs";
+
 const repositoryRoot = process.cwd();
 const distDirectory = resolve(repositoryRoot, "dist");
 const manifest = JSON.parse(
   await readFile(
     resolve(repositoryRoot, "src", "data", "profile", "document-manifest.json"),
+    "utf8",
+  ),
+);
+const [identity] = JSON.parse(
+  await readFile(
+    resolve(repositoryRoot, "src", "data", "profile", "identity.json"),
     "utf8",
   ),
 );
@@ -69,6 +80,13 @@ for (const documentManifest of manifest) {
       if (!pdfSource.includes("/Annots")) {
         failures.push(`${variant.id}: PDF has no clickable link annotations`);
       }
+
+      const extractedText = await extractPdfText(outputPath);
+      for (const issue of findPublicPdfTextIssues(extractedText, {
+        approvedPhoneDisplay: identity.publicPhone.display,
+      })) {
+        failures.push(`${variant.id}: ${issue}`);
+      }
     } catch (error) {
       failures.push(`${variant.id}: ${error.message}`);
     }
@@ -88,5 +106,5 @@ if (failures.length > 0) {
 }
 
 console.log(
-  "Verified four A4 PDFs: two 2-page resumes and two 3-page CVs with document metadata.",
+  "Verified four A4 PDFs: two 2-page resumes and two 3-page CVs with the approved public phone, extracted-text checks and document metadata.",
 );

@@ -314,14 +314,23 @@ function checkPrivacy(
       "Public content must not contain em dash characters",
     );
   }
-  const phoneMatch = serialized.match(/\+\d[\d\s().-]{7,}\d/);
-  if (phoneMatch !== null) {
+  const approvedPhoneDigits = content.identity[0]?.publicPhone.href.replace(
+    /\D/gu,
+    "",
+  );
+  const unapprovedPhone = [...serialized.matchAll(/\+\d[\d\s().-]{7,}\d/gu)]
+    .map(([value]) => ({
+      value,
+      digits: value.replace(/\D/gu, ""),
+    }))
+    .find(({ digits }) => digits !== approvedPhoneDigits);
+  if (unapprovedPhone !== undefined) {
     addIssue(
       issues,
-      "PUBLIC_PHONE",
+      "UNAPPROVED_PUBLIC_PHONE",
       "error",
       "$",
-      `Public content contains a phone-like value (${phoneMatch[0]})`,
+      `Public content contains an unapproved phone-like value (${unapprovedPhone.value})`,
     );
   }
   if (/bongokosa\.wixsite\.com/i.test(serialized)) {

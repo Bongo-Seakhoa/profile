@@ -2,8 +2,8 @@
 
 **Updated:** 2026-07-31
 **Lead:** Codex
-**Independent reviewer:** Claude, currently offline by heartbeat protocol
-**Current milestone:** DN-M-AFR-01 rights and pilot-silhouette gate
+**Independent reviewer:** Claude, active through the dual-root heartbeat protocol
+**Current milestone:** DN-M-AFR-01 production pilot
 
 ## Overall
 
@@ -15,12 +15,13 @@
 | Static View implementation | Complete | Astro/TypeScript site builds 26 pages with 0 bytes of client JavaScript. |
 | Resume and CV | Complete | JavaScript/Chromium pipeline produces four exact-A4, selectable PDFs: two 2-page resumes and two 3-page CVs. |
 | Static release QA | Passed | 58 unit tests, 72 browser tests, public-output validation, metadata validation, budgets and three-run Lighthouse median passed. |
-| Privacy review | Passed for current tree | Retired phone removed from current tree and `dist`; no secrets or U+2014 em dashes found. Historical Git exposure is separately recorded in R-026. |
+| Public contact and privacy review | Exact-value contract active | D015 records owner approval for `+27 73 590 7659`; Contact, Resume and CV require that exact number while arbitrary phone drift, private documents and U+2014 em dashes remain blocked. R-026 is closed as owner-intended exposure. |
 | Deployment | Complete | Static View implementation revision `e29a4c9` is live; warning-clean Pages run `30605182973` and post-deploy HTTP/PDF verification passed. Live `version.json` is authoritative for later record-only revisions. |
 | Canonical character discovery | Complete | Desert Nomad v3 self-contained handoff verifies 32 of 32 manifest entries and defines the exact 15-character roster. |
-| Pilot reconstruction | Private review draft complete | DN-M-AFR-01 v2 orthographic reconstruction and Blender measurement blockout exist under ignored `source/private/`. |
-| Public character derivatives | Blocked externally | Bongo must confirm ownership or derivative and redistribution rights before public character art, meshes or textures ship. |
-| Full immersive production | Required, not started at scale | Character roster, sets, effects, animations, powers, runtime integration and the complete Blender/browser matrix remain mandatory milestones. |
+| Pilot reconstruction | Approved | Bongo approved the DN-M-AFR-01 v2 silhouette; its Blender measurement blockout remains the dimensional base for production. |
+| Public character derivatives | Authorized for portfolio scope | D010 records owner image rights and authorization to create, publish and redistribute approved portfolio derivatives. Raw masters remain private. |
+| Full immersive production | Pilot active | DN-M-AFR-01 modelling, rigging, materials, animation, LOD and export validation are the active vertical slice before roster scale-up. |
+| DN-M-AFR-01 physical layering | Rejected; base trousers active | A007 returned the builder to production-valid base garments. The isolated v16 trouser cache completed but failed convergence, penetration and seam gates. No outer-layer proof, LOD or runtime package may advance until both sewn tunic and trousers pass first. |
 
 ## Static View release evidence
 
@@ -54,13 +55,51 @@ The immersive work is explicitly required by
 8. Browser streaming, performance tiers, fallbacks and recovery.
 9. Blender and browser evaluation across characters, powers, locations, ratios, breakpoints and quality levels.
 
-## Current external decisions
+## Resolved owner gates
 
-1. Bongo confirms ownership or permission to create and publicly redistribute derivatives from the Desert Nomad canonical references.
-2. Bongo approves or comments on the private DN-M-AFR-01 v2 silhouette before final sculpt work scales to the remaining roster.
-3. Bongo may provide a LinkedIn export or current professional record to close the remaining evidence-only content warnings.
-4. Bongo decides whether historical Git phone exposure should be removed through a separately planned history rewrite.
+1. D010 records Bongo's ownership of the supplied Desert Nomad images and authorization to create, publish and redistribute approved derivatives for this portfolio.
+2. D010 records approval of the private DN-M-AFR-01 v2 silhouette for production.
+
+## Current character authoring gate
+
+- D014 adopts two-dimensional garment patterns, Blender sewing and
+  layer-by-layer cloth simulation as an authoring workflow. Approved baked
+  garments become versioned source assets and are not resimulated during the
+  website build.
+- A006 passed the Blender 5.2 sewn-cloth canary twice with identical metrics and
+  pixels. The mean seam gap closed from 171.6 mm to 0.680 mm before welding.
+- D016 requires physical dressing order and explicit attachment dependencies.
+  Base garments must pass first; tabard and belt establish the waist stack;
+  cowl and mantle solve against the accepted lower stack and relevant accessory
+  proxies; jewellery and trim attach only to final dressed surfaces.
+- A007 records the exact binding dependency DAG, local occlusion rules,
+  distributed contact thresholds and neutral/dynamic evidence matrix. Its
+  reviewed builder snapshot failed because the visible base was provisional,
+  final accessories lacked layer and named-target data, bracers and trim were
+  absent, and footwear order was incorrect. The active refactor now authors
+  real sewn base patterns, but those new garments remain candidates until the
+  base validator and four-view visual gate pass.
+- The standalone Blender 5.2 dressing-stack validator now enforces the
+  canonical 18-layer graph, a strict body/tunic/trousers base profile,
+  evaluated-mesh contact and penetration evidence, attachment roots and
+  proxy-to-final parity. Ten focused tests and its Blender mesh/BVH smokes
+  pass. It cannot be used to waive seam, fold, canon or visual-pose review.
+- DN-M-AFR-01 v1 through v8b remain rejected visual evidence. Physical-stack
+  smoke v10 and v11 failed at the tabard. Diagnostic v13 passed its tabard
+  cleanup step but failed at the cowl with 96.187 mm convergence, 23.426 mm
+  reliable penetration and a 269.919 mm pre-weld seam gap. It rendered
+  nothing. No accepted current outer stack exists and no rejected run may
+  enter LOD, animation or the public runtime package.
+
+## Remaining owner decisions
+
+1. Bongo may provide a LinkedIn export or current professional record to close the remaining evidence-only content warnings.
 
 ## Claude coordination
 
-Claude's R001 review is retained. Nine Codex-to-Claude messages document later architecture, camera, animation, immersive-scope and release-review requests. No current Claude heartbeat or new response is present. Under the three-hour protocol, Claude is marked offline and Codex continues without blocking; the inbox watcher remains available for immediate resumption.
+Claude's R001 through R005 reviews are retained. The split-inbox failure was
+resolved and both agents now publish heartbeats and messages across the
+implementation worktree and canonical OneDrive collaboration roots. Claude's
+heartbeat is active. Codex continues implementation without blocking while
+Claude independently reviews the production pilot, framing contract, public
+asset gate and Static View background correction.

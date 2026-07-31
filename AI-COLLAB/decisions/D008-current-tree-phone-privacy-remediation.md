@@ -3,7 +3,11 @@
 **Date:** 2026-07-31
 **Owner:** Bongo Seakhoa
 **Implementer:** Codex
-**Status:** Adopted for the current release
+**Status:** Superseded by D015
+
+> D015 records the owner's direct approval to publish the number as an
+> intentional business contact. The removal and history-rewrite guidance below
+> is retained only as the record of the earlier privacy posture.
 
 ## Finding
 
