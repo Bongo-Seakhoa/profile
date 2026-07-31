@@ -49,22 +49,24 @@ relationship. That local ordering must be recorded explicitly.
 The approved pilot uses this initial physical order:
 
 1. MPFB body and collision proxy.
-2. Blue-grey long-sleeved base tunic and loose cream trousers.
-3. Cream front tabard, attached beneath the waist retaining line.
-4. Waist belt fitted around the dressed waist and retaining the tabard.
-5. Simplified belt, pouch and hardware collision proxies placed where the
+2. Indigo-grey long-sleeved base tunic.
+3. Sand-brown loose trousers, fitted over the accepted tunic where the tunic
+   enters or overlaps the waistband.
+4. Cream front tabard, attached beneath the waist retaining line.
+5. Waist belt fitted around the dressed waist and retaining the tabard.
+6. Simplified belt, pouch and hardware collision proxies placed where the
    approved mantle must drape over or around them.
-6. Ochre cowl followed by the asymmetric mantle, solved against the accepted
+7. Ochre cowl followed by the asymmetric mantle, solved against the accepted
    base garments, belt line and relevant accessory proxies. The long mantle
    tail must overlap the belt where shown by the approved board.
-7. Final belt hardware, pouches and the single right-side blue tassel aligned
+8. Final belt hardware, pouches and the single right-side blue tassel aligned
    to the accepted collision proxies and belt surface.
-8. Forearm bracers fitted over the accepted sleeves.
-9. Sandal soles and foot straps fitted to the feet, followed by calf wraps over
+9. Forearm bracers fitted over the accepted sleeves.
+10. Sandal soles and foot straps fitted to the feet, followed by calf wraps over
    the accepted trouser taper.
-10. Necklace, cords and medallion settled against the topmost accepted chest
+11. Necklace, cords and medallion settled against the topmost accepted chest
     layer.
-11. Mantle, tabard and accessory fringe or border trim attached to their final
+12. Mantle, tabard and accessory fringe or border trim attached to their final
     baked edges.
 
 ## Binding DN-M-AFR-01 dependency DAG
@@ -76,10 +78,10 @@ every point.
 
 ```text
 00-body
-|-- 10-base-tunic-sleeves-and-skirt
-`-- 11-base-trousers
+`-- 10-base-tunic-sleeves-and-skirt
+    `-- 11-base-trousers
 
-10 + 11
+11
 `-- 20-front-tabard
 
 10 + 11 + 20
@@ -192,7 +194,7 @@ Universal hard limits are:
 | Item | Binding contact and float gate |
 | --- | --- |
 | Base tunic | Body gap across torso and arms: `p05 >= 2 mm`, `p95 <= 20 mm`; continuous wrist coverage; no connected support-zone float longer than 25 mm. |
-| Base trousers | Waist gap `p95 <= 12 mm`; intended loose thigh and calf gap from 3 to 35 mm; ankle taper `p95 <= 10 mm` for the wrap target. |
+| Base trousers | D019 controls the DN-M-AFR-01 construction, region-aware ease and fail-closed visual gate. Waistband support retains `p95 <= 12 mm`; ankle taper retains `p95 <= 10 mm`. The former whole-leg `3 to 35 mm` band is withdrawn and may not approve any loose trouser. |
 | Tabard | Upper 20 mm attachment strip `p95 <= 3 mm`, maximum 5 mm; the belt captures the complete top edge by at least 10 mm; no rear-tabard faces. |
 | Belt | Inward surface to the dressed waist `p95 <= 3 mm`, maximum 5 mm; no more than 1 mm penetration; the tabard top is fully hidden and retained. |
 | Belt and pouch proxies | Back or anchor surface to the belt `p95 <= 3 mm`, maximum 5 mm; final garment-facing surface differs from its proxy by no more than 5 mm one-sided Hausdorff distance. |

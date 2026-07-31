@@ -247,3 +247,27 @@ Append concise, evidence-backed entries. Use UTC timestamps.
   36.125 percent largest unsupported patch, 29.879 mm waist p95, 66.832 mm
   loose-leg p95 and 52.232 mm ankle p95. Pattern tuning now proceeds from
   visible per-row body measurements; no outer layer is authorised.
+- Completed the bounded v28 trouser cleanup and its reproducible evidence set.
+  All declared machine gates passed at 11.754 mm waist p95, zero penetration,
+  100 percent support, 34 exact changed vertices and no topology defects. The
+  complete identical-setup renders nevertheless fail production quality: the
+  garment reads as tight leggings with a pinched front and back crotch, flat
+  cut waistband and insufficient sand-trouser volume. A012 rejects v28 as art,
+  keeps D016 closed, and authorises a provenance-first CC0 native-MPFB
+  harem-trouser A/B without admitting any donor to production.
+- Inspected all four relevant DN-M-AFR-01 canonical PDF pages and the
+  owner-approved v2 reconstruction at full resolution. They require loose
+  sand-brown woven trousers with narrow ankle gathers and specify the local
+  order as body, base tunic, then trousers. Adopted D019, withdrew the fitted
+  `3 to 35 mm` whole-leg gate, prohibited machine-only acceptance and corrected
+  D016 so a production trouser must fit the accepted tunic at the waistband.
+- Recorded A013 for the authoritative CC0 `toigo_harem_pants` archive. The
+  donor is lawful and statically clean with one all-quad surface, three closed
+  boundary loops and complete UVs, but it has no native weights or separate
+  waistband and remains unfit, undeformed and unapproved for export.
+- Adopted Bongo's proposed balloon-relaxation shortcut as a bounded,
+  non-accepting D019 canary. Verified directly against Blender 5.2 RNA that
+  cloth pressure requires a closed mesh, then required named temporary closure
+  helpers, a corrected rise and real waistband, a baked fuller rest shape and
+  a separate pressure-free gravity settle. No cap, pressure setting or live
+  cloth is permitted in the accepted garment or browser asset.

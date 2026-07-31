@@ -25,10 +25,16 @@ available. Exact pins are `three@0.185.1`, `@types/three@0.185.1`,
 The new runtime-manifest schema fails closed unless it contains all 15
 canonical characters, all 16 location roles, Solar Propulsion, Sand
 Teleportation and desert surfing with complete ordered phases, approved
-production state, unique content-addressed URIs, complete SHA-256 digests,
-KTX2/meshopt decoder declarations, the distant full-body camera authority and
-a disabled public entry until the complete matrix passes. Seven focused tests,
-TypeScript and ESLint pass.
+production state, content-addressed production-asset URIs, exact versioned
+Three.js Basis decoder paths, complete SHA-256 digests, KTX2/meshopt decoder
+declarations, the distant full-body camera authority and a disabled public
+entry until the complete matrix passes. Seven focused tests, TypeScript and
+ESLint pass.
+
+Production asset entries are manifest-relative. They resolve from
+`assets/immersive/runtime-manifest.json` and do not repeat that output prefix;
+the public Basis transcoder path remains the exact versioned `/profile/` path
+required by Three.js.
 
 A separate implementation is splitting release validators by route-reachable
 request graph without weakening Static View. Another implementation is fixing

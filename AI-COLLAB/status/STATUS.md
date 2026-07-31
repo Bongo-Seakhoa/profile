@@ -22,7 +22,7 @@
 | Public character derivatives | Authorized for portfolio scope | D010 records owner image rights and authorization to create, publish and redistribute approved portfolio derivatives. Raw masters remain private. |
 | Full immersive production | Pilot active | DN-M-AFR-01 modelling, rigging, materials, animation, LOD and export validation are the active vertical slice before roster scale-up. |
 | Full-body camera source controller | Source gate passed; runtime gate open | Commit `baaf558` provides canonical silhouette registries, stateful authored-disappearance enforcement, predictive bounds, responsive safe zones, real perspective AABB projection, fixed full-visibility epsilon, controller-owned look-back baselines and no OTS path. Independent reruns pass 42 focused, 73 immersive and 101 full unit tests. Production renderer mounting, object-ID-mask agreement and real-browser verification remain required. |
-| DN-M-AFR-01 physical layering | Rejected; v28 localization active | The v27 sewn-trouser solve reached 12.134 mm waist p95 but remained 0.134 mm above the 12 mm gate and regressed convergence, seam, overall-clearance and loose-fit metrics relative to v26. A reporting-only v25-v27 provenance comparison is localizing a smaller v28 correction. No tunic, outer layer, render, LOD or runtime package may advance until the trousers pass all gates and receive clean four-view approval. |
+| DN-M-AFR-01 physical layering | Rejected; D019 canary and peer review active | A012 records that v28 passed every machine and topology gate but failed the visual gate as pinched leggings. D019 withdraws the fitted-garment band and corrects the local order to accepted tunic before trousers. A013 verifies the CC0 donor but records rigged-export readiness false. The owner-directed next bounded study raises the waist and uses temporary closed-volume pressure, then freezes and gravity-settles a helper-free copy. It cannot receive production acceptance; no outer layer, LOD or runtime package may advance. |
 
 ## Static View release evidence
 
@@ -103,6 +103,16 @@ The immersive work is explicitly required by
   0.361 mm convergence and 0.0183 mm maximum seam gap. v18 must use the
   corrected seam offset, rise, seat and crotch junction without weakening any
   gate.
+- A012 retains v28 as a valid machine-pass diagnostic but rejects it as
+  production art. Its 34-vertex cleanup is bounded and clean, yet the complete
+  evidence set shows tight legging proportions, a pronounced front and back
+  crotch pinch, a flat cut waistband and insufficient sand-trouser volume.
+  D019 withdraws the misleading `3 to 35 mm` whole-leg band and corrects the
+  local foundation sequence: the base tunic must be accepted before a trouser
+  can be accepted at the waistband overlap. A013 verifies the lawful
+  `toigo_harem_pants` source and static topology while retaining rigged-export
+  readiness as false. Region-aware metric instrumentation and the base tunic
+  are now the bounded prerequisites; outer layers remain blocked.
 
 ## Remaining owner decisions
 

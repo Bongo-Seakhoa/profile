@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": "1.0.0",
+  "profileId": "DN-M-AFR-01-sirwal-v1",
+  "characterId": "DN-M-AFR-01",
+  "garmentLayerId": "11-base-trousers",
+  "status": "calibration-required",
+  "machineAcceptanceEnabled": false,
+  "decisionAuthority": "AI-COLLAB/decisions/D019-dn-m-afr-01-loose-trouser-construction-and-acceptance.md",
+  "authority": [
+    {
+      "kind": "canonical-pdf",
+      "name": "Desert_Nomad_Canonical_Reference_Bible.pdf",
+      "sha256": "08BCCB6FCC02DB0C9E4B9E48B0567EB6BFDE4E206D71BE71DB575DD926D17942",
+      "pdfPages": [3, 4, 5, 6],
+      "characterPages": [1, 2, 3, 4],
+      "bindingWrittenTerms": [
+        "sand-brown loose trousers with narrow ankle gathers",
+        "body then base tunic then trousers",
+        "medium-weight woven secondary cloth with controlled fold memory"
+      ]
+    },
+    {
+      "kind": "owner-approved-silhouette",
+      "name": "orthographic-review-v2.png",
+      "sha256": "1AEB2CC934850A69C3A792187500E60795D485DC870626A22F27EC66C5CAB26F",
+      "limitations": [
+        "not a precision orthographic",
+        "upper trouser regions are partly occluded",
+        "visible zones may calibrate dimensionless silhouette bands only"
+      ]
+    },
+    {
+      "kind": "canonical-data",
+      "name": "desert-nomad-character-canon.v3.json",
+      "sha256": "EF4FF602250585EE99338F19AFFBEA8AB1157E2EB414437B20EDDC7DD7783D3A"
+    }
+  ],
+  "layering": {
+    "requiredAcceptedPredecessors": ["00-body", "10-base-tunic-sleeves-and-skirt"],
+    "productionSuccessor": "20-front-tabard",
+    "nakedBodyStudyMayBeAccepted": false
+  },
+  "construction": {
+    "requiredEvidence": [
+      "finished-continuous-waistband",
+      "named-front-rise",
+      "named-back-rise",
+      "named-inseams",
+      "named-outseams",
+      "gusset-or-genuine-curved-rise",
+      "separate-left-and-right-leg-contours",
+      "narrow-ankle-gather-or-cuff-construction"
+    ],
+    "metadataOnlyEvidenceAllowed": false,
+    "temporaryPressureClosuresAllowed": true,
+    "temporaryPressureClosuresAllowedInFrozenGarment": false,
+    "livePressureAllowedInRuntime": false,
+    "liveClothAllowedInRuntime": false
+  },
+  "negativeControls": [
+    {
+      "id": "v28-tight-legging",
+      "blendSha256": "62625AC4334A2B5B4A7A58E68F12BB17D939D2AF58F670C0353C7309B9FED68C",
+      "requiredOutcome": "reject",
+      "knownMeasurementsM": {
+        "wholeGarmentP05": 0.005402176,
+        "wholeGarmentMedian": 0.008555761,
+        "wholeGarmentP95": 0.017174578,
+        "wholeGarmentMaximum": 0.026784893,
+        "looseLegP05": 0.006031329,
+        "looseLegP95": 0.019190342,
+        "waistP95": 0.011754086,
+        "ankleP95": 0.008341697
+      },
+      "knownVisualFailures": [
+        "body-contour-tracking",
+        "front-crotch-pinch",
+        "rear-crotch-pinch",
+        "raw-flat-waist-edge",
+        "missing-loose-volume",
+        "horizontal-material-banding"
+      ]
+    }
+  ],
+  "anatomicalStations": [
+    "waistband-support",
+    "seat",
+    "upper-thigh-left",
+    "upper-thigh-right",
+    "mid-thigh-left",
+    "mid-thigh-right",
+    "knee-left",
+    "knee-right",
+    "upper-calf-left",
+    "upper-calf-right",
+    "pre-cuff-left",
+    "pre-cuff-right",
+    "cuff-left",
+    "cuff-right"
+  ],
+  "requiredMetricFamilies": {
+    "crossSections": [
+      "closed-contour-count",
+      "area-weighted-perimeter",
+      "contour-area",
+      "frontal-width",
+      "sagittal-depth",
+      "garment-to-body-ratios",
+      "left-right-balance"
+    ],
+    "waistband": [
+      "topology-proven-continuity",
+      "finished-band-height",
+      "top-edge-length",
+      "lower-edge-length",
+      "support-mask-gap",
+      "floating-run-length"
+    ],
+    "riseAndSeat": [
+      "front-rise-arc-length",
+      "back-rise-arc-length",
+      "lowest-suspended-crotch-point",
+      "sagittal-depth",
+      "central-clearance-volume",
+      "local-concavity"
+    ],
+    "taperAndGather": [
+      "pre-cuff-circumference",
+      "cuff-circumference",
+      "reduction-ratio",
+      "area-weighted-fold-count",
+      "fold-depth-distribution"
+    ],
+    "silhouette": [
+      "front-body-normalised-widths",
+      "profile-body-normalised-depths",
+      "three-quarter-envelope",
+      "body-contour-tracking-score"
+    ],
+    "dynamics": [
+      "waist-retention",
+      "ankle-retention",
+      "self-intersection",
+      "body-penetration",
+      "silhouette-continuity"
+    ]
+  },
+  "calibration": {
+    "pendingThresholdFamilies": [
+      "crossSections",
+      "riseAndSeat",
+      "taperAndGather",
+      "silhouette"
+    ],
+    "nullOrMissingThresholdMeans": "fail-closed",
+    "areaOrArcLengthWeightingRequired": true,
+    "vertexCountWeightingAllowed": false,
+    "absoluteWorldZRegionsAllowed": false,
+    "aggregateNearestSurfaceClearanceMayProveLooseFit": false,
+    "occludedImageEstimateMayBecomeHardThreshold": false
+  },
+  "retainedHardLimits": {
+    "staticClothPenetrationMaximumMm": 2,
+    "dynamicClothPenetrationMaximumMm": 3,
+    "dynamicPenetrationConsecutiveFramesMaximum": 2,
+    "penetrationPatchAreaOverOneMmMaximumSquareMm": 25,
+    "cleanedSeamGapMaximumMm": 0.5,
+    "waistbandSupportP95MaximumMm": 12,
+    "waistbandFloatingRunMaximumMm": 25,
+    "cuffToWrapP95MaximumMm": 10
+  },
+  "requiredViews": [
+    "front",
+    "anatomical-right-profile",
+    "back",
+    "anatomical-left-front-three-quarter",
+    "front-rise-closeup",
+    "rear-rise-closeup",
+    "waistband-closeup"
+  ],
+  "requiredPoses": [
+    "neutral-a-pose",
+    "maximum-stride-walk",
+    "pelvis-chest-turn",
+    "pointing-or-raised-arm",
+    "jump-apex",
+    "maximum-compression-landing",
+    "representative-power-excursion"
+  ],
+  "allowedPreAcceptanceStatus": "candidate-safety-and-topology-gates-passed-visual-pending",
+  "forbiddenStatusesUntilCalibrationAndReview": [
+    "candidate-machine-gates-passed",
+    "accepted",
+    "accepted-sewn-base-garment"
+  ],
+  "requiredReviewers": ["codex", "claude"],
+  "ownerReviewRequiredForSilhouetteChange": true
+}
