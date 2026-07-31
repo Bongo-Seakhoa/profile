@@ -21,6 +21,7 @@
 | Pilot reconstruction | Approved | Bongo approved the DN-M-AFR-01 v2 silhouette; its Blender measurement blockout remains the dimensional base for production. |
 | Public character derivatives | Authorized for portfolio scope | D010 records owner image rights and authorization to create, publish and redistribute approved portfolio derivatives. Raw masters remain private. |
 | Full immersive production | Pilot active | DN-M-AFR-01 modelling, rigging, materials, animation, LOD and export validation are the active vertical slice before roster scale-up. |
+| Full-body camera source controller | Source gate passed; runtime gate open | Commit `baaf558` provides canonical silhouette registries, stateful authored-disappearance enforcement, predictive bounds, responsive safe zones, real perspective AABB projection, fixed full-visibility epsilon, controller-owned look-back baselines and no OTS path. Independent reruns pass 42 focused, 73 immersive and 101 full unit tests. Production renderer mounting, object-ID-mask agreement and real-browser verification remain required. |
 | DN-M-AFR-01 physical layering | Rejected; v18 base-seam correction active | A007 returned the builder to production-valid base garments. v16 and v17 both failed the trouser gate. v17 removed actual-body penetration but exposed a 274.154 mm orientation-specific inner seam failure. A controlled nonzero seam-offset canary passed, and no outer-layer proof, LOD or runtime package may advance until both sewn tunic and trousers pass. |
 
 ## Static View release evidence
