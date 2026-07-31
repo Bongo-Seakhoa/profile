@@ -4,6 +4,7 @@ export * from "./dom-content-safe-zone-bridge";
 export * from "./framing-telemetry-buffer";
 export * from "./full-body-framing-controller";
 export * from "./look-back-orbit-controller";
+export * from "./off-axis-perspective-contract";
 export * from "./perspective-aabb-projection-probe";
 export * from "./required-contributor-registry";
 export * from "./types";

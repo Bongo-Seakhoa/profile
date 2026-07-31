@@ -1,4 +1,5 @@
 import { clamp, intersectRects, isValidBounds, rectArea } from "./math";
+import { deriveOffAxisPerspectiveContract } from "./off-axis-perspective-contract";
 import type {
   AnimatedEnvelope,
   Bounds3,
@@ -18,11 +19,13 @@ export class PerspectiveProjectionContractError extends Error {
 
 export interface PerspectiveAabbProjectionProbeOptions {
   readonly nearPlane: number;
+  readonly farPlane: number;
   readonly targetEpsilonWorldUnits: number;
 }
 
 const DEFAULT_OPTIONS: PerspectiveAabbProjectionProbeOptions = {
   nearPlane: 0.01,
+  farPlane: 10_000,
   targetEpsilonWorldUnits: 1e-6,
 };
 
@@ -97,6 +100,7 @@ export class PerspectiveAabbProjectionProbe implements ProjectionProbe {
     if (
       Object.values(this.#options).some((value) => !Number.isFinite(value)) ||
       this.#options.nearPlane <= 0 ||
+      this.#options.farPlane <= this.#options.nearPlane ||
       this.#options.targetEpsilonWorldUnits < 0
     ) {
       throw new RangeError("Invalid perspective projection-probe options.");
@@ -160,6 +164,15 @@ export class PerspectiveAabbProjectionProbe implements ProjectionProbe {
       );
     }
 
+    const projection = deriveOffAxisPerspectiveContract({
+      viewport,
+      anchorPx: candidate.anchorPx,
+      anchorCoordinateSpace: candidate.anchorCoordinateSpace,
+      verticalFieldOfViewDegrees: candidate.rig.verticalFieldOfViewDegrees,
+      nearPlane: this.#options.nearPlane,
+      farPlane: this.#options.farPlane,
+    });
+
     const cosElevation = Math.cos(candidate.elevationRadians);
     const cameraPosition: Vec3 = {
       x:
@@ -183,22 +196,25 @@ export class PerspectiveAabbProjectionProbe implements ProjectionProbe {
       );
     }
 
-    const tangent = Math.tan(
-      (candidate.rig.verticalFieldOfViewDegrees * Math.PI) / 360,
-    );
-    const aspect = viewport.width / viewport.height;
+    const { frustum } = projection;
+    const horizontalSpan = frustum.right - frustum.left;
+    const verticalSpan = frustum.top - frustum.bottom;
     const projected = boundsCorners(bounds).map((corner) => {
       const relative = subtract(corner, cameraPosition);
       const depth = dot(relative, forward);
-      if (depth <= this.#options.nearPlane) {
+      if (depth <= frustum.near || depth >= frustum.far) {
         return null;
       }
 
-      const ndcX = dot(relative, right) / (depth * tangent * aspect);
-      const ndcY = dot(relative, up) / (depth * tangent);
+      const ndcX =
+        (2 * frustum.near * dot(relative, right)) / (horizontalSpan * depth) -
+        (frustum.right + frustum.left) / horizontalSpan;
+      const ndcY =
+        (2 * frustum.near * dot(relative, up)) / (verticalSpan * depth) -
+        (frustum.top + frustum.bottom) / verticalSpan;
       return {
-        x: candidate.anchorPx.x + ndcX * (viewport.width / 2),
-        y: candidate.anchorPx.y - ndcY * (viewport.height / 2),
+        x: ((ndcX + 1) * viewport.width) / 2,
+        y: ((1 - ndcY) * viewport.height) / 2,
       };
     });
     if (projected.some((point) => point === null)) {
