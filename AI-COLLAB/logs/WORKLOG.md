@@ -1,0 +1,132 @@
+# Profile Upgrade worklog
+
+Append concise, evidence-backed entries. Use UTC timestamps.
+
+## 2026-07-30
+
+- Audited repository, live GitHub Pages site, current generator, deployment layout and public routes.
+- Confirmed baseline commit `df410d5` and origin `Bongo-Seakhoa/profile`.
+- Confirmed real Chrome desktop rendering and severe 390 px horizontal overflow.
+- Confirmed the in-app browser could not attach; retained installed Chrome headless as the verified browser fallback.
+- Ran the current build from an isolated copy. All four PDF generations failed, but the process exited 0 and reported success. Logged R-002.
+- Audited the 39-file reference library and reviewed the Static View authority document.
+- Read Claude’s complete R001 independent architecture and quality review.
+- Independently reviewed `07_59_39 PM (2).png`; it visually matches the Threshold Dunes camp/waystation description.
+- Corrected `Anzania_Asset_Linkage_Actual_Filenames_v2.0.xlsx`, rendered all six sheets, re-imported the export and verified no stale filename suffix or formula-error marker remained.
+- Replaced the reference-library workbook with the verified correction and preserved its exact original under `AI-COLLAB/archive/reference-originals/`.
+- Adopted the hybrid architecture in D002 after an independent weighted comparison.
+- Wrote the systematic Release 1 plan, risk register, status and collaboration protocol.
+- Recorded the owner’s superseding distant full-body camera correction as D004, struck OTS from the allowed design space, expanded M7 and acceptance criteria, logged R-025 and assigned Claude an independent cross-animation/browser containment audit.
+- Implemented the isolated TypeScript camera core: post-skinning/proxy bounds, conservative stale-bound fallback, typed traversal suppression, responsive safe pockets, DOM animation sweeps, predictive pullback, look-back radius preservation, interaction restore and exhaustive telemetry.
+- Passed 13 deterministic camera-contract tests across landscape, portrait, square, ultrawide, short-height, content-left/content-right and special-state cases; strict TypeScript compilation also passes.
+- Read the complete `Animation Addendum.md`, adopted it through D005 and reconciled its older camera ranges with the tighter direct owner correction.
+- Implemented the lower-third home stage with traversal-only middle/upper power intents and deterministic return, plus deliberate zoom, shared male/female/non-binary locomotion profiles, compact manifest validation, animation interruption, long-idle scheduling and LOD/runtime budgets.
+- Passed 26 immersive contract tests after the owner clarified that powers may cross or hover outside the lower-third home stage.
+- Audited Blender 5.2.0 LTS. EEVEE and Cycles CPU headless self-renders passed; Cycles GPU acceleration is unavailable on the AMD integrated GPU.
+- Tested the collaboration watcher and heartbeat protocol in isolated staging; it detected missing peer state safely, wrote an atomic heartbeat and exited 0.
+- Received owner direction to remove Python from the resume/CV production path.
+- Audited the Nielsen Sports SIYA Report Export Upgrade: pure ES templates, shared browser preview, print CSS, local fonts, headless Chromium, optional JavaScript PDF merging and rendered before/after review.
+- Rendered the SIYA before/after PDFs with Poppler and visually confirmed the intended editorial-quality improvement.
+- Rendered the current resume baseline and confirmed a `SELECTED PROJECTS` heading is orphaned at the bottom of page 1, validating the owner’s concern.
+- Adopted D003: curated A4 Astro document routes, Playwright/Chromium PDF generation, browser layout audits and all-page PNG review.
+- Independent document architecture review rejected a separate Puppeteer, Paged.js, Vivliostyle, react-pdf or PDFKit primary path. Playwright/Chromium is the single renderer and test browser; specialist paged-media tools remain fallback-only.
+- `pdfinfo` confirmed the current resume and CV are US Letter. The replacement contract is exact A4.
+
+## 2026-07-31
+
+- Added base-aware favicon, app icons, web manifest, `.nojekyll`, robots and
+  sitemap metadata for the `/profile/` GitHub Pages project site.
+- Reconciled the route registry with indexing policy: the sitemap now contains
+  20 canonical indexable routes and excludes four `noindex` document previews,
+  the Bongo Kosa canonical alias and 404.
+- Implemented 26 unique 1200-by-630 social cards through
+  `scripts/build-social-cards.mjs`. Cards use route-specific copy, IBM Plex Sans
+  and the restrained Anzania palette, and are written atomically.
+- Built and visually inspected
+  `AI-COLLAB/.watch-state/release-previews/social-card-contact-sheet.jpg`.
+  All route cards, including long project titles, both names, document variants,
+  continuity and 404, remain fully visible without overlap or clipping.
+- Added `scripts/write-release-metadata.mjs` and
+  `scripts/validate-release-metadata.mjs`. Validation checks the route registry,
+  canonicals, unique titles/descriptions/cards, card hashes and dimensions,
+  icons, web manifest, sitemap, robots and version metadata.
+- Added `.github/workflows/deploy-pages.yml` for a gated main-branch GitHub
+  Pages deployment. It installs the pinned Node/pnpm and real browser runtimes,
+  runs `pnpm run qa`, uploads the complete `dist` artifact and preserves
+  `.nojekyll`. Nothing was pushed or deployed.
+- Verification passed: Astro built 26 pages; targeted ESLint and `tsc --noEmit`
+  passed; `scripts/validate-release-metadata.mjs` passed with 20 sitemap routes
+  and 26 unique route cards.
+- Closed the Static View Lighthouse gate with the pinned Chrome-compatible
+  `lighthouse@13.3.0` and `pnpm run verify:lighthouse`. The JavaScript runner
+  served the production `dist` artifact in-process and ran three simulated
+  mobile audits at 390 by 844 against `/profile/` in installed Chrome 150.
+- The command exited 0. Per-run performance scores were 79, 95 and 99;
+  accessibility, best practices and SEO were 100 in every run. The median gate
+  passed at performance 95, accessibility 100, best practices 100, SEO 100,
+  LCP 2,339.126 ms, CLS 0.001027 and TBT 73 ms. The slower first-run TBT was
+  763.5 ms; the other two were 0 ms and 73 ms, so the required three-run median
+  remained below the 200 ms limit without weakening the threshold.
+- Raw LHRs and the machine-readable gate result are retained under
+  `AI-COLLAB/.watch-state/lighthouse/`. The runner is intentionally available
+  as the dedicated `verify:lighthouse` command and is not yet appended to the
+  broad `qa` command.
+- At 2026-07-31T02:28:04Z, completed the Static View browser QA pass. Replaced
+  the hanging external preview process with an in-process, base-aware static
+  server and deterministic connection teardown.
+- Fixed three browser-confirmed release defects: insufficient contrast on
+  capability indices, min-content overflow in the mobile homepage contact
+  composition and invalid definition-list children on Contact.
+- Chrome passed 32 of 32 desktop and 32 of 32 mobile checks across all routes,
+  serious/critical axe findings, no-JavaScript navigation, skip focus, seven
+  viewport sizes, direct PDFs and document previews.
+- Firefox and WebKit each passed the four-route Overview, Work, Documents and
+  Contact smoke matrix. Firefox required one unsandboxed local run because the
+  managed Windows sandbox blocked its tab subprocess before navigation.
+- At 390 px, both resume and CV previews measured 390 px body/root scroll width
+  against 390 px client width. Static View loaded 182,710 encoded bytes on
+  desktop and 160,978 on mobile, with zero script elements and zero immersive
+  runtime requests.
+- Quality evidence passed: lint, Astro/TypeScript check, 51 unit assertions,
+  public-output validation, release metadata validation and static budgets.
+  The artifact contains zero JavaScript or immersive binary artifacts.
+- The clean post-build browser rerun passed 68 of 68 checks across exhaustive
+  Chrome desktop, exhaustive Chrome mobile and the WebKit smoke project.
+- Completed the current-tree privacy remediation. Removed the retired phone
+  from source and legacy HTML, deleted four obsolete legacy PDFs, redacted the
+  value from R001 and retained only a clearly fictional `+999` validator
+  fixture. The production artifact and current tree contain no retired-phone
+  match; historical exposure remains documented in R-026.
+- Discovered and audited the complete Desert Nomad v3 canonical handoff. The
+  self-contained archive verifies 32 of 32 manifest payloads, defines exactly
+  15 identities across three presentations and five representation families,
+  and contains no production `.blend`, glTF, FBX, rig, action, texture-map or
+  LOD assets. The lightweight archive is transport-only because its copied
+  manifest retains three intentionally omitted reference entries.
+- Retained exact-hash character-canon source data and provenance under ignored
+  `source/private/`, then added strict public Zod contracts and six synthetic
+  roster tests. Public character derivatives remain blocked by
+  `DN-CHAR-RIGHTS-001` because no explicit ownership, derivative-rights or
+  redistribution grant was found in the supplied handoff.
+- Used the built-in image-generation workflow to create a private
+  DN-M-AFR-01 reconstruction review board, then corrected it to exactly one
+  right-side blue tassel and open-toe wrapped footwear. Both drafts remain
+  ignored under `source/private/`.
+- Added a reproducible Blender 5.2 DN-M-AFR-01 measurement-blockout script.
+  The final EEVEE run saved a private `.blend`, report and front/profile/back
+  renders. It measured exactly 1.84000 m tall with 0.0 mm height error and
+  retained the complete blockout in every orthographic frame.
+- Completed the independent pre-commit scan. It found no current-tree release
+  blocker, secret, public U+2014 em dash, immersive binary in `dist`, Static
+  View import of immersive code or unintended reference/Blender publication.
+- Ran the complete CI-equivalent `pnpm run qa` gate after all implementation
+  changes. Formatting, lint, Astro/TypeScript, 58 unit tests, the 26-page build,
+  four A4 PDFs, public output, release metadata, budgets and all 72 Playwright
+  tests passed.
+- The final three-run mobile Lighthouse gate passed at median Performance 99,
+  Accessibility 100, Best Practices 100 and SEO 100, with LCP 1,508 ms, CLS
+  0.001 and TBT 49 ms.
+- Updated the current status and handoff to make the complete character, set,
+  effect, animation, power, runtime and Blender/browser evaluation scope
+  explicit. Claude has no current heartbeat and is offline by protocol; Codex
+  continues autonomously while retaining the monitored inbox.

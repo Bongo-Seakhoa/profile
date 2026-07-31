@@ -1,0 +1,41 @@
+---
+import { sitePath } from "../../lib/urls";
+import Container from "../primitives/Container.astro";
+
+export interface BreadcrumbItem {
+  label: string;
+  path?: string;
+}
+
+export interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <Container size="wide">
+        <ol>
+          {items.map((item, index) => {
+            const current = index === items.length - 1;
+
+            return (
+              <li>
+                {item.path && !current ? (
+                  <a href={sitePath(item.path)}>{item.label}</a>
+                ) : (
+                  <span aria-current={current ? "page" : undefined}>
+                    {item.label}
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </Container>
+    </nav>
+  )
+}

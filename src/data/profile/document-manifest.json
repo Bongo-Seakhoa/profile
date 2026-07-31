@@ -1,0 +1,283 @@
+[
+  {
+    "id": "resume",
+    "label": "Resume",
+    "paper": "A4",
+    "pageCount": 2,
+    "publicPhone": false,
+    "variants": [
+      {
+        "id": "resume-bongo-seakhoa",
+        "identityId": "bongo-seakhoa",
+        "displayName": "Bongo Seakhoa",
+        "previewPath": "documents/resume/bongo-seakhoa/",
+        "pdfPath": "documents/bongo-seakhoa-resume.pdf"
+      },
+      {
+        "id": "resume-bongo-kosa",
+        "identityId": "bongo-seakhoa",
+        "displayName": "Bongo Kosa",
+        "previewPath": "documents/resume/bongo-kosa/",
+        "pdfPath": "documents/bongo-kosa-resume.pdf"
+      }
+    ],
+    "selectionPolicy": {
+      "skills": "all",
+      "experience": "selected",
+      "projects": "selected",
+      "education": "all",
+      "credentials": "selected"
+    },
+    "pages": [
+      {
+        "number": 1,
+        "sections": [
+          {
+            "id": "resume-identity",
+            "kind": "identity",
+            "label": "Identity",
+            "itemIds": ["bongo-seakhoa"]
+          },
+          {
+            "id": "resume-profile",
+            "kind": "profile",
+            "label": "Professional summary",
+            "itemIds": ["bongo-seakhoa"]
+          },
+          {
+            "id": "resume-skills",
+            "kind": "skills",
+            "label": "Core skills",
+            "itemIds": [
+              "languages",
+              "data-ml",
+              "cloud-delivery",
+              "analytics-bi",
+              "databases"
+            ]
+          },
+          {
+            "id": "resume-experience",
+            "kind": "experience",
+            "label": "Experience",
+            "itemIds": [
+              "metapos-data-engineering-scientist",
+              "2u-edx-learning-specialist",
+              "blossom-superagent-mentor",
+              "1eight-data-analyst-consultant"
+            ]
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "sections": [
+          {
+            "id": "resume-projects",
+            "kind": "projects",
+            "label": "Selected projects",
+            "itemIds": [
+              "metapos-app-data-management",
+              "fxpm-1-4-forex-portfolio-manager",
+              "streamlit-recommender-system",
+              "regression-predict-api"
+            ]
+          },
+          {
+            "id": "resume-education",
+            "kind": "education",
+            "label": "Education",
+            "itemIds": [
+              "university-debrecen-engineering-management",
+              "explore-ai-data-science"
+            ]
+          },
+          {
+            "id": "resume-coursework",
+            "kind": "credentials",
+            "label": "Selected coursework",
+            "itemIds": [
+              "statistical-inference-specialization",
+              "data-mining-methods",
+              "data-mining-pipeline"
+            ]
+          },
+          {
+            "id": "resume-credentials",
+            "kind": "credentials",
+            "label": "Selected credentials",
+            "itemIds": [
+              "google-associate-cloud-engineer",
+              "google-cloud-digital-leader",
+              "datacamp-professional-data-scientist",
+              "ibm-advanced-data-science",
+              "worldquant-applied-data-science-lab",
+              "ibm-data-science-professional-certificate"
+            ]
+          }
+        ]
+      }
+    ],
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "cv",
+    "label": "Curriculum vitae",
+    "paper": "A4",
+    "pageCount": 3,
+    "publicPhone": false,
+    "variants": [
+      {
+        "id": "cv-bongo-seakhoa",
+        "identityId": "bongo-seakhoa",
+        "displayName": "Bongo Seakhoa",
+        "previewPath": "documents/cv/bongo-seakhoa/",
+        "pdfPath": "documents/bongo-seakhoa-cv.pdf"
+      },
+      {
+        "id": "cv-bongo-kosa",
+        "identityId": "bongo-seakhoa",
+        "displayName": "Bongo Kosa",
+        "previewPath": "documents/cv/bongo-kosa/",
+        "pdfPath": "documents/bongo-kosa-cv.pdf"
+      }
+    ],
+    "selectionPolicy": {
+      "skills": "all",
+      "experience": "all",
+      "projects": "selected",
+      "education": "all",
+      "credentials": "all"
+    },
+    "pages": [
+      {
+        "number": 1,
+        "sections": [
+          {
+            "id": "cv-identity",
+            "kind": "identity",
+            "label": "Identity",
+            "itemIds": ["bongo-seakhoa"]
+          },
+          {
+            "id": "cv-profile",
+            "kind": "profile",
+            "label": "Professional profile",
+            "itemIds": ["bongo-seakhoa"]
+          },
+          {
+            "id": "cv-skills",
+            "kind": "skills",
+            "label": "Technical skills",
+            "itemIds": [
+              "languages",
+              "data-ml",
+              "cloud-delivery",
+              "analytics-bi",
+              "databases"
+            ]
+          },
+          {
+            "id": "cv-experience-current",
+            "kind": "experience",
+            "label": "Experience",
+            "itemIds": [
+              "metapos-data-engineering-scientist",
+              "2u-edx-learning-specialist",
+              "blossom-superagent-mentor"
+            ]
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "sections": [
+          {
+            "id": "cv-experience-continued",
+            "kind": "experience",
+            "label": "Experience continued",
+            "itemIds": [
+              "1eight-data-analyst-consultant",
+              "turing-freelance-data-scientist"
+            ]
+          },
+          {
+            "id": "cv-projects",
+            "kind": "projects",
+            "label": "Selected projects",
+            "itemIds": [
+              "metapos-app-data-management",
+              "fxpm-1-4-forex-portfolio-manager",
+              "streamlit-recommender-system",
+              "regression-predict-api",
+              "visualizing-filters-cnn",
+              "airqo-environmental-data",
+              "mql5-expert-advisor",
+              "fxpm-backtester"
+            ]
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "sections": [
+          {
+            "id": "cv-education",
+            "kind": "education",
+            "label": "Education",
+            "itemIds": [
+              "university-debrecen-engineering-management",
+              "explore-ai-data-science"
+            ]
+          },
+          {
+            "id": "cv-coursework",
+            "kind": "credentials",
+            "label": "Academic coursework",
+            "itemIds": [
+              "statistical-inference-specialization",
+              "data-mining-methods",
+              "data-mining-pipeline"
+            ]
+          },
+          {
+            "id": "cv-professional-credentials",
+            "kind": "credentials",
+            "label": "Professional credentials",
+            "itemIds": [
+              "google-associate-cloud-engineer",
+              "google-cloud-digital-leader",
+              "datacamp-professional-data-scientist",
+              "ibm-advanced-data-science",
+              "worldquant-applied-data-science-lab",
+              "ibm-data-science-professional-certificate",
+              "google-data-analytics-professional-certificate",
+              "ibm-cybersecurity-analyst",
+              "ibm-introduction-data-science",
+              "ibm-it-fundamentals-cybersecurity",
+              "ibm-security-analyst-fundamentals"
+            ]
+          },
+          {
+            "id": "cv-credential-history",
+            "kind": "credentials",
+            "label": "Credential history",
+            "itemIds": ["aws-cloud-practitioner"]
+          },
+          {
+            "id": "cv-additional-learning",
+            "kind": "credentials",
+            "label": "Additional learning",
+            "itemIds": [
+              "visualizing-cnn-filters-tensorflow",
+              "first-python-program-ust",
+              "google-data-analytics-capstone",
+              "data-analysis-r-programming"
+            ]
+          }
+        ]
+      }
+    ],
+    "lastReviewed": "2026-07-30"
+  }
+]

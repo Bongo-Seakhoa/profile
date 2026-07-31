@@ -1,0 +1,129 @@
+---
+import ContentStyles from "../../components/content/ContentStyles.astro";
+import DocumentCard from "../../components/content/DocumentCard.astro";
+import Container from "../../components/primitives/Container.astro";
+import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import SectionIntro from "../../components/primitives/SectionIntro.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../lib/content/load-content";
+
+const content = await loadProfileContent();
+const route = content.routes.find((entry) => entry.id === "documents");
+
+if (!route) throw new Error("Documents route content is missing.");
+
+const cards = content.documentManifest.flatMap((document) =>
+  document.variants.map((variant) => ({
+    id: variant.id,
+    label: `${variant.displayName} ${document.id === "cv" ? "CV" : "Resume"}`,
+    description:
+      document.id === "resume"
+        ? "A concise professional summary with selected experience, projects, education and credentials."
+        : "A fuller professional record with complete experience, selected projects, education and credential history.",
+    previewPath: variant.previewPath,
+    pdfPath: variant.pdfPath,
+    pageCount: document.pageCount,
+    identity: variant.displayName,
+    kind: document.id,
+  })),
+);
+const primaryCards = cards.filter((card) => card.identity === "Bongo Seakhoa");
+const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId={route.id}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow="Professional documents"
+    title={route.title}
+    lede="Polished A4 documents generated from the same approved content as this site. Every preview has a direct PDF download."
+  />
+
+  <section class="page-section" aria-labelledby="primary-documents-title">
+    <Container>
+      <SectionIntro
+        id="primary-documents-title"
+        eyebrow="Primary identity"
+        title="Bongo Seakhoa documents"
+        description="Choose the concise resume or the fuller CV. Both are browser-readable and available as direct PDF downloads."
+      />
+      <div class="documents-grid">
+        {
+          primaryCards.map((card) => (
+            <DocumentCard
+              label={card.label}
+              description={card.description}
+              previewPath={card.previewPath}
+              pdfPath={card.pdfPath}
+              pageCount={card.pageCount}
+              primary
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface"
+    aria-labelledby="alternate-documents-title"
+  >
+    <Container>
+      <SectionIntro
+        id="alternate-documents-title"
+        eyebrow="Alternate public name"
+        title="Bongo Kosa document variants"
+        description="These variants contain the same professional content. Only the approved display name changes."
+      />
+      <div class="documents-grid">
+        {
+          alternateCards.map((card) => (
+            <DocumentCard
+              label={card.label}
+              description={card.description}
+              previewPath={card.previewPath}
+              pdfPath={card.pdfPath}
+              pageCount={card.pageCount}
+            />
+          ))
+        }
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--muted"
+    aria-labelledby="document-quality-title"
+  >
+    <Container size="content">
+      <div class="integrity-note">
+        <h2 id="document-quality-title">Document quality</h2>
+        <p>
+          The build verifies A4 dimensions, exact page counts, local fonts,
+          overflow, section placement, metadata and direct download paths.
+          Public documents do not include a telephone number.
+        </p>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .documents-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 44rem) {
+    .documents-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

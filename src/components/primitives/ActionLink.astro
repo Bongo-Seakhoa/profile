@@ -1,0 +1,45 @@
+---
+import { isExternalUrl, isSpecialProtocol, sitePath } from "../../lib/urls";
+
+export interface Props {
+  href: string;
+  variant?: "primary" | "secondary" | "quiet";
+  class?: string;
+  download?: boolean | string;
+  newTab?: boolean;
+}
+
+const {
+  href,
+  variant = "primary",
+  class: className,
+  download,
+  newTab = false,
+} = Astro.props;
+
+const external = isExternalUrl(href);
+const resolvedHref =
+  external || isSpecialProtocol(href) || href.startsWith("#")
+    ? href
+    : sitePath(href);
+const target = newTab ? "_blank" : undefined;
+const rel = newTab ? "noreferrer noopener" : undefined;
+---
+
+<a
+  class:list={["action-link", `action-link--${variant}`, className]}
+  href={resolvedHref}
+  target={target}
+  rel={rel}
+  download={download}
+>
+  <span><slot /></span>
+  {
+    external && (
+      <span class="action-link__external" aria-hidden="true">
+        ↗
+      </span>
+    )
+  }
+  {newTab && <span class="visually-hidden"> (opens in a new tab)</span>}
+</a>

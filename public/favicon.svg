@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title>Bongo Seakhoa identity mark</title>
+  <rect width="96" height="96" rx="24" fill="#12261f" />
+  <path d="M18 28h60" stroke="#d3a03f" stroke-width="6" stroke-linecap="round" />
+  <path d="M18 68h60" stroke="#bc5a3c" stroke-width="6" stroke-linecap="round" />
+  <text x="48" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#fffaf0">BK/BS</text>
+</svg>

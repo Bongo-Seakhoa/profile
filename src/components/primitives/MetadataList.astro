@@ -1,0 +1,54 @@
+---
+import { isExternalUrl, isSpecialProtocol, sitePath } from "../../lib/urls";
+
+export interface MetadataItem {
+  term: string;
+  value: string | string[];
+  href?: string;
+}
+
+export interface Props {
+  items: MetadataItem[];
+  layout?: "inline" | "stacked";
+  class?: string;
+  ariaLabel?: string;
+}
+
+const { items, layout = "inline", class: className, ariaLabel } = Astro.props;
+
+function resolveHref(href: string): string {
+  if (isExternalUrl(href) || isSpecialProtocol(href) || href.startsWith("#")) {
+    return href;
+  }
+
+  return sitePath(href);
+}
+---
+
+<dl
+  class:list={["metadata-list", `metadata-list--${layout}`, className]}
+  aria-label={ariaLabel}
+>
+  {
+    items.map((item) => (
+      <div class="metadata-list__item">
+        <dt>{item.term}</dt>
+        <dd>
+          {item.href ? (
+            <a href={resolveHref(item.href)}>
+              {Array.isArray(item.value) ? item.value.join(", ") : item.value}
+            </a>
+          ) : Array.isArray(item.value) ? (
+            <span class="metadata-list__values">
+              {item.value.map((value) => (
+                <span>{value}</span>
+              ))}
+            </span>
+          ) : (
+            item.value
+          )}
+        </dd>
+      </div>
+    ))
+  }
+</dl>

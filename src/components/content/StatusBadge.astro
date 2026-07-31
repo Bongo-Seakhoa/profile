@@ -1,0 +1,52 @@
+---
+export interface Props {
+  label: string;
+  tone?: "public" | "professional" | "experiment" | "active" | "historical";
+}
+
+const { label, tone = "public" } = Astro.props;
+---
+
+<span class:list={["status-badge", `status-badge--${tone}`]}>{label}</span>
+
+<style>
+  .status-badge {
+    display: inline-flex;
+    min-block-size: 1.7rem;
+    padding: 0.26rem 0.55rem;
+    align-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 0.35rem;
+    color: var(--indigo);
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+
+  .status-badge--professional {
+    border-color: rgb(152 81 50 / 38%);
+    color: var(--rust-strong);
+    background: rgb(152 81 50 / 7%);
+  }
+
+  .status-badge--experiment {
+    border-color: rgb(71 113 108 / 42%);
+    color: var(--teal-strong);
+    background: rgb(71 113 108 / 8%);
+  }
+
+  .status-badge--active {
+    border-color: rgb(71 113 108 / 48%);
+    color: var(--teal-strong);
+    background: rgb(71 113 108 / 9%);
+  }
+
+  .status-badge--historical {
+    color: var(--ink-soft);
+    background: var(--surface-muted);
+  }
+</style>

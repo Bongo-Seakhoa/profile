@@ -1,0 +1,219 @@
+---
+import ContentStyles from "../../components/content/ContentStyles.astro";
+import ActionLink from "../../components/primitives/ActionLink.astro";
+import Container from "../../components/primitives/Container.astro";
+import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import SectionIntro from "../../components/primitives/SectionIntro.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../lib/content/load-content";
+import { sitePath } from "../../lib/urls";
+
+const content = await loadProfileContent();
+const route = content.routes.find((entry) => entry.id === "about");
+const identity = content.identity[0];
+
+if (!route || !identity) throw new Error("About route content is missing.");
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId={route.id}
+  updatedDate={identity.lastReviewed}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow="Professional introduction"
+    title={route.title}
+    lede={identity.valueStatement}
+  >
+    <ActionLink href="work/">Selected work</ActionLink>
+    <ActionLink href="documents/" variant="secondary">
+      Resume and CV
+    </ActionLink>
+  </PageMasthead>
+
+  <section class="page-section" aria-labelledby="current-focus-title">
+    <Container size="content">
+      <div class="about-narrative">
+        <aside>
+          <p>Current focus</p>
+          <ul>
+            {
+              identity.profileHighlights.map((highlight) => (
+                <li>{highlight}</li>
+              ))
+            }
+          </ul>
+        </aside>
+        <article>
+          <SectionIntro
+            id="current-focus-title"
+            eyebrow="Background"
+            title="Data work with a practical purpose"
+          />
+          {identity.summary.map((paragraph) => <p>{paragraph}</p>)}
+        </article>
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface"
+    aria-labelledby="working-style-title"
+  >
+    <Container size="content">
+      <SectionIntro
+        id="working-style-title"
+        eyebrow="Working style"
+        title="Clear systems and clear communication"
+      />
+      <div class="working-style">
+        <article>
+          <h3>Technical care</h3>
+          <p>
+            I value dependable data flows, explicit assumptions and validation
+            that makes technical work easier to trust.
+          </p>
+        </article>
+        <article>
+          <h3>Decision support</h3>
+          <p>
+            Analysis should explain what matters and give stakeholders a useful
+            next step.
+          </p>
+        </article>
+        <article>
+          <h3>Learning and guidance</h3>
+          <p>
+            Mentoring and learner support have shaped how I document work,
+            explain trade-offs and give feedback.
+          </p>
+        </article>
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--muted"
+    aria-labelledby="identity-continuity-title"
+  >
+    <Container size="content">
+      <div class="identity-continuity">
+        <p class="identity-continuity__label">Identity continuity</p>
+        <h2 id="identity-continuity-title">Bongo Seakhoa and Bongo Kosa</h2>
+        <p>{identity.identityNote}</p>
+        <ActionLink href="bongo-kosa/" variant="quiet">
+          View the continuity page
+        </ActionLink>
+      </div>
+    </Container>
+  </section>
+
+  <section class="page-section" aria-labelledby="about-contact-title">
+    <Container>
+      <div class="contact-panel">
+        <div>
+          <h2 id="about-contact-title">Professional contact</h2>
+          <p>{identity.availability}</p>
+        </div>
+        <div class="contact-panel__links">
+          <a href={`mailto:${identity.email}`}>{identity.email}</a>
+          <a href={sitePath("contact/")}>Full contact details</a>
+        </div>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-narrative {
+    display: grid;
+    grid-template-columns: minmax(14rem, 0.65fr) minmax(0, 1.35fr);
+    gap: clamp(2rem, 7vw, 7rem);
+  }
+
+  aside {
+    padding: var(--space-5);
+    border-block-start: 0.3rem solid var(--gold);
+    background: var(--surface);
+  }
+
+  aside > p,
+  .identity-continuity__label {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  aside ul {
+    display: grid;
+    margin: var(--space-4) 0 0;
+    padding-inline-start: 1.2rem;
+    gap: var(--space-3);
+    color: var(--ink-soft);
+  }
+
+  aside li::marker {
+    color: var(--gold);
+  }
+
+  .about-narrative article > p {
+    max-inline-size: 66ch;
+    color: var(--ink-soft);
+    font-size: var(--step-1);
+  }
+
+  .about-narrative article > p + p {
+    margin-block-start: var(--space-5);
+  }
+
+  .working-style {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .working-style article {
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--line-strong);
+  }
+
+  .working-style h3 {
+    font-size: var(--step-1);
+  }
+
+  .working-style p {
+    margin-block-start: var(--space-3);
+    color: var(--ink-soft);
+  }
+
+  .identity-continuity {
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .identity-continuity h2 {
+    margin-block-start: var(--space-3);
+    font-size: var(--step-2);
+  }
+
+  .identity-continuity > p:not(.identity-continuity__label) {
+    max-inline-size: 64ch;
+    margin-block: var(--space-4);
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 50rem) {
+    .about-narrative,
+    .working-style {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

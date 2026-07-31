@@ -1,0 +1,111 @@
+---
+import ContentStyles from "../../components/content/ContentStyles.astro";
+import ActionLink from "../../components/primitives/ActionLink.astro";
+import Container from "../../components/primitives/Container.astro";
+import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../lib/content/load-content";
+import { sitePath } from "../../lib/urls";
+
+const content = await loadProfileContent();
+const route = content.routes.find((entry) => entry.id === "bongo-kosa");
+const identity = content.identity[0];
+const resume = content.documentManifest
+  .find((document) => document.id === "resume")
+  ?.variants.find((variant) => variant.displayName === "Bongo Kosa");
+const cv = content.documentManifest
+  .find((document) => document.id === "cv")
+  ?.variants.find((variant) => variant.displayName === "Bongo Kosa");
+
+if (!route || !identity || !resume || !cv) {
+  throw new Error("Bongo Kosa continuity content is missing.");
+}
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath=""
+  updatedDate={identity.lastReviewed}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow="Identity continuity"
+    title={route.title}
+    lede={identity.identityNote}
+  >
+    <ActionLink href="">Visit the main portfolio</ActionLink>
+    <ActionLink href="about/" variant="secondary">
+      About Bongo Seakhoa
+    </ActionLink>
+  </PageMasthead>
+
+  <section class="page-section" aria-labelledby="continuity-title">
+    <Container size="content">
+      <article class="continuity-record">
+        <p class="continuity-record__label">One professional record</p>
+        <h2 id="continuity-title">The work is maintained in one place.</h2>
+        <p>
+          This page connects the alternate public name to the primary Bongo
+          Seakhoa portfolio. It does not duplicate the professional site or hide
+          content behind a redirect.
+        </p>
+        <div class="continuity-record__documents">
+          <a href={sitePath(resume.pdfPath)} download>
+            Download Bongo Kosa resume
+          </a>
+          <a href={sitePath(cv.pdfPath)} download>Download Bongo Kosa CV</a>
+          <a href={sitePath("documents/")}>View every document variant</a>
+        </div>
+      </article>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .continuity-record {
+    padding: clamp(1.5rem, 5vw, 4rem);
+    border: 1px solid var(--line-strong);
+    border-block-start: 0.35rem solid var(--gold);
+    background: var(--surface);
+  }
+
+  .continuity-record__label {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    max-inline-size: 26ch;
+    margin-block-start: var(--space-3);
+    font-size: var(--step-3);
+  }
+
+  article > p:not(.continuity-record__label) {
+    max-inline-size: 62ch;
+    margin-block-start: var(--space-4);
+    color: var(--ink-soft);
+    font-size: var(--step-1);
+  }
+
+  .continuity-record__documents {
+    display: flex;
+    margin-block-start: var(--space-6);
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+  }
+
+  .continuity-record__documents a {
+    display: inline-flex;
+    min-block-size: var(--target-size);
+    padding-block: 0.65rem;
+    align-items: center;
+    color: var(--rust-strong);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+</style>

@@ -1,0 +1,129 @@
+[
+  {
+    "id": "data-engineering",
+    "title": "Data engineering and reliability",
+    "problem": "Operational data is hard to trust when pipelines, models and reporting logic drift apart.",
+    "delivers": [
+      "Structured data flows and transformation logic",
+      "Data-quality checks and reliable reporting foundations",
+      "Clear technical documentation for ongoing ownership"
+    ],
+    "evidence": [
+      {
+        "label": "Retail point-of-sale data workflows at MetaPOS",
+        "collection": "experience",
+        "id": "metapos-data-engineering-scientist"
+      },
+      {
+        "label": "MetaPOS app data-management project summary",
+        "collection": "project",
+        "id": "metapos-app-data-management"
+      }
+    ],
+    "tools": ["Python", "SQL", "Google Cloud Platform", "Docker", "Git"],
+    "featuredOrder": 1,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "analytics",
+    "title": "Analytics and decision support",
+    "problem": "Teams need analysis that explains what is happening and what to do next, not another dashboard without context.",
+    "delivers": [
+      "Exploratory and statistical analysis",
+      "Stakeholder-ready findings and practical recommendations",
+      "Visual reporting with transparent assumptions"
+    ],
+    "evidence": [
+      {
+        "label": "Client-facing analytics consulting at 1Eight",
+        "collection": "experience",
+        "id": "1eight-data-analyst-consultant"
+      },
+      {
+        "label": "Operational reporting support in retail data work",
+        "collection": "experience",
+        "id": "metapos-data-engineering-scientist"
+      }
+    ],
+    "tools": ["SQL", "Python", "Tableau", "Power BI", "Looker"],
+    "featuredOrder": 2,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "applied-machine-learning",
+    "title": "Applied machine learning",
+    "problem": "A model is useful only when its data, validation and delivery path are understood.",
+    "delivers": [
+      "Problem framing and data preparation",
+      "Model experimentation and evaluation",
+      "Lightweight APIs and interactive demonstrations"
+    ],
+    "evidence": [
+      {
+        "label": "Public recommender-system project",
+        "collection": "project",
+        "id": "streamlit-recommender-system"
+      },
+      {
+        "label": "Public regression-API project",
+        "collection": "project",
+        "id": "regression-predict-api"
+      },
+      {
+        "label": "CNN filter visualisation",
+        "collection": "project",
+        "id": "visualizing-filters-cnn"
+      },
+      {
+        "label": "Environmental-data analysis",
+        "collection": "project",
+        "id": "airqo-environmental-data"
+      }
+    ],
+    "tools": [
+      "Scikit-learn",
+      "TensorFlow",
+      "PyTorch",
+      "Pandas",
+      "Flask",
+      "Streamlit"
+    ],
+    "featuredOrder": 3,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "technical-mentoring",
+    "title": "Technical mentoring and communication",
+    "problem": "Technical learning stalls when explanations, feedback and practical next steps are unclear.",
+    "delivers": [
+      "Structured tutoring and learner guidance",
+      "Technical feedback against clear rubrics",
+      "Documentation that works for technical and non-technical readers"
+    ],
+    "evidence": [
+      {
+        "label": "Learning support at 2U and edX",
+        "collection": "experience",
+        "id": "2u-edx-learning-specialist"
+      },
+      {
+        "label": "Freelance-readiness mentoring through Blossom Academy",
+        "collection": "experience",
+        "id": "blossom-superagent-mentor"
+      }
+    ],
+    "tools": [
+      "Git",
+      "GitHub",
+      "Python",
+      "Machine learning",
+      "Technical writing"
+    ],
+    "featuredOrder": 4,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  }
+]

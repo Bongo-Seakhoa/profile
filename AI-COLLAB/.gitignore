@@ -1,0 +1,4 @@
+.watch-state/
+*.tmp
+heartbeats/codex.json
+heartbeats/claude.json

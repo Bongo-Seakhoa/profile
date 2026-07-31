@@ -1,0 +1,10 @@
+packages:
+  - .
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  sharp: true
+minimumReleaseAgeExclude:
+  - "@playwright/test@1.62.1"
+  - playwright-core@1.62.1
+  - playwright@1.62.1

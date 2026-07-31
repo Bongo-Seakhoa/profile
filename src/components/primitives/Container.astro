@@ -1,0 +1,14 @@
+---
+export interface Props {
+  as?: "div" | "section" | "article" | "header" | "footer" | "nav";
+  size?: "wide" | "content" | "prose";
+  class?: string;
+  id?: string;
+}
+
+const { as: Tag = "div", size = "wide", class: className, id } = Astro.props;
+---
+
+<Tag id={id} class:list={["container", `container--${size}`, className]}>
+  <slot />
+</Tag>

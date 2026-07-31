@@ -1,0 +1,140 @@
+---
+import type { Project } from "../../lib/content/schemas";
+import { sitePath } from "../../lib/urls";
+import StatusBadge from "./StatusBadge.astro";
+import TechnologyList from "./TechnologyList.astro";
+
+export interface Props {
+  project: Project;
+  variant?: "lead" | "standard" | "archive";
+}
+
+const { project, variant = "standard" } = Astro.props;
+const statusLabel =
+  project.status === "professional"
+    ? "Client-safe summary"
+    : project.status === "experiment"
+      ? "Experiment"
+      : project.status === "archived"
+        ? "Archived"
+        : "Public project";
+const statusTone =
+  project.status === "archived" ? "historical" : project.status;
+---
+
+<article
+  class:list={["project-card", `project-card--${variant}`]}
+  data-project-status={project.status}
+>
+  <div class="project-card__meta">
+    <StatusBadge label={statusLabel} tone={statusTone} />
+    <span>{project.type}</span>
+  </div>
+  <div class="project-card__body">
+    <h3>
+      <a href={sitePath(`work/${project.slug}/`)}>{project.title}</a>
+    </h3>
+    {project.role && <p class="project-card__role">Role: {project.role}</p>}
+    <p>{project.summary}</p>
+  </div>
+  <TechnologyList items={project.technologies} />
+  <div class="project-card__actions">
+    <a href={sitePath(`work/${project.slug}/`)}>Read project summary</a>
+    <a href={project.publicUrl} target="_blank" rel="noreferrer">
+      {
+        project.privacyStatus === "client-safe-summary"
+          ? "Visit organisation"
+          : "View public evidence"
+      }
+      <span class="visually-hidden"> for {project.title}</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    min-inline-size: 0;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    flex-direction: column;
+    gap: var(--space-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-medium);
+    background: var(--surface);
+  }
+
+  .project-card--lead {
+    min-block-size: 100%;
+    border-block-start: 0.35rem solid var(--rust);
+    background: var(--surface);
+  }
+
+  .project-card--archive {
+    padding: var(--space-5);
+    border-radius: var(--radius-small);
+    background: transparent;
+  }
+
+  .project-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+  }
+
+  h3 {
+    max-inline-size: 22ch;
+    font-size: clamp(1.45rem, 2vw, 2.25rem);
+  }
+
+  h3 a {
+    text-decoration-thickness: 0.08em;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.15em;
+  }
+
+  h3 a:hover {
+    color: var(--rust-strong);
+    text-decoration-color: currentColor;
+  }
+
+  .project-card__body {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .project-card__body > p {
+    max-inline-size: 60ch;
+    color: var(--ink-soft);
+  }
+
+  .project-card__role {
+    color: var(--indigo) !important;
+    font-weight: 700;
+  }
+
+  .project-card__actions {
+    display: flex;
+    margin-block-start: auto;
+    padding-block-start: var(--space-4);
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .project-card__actions a {
+    min-block-size: var(--target-size);
+    padding-block: 0.65rem;
+    color: var(--rust-strong);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .project-card__actions a:last-child {
+    color: var(--indigo);
+  }
+</style>

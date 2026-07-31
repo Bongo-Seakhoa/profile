@@ -1,0 +1,112 @@
+---
+import { isExternalUrl, isSpecialProtocol, sitePath } from "../../lib/urls";
+import Container from "../primitives/Container.astro";
+
+interface FooterNavigationItem {
+  path: string;
+  label: string;
+}
+
+interface FooterLink {
+  id: string;
+  label: string;
+  url: string;
+}
+
+export interface Props {
+  primaryName: string;
+  valueStatement: string;
+  identityNote: string;
+  navigation: FooterNavigationItem[];
+  links: FooterLink[];
+  lastReviewed: string;
+  showExploreAnzania?: boolean;
+  exploreAnzaniaPath?: string;
+}
+
+const {
+  primaryName,
+  valueStatement,
+  identityNote,
+  navigation,
+  links,
+  lastReviewed,
+  showExploreAnzania = false,
+  exploreAnzaniaPath = "explore/",
+} = Astro.props;
+
+const year = new Date().getUTCFullYear();
+const reviewedLabel = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+}).format(new Date(`${lastReviewed}T00:00:00Z`));
+
+function resolveHref(href: string): string {
+  if (isExternalUrl(href) || isSpecialProtocol(href) || href.startsWith("#")) {
+    return href;
+  }
+
+  return sitePath(href);
+}
+---
+
+<footer class="site-footer">
+  <Container size="wide">
+    <div class="site-footer__rule" aria-hidden="true"></div>
+    <div class="site-footer__grid">
+      <section class="site-footer__identity" aria-labelledby="footer-identity">
+        <h2 id="footer-identity">{primaryName}</h2>
+        <p>{valueStatement}</p>
+        <p class="site-footer__continuity">{identityNote}</p>
+      </section>
+
+      <nav class="site-footer__navigation" aria-label="Footer">
+        <h2>Navigate</h2>
+        <ul>
+          {
+            navigation.map((item) => (
+              <li>
+                <a href={sitePath(item.path)}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <section class="site-footer__connect" aria-labelledby="footer-connect">
+        <h2 id="footer-connect">Connect</h2>
+        <ul>
+          {
+            links.map((link) => (
+              <li>
+                <a href={resolveHref(link.url)}>
+                  {link.label}
+                  {isExternalUrl(link.url) && (
+                    <span aria-hidden="true"> ↗</span>
+                  )}
+                </a>
+              </li>
+            ))
+          }
+          {
+            showExploreAnzania && (
+              <li>
+                <a href={sitePath(exploreAnzaniaPath)}>Explore Anzania</a>
+              </li>
+            )
+          }
+        </ul>
+      </section>
+    </div>
+
+    <div class="site-footer__meta">
+      <p>© {year} {primaryName}. Static View.</p>
+      <p>
+        Professional record reviewed{" "}
+        <time datetime={lastReviewed}>{reviewedLabel}</time>.
+      </p>
+    </div>
+  </Container>
+</footer>

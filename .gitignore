@@ -5,3 +5,20 @@ Thumbs.db
 /.claude/
 /source/private/*
 !/source/private/.gitkeep
+
+# Astro / Node
+/node_modules/
+/.astro/
+/dist/
+/coverage/
+/.cache/
+
+# Browser and quality reports
+/playwright-report/
+/test-results/
+/artifacts/
+/.lighthouseci/
+
+# Generated document QA
+/tmp/
+/output/

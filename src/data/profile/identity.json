@@ -1,0 +1,53 @@
+[
+  {
+    "id": "bongo-seakhoa",
+    "primaryName": "Bongo Seakhoa",
+    "alternateNames": ["Bongo Kosa"],
+    "fullNameVariants": ["Bongo Bokoa Seakhoa", "Bongo Bokoa Kosa"],
+    "headline": "Data scientist and data engineer",
+    "valueStatement": "I turn complex information into reliable data systems, practical analysis and decisions people can act on.",
+    "location": "Debrecen, Hungary",
+    "availability": "Open to remote, contract and globally distributed opportunities",
+    "email": "bongokosa@gmail.com",
+    "summary": [
+      "I work across data engineering, analytics and applied machine learning, with a focus on dependable workflows and clear decision support.",
+      "My background combines technical delivery with remote mentoring and learner support. I use Python, SQL, cloud platforms and analytics tools to help operators, students and stakeholders make sense of complex information.",
+      "I am currently pursuing a BSc in Engineering Management at the University of Debrecen while continuing to develop public cloud, analytics and machine learning work."
+    ],
+    "identityNote": "Bongo Seakhoa is also known professionally and legally in some records as Bongo Kosa. Both names refer to the same person and body of work.",
+    "profileHighlights": [
+      "Cloud data engineering and analytics delivery",
+      "Applied machine learning and model deployment",
+      "Technical mentoring and learner support",
+      "Remote work across Africa, Australia and Europe"
+    ],
+    "links": [
+      {
+        "id": "linkedin",
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/bongo-seakhoa/",
+        "description": "Primary public professional network"
+      },
+      {
+        "id": "github",
+        "label": "GitHub",
+        "url": "https://github.com/Bongo-Seakhoa",
+        "description": "Public code and project work"
+      },
+      {
+        "id": "coursera",
+        "label": "Coursera",
+        "url": "https://www.coursera.org/user/63159c17757584840fceb411c51c47e7",
+        "description": "Public course and certificate profile"
+      },
+      {
+        "id": "email",
+        "label": "Email",
+        "url": "mailto:bongokosa@gmail.com",
+        "description": "Direct professional contact"
+      }
+    ],
+    "evidenceState": "owner-supplied-profile",
+    "lastReviewed": "2026-07-30"
+  }
+]

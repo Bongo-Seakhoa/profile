@@ -1,0 +1,58 @@
+[
+  {
+    "id": "languages",
+    "label": "Languages",
+    "items": ["Python", "SQL", "R"]
+  },
+  {
+    "id": "data-ml",
+    "label": "Data and machine learning",
+    "items": [
+      "Pandas",
+      "NumPy",
+      "SciPy",
+      "Scikit-learn",
+      "TensorFlow",
+      "PyTorch",
+      "Apache Spark"
+    ]
+  },
+  {
+    "id": "cloud-delivery",
+    "label": "Cloud and delivery",
+    "items": [
+      "Google Cloud Platform",
+      "AWS",
+      "Docker",
+      "Git",
+      "GitHub",
+      "Streamlit",
+      "Flask"
+    ]
+  },
+  {
+    "id": "analytics-bi",
+    "label": "Analytics and BI",
+    "items": [
+      "Tableau",
+      "Power BI",
+      "Looker",
+      "Matplotlib",
+      "Seaborn",
+      "Plotly"
+    ]
+  },
+  {
+    "id": "databases",
+    "label": "Databases",
+    "items": [
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "SQLite",
+      "Oracle",
+      "Microsoft SQL Server",
+      "Amazon RDS"
+    ]
+  }
+]

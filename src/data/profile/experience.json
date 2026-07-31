@@ -1,0 +1,129 @@
+[
+  {
+    "id": "metapos-data-engineering-scientist",
+    "company": "MetaPOS",
+    "role": "Data Engineering Scientist",
+    "contractType": "unknown",
+    "location": "Cape Town, South Africa",
+    "remote": true,
+    "dateStart": "2023-09",
+    "dateEnd": null,
+    "current": true,
+    "summary": "Contributes to data engineering work that improves data reliability, operational reporting and decision support within a retail point-of-sale environment.",
+    "highlights": [
+      "Works with Python, SQL and data modelling to support data pipelines and analytics workflows.",
+      "Improves accuracy and efficiency in transaction, inventory and sales-related data processes.",
+      "Collaborates across functions to strengthen data-driven operational decisions."
+    ],
+    "tools": ["Python", "SQL", "Google Cloud Platform", "Data modelling"],
+    "evidenceLinks": ["https://metapos.co.za/"],
+    "evidenceState": "client-safe-summary",
+    "privacyStatus": "client-safe-summary",
+    "featured": true,
+    "featuredOrder": 1,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "blossom-superagent-mentor",
+    "company": "Blossom Academy",
+    "role": "Superagent Mentor",
+    "contractType": "unknown",
+    "location": "Greater Accra Region, Ghana",
+    "remote": true,
+    "dateStart": "2024-11",
+    "dateEnd": null,
+    "current": true,
+    "summary": "Mentors emerging talent pursuing paid freelance work and stronger market readiness.",
+    "highlights": [
+      "Guides mentees toward paid freelancing opportunities and stronger positioning.",
+      "Supports professional confidence, direction and practical momentum."
+    ],
+    "tools": ["Mentoring", "Career guidance", "Technical communication"],
+    "evidenceLinks": [],
+    "evidenceState": "owner-supplied-profile",
+    "privacyStatus": "public",
+    "featured": true,
+    "featuredOrder": 3,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "2u-edx-learning-specialist",
+    "company": "2U / edX",
+    "role": "Learning Specialist",
+    "contractType": "unknown",
+    "location": "Cape Town, South Africa",
+    "remote": true,
+    "dateStart": "2023-10",
+    "dateEnd": "2025-06",
+    "current": false,
+    "summary": "Supported boot camp learners through technical tutoring, platform guidance, homework assessment and empathetic remote education delivery.",
+    "highlights": [
+      "Tutored students in Git, GitHub, FinTech, Python and machine learning topics.",
+      "Answered learner questions on the AskBCS platform and graded work against structured rubrics.",
+      "Helped sustain a supportive learning environment built on clarity, encouragement and technical precision."
+    ],
+    "tools": ["Git", "GitHub", "Python", "Machine learning", "Assessment"],
+    "evidenceLinks": [],
+    "evidenceState": "owner-supplied-profile",
+    "privacyStatus": "public",
+    "featured": true,
+    "featuredOrder": 2,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "turing-freelance-data-scientist",
+    "company": "Turing.com",
+    "role": "Freelance Data Scientist",
+    "contractType": "unknown",
+    "location": "Remote",
+    "remote": true,
+    "dateStart": "2022-05",
+    "dateEnd": "2023-09",
+    "current": false,
+    "summary": "Delivered freelance analytics and data science work across varied remote projects and client needs.",
+    "highlights": [
+      "Worked across Python, SQL, visualisation and statistical analysis.",
+      "Contributed independently to data-driven solutions across multiple project contexts."
+    ],
+    "tools": ["Python", "SQL", "Visualisation", "Statistical analysis"],
+    "evidenceLinks": [],
+    "evidenceState": "owner-supplied-profile",
+    "privacyStatus": "public",
+    "featured": false,
+    "featuredOrder": null,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "1eight-data-analyst-consultant",
+    "company": "1Eight",
+    "role": "Data Analyst Consultant",
+    "contractType": "unknown",
+    "location": "New South Wales, Australia",
+    "remote": true,
+    "dateStart": "2022-12",
+    "dateEnd": "2023-04",
+    "current": false,
+    "summary": "Delivered analytical insight and recommendations from complex datasets for client-facing business contexts.",
+    "highlights": [
+      "Used SQL, GCP, Streamlit, visualisation and statistical analysis to interpret business data.",
+      "Turned technical outputs into actionable recommendations for stakeholders."
+    ],
+    "tools": [
+      "SQL",
+      "Google Cloud Platform",
+      "Streamlit",
+      "Statistical analysis"
+    ],
+    "evidenceLinks": [],
+    "evidenceState": "owner-supplied-profile",
+    "privacyStatus": "public",
+    "featured": false,
+    "featuredOrder": null,
+    "public": true,
+    "lastReviewed": "2026-07-30"
+  }
+]

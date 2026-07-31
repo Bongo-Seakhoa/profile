@@ -1,0 +1,178 @@
+---
+import type { Experience } from "../../lib/content/schemas";
+import TechnologyList from "./TechnologyList.astro";
+
+export interface Props {
+  experience: Experience;
+  compact?: boolean;
+}
+
+const { experience, compact = false } = Astro.props;
+const formatter = new Intl.DateTimeFormat("en-GB", {
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
+const formatMonth = (value: string) => {
+  const [yearPart, monthPart] = value.split("-");
+  const year = Number(yearPart);
+  const month = Number(monthPart);
+  if (!Number.isInteger(year) || !Number.isInteger(month)) {
+    throw new TypeError(`Invalid experience date: ${value}`);
+  }
+  return formatter.format(new Date(Date.UTC(year, month - 1, 1)));
+};
+const dateRange = `${formatMonth(experience.dateStart)} to ${
+  experience.current
+    ? "Present"
+    : formatMonth(experience.dateEnd ?? experience.dateStart)
+}`;
+---
+
+<article
+  class:list={["experience-record", compact && "experience-record--compact"]}
+  data-record-id={experience.id}
+>
+  <div class="experience-record__marker" aria-hidden="true"></div>
+  <div class="experience-record__content">
+    <header>
+      <div>
+        <p class="experience-record__company">{experience.company}</p>
+        <h3>{experience.role}</h3>
+      </div>
+      <dl>
+        <div>
+          <dt>Dates</dt>
+          <dd>{dateRange}</dd>
+        </div>
+        <div>
+          <dt>Context</dt>
+          <dd>{experience.remote ? "Remote, " : ""}{experience.location}</dd>
+        </div>
+      </dl>
+    </header>
+    <p class="experience-record__summary">{experience.summary}</p>
+    {
+      !compact && (
+        <>
+          <ul>
+            {experience.highlights.map((highlight) => (
+              <li>{highlight}</li>
+            ))}
+          </ul>
+          <TechnologyList items={experience.tools} label="Tools and focus" />
+        </>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .experience-record {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.1rem minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  .experience-record__marker {
+    position: relative;
+    border-inline-start: 1px solid var(--line-strong);
+  }
+
+  .experience-record__marker::before {
+    position: absolute;
+    top: 0.2rem;
+    left: -0.36rem;
+    inline-size: 0.65rem;
+    block-size: 0.65rem;
+    border: 0.12rem solid var(--surface);
+    border-radius: 50%;
+    background: var(--rust);
+    box-shadow: 0 0 0 1px var(--rust);
+    content: "";
+  }
+
+  .experience-record__content {
+    padding-block-end: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, auto);
+    gap: var(--space-5);
+  }
+
+  .experience-record__company {
+    margin-block-end: var(--space-1);
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    font-size: var(--step-2);
+  }
+
+  dl {
+    display: grid;
+    margin: 0;
+    gap: var(--space-2);
+  }
+
+  dl > div {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  dt {
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+
+  .experience-record__summary {
+    max-inline-size: 72ch;
+    margin-block-start: var(--space-4);
+    color: var(--ink-soft);
+  }
+
+  ul {
+    display: grid;
+    max-inline-size: 72ch;
+    margin: var(--space-4) 0;
+    padding-inline-start: 1.15rem;
+    gap: var(--space-2);
+  }
+
+  li::marker {
+    color: var(--gold);
+  }
+
+  .experience-record--compact .experience-record__content {
+    padding-block-end: var(--space-6);
+  }
+
+  @media (max-width: 46rem) {
+    header {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    dl > div {
+      grid-template-columns: 4rem minmax(0, 1fr);
+    }
+  }
+</style>

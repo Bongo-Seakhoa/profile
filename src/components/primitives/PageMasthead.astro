@@ -1,0 +1,52 @@
+---
+import Container from "./Container.astro";
+
+export interface Props {
+  title: string;
+  eyebrow?: string;
+  lede?: string;
+  id?: string;
+  tone?: "default" | "muted" | "indigo";
+  class?: string;
+}
+
+const {
+  title,
+  eyebrow,
+  lede,
+  id = "page-title",
+  tone = "default",
+  class: className,
+} = Astro.props;
+
+const hasActions = Astro.slots.has("default");
+const hasMetadata = Astro.slots.has("metadata");
+---
+
+<header
+  class:list={["page-masthead", `page-masthead--${tone}`, className]}
+  aria-labelledby={id}
+>
+  <Container size="wide">
+    <div class="page-masthead__rule" aria-hidden="true"></div>
+    <div class="page-masthead__body">
+      {eyebrow && <p class="page-masthead__eyebrow">{eyebrow}</p>}
+      <h1 id={id}>{title}</h1>
+      {lede && <p class="page-masthead__lede">{lede}</p>}
+      {
+        hasMetadata && (
+          <div class="page-masthead__metadata">
+            <slot name="metadata" />
+          </div>
+        )
+      }
+      {
+        hasActions && (
+          <div class="page-masthead__actions">
+            <slot />
+          </div>
+        )
+      }
+    </div>
+  </Container>
+</header>
