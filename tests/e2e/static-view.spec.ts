@@ -42,6 +42,54 @@ const pdfRoutes = [
   "documents/bongo-kosa-cv.pdf",
 ] as const;
 
+const anzaniaBackgroundContracts = [
+  {
+    route: "",
+    backgrounds: [
+      {
+        assetId: "threshold-dunes-outer",
+        veil: "copy-left",
+        desktopFocal: "53% 52%",
+        mobileFocal: "53% 52%",
+      },
+      {
+        assetId: "archive-echoes-outer",
+        veil: "balanced",
+        desktopFocal: "60% 55%",
+        mobileFocal: "60% 55%",
+      },
+      {
+        assetId: "oasis-audience-inner",
+        veil: "quiet",
+        desktopFocal: "50% 50%",
+        mobileFocal: "50% 50%",
+      },
+    ],
+  },
+  {
+    route: "work/",
+    backgrounds: [
+      {
+        assetId: "archive-echoes-outer",
+        veil: "balanced",
+        desktopFocal: "60% 55%",
+        mobileFocal: "60% 55%",
+      },
+    ],
+  },
+  {
+    route: "contact/",
+    backgrounds: [
+      {
+        assetId: "oasis-audience-inner",
+        veil: "quiet",
+        desktopFocal: "50% 50%",
+        mobileFocal: "50% 50%",
+      },
+    ],
+  },
+] as const;
+
 test.describe("Static View route and accessibility contract", () => {
   for (const route of [...coreRoutes, ...projectRoutes]) {
     test(`${route || "overview"} renders semantic, static content`, async ({
@@ -191,48 +239,207 @@ test.describe("Responsive layout", () => {
   }
 });
 
-test("Anzania environments render as full section backgrounds with a white veil", async ({
+test("Anzania environments render as full, unframed section backgrounds", async ({
   page,
 }) => {
-  for (const route of ["", "work/", "contact/"]) {
+  for (const contract of anzaniaBackgroundContracts) {
+    const { route, backgrounds: expectedBackgrounds } = contract;
     await page.goto(route, { waitUntil: "networkidle" });
 
-    const presentations = await page
-      .locator('[data-anzania-presentation="environmental-background"]')
-      .evaluateAll((backdrops) =>
-        backdrops.map((backdrop) => {
-          const section = backdrop.parentElement;
-          const backdropBox = backdrop.getBoundingClientRect();
-          const sectionBox = section?.getBoundingClientRect();
-          const overlayStyle = getComputedStyle(backdrop, "::before");
+    const backdropLocator = page.locator(
+      '[data-anzania-presentation="environmental-background"]',
+    );
+    await expect(backdropLocator).toHaveCount(expectedBackgrounds.length);
 
-          return {
-            position: getComputedStyle(backdrop).position,
-            overlay: backdrop.getAttribute("data-anzania-overlay"),
-            overlayImage: overlayStyle.backgroundImage,
-            insideFigure: Boolean(backdrop.closest("figure")),
-            widthDifference: sectionBox
-              ? Math.abs(backdropBox.width - sectionBox.width)
-              : Number.POSITIVE_INFINITY,
-            heightDifference: sectionBox
-              ? Math.abs(backdropBox.height - sectionBox.height)
-              : Number.POSITIVE_INFINITY,
-          };
-        }),
+    for (const backdrop of await backdropLocator.all()) {
+      await backdrop.scrollIntoViewIfNeeded();
+      await expect
+        .poll(() =>
+          backdrop
+            .locator("img")
+            .evaluate(
+              (image) =>
+                image instanceof HTMLImageElement &&
+                image.complete &&
+                image.naturalWidth > 0,
+            ),
+        )
+        .toBe(true);
+    }
+
+    const presentations = await backdropLocator.evaluateAll((backdrops) =>
+      backdrops.map((backdrop) => {
+        const section = backdrop.parentElement;
+        const picture = backdrop.querySelector("picture[data-anzania-asset]");
+        const image = picture?.querySelector("img");
+        const backdropBox = backdrop.getBoundingClientRect();
+        const sectionBox = section?.getBoundingClientRect();
+        const pictureBox = picture?.getBoundingClientRect();
+        const imageBox = image?.getBoundingClientRect();
+        const rootWidth = document.documentElement.clientWidth;
+        const backdropStyle = getComputedStyle(backdrop);
+        const pictureStyle = picture ? getComputedStyle(picture) : null;
+        const imageStyle = image ? getComputedStyle(image) : null;
+        const overlayStyle = getComputedStyle(backdrop, "::before");
+        const goldStyle = getComputedStyle(backdrop, "::after");
+        const isMobileFocalMode = matchMedia("(max-width: 47.999rem)").matches;
+
+        const boxDifference = (
+          candidate: DOMRect | undefined,
+          reference: DOMRect | undefined,
+        ): number => {
+          if (!candidate || !reference) return Number.POSITIVE_INFINITY;
+
+          return Math.max(
+            Math.abs(candidate.left - reference.left),
+            Math.abs(candidate.right - reference.right),
+            Math.abs(candidate.top - reference.top),
+            Math.abs(candidate.bottom - reference.bottom),
+            Math.abs(candidate.width - reference.width),
+            Math.abs(candidate.height - reference.height),
+          );
+        };
+
+        const colourAlphas = (
+          serializedGradient: string,
+          red: number,
+          green: number,
+          blue: number,
+        ): number[] => {
+          const pattern = new RegExp(
+            `rgba?\\(\\s*${red}(?:\\s*,\\s*|\\s+)${green}(?:\\s*,\\s*|\\s+)${blue}(?:\\s*(?:,|/)\\s*|\\s+)([\\d.]+)(%)?\\s*\\)`,
+            "giu",
+          );
+
+          return [...serializedGradient.matchAll(pattern)].map((match) => {
+            const alpha = Number(match[1]);
+            return match[2] === "%" ? alpha / 100 : alpha;
+          });
+        };
+
+        const frameStyles = [backdropStyle, pictureStyle, imageStyle].filter(
+          (style): style is CSSStyleDeclaration => style !== null,
+        );
+        const firstGoldLayerSize = goldStyle.backgroundSize
+          .split(",", 1)[0]
+          ?.trim();
+        const goldStripeHeight = firstGoldLayerSize
+          ? Number.parseFloat(firstGoldLayerSize.split(/\s+/u).at(-1) ?? "")
+          : Number.NaN;
+        const desktopFocal = imageStyle
+          ? `${imageStyle.getPropertyValue("--anzania-focal-desktop-x").trim()} ${imageStyle.getPropertyValue("--anzania-focal-desktop-y").trim()}`
+          : "";
+        const mobileFocal = imageStyle
+          ? `${imageStyle.getPropertyValue("--anzania-focal-mobile-x").trim()} ${imageStyle.getPropertyValue("--anzania-focal-mobile-y").trim()}`
+          : "";
+
+        return {
+          assetId: picture?.getAttribute("data-anzania-asset"),
+          className: backdrop.className,
+          position: backdropStyle.position,
+          pointerEvents: backdropStyle.pointerEvents,
+          ariaHidden: backdrop.getAttribute("aria-hidden"),
+          overlay: backdrop.getAttribute("data-anzania-overlay"),
+          overlayImage: overlayStyle.backgroundImage,
+          whiteStopAlphas: colourAlphas(
+            overlayStyle.backgroundImage,
+            255,
+            253,
+            248,
+          ),
+          goldImage: goldStyle.backgroundImage,
+          goldLineAlphas: colourAlphas(goldStyle.backgroundImage, 128, 96, 32),
+          goldStripeHeight,
+          goldRepeat: goldStyle.backgroundRepeat,
+          directMainSection: section?.parentElement?.tagName === "MAIN",
+          insideFramedLandmark: Boolean(
+            backdrop.closest("article, aside, figure"),
+          ),
+          sectionViewportDifference: sectionBox
+            ? Math.max(
+                Math.abs(sectionBox.left),
+                Math.abs(sectionBox.right - rootWidth),
+                Math.abs(sectionBox.width - rootWidth),
+              )
+            : Number.POSITIVE_INFINITY,
+          backdropCoverageDifference: boxDifference(backdropBox, sectionBox),
+          pictureCoverageDifference: boxDifference(pictureBox, backdropBox),
+          imageCoverageDifference: boxDifference(imageBox, backdropBox),
+          objectFit: imageStyle?.objectFit,
+          responsiveSizes: image?.getAttribute("sizes"),
+          unframed: frameStyles.every(
+            (style) =>
+              style.borderTopWidth === "0px" &&
+              style.borderRightWidth === "0px" &&
+              style.borderBottomWidth === "0px" &&
+              style.borderLeftWidth === "0px" &&
+              style.borderRadius === "0px" &&
+              style.boxShadow === "none",
+          ),
+          desktopFocal,
+          mobileFocal,
+          activeFocal: imageStyle?.objectPosition.replace(/\s+/gu, " ").trim(),
+          isMobileFocalMode,
+        };
+      }),
+    );
+
+    expect(presentations.map(({ assetId }) => assetId)).toEqual(
+      expectedBackgrounds.map(({ assetId }) => assetId),
+    );
+
+    for (const [index, presentation] of presentations.entries()) {
+      const expected = expectedBackgrounds[index];
+      expect(expected).toBeDefined();
+      expect(presentation.className).toContain(
+        `anzania-backdrop--${expected?.veil}`,
+      );
+      expect(presentation.position).toBe("absolute");
+      expect(presentation.pointerEvents).toBe("none");
+      expect(presentation.ariaHidden).toBe("true");
+      expect(presentation.directMainSection).toBe(true);
+      expect(presentation.insideFramedLandmark).toBe(false);
+      expect(presentation.sectionViewportDifference).toBeLessThanOrEqual(1);
+      expect(presentation.backdropCoverageDifference).toBeLessThanOrEqual(1);
+      expect(presentation.pictureCoverageDifference).toBeLessThanOrEqual(1);
+      expect(presentation.imageCoverageDifference).toBeLessThanOrEqual(1);
+      expect(presentation.objectFit).toBe("cover");
+      expect(presentation.responsiveSizes).toBe("100vw");
+      expect(presentation.unframed).toBe(true);
+
+      expect(presentation.overlay).toBe("translucent-white");
+      expect(presentation.overlayImage).toContain("linear-gradient");
+      expect(presentation.whiteStopAlphas.length).toBeGreaterThanOrEqual(2);
+      expect(
+        presentation.whiteStopAlphas.every(
+          (alpha) => alpha >= 0.18 && alpha <= 0.96,
+        ),
+      ).toBe(true);
+      expect(presentation.whiteStopAlphas.some((alpha) => alpha >= 0.68)).toBe(
+        true,
       );
 
-    expect(presentations.length).toBeGreaterThan(0);
-    expect(
-      presentations.every(
-        (presentation) =>
-          presentation.position === "absolute" &&
-          presentation.overlay === "translucent-white" &&
-          presentation.overlayImage.includes("linear-gradient") &&
-          !presentation.insideFigure &&
-          presentation.widthDifference <= 1 &&
-          presentation.heightDifference <= 1,
-      ),
-    ).toBe(true);
+      expect(presentation.goldImage).toContain("linear-gradient");
+      expect(presentation.goldImage).toContain("repeating-linear-gradient");
+      expect(presentation.goldRepeat).toContain("no-repeat");
+      expect(presentation.goldLineAlphas.length).toBeGreaterThanOrEqual(1);
+      expect(
+        presentation.goldLineAlphas.every(
+          (alpha) => alpha > 0 && alpha <= 0.07,
+        ),
+      ).toBe(true);
+      expect(presentation.goldStripeHeight).toBeGreaterThan(0);
+      expect(presentation.goldStripeHeight).toBeLessThanOrEqual(4);
+
+      expect(presentation.desktopFocal).toBe(expected?.desktopFocal);
+      expect(presentation.mobileFocal).toBe(expected?.mobileFocal);
+      expect(presentation.activeFocal).toBe(
+        presentation.isMobileFocalMode
+          ? expected?.mobileFocal
+          : expected?.desktopFocal,
+      );
+    }
+
     await expect(page.locator("figure [data-anzania-asset]")).toHaveCount(0);
   }
 });

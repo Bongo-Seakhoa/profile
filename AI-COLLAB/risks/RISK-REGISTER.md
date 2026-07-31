@@ -60,11 +60,18 @@
   reliable penetration and a 3.263 mm maximum seam-pair/component gap, but
   remains rejected by the fit gates: waist p95 50.479 mm, loose-leg p95
   47.339 mm and maximum clearance 63.738 mm.
-- v21 replaces the distorted ellipse and broad support bridge with per-vertex
-  evaluated-visible-body ray measurements. Its topology preflight passes with
-  152/152 pairs, one shell, three intentional loops, zero non-manifold edges
-  and minimum signed pin clearance 3.440 mm. The unchanged full solve is the
-  active gate; the tunic remains blocked.
+- v24 passed every gate except waist p95 at 12.437 mm. v25 was retained as a
+  diagnostic provenance checkpoint after its wider correction regressed waist
+  p95 to 13.099 mm.
+- v26 reduced waist p95 to 12.683 mm but introduced measurable convergence,
+  seam and clearance regressions. v27 localized the correction and reached
+  12.134 mm, only 0.134 mm over the gate, while still regressing convergence,
+  seam, overall-clearance and loose-fit metrics. It is rejected.
+- The active v28 work is reporting-only localization across v25-v27. It must
+  identify which modified pattern points helped or harmed, restore uninvolved
+  geometry where supported by evidence, forecast signed clearance and the
+  regressed metrics, and declare its exact point scope before another solve.
+  The tunic and all upper layers remain blocked.
 - Belt and pouch proxies are not derived from an accepted fitted belt and final
   accessory layer, dependency and attachment-target metadata is absent.
 - Bracers and mantle or tabard trim are missing; footwear is authored in the
@@ -84,6 +91,6 @@
 | DN-ORTHO-001    | Approved reconstructed pilot modelling boards and measurement overlay.             | Resolved by the approved v2 silhouette and passing 1.84 m Blender blockout. | Closed by D010 and A004. |
 | DN-CHAR-RIGHTS-001 | Owner confirmation of ownership and permission to create and publicly redistribute derivatives from the canonical character references. | Resolved for the portfolio scope. | Closed by D010; raw masters remain private. |
 | DN-CHAR-ASSET-001 | Production Blender models, rigs, textures, actions, LODs and validated runtime exports. | Character integration and the complete immersive matrix. | Codex builds the pilot after reconstruction approval, then scales the approved pipeline to the remaining roster. |
-| DEP-BROWSER-001 | ChatGPT Chrome Extension plus native host in the selected Bongo Personal Profile. | Interactive Chrome inspection of the current Static View background revision. | Reinstall the Chrome plugin from the ChatGPT plugin UI, then rerun the browser matrix. |
+| DEP-BROWSER-001 | Bongo Personal Chrome runtime supplied by the owner. | Interactive Chrome inspection of the current Static View background revision. | Runtime is available; run and record the real-profile browser matrix before visual acceptance or deployment. |
 
 The supplied `/profile/` URL and the corrected Threshold Dunes linkage are treated as resolved working decisions.
