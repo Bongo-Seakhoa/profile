@@ -14,20 +14,31 @@ import {
 function asset(
   id: string,
   kind: RuntimeAssetReference["kind"],
+  fixedUri?: string,
 ): RuntimeAssetReference {
   const sha256 = createHash("sha256").update(id).digest("hex");
   const contract = {
     "character-glb": ["glb", "model/gltf-binary"],
-    "decoder-module": ["mjs", "text/javascript"],
+    "decoder-module": ["js", "text/javascript"],
     "decoder-wasm": ["wasm", "application/wasm"],
     "effect-manifest": ["json", "application/json"],
     "environment-glb": ["glb", "model/gltf-binary"],
     "production-metadata": ["json", "application/json"],
   } as const;
   const [extension, mimeType] = contract[kind];
+  const directory = {
+    "character-glb": "characters",
+    "decoder-module": "decoders",
+    "decoder-wasm": "decoders",
+    "effect-manifest": "powers",
+    "environment-glb": "environments",
+    "production-metadata": "metadata",
+  } as const;
   return {
     kind,
-    uri: `assets/immersive/test/${id}.${sha256.slice(0, 12)}.${extension}`,
+    uri:
+      fixedUri ??
+      `${directory[kind]}/${id}.${sha256.slice(0, 12)}.${extension}`,
     mimeType,
     byteLength: 1_024,
     sha256,
@@ -62,12 +73,18 @@ function validManifest() {
       geometry: "meshopt",
       meshoptimizerVersion: IMMERSIVE_RUNTIME_DEPENDENCY_VERSIONS.meshoptimizer,
       decoders: {
+        sourcePackage: "three@0.185.1",
+        transcoderPath: "/profile/assets/immersive/decoders/three-0.185.1/",
         basisTranscoderModule: asset(
           "basis-transcoder-module",
           "decoder-module",
+          "decoders/three-0.185.1/basis_transcoder.js",
         ),
-        basisTranscoderWasm: asset("basis-transcoder-wasm", "decoder-wasm"),
-        meshoptDecoderModule: asset("meshopt-decoder-module", "decoder-module"),
+        basisTranscoderWasm: asset(
+          "basis-transcoder-wasm",
+          "decoder-wasm",
+          "decoders/three-0.185.1/basis_transcoder.wasm",
+        ),
       },
     },
     characters: CANONICAL_RUNTIME_CHARACTER_IDS.map((characterId) => ({
@@ -170,6 +187,36 @@ describe("immersive runtime manifest", () => {
     }
   });
 
+  it("requires the exact versioned Three.js Basis decoder sibling names", () => {
+    const manifest = validManifest();
+    manifest.compression.decoders.basisTranscoderModule.uri =
+      "decoders/three-0.185.1/basis-transcoder.js";
+    const result = immersiveRuntimeManifestSchema.safeParse(manifest);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some(({ message }) =>
+          message.includes("exact pinned Three.js decoder file"),
+        ),
+      ).toBe(true);
+    }
+  });
+
+  it("rejects output-root-relative asset strings that would double-resolve from the manifest", () => {
+    const manifest = validManifest();
+    const packageAsset = manifest.characters[0]!.package;
+    packageAsset.uri = `assets/immersive/${packageAsset.uri}`;
+    const result = immersiveRuntimeManifestSchema.safeParse(manifest);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some(({ message }) =>
+          message.includes("manifest-relative"),
+        ),
+      ).toBe(true);
+    }
+  });
+
   it("rejects incomplete or reordered traversal phases", () => {
     const manifest = validManifest();
     manifest.powers[0]!.phases.reverse();
@@ -200,7 +247,7 @@ describe("immersive runtime manifest", () => {
     if (!result.success) {
       expect(
         result.error.issues.some(({ message }) =>
-          message.includes("unique content-addressed URI"),
+          message.includes("unique release-addressed URI"),
         ),
       ).toBe(true);
     }

@@ -138,7 +138,9 @@ export const REQUIRED_TRAVERSAL_POWER_PHASES = {
 
 const SHA256_PATTERN = /^[0-9a-f]{64}$/;
 const CONTENT_ADDRESSED_URI_PATTERN =
-  /^assets\/immersive\/[a-z0-9][a-z0-9/_-]*\.[0-9a-f]{12}\.(?:glb|json|ktx2|wasm|mjs)$/;
+  /^(?:characters|environments|metadata|powers|shared)\/[a-z0-9][a-z0-9/_-]*\.[0-9a-f]{12}\.(?:glb|json|ktx2)$/;
+const VERSIONED_DECODER_URI_PATTERN =
+  /^decoders\/three-0\.185\.1\/basis_transcoder\.(?:js|wasm)$/;
 const RELEASE_ID_PATTERN = /^profile-[0-9]{8}t[0-9]{6}z-[0-9a-f]{12}$/;
 
 type RuntimeAssetKind =
@@ -156,7 +158,7 @@ const ASSET_KIND_CONTRACT: Readonly<
   >
 > = {
   "character-glb": { extension: ".glb", mime: "model/gltf-binary" },
-  "decoder-module": { extension: ".mjs", mime: "text/javascript" },
+  "decoder-module": { extension: ".js", mime: "text/javascript" },
   "decoder-wasm": { extension: ".wasm", mime: "application/wasm" },
   "effect-manifest": { extension: ".json", mime: "application/json" },
   "environment-glb": { extension: ".glb", mime: "model/gltf-binary" },
@@ -173,7 +175,14 @@ export const runtimeAssetReferenceSchema = z
       "environment-glb",
       "production-metadata",
     ]),
-    uri: z.string().regex(CONTENT_ADDRESSED_URI_PATTERN),
+    uri: z
+      .string()
+      .refine(
+        (value) =>
+          CONTENT_ADDRESSED_URI_PATTERN.test(value) ||
+          VERSIONED_DECODER_URI_PATTERN.test(value),
+        "Runtime asset URI must be manifest-relative, content-addressed or an exact manifest-relative Three.js decoder path.",
+      ),
     mimeType: z.enum([
       "application/json",
       "application/wasm",
@@ -202,7 +211,10 @@ export const runtimeAssetReferenceSchema = z
     }
 
     const hashPrefix = asset.uri.match(/\.([0-9a-f]{12})\.[^.]+$/u)?.[1];
-    if (hashPrefix !== asset.sha256.slice(0, 12)) {
+    if (
+      !asset.kind.startsWith("decoder-") &&
+      hashPrefix !== asset.sha256.slice(0, 12)
+    ) {
       context.addIssue({
         code: "custom",
         message:
@@ -329,20 +341,32 @@ const powerEntrySchema = z
 
 const decoderBundleSchema = z
   .object({
+    sourcePackage: z.literal("three@0.185.1"),
+    transcoderPath: z.literal(
+      "/profile/assets/immersive/decoders/three-0.185.1/",
+    ),
     basisTranscoderModule: runtimeAssetReferenceSchema,
     basisTranscoderWasm: runtimeAssetReferenceSchema,
-    meshoptDecoderModule: runtimeAssetReferenceSchema,
   })
   .strict()
   .superRefine((bundle, context) => {
-    for (const [field, asset] of Object.entries(bundle)) {
-      const expectedKind =
-        field === "basisTranscoderWasm" ? "decoder-wasm" : "decoder-module";
-      if (asset.kind !== expectedKind) {
+    const expected = {
+      basisTranscoderModule: {
+        kind: "decoder-module",
+        uri: "decoders/three-0.185.1/basis_transcoder.js",
+      },
+      basisTranscoderWasm: {
+        kind: "decoder-wasm",
+        uri: "decoders/three-0.185.1/basis_transcoder.wasm",
+      },
+    } as const;
+    for (const [field, contract] of Object.entries(expected)) {
+      const asset = bundle[field as keyof typeof expected];
+      if (asset.kind !== contract.kind || asset.uri !== contract.uri) {
         context.addIssue({
           code: "custom",
-          message: `${field} must be a ${expectedKind} reference.`,
-          path: [field, "kind"],
+          message: `${field} must use the exact pinned Three.js decoder file.`,
+          path: [field],
         });
       }
     }
@@ -452,7 +476,8 @@ export const immersiveRuntimeManifestSchema = z
     );
 
     const assetUris = [
-      ...Object.values(manifest.compression.decoders).map(({ uri }) => uri),
+      manifest.compression.decoders.basisTranscoderModule.uri,
+      manifest.compression.decoders.basisTranscoderWasm.uri,
       ...manifest.characters.flatMap(({ package: packageAsset, metadata }) => [
         packageAsset.uri,
         metadata.uri,
@@ -467,7 +492,7 @@ export const immersiveRuntimeManifestSchema = z
       context.addIssue({
         code: "custom",
         message:
-          "Every runtime asset must have one unique content-addressed URI.",
+          "Every runtime asset must have one unique release-addressed URI.",
         path: ["integrity"],
       });
     }

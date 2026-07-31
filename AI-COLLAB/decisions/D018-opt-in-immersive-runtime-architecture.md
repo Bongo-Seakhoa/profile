@@ -39,8 +39,20 @@ scope rather than a public placeholder.
 - Load only content-addressed, manifest-declared, self-contained production GLB
   packages. Fetch bytes first, verify their complete SHA-256 digest with Web
   Crypto, and only then parse them.
+- Resolve every production asset URI against the fetched runtime manifest URL.
+  Manifest entries are content-addressed paths relative to
+  `assets/immersive/runtime-manifest.json`; they must not repeat the
+  `assets/immersive/` output prefix. Browser loading and release-graph
+  validation therefore use the same URL semantics.
 - Require KTX2/Basis textures and meshopt-compressed geometry for production
   packages. Decoder versions and copied decoder files are release metadata.
+- Preserve Three.js KTX2Loader's required sibling names exactly as
+  `basis_transcoder.js` and `basis_transcoder.wasm`. Their manifest-relative
+  entries resolve beneath the versioned
+  `/profile/assets/immersive/decoders/three-0.185.1/` directory. The directory is
+  version-addressed and release metadata records the complete SHA-256 digest of
+  each decoder; the filenames themselves cannot be content-addressed because
+  KTX2Loader appends these fixed names to `setTranscoderPath()`.
 - Sample active skinned meshes, rigid attachments, cloth or power proxies and
   outgoing plus incoming LOD bounds after animation and world-matrix updates.
   Feed that exact-frame union into the framing controller before rendering.
