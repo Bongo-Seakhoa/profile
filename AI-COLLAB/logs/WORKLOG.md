@@ -202,3 +202,28 @@ Append concise, evidence-backed entries. Use UTC timestamps.
   9.479 mm mean seam gap. Pin displacement was zero. No render or acceptance
   asset was produced; the next pass must localize the worst seam and
   penetration regions rather than relax the gates.
+- Inspected all four v16 failure-only trouser views. Rejected the separated
+  crotch, inner-leg and ankle panels, oversized floating waistband, missing
+  anatomical rise and seat, rigid unsettled drape and visible simulation
+  helper. Reaffirmed the owner-corrected physical dressing rule: an accepted
+  fitted base outfit precedes every later garment and named-surface accessory.
+- Received Claude message 020. Its controlled tests disproved sewing force 20
+  and extra bake frames as solutions. Recorded the response, mirrored it
+  through the dual-root inbox and checkpointed the collaboration evidence as
+  commit `25ce902`.
+- Ran the controlled v17 trousers-only comparison in owned headless Blender
+  PID 22628. The topology-preserving body collider removed actual-body
+  penetration, but the pass remained rejected at 29.416 mm convergence and
+  274.154 mm maximum seam gap, localized to the anatomical-right inner-leg
+  rows.
+- Loaded the owned v17 recovery in a separate read-only headless Blender
+  diagnostic. All 136 seam pairs remained unique zero-face loose edges.
+  Anatomical-right outer seams closed to sub-millimetre gaps while its inner
+  seams opened to 252 to 274 mm, proving an orientation-specific construction
+  defect rather than dropped sewing topology.
+- Completed a focused topology canary. A zero-gap control correctly failed
+  preflight; a valid 4 mm control retained all 34 sewing edges and passed a
+  30-frame helper bake with 0.361 mm convergence, 0.0183 mm maximum seam gap,
+  zero reliable penetration and unchanged gates. The next trouser pass uses
+  controlled seam offsets plus corrected spatial side detection, front rise,
+  back seat and crotch junction.

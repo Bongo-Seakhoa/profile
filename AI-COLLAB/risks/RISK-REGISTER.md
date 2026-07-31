@@ -50,6 +50,14 @@
   pre-weld seam gap. Pin displacement remained zero, localizing the next
   correction to pattern seams, pre-wrap clearance and settling rather than
   attachment drift.
+- The controlled v17 run removed actual-body penetration but failed with
+  29.416 mm convergence and a 274.154 mm maximum seam gap. Read-only recovery
+  inspection proved that all 136 loose sewing edges survived; the
+  anatomical-right outer seam closed while its inner seam opened across the
+  complete front-to-back leg depth. A focused canary identified degenerate
+  zero-length seam starts, wrong side/orientation logic and the incomplete
+  rise/seat/crotch junction as the current blockers. v18 must correct those
+  defects and retain the same thresholds.
 - Belt and pouch proxies are not derived from an accepted fitted belt and final
   accessory layer, dependency and attachment-target metadata is absent.
 - Bracers and mantle or tabard trim are missing; footwear is authored in the
