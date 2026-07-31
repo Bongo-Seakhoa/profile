@@ -11,7 +11,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "overview"
   },
   {
@@ -26,7 +26,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "selected-work"
   },
   {
@@ -41,7 +41,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "capabilities"
   },
   {
@@ -56,7 +56,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "experience"
   },
   {
@@ -71,7 +71,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "research"
   },
   {
@@ -86,7 +86,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "education"
   },
   {
@@ -101,7 +101,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "credentials"
   },
   {
@@ -116,7 +116,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "about"
   },
   {
@@ -131,7 +131,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "documents"
   },
   {
@@ -146,7 +146,7 @@
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "contact"
   },
   {
@@ -164,7 +164,7 @@
       "collection": "project",
       "id": "metapos-app-data-management"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-metapos-app-data-management"
   },
   {
@@ -182,7 +182,7 @@
       "collection": "project",
       "id": "fxpm-1-4-forex-portfolio-manager"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-fxpm-1-4"
   },
   {
@@ -200,7 +200,7 @@
       "collection": "project",
       "id": "streamlit-recommender-system"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-streamlit-recommender"
   },
   {
@@ -218,7 +218,7 @@
       "collection": "project",
       "id": "regression-predict-api"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-regression-predict-api"
   },
   {
@@ -236,7 +236,7 @@
       "collection": "project",
       "id": "visualizing-filters-cnn"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-visualizing-filters-cnn"
   },
   {
@@ -254,7 +254,7 @@
       "collection": "project",
       "id": "airqo-environmental-data"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-airqo-environmental-data"
   },
   {
@@ -272,7 +272,7 @@
       "collection": "project",
       "id": "mql5-expert-advisor"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-mql5-expert-advisor"
   },
   {
@@ -290,7 +290,7 @@
       "collection": "project",
       "id": "fxpm-backtester"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-fxpm-backtester"
   },
   {
@@ -308,7 +308,7 @@
       "collection": "project",
       "id": "institutional-ls-sr-trading-ea"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-institutional-ls-sr"
   },
   {
@@ -326,7 +326,7 @@
       "collection": "project",
       "id": "openai-trader-experiment"
     },
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": "project-openai-trader"
   },
   {
@@ -341,7 +341,7 @@
     "sitemap": false,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": null
   },
   {
@@ -356,7 +356,7 @@
     "sitemap": false,
     "canonicalRouteId": "resume-bongo-seakhoa",
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": null
   },
   {
@@ -371,7 +371,7 @@
     "sitemap": false,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": null
   },
   {
@@ -386,7 +386,7 @@
     "sitemap": false,
     "canonicalRouteId": "cv-bongo-seakhoa",
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": null
   },
   {
@@ -401,7 +401,7 @@
     "sitemap": false,
     "canonicalRouteId": "home",
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": null
   },
   {
@@ -416,7 +416,7 @@
     "sitemap": false,
     "canonicalRouteId": null,
     "entityRef": null,
-    "staticRenderable": true,
+    "surface": "static-view",
     "immersiveDestinationId": null
   }
 ]

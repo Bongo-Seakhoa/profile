@@ -80,9 +80,8 @@ const declaredRoutePath = canonicalPath
 const requestedRoute =
   content.routes.find((route) => route.path === routePath) ??
   content.routes.find((route) => route.path === declaredRoutePath);
-const socialCardId = requestedRoute?.staticRenderable
-  ? requestedRoute.id
-  : "home";
+const socialCardId =
+  requestedRoute?.surface === "static-view" ? requestedRoute.id : "home";
 const resolvedSocialImage = ogImage ?? `assets/social/${socialCardId}.jpg`;
 const resolvedSocialImageAlt =
   ogImageAlt ?? `${documentTitle}. Professional portfolio by Bongo Seakhoa.`;

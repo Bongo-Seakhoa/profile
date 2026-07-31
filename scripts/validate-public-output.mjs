@@ -1,6 +1,15 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { extname, join, relative, resolve } from "node:path";
 
+import {
+  classifyReleaseFiles,
+  findStaticReleasePolicyViolations,
+  findUnclaimedRuntimeAssets,
+  inspectReleaseSurfaces,
+  RELEASE_SURFACES,
+  validateImmersiveSurfaceBootstrap,
+} from "./release-surfaces.mjs";
+
 const repositoryRoot = process.cwd();
 const distDirectory = resolve(repositoryRoot, "dist");
 const [identity] = JSON.parse(
@@ -12,6 +21,18 @@ const [identity] = JSON.parse(
 const documentManifest = JSON.parse(
   await readFile(
     resolve(repositoryRoot, "src", "data", "profile", "document-manifest.json"),
+    "utf8",
+  ),
+);
+const routes = JSON.parse(
+  await readFile(
+    resolve(repositoryRoot, "src", "data", "profile", "routes.json"),
+    "utf8",
+  ),
+);
+const [siteSettings] = JSON.parse(
+  await readFile(
+    resolve(repositoryRoot, "src", "data", "profile", "site-settings.json"),
     "utf8",
   ),
 );
@@ -79,48 +100,66 @@ for (const sourceRoot of sourceRoots) {
 const distFiles = await walk(distDirectory);
 for (const path of distFiles) await rejectEmDashes(path);
 
-const forbiddenStaticExtensions = new Set([
-  ".bin",
-  ".blend",
-  ".fbx",
-  ".glb",
-  ".gltf",
-  ".js",
-  ".mjs",
-  ".mp3",
-  ".mp4",
-  ".ogg",
-  ".wasm",
-  ".webm",
-]);
-for (const path of distFiles) {
-  const extension = extname(path).toLowerCase();
-  const publicPath = relative(distDirectory, path).replaceAll("\\", "/");
-  if (forbiddenStaticExtensions.has(extension)) {
+const { graphs } = await inspectReleaseSurfaces({
+  distDirectory,
+  routes,
+  basePath: siteSettings.basePath,
+  siteUrl: siteSettings.siteUrl,
+});
+const staticGraph = graphs[RELEASE_SURFACES.staticView];
+const immersiveGraph = graphs[RELEASE_SURFACES.immersiveEntry];
+
+for (const [surfaceId, graph] of Object.entries(graphs)) {
+  for (const missing of graph.missing) {
     failures.push(
-      `${publicPath} is an executable or immersive runtime asset in Static View`,
+      `${surfaceId} request graph is missing ${missing.path} referenced by ${missing.from ?? "its route registry"}`,
     );
   }
-  if (publicPath.toLowerCase().includes("immersive")) {
-    failures.push(`${publicPath} exposes an immersive asset in Static View`);
+  for (const violation of graph.policyViolations ?? []) {
+    failures.push(
+      `${surfaceId} request graph rejects ${violation.request} from ${violation.from}: ${violation.reason}`,
+    );
   }
 }
 
-const htmlFiles = distFiles.filter((path) => extname(path) === ".html");
+for (const failure of await validateImmersiveSurfaceBootstrap({
+  graph: immersiveGraph,
+  distDirectory,
+  basePath: siteSettings.basePath,
+})) {
+  failures.push(`immersive-entry bootstrap: ${failure}`);
+}
+
+const allPublicPaths = distFiles.map((path) =>
+  relative(distDirectory, path).replaceAll("\\", "/"),
+);
+const releaseClassification = classifyReleaseFiles(
+  allPublicPaths,
+  staticGraph,
+  immersiveGraph,
+);
+failures.push(
+  ...(await findStaticReleasePolicyViolations({
+    distDirectory,
+    outputPaths: releaseClassification.staticRelease,
+  })),
+);
+for (const publicPath of findUnclaimedRuntimeAssets(
+  allPublicPaths,
+  staticGraph,
+  immersiveGraph,
+)) {
+  failures.push(
+    `${publicPath} is an unclaimed runtime asset; it must be reachable only from an immersive-entry route`,
+  );
+}
+
+const htmlFiles = releaseClassification.staticRelease
+  .filter((path) => extname(path) === ".html")
+  .map((path) => resolve(distDirectory, path));
 for (const path of htmlFiles) {
   const html = await readFile(path, "utf8");
 
-  if (/<canvas(?:\s|>)/i.test(html)) {
-    failures.push(`${displayPath(path)} contains a canvas in Static View`);
-  }
-  if (/<script\b[^>]*\bsrc\s*=/i.test(html)) {
-    failures.push(`${displayPath(path)} loads a client script in Static View`);
-  }
-  if (/<script\b[^>]*\btype=(?:"|')module(?:"|')/i.test(html)) {
-    failures.push(
-      `${displayPath(path)} contains a client module in Static View`,
-    );
-  }
   const telephoneLinks = [
     ...html.matchAll(/href=(?:"|')(tel:[^"']+)(?:"|')/giu),
   ].map(([, href]) => href);
@@ -161,23 +200,9 @@ for (const path of htmlFiles) {
   }
 }
 
-const cssFiles = distFiles.filter((path) => extname(path) === ".css");
-for (const path of cssFiles) {
-  const css = await readFile(path, "utf8");
-  const forbiddenMotion = [
-    [/@keyframes\b/i, "@keyframes"],
-    [/\banimation(?:-name)?\s*:(?!\s*none\b)/i, "animation"],
-    [/\bscroll-behavior\s*:\s*smooth/i, "smooth scrolling"],
-    [/\btransition\s*:/i, "transition"],
-  ];
-  for (const [pattern, label] of forbiddenMotion) {
-    if (pattern.test(css)) {
-      failures.push(
-        `${displayPath(path)} contains forbidden Static View ${label}`,
-      );
-    }
-  }
-}
+const cssFiles = releaseClassification.staticRelease
+  .filter((path) => extname(path) === ".css")
+  .map((path) => resolve(distDirectory, path));
 
 const expectedDocuments = documentManifest.flatMap((document) =>
   document.variants.map((variant) => variant.pdfPath),
@@ -232,5 +257,5 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `Validated ${htmlFiles.length} HTML files, ${cssFiles.length} CSS files and four direct PDF downloads.`,
+  `Validated the ${staticGraph.files.length}-file Static View request graph (${htmlFiles.length} HTML and ${cssFiles.length} CSS files), an isolated ${immersiveGraph.files.length}-file immersive graph and four direct PDF downloads.`,
 );

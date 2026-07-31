@@ -6,14 +6,19 @@ import { extname, join, normalize, resolve, sep } from "node:path";
 const MIME_TYPES = new Map([
   [".avif", "image/avif"],
   [".css", "text/css; charset=utf-8"],
+  [".glb", "model/gltf-binary"],
+  [".gltf", "model/gltf+json"],
   [".html", "text/html; charset=utf-8"],
   [".jpeg", "image/jpeg"],
   [".jpg", "image/jpeg"],
   [".js", "text/javascript; charset=utf-8"],
   [".json", "application/json; charset=utf-8"],
+  [".ktx2", "image/ktx2"],
+  [".mjs", "text/javascript; charset=utf-8"],
   [".pdf", "application/pdf"],
   [".png", "image/png"],
   [".svg", "image/svg+xml"],
+  [".wasm", "application/wasm"],
   [".webp", "image/webp"],
   [".woff2", "font/woff2"],
 ]);
@@ -26,9 +31,11 @@ const MIME_TYPES = new Map([
 function safeRelativePath(urlPath, basePath) {
   const [pathPart = ""] = urlPath.split("?");
   const decoded = decodeURIComponent(pathPart);
-  const withoutBase = decoded.startsWith(basePath)
-    ? decoded.slice(basePath.length)
-    : decoded;
+  const normalizedBase = basePath === "/" ? "" : basePath.replace(/\/+$/u, "");
+  if (decoded !== normalizedBase && !decoded.startsWith(`${normalizedBase}/`)) {
+    throw new Error("Request is outside the configured base path");
+  }
+  const withoutBase = decoded.slice(normalizedBase.length);
   const relative = normalize(withoutBase).replace(/^[/\\]+/, "");
 
   if (relative.startsWith("..")) {

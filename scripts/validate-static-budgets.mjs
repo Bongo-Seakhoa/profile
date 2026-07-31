@@ -2,6 +2,18 @@ import { gzipSync } from "node:zlib";
 import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { extname, join, relative, resolve } from "node:path";
 
+import {
+  classifyReleaseFiles,
+  inspectReleaseSurfaces,
+  RELEASE_SURFACES,
+  validateImmersiveSurfaceBootstrap,
+} from "./release-surfaces.mjs";
+import {
+  RELEASE_BUDGET_LIMITS,
+  RELEASE_SCOPE_RESERVES,
+  REQUIRED_COMPLETE_SCOPE_BYTES,
+} from "./release-budget-policy.mjs";
+
 const repositoryRoot = process.cwd();
 const distDirectory = resolve(repositoryRoot, "dist");
 const reportPath = resolve(
@@ -11,15 +23,12 @@ const reportPath = resolve(
   "static-budget.json",
 );
 
-const limits = {
-  maximumCompressedHtmlPerRoute: 100 * 1024,
-  maximumCompressedCssTotal: 60 * 1024,
-  maximumCompressedJavaScriptTotal: 80 * 1024,
-  maximumHeroAvif: 450 * 1024,
-  maximumSocialCard: 100 * 1024,
-  maximumPdf: 750 * 1024,
-  maximumDist: 15 * 1024 * 1024,
-};
+const limits = RELEASE_BUDGET_LIMITS;
+if (REQUIRED_COMPLETE_SCOPE_BYTES > limits.maximumWholeRelease) {
+  throw new Error(
+    "The declared complete immersive scope cannot fit inside the whole-release ceiling",
+  );
+}
 
 async function walk(directory) {
   const files = [];
@@ -39,26 +48,69 @@ const routes = JSON.parse(
     "utf8",
   ),
 );
+const [siteSettings] = JSON.parse(
+  await readFile(
+    resolve(repositoryRoot, "src", "data", "profile", "site-settings.json"),
+    "utf8",
+  ),
+);
 const documentPlans = JSON.parse(
   await readFile(
     resolve(repositoryRoot, "src", "data", "profile", "document-manifest.json"),
     "utf8",
   ),
 );
-const expectedRouteCount = routes.filter(
-  (route) => route.staticRenderable,
-).length;
+const { graphs, manifests } = await inspectReleaseSurfaces({
+  distDirectory,
+  routes,
+  basePath: siteSettings.basePath,
+  siteUrl: siteSettings.siteUrl,
+});
+const staticGraph = graphs[RELEASE_SURFACES.staticView];
+const immersiveGraph = graphs[RELEASE_SURFACES.immersiveEntry];
+const releaseFiles = files.map((path) =>
+  relative(distDirectory, path).replaceAll("\\", "/"),
+);
+const releaseClassification = classifyReleaseFiles(
+  releaseFiles,
+  staticGraph,
+  immersiveGraph,
+);
+const expectedRouteCount = staticGraph.entryPaths.length;
 const expectedPdfCount = documentPlans.reduce(
   (count, plan) => count + plan.variants.length,
   0,
 );
 const relativePath = (path) =>
   relative(distDirectory, path).replaceAll("\\", "/");
-const byExtension = (extension) =>
-  files.filter((path) => extname(path).toLowerCase() === extension);
+const byExtension = (extension, candidates = files) =>
+  candidates.filter((path) => extname(path).toLowerCase() === extension);
+const staticReleaseFiles = releaseClassification.staticRelease.map((path) =>
+  resolve(distDirectory, path),
+);
+
+for (const [surfaceId, graph] of Object.entries(graphs)) {
+  for (const missing of graph.missing) {
+    failures.push(
+      `${surfaceId} request graph is missing ${missing.path} referenced by ${missing.from ?? "its route registry"}`,
+    );
+  }
+  for (const violation of graph.policyViolations ?? []) {
+    failures.push(
+      `${surfaceId} request graph rejects ${violation.request} from ${violation.from}: ${violation.reason}`,
+    );
+  }
+}
+for (const failure of await validateImmersiveSurfaceBootstrap({
+  graph: immersiveGraph,
+  distDirectory,
+  basePath: siteSettings.basePath,
+})) {
+  failures.push(`immersive-entry bootstrap: ${failure}`);
+}
 
 const html = [];
-for (const path of byExtension(".html")) {
+for (const path of byExtension(".html", staticReleaseFiles)) {
   const bytes = await readFile(path);
   const gzipBytes = gzipSync(bytes, { level: 9 }).length;
   html.push({ path: relativePath(path), bytes: bytes.length, gzipBytes });
@@ -85,10 +137,13 @@ async function compressedTotal(paths) {
   return { count: paths.length, rawBytes, gzipBytes };
 }
 
-const css = await compressedTotal(byExtension(".css"));
+const staticGraphAbsolutePaths = staticGraph.files.map((path) =>
+  resolve(distDirectory, path),
+);
+const css = await compressedTotal(byExtension(".css", staticReleaseFiles));
 const javascript = await compressedTotal([
-  ...byExtension(".js"),
-  ...byExtension(".mjs"),
+  ...byExtension(".js", staticReleaseFiles),
+  ...byExtension(".mjs", staticReleaseFiles),
 ]);
 
 if (css.gzipBytes > limits.maximumCompressedCssTotal) {
@@ -107,7 +162,7 @@ if (javascript.count > 0) {
   );
 }
 
-const heroPath = files.find((path) =>
+const heroPath = staticGraphAbsolutePaths.find((path) =>
   relativePath(path).endsWith("anzania-threshold-dunes-outer-v01-1672.avif"),
 );
 if (!heroPath) {
@@ -120,7 +175,7 @@ if (heroBytes > limits.maximumHeroAvif) {
   );
 }
 
-const socialCards = files.filter(
+const socialCards = staticGraphAbsolutePaths.filter(
   (path) =>
     relativePath(path).startsWith("assets/social/") &&
     extname(path).toLowerCase() === ".jpg",
@@ -154,19 +209,33 @@ for (const path of pdfs) {
   }
 }
 
-const distBytes = (
+const staticReleaseBytes = (
+  await Promise.all(
+    staticReleaseFiles.map(async (path) => (await stat(path)).size),
+  )
+).reduce((total, bytes) => total + bytes, 0);
+if (staticReleaseBytes > limits.maximumStaticRelease) {
+  failures.push(
+    `The Static View release surface is ${staticReleaseBytes} bytes, above the preserved 15 MB budget`,
+  );
+}
+
+const wholeReleaseBytes = (
   await Promise.all(files.map(async (path) => (await stat(path)).size))
 ).reduce((total, bytes) => total + bytes, 0);
-if (distBytes > limits.maximumDist) {
+if (wholeReleaseBytes > limits.maximumWholeRelease) {
   failures.push(
-    `The complete release artifact is ${distBytes} bytes, above the 15 MB budget`,
+    `The complete release artifact is ${wholeReleaseBytes} bytes, above the 768 MB ceiling`,
   );
 }
 
 const report = {
-  schemaVersion: "1.0.0",
+  schemaVersion: "2.0.0",
   generatedAt: new Date().toISOString(),
   limits,
+  scopeReserves: RELEASE_SCOPE_RESERVES,
+  requiredCompleteScopeBytes: REQUIRED_COMPLETE_SCOPE_BYTES,
+  surfaces: manifests,
   measured: {
     routes: html.sort((left, right) => left.path.localeCompare(right.path)),
     css,
@@ -184,8 +253,20 @@ const report = {
       0,
       ...(await Promise.all(pdfs.map(async (path) => (await stat(path)).size))),
     ),
-    distFileCount: files.length,
-    distBytes,
+    staticRequestGraphFileCount: staticGraph.files.length,
+    staticRequestGraphBytes:
+      manifests[RELEASE_SURFACES.staticView].requestGraph.bytes,
+    immersiveRequestGraphFileCount: immersiveGraph.files.length,
+    immersiveRequestGraphBytes:
+      manifests[RELEASE_SURFACES.immersiveEntry].requestGraph.bytes,
+    sharedSurfaceFileCount: releaseClassification.shared.length,
+    immersiveExclusiveFileCount:
+      releaseClassification.immersiveExclusive.length,
+    unclaimedFileCount: releaseClassification.unclaimed.length,
+    staticReleaseFileCount: staticReleaseFiles.length,
+    staticReleaseBytes,
+    wholeReleaseFileCount: files.length,
+    wholeReleaseBytes,
   },
   status: failures.length === 0 ? "pass" : "fail",
   failures,
@@ -200,6 +281,6 @@ if (failures.length > 0) {
 } else {
   const maximumHtml = Math.max(0, ...html.map((route) => route.gzipBytes));
   console.log(
-    `Static budgets passed: ${maximumHtml} B max HTML gzip, ${css.gzipBytes} B CSS gzip, ${javascript.gzipBytes} B JavaScript gzip, ${distBytes} B artifact.`,
+    `Static budgets passed: ${maximumHtml} B max HTML gzip, ${css.gzipBytes} B CSS gzip, ${javascript.gzipBytes} B JavaScript gzip, ${staticReleaseBytes} B Static View surface and ${wholeReleaseBytes} B whole release.`,
   );
 }

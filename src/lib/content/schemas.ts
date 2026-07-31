@@ -302,6 +302,8 @@ export const routeEntityReferenceSchema = z.object({
   id: recordIdSchema,
 });
 
+export const releaseSurfaceSchema = z.enum(["static-view", "immersive-entry"]);
+
 export const routeSchema = z.object({
   id: recordIdSchema,
   path: z
@@ -323,7 +325,7 @@ export const routeSchema = z.object({
   sitemap: z.boolean(),
   canonicalRouteId: recordIdSchema.nullable(),
   entityRef: routeEntityReferenceSchema.nullable(),
-  staticRenderable: z.literal(true),
+  surface: releaseSurfaceSchema,
   immersiveDestinationId: recordIdSchema.nullable(),
 });
 

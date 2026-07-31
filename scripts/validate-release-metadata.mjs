@@ -2,6 +2,12 @@ import { readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { URL } from "node:url";
 
+import {
+  inspectReleaseSurfaces,
+  RELEASE_SURFACES,
+  validateImmersiveSurfaceBootstrap,
+} from "./release-surfaces.mjs";
+
 const repositoryRoot = process.cwd();
 const distDirectory = resolve(repositoryRoot, "dist");
 
@@ -96,6 +102,11 @@ if (
 }
 
 const version = JSON.parse(await readDist("version.json"));
+if (version.schemaVersion !== "2.0.0" || version.artifact !== "profile-site") {
+  errors.push(
+    "version.json must identify the schema 2.0.0 profile-site release artifact",
+  );
+}
 if (version.version !== packageManifest.version) {
   errors.push("version.json does not match package.json");
 }
@@ -115,13 +126,50 @@ if (Number.isNaN(Date.parse(version.builtAt))) {
   errors.push("version.json builtAt is not an ISO-compatible timestamp");
 }
 
+const { graphs: releaseGraphs, manifests: expectedSurfaces } =
+  await inspectReleaseSurfaces({
+    distDirectory,
+    routes,
+    basePath: settings.basePath,
+    siteUrl: settings.siteUrl,
+  });
+for (const [surfaceId, graph] of Object.entries(releaseGraphs)) {
+  for (const missing of graph.missing) {
+    errors.push(
+      `${surfaceId} request graph is missing ${missing.path} referenced by ${missing.from ?? "its route registry"}`,
+    );
+  }
+  for (const violation of graph.policyViolations ?? []) {
+    errors.push(
+      `${surfaceId} request graph rejects ${violation.request} from ${violation.from}: ${violation.reason}`,
+    );
+  }
+}
+for (const failure of await validateImmersiveSurfaceBootstrap({
+  graph: releaseGraphs[RELEASE_SURFACES.immersiveEntry],
+  distDirectory,
+  basePath: settings.basePath,
+})) {
+  errors.push(`immersive-entry bootstrap: ${failure}`);
+}
+if (JSON.stringify(version.surfaces) !== JSON.stringify(expectedSurfaces)) {
+  errors.push(
+    "version.json surface manifests or request-graph digests do not match the built release",
+  );
+}
+if (!version.surfaces?.[RELEASE_SURFACES.staticView]?.enabled) {
+  errors.push("version.json must enable the Static View surface");
+}
+
 const socialManifest = JSON.parse(
   await readDist("assets/social/manifest.json"),
 );
 const socialCardsByRoute = new Map(
   socialManifest.cards.map((card) => [card.routeId, card]),
 );
-const expectedPublicPages = routes.filter((route) => route.staticRenderable);
+const expectedPublicPages = routes.filter(
+  (route) => route.surface === RELEASE_SURFACES.staticView,
+);
 const routesById = new Map(routes.map((route) => [route.id, route]));
 const cardHashes = new Set();
 const pageTitles = new Map();

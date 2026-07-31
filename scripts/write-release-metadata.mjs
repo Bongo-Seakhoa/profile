@@ -2,6 +2,12 @@ import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
+import {
+  inspectReleaseSurfaces,
+  RELEASE_SURFACES,
+  validateImmersiveSurfaceBootstrap,
+} from "./release-surfaces.mjs";
+
 const repositoryRoot = process.cwd();
 const distDirectory = resolve(repositoryRoot, "dist");
 const packagePath = resolve(repositoryRoot, "package.json");
@@ -12,9 +18,17 @@ const settingsPath = resolve(
   "profile",
   "site-settings.json",
 );
+const routesPath = resolve(
+  repositoryRoot,
+  "src",
+  "data",
+  "profile",
+  "routes.json",
+);
 
 const packageManifest = JSON.parse(await readFile(packagePath, "utf8"));
 const [siteSettings] = JSON.parse(await readFile(settingsPath, "utf8"));
+const routes = JSON.parse(await readFile(routesPath, "utf8"));
 
 let gitLocationArguments = [];
 try {
@@ -49,10 +63,44 @@ const releaseRef =
   readGitValue("rev-parse", "--abbrev-ref", "HEAD");
 const builtAt =
   process.env.RELEASE_TIMESTAMP?.trim() || new Date().toISOString();
+const { graphs, manifests: surfaces } = await inspectReleaseSurfaces({
+  distDirectory,
+  routes,
+  basePath: siteSettings.basePath,
+  siteUrl: siteSettings.siteUrl,
+});
+
+const missingRequests = Object.entries(graphs).flatMap(([surfaceId, graph]) =>
+  graph.missing.map(
+    (missing) =>
+      `${surfaceId}: ${missing.path} from ${missing.from ?? "the route registry"}`,
+  ),
+);
+const policyViolations = Object.entries(graphs).flatMap(([surfaceId, graph]) =>
+  (graph.policyViolations ?? []).map(
+    (violation) =>
+      `${surfaceId}: ${violation.request} from ${violation.from}: ${violation.reason}`,
+  ),
+);
+if (missingRequests.length > 0 || policyViolations.length > 0) {
+  throw new Error(
+    `Cannot write release metadata with invalid local requests:\n- ${[...missingRequests, ...policyViolations].join("\n- ")}`,
+  );
+}
+const immersiveBootstrapFailures = await validateImmersiveSurfaceBootstrap({
+  graph: graphs[RELEASE_SURFACES.immersiveEntry],
+  distDirectory,
+  basePath: siteSettings.basePath,
+});
+if (immersiveBootstrapFailures.length > 0) {
+  throw new Error(
+    `Cannot write release metadata with an invalid immersive bootstrap:\n- ${immersiveBootstrapFailures.join("\n- ")}`,
+  );
+}
 
 const metadata = {
-  schemaVersion: "1.0.0",
-  artifact: "static-view",
+  schemaVersion: "2.0.0",
+  artifact: "profile-site",
   version: packageManifest.version,
   revision: revision || "unknown",
   ref: releaseRef || "unknown",
@@ -60,6 +108,7 @@ const metadata = {
   builtAt,
   siteUrl: siteSettings.siteUrl,
   basePath: siteSettings.basePath,
+  surfaces,
   runtime: {
     node: process.version,
     packageManager: packageManifest.packageManager,
@@ -74,5 +123,5 @@ await writeFile(
 );
 
 console.log(
-  `Wrote dist/version.json for ${metadata.version} (${metadata.revision.slice(0, 12)}).`,
+  `Wrote dist/version.json for ${metadata.version} (${metadata.revision.slice(0, 12)}) with separate Static View and immersive surface manifests.`,
 );

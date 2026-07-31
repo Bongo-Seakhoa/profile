@@ -33,7 +33,7 @@ const embeddedFont = font.toString("base64");
 
 const WIDTH = 1200;
 const HEIGHT = 630;
-const cards = routes.filter((route) => route.staticRenderable);
+const cards = routes.filter((route) => route.surface === "static-view");
 const accents = [
   { primary: "#d3a03f", secondary: "#bc5a3c", field: "#173e46" },
   { primary: "#5f9ca2", secondary: "#d3a03f", field: "#243f5a" },
