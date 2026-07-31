@@ -14,13 +14,14 @@ will route any later Claude response through the written review process.
 
 ## Repository state
 
-- Current record branch: `agent/static-release-record`, based on `origin/main`.
+- Canonical release branch: `main`.
 - Legacy baseline: `df410d5`
 - Recovery tag: `legacy-pages-baseline-20260730`
 - Production implementation merge: `f007d7c84222bc099650538143c2081df54ae398`
-- Current production main revision: `e29a4c959c39fff6e93def841c0944db94bf013f`
+- Verified Static View implementation revision: `e29a4c959c39fff6e93def841c0944db94bf013f`
 - Live site: `https://bongo-seakhoa.github.io/profile/`
 - Warning-clean Pages run: `30605182973`
+- Live `version.json` is authoritative for later record-only main revisions.
 - Production deployment and live HTTP/PDF smoke verification passed.
 
 ## Completed implementation
