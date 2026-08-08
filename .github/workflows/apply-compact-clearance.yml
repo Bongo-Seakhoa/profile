@@ -34,19 +34,19 @@ jobs:
           if ! grep -q "Pixel 5 and similarly short portrait viewports" "$stylesheet"; then
             cat >> "$stylesheet" <<'EOF'
 
-/* Pixel 5 and similarly short portrait viewports need a little more stage
-   above the dossier so the enlarged full-body guide and its complete caption
-   retain the authored clearance contract. The dossier remains scrollable. */
-@media (max-width: 520px) and (min-height: 650px) and (max-height: 780px) {
-  .chapter-panel {
-    max-height: 48dvh;
-  }
+          /* Pixel 5 and similarly short portrait viewports need a little more stage
+             above the dossier so the enlarged full-body guide and its complete caption
+             retain the authored clearance contract. The dossier remains scrollable. */
+          @media (max-width: 520px) and (min-height: 650px) and (max-height: 780px) {
+            .chapter-panel {
+              max-height: 48dvh;
+            }
 
-  .chapter-panel[data-mode="inner"] {
-    max-height: 50dvh;
-  }
-}
-EOF
+            .chapter-panel[data-mode="inner"] {
+              max-height: 50dvh;
+            }
+          }
+          EOF
           fi
 
           rm -f .github/workflows/apply-compact-clearance.yml
