@@ -16,12 +16,19 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v6
 
-      - name: Apply the prepared release patch
+      - name: Reassemble and apply the prepared release patch
         shell: bash
         run: |
-          tar --extract --gzip --file .agent/anzania-final-wow-pass.tar.gz --directory .
-          rm .agent/anzania-final-wow-pass.tar.gz
-          rmdir .agent
+          set -euo pipefail
+          archive="/tmp/anzania-final-wow-pass.tar.gz"
+          : > "$archive"
+          for part in .agent/anzania.part.*.b64; do
+            base64 --decode "$part" >> "$archive"
+          done
+          echo "70c90e4cac7facc8a40a9cfaccef8dffa56260c3b68adeec059359665d7c2fe6  $archive" | sha256sum --check --strict
+          tar --list --gzip --file "$archive" >/dev/null
+          tar --extract --gzip --file "$archive" --directory .
+          rm -rf .agent
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v6
@@ -47,12 +54,21 @@ jobs:
           tests/e2e/anzania-explorer.spec.ts
           tests/unit/immersive/anzania-2-5d-runtime.test.ts
 
-      - name: Commit the completed implementation
+      - name: Commit the completed implementation locally
         shell: bash
         run: |
-          git rm .github/workflows/agent-apply-anzania.yml
           git add --all
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Implement Anzania final wow pass"
-          git push
+
+      - name: Validate source and release build
+        run: |
+          pnpm run format:check
+          pnpm run lint
+          pnpm run check
+          pnpm run test:immersive
+          pnpm run build
+
+      - name: Push validated implementation
+        run: git push
