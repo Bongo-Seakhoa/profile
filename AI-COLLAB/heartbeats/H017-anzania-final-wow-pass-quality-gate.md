@@ -8,11 +8,13 @@ Pull request: #6
 
 This heartbeat records the final publication gate for the upgraded Explore Anzania experience. The branch contains the original 15-guide layered SVG roster, larger 2.5D companion framing, selectable traversal abilities, deeper eight-location dossiers, biome-aware environmental effects, the expanded ISM 2026 research record and the refined Professional Record presentation.
 
-## Final corrective action
+## Final corrective actions
 
-Hosted browser QA found one compact portrait composition in which the complete guide caption entered the dossier clearance envelope by a few pixels while the character itself remained fully visible. The final correction reduces only the scrollable dossier height on short portrait viewports, preserving the enlarged guide, complete caption and authored background composition.
+Hosted browser QA found one compact portrait composition in which the complete guide caption entered the dossier clearance envelope by a few pixels while the character itself remained fully visible. The correction reduces only the scrollable dossier height on short portrait viewports, preserving the enlarged guide, complete caption and authored background composition.
 
-The immersive styling remains one governed stylesheet. Temporary patch transport files and workflows were removed before this gate.
+The full-body browser contract now waits for both image transforms and companion geometry to settle before measurement. Its strict size, visibility and collision assertions remain unchanged.
+
+The final Lighthouse investigation identified the homepage Threshold Dunes atmosphere as the LCP element. The production correction retains normal CSS splitting, removes an effectively invisible duplicate scene request beneath the homepage ledger, and requests synchronous decoding only for the single eager homepage atmosphere image. Secondary routes retain asynchronous decoding and low-priority atmospheric loading. Temporary profiling and patch-transport workflows were removed before this gate.
 
 ## Acceptance gate
 
