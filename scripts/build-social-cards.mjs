@@ -87,24 +87,23 @@ function textLines(lines, { x, y, lineHeight, className }) {
     .join("");
 }
 
+function routeLabelFor(route) {
+  if (route.id === "home") return "PROFESSIONAL PORTFOLIO";
+  if (route.id === "explore") return "ORIGINAL FICTIONAL WORLD";
+  if (route.kind === "project") return "SELECTED WORK";
+  if (route.kind === "document") return "PROFESSIONAL DOCUMENT";
+  if (route.kind === "continuity") return "IDENTITY CONTINUITY";
+  if (route.kind === "system") return "PAGE RECOVERY";
+  return "PROFESSIONAL PROFILE";
+}
+
 function cardSvg(route, index) {
   const accent = accents[index % accents.length];
   const titleLines = wrapText(route.title, 31, 2);
   const descriptionLines = wrapText(route.description, 62, 3);
   const titleBaseline = 232;
   const descriptionBaseline = titleBaseline + titleLines.length * 72 + 42;
-  const routeLabel =
-    route.id === "home"
-      ? "PROFESSIONAL PORTFOLIO"
-      : route.kind === "project"
-        ? "SELECTED WORK"
-        : route.kind === "document"
-          ? "PROFESSIONAL DOCUMENT"
-          : route.kind === "continuity"
-            ? "IDENTITY CONTINUITY"
-            : route.kind === "system"
-              ? "PAGE RECOVERY"
-              : "PROFESSIONAL PROFILE";
+  const routeLabel = routeLabelFor(route);
   const motifOffset = (index % 5) * 20;
 
   return `

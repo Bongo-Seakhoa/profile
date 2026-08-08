@@ -11,6 +11,7 @@
 /404.html
 /pnpm-lock.yaml
 /public/assets/images/anzania/manifest.json
+/public/assets/immersive/
 /src/data/immersive/characters/desert-nomad-character-canon.v3.json
 dist/
 node_modules/

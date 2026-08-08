@@ -1,16 +1,18 @@
 <style is:global>
   .page-section {
+    position: relative;
     padding-block: var(--section-space);
   }
 
   .page-section--surface {
     border-block: 1px solid var(--line);
-    background: var(--surface);
+    background: rgb(251 245 234 / 78%);
+    backdrop-filter: blur(0.35rem);
   }
 
   .page-section--muted {
     border-block: 1px solid var(--line);
-    background: var(--surface-muted);
+    background: rgb(231 215 189 / 74%);
   }
 
   .page-section--compact {
@@ -46,13 +48,17 @@
 
   .evidence-band {
     display: grid;
-    padding-block: var(--space-5);
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    border-block: 1px solid var(--line-strong);
+    border: 1px solid var(--line-strong);
+    background: rgb(251 245 234 / 88%);
+    box-shadow: 0 1.2rem 3rem rgb(49 34 21 / 8%);
+    backdrop-filter: blur(0.5rem);
   }
 
   .evidence-band__item {
-    padding: var(--space-4) var(--space-5);
+    position: relative;
+    min-block-size: 8.4rem;
+    padding: var(--space-5);
     border-inline-start: 1px solid var(--line);
   }
 
@@ -60,30 +66,54 @@
     border-inline-start: 0;
   }
 
+  .evidence-band__item::after {
+    position: absolute;
+    inset-block-start: 1rem;
+    inset-inline-end: 1rem;
+    color: rgb(132 63 40 / 28%);
+    content: "◇";
+    font-family: var(--font-mono);
+  }
+
   .evidence-band__index {
     display: block;
-    margin-block-end: var(--space-2);
+    margin-block-end: var(--space-3);
     color: var(--rust-strong);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     font-weight: 700;
+    letter-spacing: 0.08em;
   }
 
   .evidence-band__item p {
+    max-inline-size: 27ch;
     margin: 0;
     color: var(--ink-soft);
-    font-size: var(--step--1);
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 650;
+    line-height: 1.48;
   }
 
   .route-intro-note,
   .empty-state,
   .integrity-note {
+    position: relative;
     max-inline-size: 70ch;
-    padding: var(--space-5);
     border: 1px solid var(--line-strong);
-    border-inline-start: 0.35rem solid var(--gold);
-    background: var(--surface);
+    background: rgb(251 245 234 / 82%);
+    padding: var(--space-5);
+  }
+
+  .route-intro-note::before,
+  .empty-state::before,
+  .integrity-note::before {
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: -1px;
+    inline-size: 3.5rem;
+    block-size: 2px;
+    background: var(--gold);
+    content: "";
   }
 
   .route-intro-note h2,
@@ -111,13 +141,50 @@
   }
 
   .contact-panel {
+    position: relative;
+    isolation: isolate;
     display: grid;
+    overflow: hidden;
     padding: clamp(1.5rem, 5vw, 4rem);
     grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
     gap: clamp(2rem, 6vw, 6rem);
-    border-radius: var(--radius-large);
+    border: 1px solid rgb(237 201 120 / 42%);
+    border-radius: 0;
+    background:
+      linear-gradient(115deg, rgb(34 28 22 / 98%), rgb(39 78 92 / 94%)),
+      var(--route-scene);
+    background-position: center, center;
+    background-size: cover;
     color: var(--surface);
-    background: var(--indigo);
+    box-shadow: 0 1.6rem 4rem rgb(32 22 14 / 16%);
+  }
+
+  .contact-panel::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+      radial-gradient(
+        circle at 85% 20%,
+        rgb(237 201 120 / 16%),
+        transparent 34%
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 4.9rem,
+        rgb(255 249 238 / 3%) 4.9rem 5rem
+      );
+    content: "";
+  }
+
+  .contact-panel::after {
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: -1px;
+    inline-size: 4.5rem;
+    block-size: 2px;
+    background: var(--gold-light);
+    content: "";
   }
 
   .contact-panel h2 {
@@ -129,7 +196,7 @@
   .contact-panel p {
     max-inline-size: 56ch;
     margin-block-start: var(--space-4);
-    color: rgb(255 249 238 / 82%);
+    color: rgb(255 249 238 / 78%);
   }
 
   .contact-panel__links {
@@ -145,7 +212,7 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-    border-block-end: 1px solid rgb(255 249 238 / 24%);
+    border-block-end: 1px solid rgb(255 249 238 / 20%);
     color: var(--surface);
     font-weight: 700;
     text-underline-offset: 0.2em;
@@ -162,9 +229,9 @@
     block-size: 1px !important;
     padding: 0 !important;
     overflow: hidden !important;
+    border: 0 !important;
     clip: rect(0, 0, 0, 0) !important;
     white-space: nowrap !important;
-    border: 0 !important;
   }
 
   @media (max-width: 58rem) {

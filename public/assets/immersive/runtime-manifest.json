@@ -1,0 +1,227 @@
+{
+  "schemaVersion": "2.5.0",
+  "world": {
+    "name": "Anzania",
+    "definition": "An original fictional portfolio world created for Bongo Seakhoa.",
+    "disclaimer": "Anzania is fictional. It is not Tanzania or any other real location.",
+    "experience": "Cinematic 2.5D guided portfolio journey"
+  },
+  "locations": [
+    {
+      "id": "threshold-dunes",
+      "number": "01",
+      "name": "Threshold Dunes",
+      "formalName": "The Threshold Dunes",
+      "region": "The Western Reach",
+      "eyebrow": "The point of entry",
+      "title": "Work that turns ambiguity into usable systems.",
+      "lead": "I turn complex information into reliable data systems, practical analysis and decisions people can act on.",
+      "evidence": [
+        { "label": "Current focus", "value": "Data engineering and analytics at MetaPOS" },
+        { "label": "Working range", "value": "Data systems, decision support and applied machine learning" },
+        { "label": "Based in", "value": "Debrecen, Hungary" }
+      ],
+      "actions": [
+        { "label": "View selected work", "path": "work/" },
+        { "label": "Start a conversation", "path": "contact/" }
+      ],
+      "outer": { "large": "./scenes/threshold-dunes-outer-1600.webp", "small": "./scenes/threshold-dunes-outer-960.webp" },
+      "inner": { "large": "./scenes/threshold-dunes-inner-1600.webp", "small": "./scenes/threshold-dunes-inner-960.webp" },
+      "power": "sand-teleportation",
+      "portalAction": "Enter the waystation",
+      "portalCaption": "The horizon folds into the first evidence"
+    },
+    {
+      "id": "stone-pass",
+      "number": "02",
+      "name": "Stone Pass of Names",
+      "formalName": "The Stone Pass of Names",
+      "region": "The Canyon of Continuity",
+      "eyebrow": "Identity without mythology",
+      "title": "One person, two surnames, one continuous body of work.",
+      "lead": "Bongo Seakhoa is the default professional name. Bongo Kosa is the alternate and legal name used in some records. The distinction is continuity, not a second persona.",
+      "evidence": [
+        { "label": "Primary public name", "value": "Bongo Seakhoa" },
+        { "label": "Alternate name", "value": "Bongo Kosa" },
+        { "label": "Professional principle", "value": "Clarity over performance, evidence over ornament" }
+      ],
+      "actions": [
+        { "label": "Read the full background", "path": "about/" },
+        { "label": "Review experience", "path": "experience/" }
+      ],
+      "outer": { "large": "./scenes/stone-pass-outer-1600.webp", "small": "./scenes/stone-pass-outer-960.webp" },
+      "inner": { "large": "./scenes/stone-pass-inner-1600.webp", "small": "./scenes/stone-pass-inner-960.webp" },
+      "power": "reality-bending",
+      "portalAction": "Pass beneath the arch",
+      "portalCaption": "The inscriptions resolve into a factual record"
+    },
+    {
+      "id": "garden-origins",
+      "number": "03",
+      "name": "Garden of Origins",
+      "formalName": "The Garden of Origins",
+      "region": "The Watered Terraces",
+      "eyebrow": "Learning as a living system",
+      "title": "Scientific roots, systems thinking and continued formal study.",
+      "lead": "A foundation in science grew into data, engineering and decision systems. The path remains deliberately interdisciplinary and grounded in continuous learning.",
+      "evidence": [
+        { "label": "Current study", "value": "BSc in Engineering Management, University of Debrecen" },
+        { "label": "Technical foundation", "value": "Data science, analytics and cloud engineering" },
+        { "label": "Learning practice", "value": "Formal study, public experiments and verified credentials" }
+      ],
+      "actions": [
+        { "label": "View education", "path": "education/" },
+        { "label": "Verify credentials", "path": "credentials/" }
+      ],
+      "outer": { "large": "./scenes/garden-origins-outer-1600.webp", "small": "./scenes/garden-origins-outer-960.webp" },
+      "inner": { "large": "./scenes/garden-origins-inner-1600.webp", "small": "./scenes/garden-origins-inner-960.webp" },
+      "power": "reality-bending",
+      "portalAction": "Enter the memory court",
+      "portalCaption": "Hard desert light softens into water and shade"
+    },
+    {
+      "id": "archive-echoes",
+      "number": "04",
+      "name": "Archive of Echoes",
+      "formalName": "The Archive of Echoes",
+      "region": "The Citadel of Evidence",
+      "eyebrow": "Proof before proclamation",
+      "title": "Every claim should resolve into a project, role or verifiable artefact.",
+      "lead": "The archive is where reputation is tested. Public projects and client-safe summaries state scope, evidence and status directly rather than inflating experiments into outcomes.",
+      "evidence": [
+        { "label": "Selected systems", "value": "Retail data, portfolio management and recommender workflows" },
+        { "label": "Evidence standard", "value": "Public repositories or clearly labelled client-safe summaries" },
+        { "label": "Research posture", "value": "Experiments are distinguished from publications" }
+      ],
+      "actions": [
+        { "label": "Browse all work", "path": "work/" },
+        { "label": "Review research", "path": "research/" }
+      ],
+      "outer": { "large": "./scenes/archive-echoes-outer-1600.webp", "small": "./scenes/archive-echoes-outer-960.webp" },
+      "inner": { "large": "./scenes/archive-echoes-inner-1600.webp", "small": "./scenes/archive-echoes-inner-960.webp" },
+      "power": "sand-teleportation",
+      "portalAction": "Open the archive",
+      "portalCaption": "Scrolls, instruments and evidence move into reach"
+    },
+    {
+      "id": "forge-resolve",
+      "number": "05",
+      "name": "Forge of Resolve",
+      "formalName": "The Forge of Resolve",
+      "region": "The Foundry Citadel",
+      "eyebrow": "Systems must survive reality",
+      "title": "Reliability is designed through constraints, tests and ownership.",
+      "lead": "Useful technical work is not only a clever model or query. It is the discipline of making data flows dependable, explainable and maintainable under real operating pressure.",
+      "evidence": [
+        { "label": "Engineering emphasis", "value": "Data quality, transformation logic and operational reporting" },
+        { "label": "Delivery practice", "value": "Validation, documentation and clear recovery paths" },
+        { "label": "Tooling", "value": "Python, SQL, cloud platforms, Docker and Git" }
+      ],
+      "actions": [
+        { "label": "Explore capabilities", "path": "capabilities/" },
+        { "label": "Read professional experience", "path": "experience/" }
+      ],
+      "outer": { "large": "./scenes/forge-resolve-outer-1600.webp", "small": "./scenes/forge-resolve-outer-960.webp" },
+      "inner": { "large": "./scenes/forge-resolve-inner-1600.webp", "small": "./scenes/forge-resolve-inner-960.webp" },
+      "power": "solar-propulsion",
+      "portalAction": "Cross the foundry floor",
+      "portalCaption": "The system reveals how it is built to endure"
+    },
+    {
+      "id": "bazaar-skill",
+      "number": "06",
+      "name": "Bazaar of Skill",
+      "formalName": "The Bazaar of Skill",
+      "region": "The Avenue of Practice",
+      "eyebrow": "Capability made practical",
+      "title": "Choose the problem first. Then choose the tools that earn their place.",
+      "lead": "The bazaar connects technical capability to useful engagements: reliable data foundations, analysis for decisions, applied models and clear technical communication.",
+      "evidence": [
+        { "label": "Data engineering", "value": "Structured flows, modelling and quality foundations" },
+        { "label": "Analytics", "value": "Findings, reporting and transparent recommendations" },
+        { "label": "Applied ML", "value": "Framing, evaluation and lightweight delivery" }
+      ],
+      "actions": [
+        { "label": "See capability detail", "path": "capabilities/" },
+        { "label": "Match capabilities to work", "path": "work/" }
+      ],
+      "outer": { "large": "./scenes/bazaar-skill-outer-1600.webp", "small": "./scenes/bazaar-skill-outer-960.webp" },
+      "inner": { "large": "./scenes/bazaar-skill-inner-1600.webp", "small": "./scenes/bazaar-skill-inner-960.webp" },
+      "power": "dune-surfing",
+      "portalAction": "Walk the market court",
+      "portalCaption": "The avenue resolves into practical service paths"
+    },
+    {
+      "id": "observatory-horizons",
+      "number": "07",
+      "name": "Observatory of Horizons",
+      "formalName": "The Observatory of Horizons",
+      "region": "The High Plateau",
+      "eyebrow": "Foresight without fortune-telling",
+      "title": "Research and analytics help examine possible directions, not pretend uncertainty is gone.",
+      "lead": "The observatory holds public technical experiments, current questions and long-range interests. Evidence, interpretation and ambition remain visibly distinct.",
+      "evidence": [
+        { "label": "Inquiry", "value": "Trading systems, machine learning and environmental data" },
+        { "label": "Method", "value": "Simulation, historical evaluation and explicit validation" },
+        { "label": "Horizon", "value": "Systems thinking that connects technical and operating context" }
+      ],
+      "actions": [
+        { "label": "Review research and experiments", "path": "research/" },
+        { "label": "See current study", "path": "education/" }
+      ],
+      "outer": { "large": "./scenes/observatory-horizons-outer-1600.webp", "small": "./scenes/observatory-horizons-outer-960.webp" },
+      "inner": { "large": "./scenes/observatory-horizons-inner-1600.webp", "small": "./scenes/observatory-horizons-inner-960.webp" },
+      "power": "solar-propulsion",
+      "portalAction": "Enter the charting chamber",
+      "portalCaption": "The horizon rises into a field of tested questions"
+    },
+    {
+      "id": "oasis-audience",
+      "number": "08",
+      "name": "Oasis of Audience",
+      "formalName": "The Oasis of Audience",
+      "region": "The Lagoon of Exchange",
+      "eyebrow": "The journey becomes a conversation",
+      "title": "Bring a data problem, a research question or a system that needs clarity.",
+      "lead": "The final location is not an ending. It is a direct path to collaboration, documents and the conventional portfolio for visitors who want every detail without the journey.",
+      "evidence": [
+        { "label": "Availability", "value": "Remote, contract and globally distributed opportunities" },
+        { "label": "Best starting point", "value": "A clear problem, current constraints and the decision at stake" },
+        { "label": "Direct record", "value": "Resume, CV, project summaries and public contact paths" }
+      ],
+      "actions": [
+        { "label": "Contact Bongo", "path": "contact/" },
+        { "label": "Open resume and CV", "path": "documents/" }
+      ],
+      "outer": { "large": "./scenes/oasis-audience-outer-1600.webp", "small": "./scenes/oasis-audience-outer-960.webp" },
+      "inner": { "large": "./scenes/oasis-audience-inner-1600.webp", "small": "./scenes/oasis-audience-inner-960.webp" },
+      "power": "reality-bending",
+      "portalAction": "Enter the consultation pavilion",
+      "portalCaption": "The route settles into a clear next step"
+    }
+  ],
+  "powers": {
+    "dune-surfing": { "name": "Dune Surfing", "durationMs": 1050, "className": "is-dune-surfing" },
+    "sand-teleportation": { "name": "Sand Teleportation", "durationMs": 920, "className": "is-sand-teleporting" },
+    "solar-propulsion": { "name": "Solar Propulsion", "durationMs": 1120, "className": "is-solar-propelling" },
+    "reality-bending": { "name": "Reality Bending", "durationMs": 980, "className": "is-reality-bending" }
+  },
+  "guides": [
+    { "id": "dn-m-afr-01", "name": "Amani", "presentation": "Masculine", "inspiration": "African-inspired", "src": "./characters/dn-m-afr-01.webp", "alt": "Full-body African-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-m-eas-01", "name": "Ren", "presentation": "Masculine", "inspiration": "East Asian-inspired", "src": "./characters/dn-m-eas-01.webp", "alt": "Full-body East Asian-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-m-sas-01", "name": "Arun", "presentation": "Masculine", "inspiration": "South Asian-inspired", "src": "./characters/dn-m-sas-01.webp", "alt": "Full-body South Asian-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-m-mena-01", "name": "Zayd", "presentation": "Masculine", "inspiration": "Middle Eastern and North African-inspired", "src": "./characters/dn-m-mena-01.webp", "alt": "Full-body Middle Eastern and North African-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-m-eur-01", "name": "Rowan", "presentation": "Masculine", "inspiration": "European-inspired", "src": "./characters/dn-m-eur-01.webp", "alt": "Full-body European-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-f-afr-01", "name": "Zuri", "presentation": "Feminine", "inspiration": "African-inspired", "src": "./characters/dn-f-afr-01.webp", "alt": "Full-body African-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-f-eas-01", "name": "Mei", "presentation": "Feminine", "inspiration": "East Asian-inspired", "src": "./characters/dn-f-eas-01.webp", "alt": "Full-body East Asian-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-f-sas-01", "name": "Priya", "presentation": "Feminine", "inspiration": "South Asian-inspired", "src": "./characters/dn-f-sas-01.webp", "alt": "Full-body South Asian-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-f-mena-01", "name": "Layla", "presentation": "Feminine", "inspiration": "Middle Eastern and North African-inspired", "src": "./characters/dn-f-mena-01.webp", "alt": "Full-body Middle Eastern and North African-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-f-eur-01", "name": "Elara", "presentation": "Feminine", "inspiration": "European-inspired", "src": "./characters/dn-f-eur-01.webp", "alt": "Full-body European-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-n-afr-01", "name": "Nia", "presentation": "Neutral", "inspiration": "African-inspired", "src": "./characters/dn-n-afr-01.webp", "alt": "Full-body African-inspired gender-neutral Anzania guide in layered desert garments." },
+    { "id": "dn-n-eas-01", "name": "Sora", "presentation": "Neutral", "inspiration": "East Asian-inspired", "src": "./characters/dn-n-eas-01.webp", "alt": "Full-body East Asian-inspired gender-neutral Anzania guide in layered desert garments." },
+    { "id": "dn-n-sas-01", "name": "Kavi", "presentation": "Neutral", "inspiration": "South Asian-inspired", "src": "./characters/dn-n-sas-01.webp", "alt": "Full-body South Asian-inspired gender-neutral Anzania guide in layered desert garments." },
+    { "id": "dn-n-mena-01", "name": "Noor", "presentation": "Neutral", "inspiration": "Middle Eastern and North African-inspired", "src": "./characters/dn-n-mena-01.webp", "alt": "Full-body Middle Eastern and North African-inspired gender-neutral Anzania guide in layered desert garments." },
+    { "id": "dn-n-eur-01", "name": "Avery", "presentation": "Neutral", "inspiration": "European-inspired", "src": "./characters/dn-n-eur-01.webp", "alt": "Full-body European-inspired gender-neutral Anzania guide in layered desert garments." }
+  ],
+  "atlas": { "src": "./maps/anzania-atlas.webp", "alt": "Illustrated atlas of the eight fictional locations in Anzania." }
+}

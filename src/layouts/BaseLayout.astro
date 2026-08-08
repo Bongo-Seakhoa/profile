@@ -7,11 +7,13 @@ import "../styles/global.css";
 import "../styles/tokens.css";
 import "../styles/primitives.css";
 import "../styles/shell.css";
+import "../styles/static-system.css";
 import "../styles/print.css";
 
 import Breadcrumbs from "../components/shell/Breadcrumbs.astro";
 import SiteFooter from "../components/shell/SiteFooter.astro";
 import SiteHeader from "../components/shell/SiteHeader.astro";
+import StaticInterface from "../components/shell/StaticInterface.astro";
 import { loadProfileContent } from "../lib/content/load-content";
 import { absoluteUrl, sitePath } from "../lib/urls";
 
@@ -59,7 +61,7 @@ const {
   activeRouteId,
   breadcrumbs = [],
   structuredData = [],
-  showExploreAnzania = false,
+  showExploreAnzania = true,
   exploreAnzaniaPath = "explore/",
   pageClass,
 } = Astro.props;
@@ -80,6 +82,7 @@ const declaredRoutePath = canonicalPath
 const requestedRoute =
   content.routes.find((route) => route.path === routePath) ??
   content.routes.find((route) => route.path === declaredRoutePath);
+const resolvedActiveRouteId = activeRouteId ?? requestedRoute?.id ?? "static";
 const socialCardId = requestedRoute?.staticRenderable
   ? requestedRoute.id
   : "home";
@@ -112,6 +115,7 @@ const footerRoutes = content.routes
       (left.navigationOrder ?? Number.MAX_SAFE_INTEGER) -
       (right.navigationOrder ?? Number.MAX_SAFE_INTEGER),
   );
+const commandRoutes = footerRoutes.filter((route) => route.id !== "documents");
 const documentDownloads = content.documentManifest.flatMap((document) => {
   const primaryVariant = document.variants.find(
     (variant) => variant.displayName === identity.primaryName,
@@ -196,7 +200,11 @@ const jsonLd = JSON.stringify({
 ---
 
 <!doctype html>
-<html lang={settings.locale} data-view="static">
+<html
+  lang={settings.locale}
+  data-view="static"
+  data-route={resolvedActiveRouteId}
+>
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -246,15 +254,31 @@ const jsonLd = JSON.stringify({
     <script type="application/ld+json" is:inline set:html={jsonLd} />
     <slot name="head" />
   </head>
-  <body class={pageClass}>
+  <body
+    class:list={[
+      "static-site",
+      `static-page--${resolvedActiveRouteId}`,
+      pageClass,
+    ]}
+    data-route={resolvedActiveRouteId}
+  >
     <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <StaticInterface
+      primaryName={identity.primaryName}
+      activeRouteId={resolvedActiveRouteId}
+      navigation={commandRoutes}
+      documentDownloads={documentDownloads}
+      showExploreAnzania={showExploreAnzania}
+      exploreAnzaniaPath={exploreAnzaniaPath}
+    />
 
     <SiteHeader
       primaryName={identity.primaryName}
       headline={identity.headline}
       navigation={navigationRoutes}
       currentPath={Astro.url.pathname}
-      {...activeRouteId ? { activeRouteId } : {}}
+      activeRouteId={resolvedActiveRouteId}
       documentDownloads={documentDownloads}
       showExploreAnzania={showExploreAnzania}
       exploreAnzaniaPath={exploreAnzaniaPath}

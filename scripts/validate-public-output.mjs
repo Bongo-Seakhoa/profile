@@ -8,6 +8,9 @@ const sourceRoots = [
   resolve(repositoryRoot, "src", "components"),
   resolve(repositoryRoot, "src", "layouts"),
   resolve(repositoryRoot, "src", "pages"),
+  resolve(repositoryRoot, "src", "styles"),
+  resolve(repositoryRoot, "public", "assets", "static"),
+  resolve(repositoryRoot, "public", "assets", "immersive"),
 ];
 const textExtensions = new Set([
   ".astro",
@@ -33,6 +36,10 @@ async function walk(directory) {
 
 function displayPath(path) {
   return relative(repositoryRoot, path).replaceAll("\\", "/");
+}
+
+function distPath(path) {
+  return relative(distDirectory, path).replaceAll("\\", "/");
 }
 
 function findLineColumn(text, offset) {
@@ -65,50 +72,126 @@ for (const sourceRoot of sourceRoots) {
 const distFiles = await walk(distDirectory);
 for (const path of distFiles) await rejectEmDashes(path);
 
-const forbiddenStaticExtensions = new Set([
+const immersivePrefix = "assets/immersive/";
+const staticPrefix = "assets/static/";
+const approvedStaticRuntime = `${staticPrefix}static-runtime.js`;
+const approvedStaticRuntimeHref = `/profile/${approvedStaticRuntime}`;
+const forbiddenRuntimeExtensions = new Set([
   ".bin",
   ".blend",
   ".fbx",
   ".glb",
   ".gltf",
-  ".js",
-  ".mjs",
   ".mp3",
   ".mp4",
   ".ogg",
   ".wasm",
   ".webm",
 ]);
+const allowedImmersiveExtensions = new Set([".css", ".js", ".json", ".webp"]);
+const allowedStaticExtensions = new Set([".js"]);
+
 for (const path of distFiles) {
   const extension = extname(path).toLowerCase();
-  const publicPath = relative(distDirectory, path).replaceAll("\\", "/");
-  if (forbiddenStaticExtensions.has(extension)) {
-    failures.push(
-      `${publicPath} is an executable or immersive runtime asset in Static View`,
-    );
+  const publicPath = distPath(path);
+  const isImmersive = publicPath.startsWith(immersivePrefix);
+  const isStaticRuntime = publicPath.startsWith(staticPrefix);
+
+  if (forbiddenRuntimeExtensions.has(extension)) {
+    failures.push(`${publicPath} is a prohibited heavy runtime asset`);
   }
-  if (publicPath.toLowerCase().includes("immersive")) {
-    failures.push(`${publicPath} exposes an immersive asset in Static View`);
+  if (
+    (extension === ".js" || extension === ".mjs") &&
+    !isImmersive &&
+    publicPath !== approvedStaticRuntime
+  ) {
+    failures.push(`${publicPath} adds an unapproved client runtime`);
+  }
+  if (isImmersive && !allowedImmersiveExtensions.has(extension)) {
+    failures.push(`${publicPath} uses an unapproved immersive asset type`);
+  }
+  if (isStaticRuntime && !allowedStaticExtensions.has(extension)) {
+    failures.push(`${publicPath} uses an unapproved Static View asset type`);
   }
 }
 
 const htmlFiles = distFiles.filter((path) => extname(path) === ".html");
 for (const path of htmlFiles) {
   const html = await readFile(path, "utf8");
+  const publicPath = distPath(path);
+  const isExploreRoute = publicPath === "explore/index.html";
+  // Resume and CV previews are deliberately chrome-less print layouts. They carry
+  // no site shell, no client runtime and no Anzania framing, so the Static View
+  // contracts below do not apply to them.
+  const isDocumentPreview =
+    /^documents\/(?:resume|cv)\/[^/]+\/index\.html$/.test(publicPath);
 
   if (/<canvas(?:\s|>)/i.test(html)) {
-    failures.push(`${displayPath(path)} contains a canvas in Static View`);
-  }
-  if (/<script\b[^>]*\bsrc\s*=/i.test(html)) {
-    failures.push(`${displayPath(path)} loads a client script in Static View`);
-  }
-  if (/<script\b[^>]*\btype=(?:"|')module(?:"|')/i.test(html)) {
-    failures.push(
-      `${displayPath(path)} contains a client module in Static View`,
-    );
+    failures.push(`${displayPath(path)} contains a canvas`);
   }
   if (/href=(?:"|')tel:/i.test(html)) {
     failures.push(`${displayPath(path)} exposes a public telephone link`);
+  }
+  if (!isExploreRoute && html.includes("assets/immersive/")) {
+    failures.push(
+      `${displayPath(path)} references immersive assets from Static View`,
+    );
+  }
+
+  const scriptSources = Array.from(
+    html.matchAll(/<script\b[^>]*\bsrc=(?:"|')([^"']+)(?:"|')[^>]*>/gi),
+    (match) => match[1],
+  );
+
+  if (isExploreRoute) {
+    const requiredFragments = [
+      "/profile/assets/immersive/anzania-explorer.css",
+      "/profile/assets/immersive/anzania-explorer.js",
+      "An original fictional world",
+      "Continue in Static View",
+      "full-body companion",
+    ];
+    for (const fragment of requiredFragments) {
+      if (!html.includes(fragment)) {
+        failures.push(
+          `explore/index.html is missing required contract: ${fragment}`,
+        );
+      }
+    }
+    if (
+      !/<script\b[^>]*\btype=(?:"|')module(?:"|')[^>]*anzania-explorer\.js/i.test(
+        html,
+      )
+    ) {
+      failures.push(
+        "explore/index.html does not load the approved module runtime",
+      );
+    }
+  } else if (isDocumentPreview) {
+    if (scriptSources.length !== 0) {
+      failures.push(
+        `${displayPath(path)} must stay script-free, found ${scriptSources.length}`,
+      );
+    }
+  } else {
+    if (scriptSources.length !== 1) {
+      failures.push(
+        `${displayPath(path)} must load exactly one Static View runtime, found ${scriptSources.length}`,
+      );
+    }
+    if (scriptSources.some((source) => source !== approvedStaticRuntimeHref)) {
+      failures.push(
+        `${displayPath(path)} loads an unapproved client script: ${scriptSources.join(", ")}`,
+      );
+    }
+    if (!html.includes('data-view="static"')) {
+      failures.push(`${displayPath(path)} is missing the Static View contract`);
+    }
+    if (!html.includes("ANZANIA / FICTIONAL WORLD")) {
+      failures.push(
+        `${displayPath(path)} is missing the canonical fictional-world marker`,
+      );
+    }
   }
 
   const attributePattern = /\b(?:href|src)=(?:"|')([^"']+)(?:"|')/gi;
@@ -125,21 +208,155 @@ for (const path of htmlFiles) {
 }
 
 const cssFiles = distFiles.filter((path) => extname(path) === ".css");
-for (const path of cssFiles) {
-  const css = await readFile(path, "utf8");
-  const forbiddenMotion = [
-    [/@keyframes\b/i, "@keyframes"],
-    [/\banimation(?:-name)?\s*:(?!\s*none\b)/i, "animation"],
-    [/\bscroll-behavior\s*:\s*smooth/i, "smooth scrolling"],
-    [/\btransition\s*:/i, "transition"],
+const staticCssFiles = cssFiles.filter(
+  (path) => !distPath(path).startsWith(immersivePrefix),
+);
+const combinedStaticCss = (
+  await Promise.all(staticCssFiles.map((path) => readFile(path, "utf8")))
+).join("\n");
+if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/i.test(combinedStaticCss)) {
+  failures.push("Static View CSS is missing a reduced-motion contract");
+}
+if (/\bscroll-behavior\s*:\s*smooth/i.test(combinedStaticCss)) {
+  failures.push("Static View CSS contains prohibited forced smooth scrolling");
+}
+for (const contract of [
+  ".static-atmosphere",
+  ".static-command-dialog",
+  ".static-transition-veil",
+  "@view-transition",
+]) {
+  if (!combinedStaticCss.includes(contract)) {
+    failures.push(`Static View CSS is missing contract: ${contract}`);
+  }
+}
+
+const staticRuntimePath = resolve(distDirectory, approvedStaticRuntime);
+try {
+  const runtime = await readFile(staticRuntimePath, "utf8");
+  const requiredStaticContracts = [
+    "static-enhanced",
+    "prefers-reduced-motion",
+    "IntersectionObserver",
+    "data-command-dialog",
+    "data-static-progress",
+    "data-leaving",
+    "ResizeObserver",
   ];
-  for (const [pattern, label] of forbiddenMotion) {
-    if (pattern.test(css)) {
+  for (const contract of requiredStaticContracts) {
+    if (!runtime.includes(contract)) {
+      failures.push(`The Static View runtime is missing contract: ${contract}`);
+    }
+  }
+  if (/document\.createElement\((?:"|')canvas/i.test(runtime)) {
+    failures.push("The Static View runtime creates a canvas");
+  }
+  if (
+    /\bWebGL(?:2)?RenderingContext\b|\.getContext\((?:"|')webgl/i.test(runtime)
+  ) {
+    failures.push("The Static View runtime initializes WebGL");
+  }
+} catch {
+  failures.push("The approved Static View runtime is missing");
+}
+
+const manifestPath = resolve(
+  distDirectory,
+  "assets",
+  "immersive",
+  "runtime-manifest.json",
+);
+try {
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  if (manifest.world?.name !== "Anzania") {
+    failures.push("The immersive manifest does not identify Anzania correctly");
+  }
+  if (
+    manifest.world?.disclaimer !==
+    "Anzania is fictional. It is not Tanzania or any other real location."
+  ) {
+    failures.push(
+      "The immersive manifest is missing the canonical fictional-world disclaimer",
+    );
+  }
+  if (manifest.locations?.length !== 8) {
+    failures.push(
+      `Expected 8 Anzania locations, found ${manifest.locations?.length ?? 0}`,
+    );
+  }
+  if (manifest.guides?.length !== 15) {
+    failures.push(
+      `Expected 15 full-body guides, found ${manifest.guides?.length ?? 0}`,
+    );
+  }
+  if (Object.keys(manifest.powers ?? {}).length !== 4) {
+    failures.push(
+      `Expected 4 authored traversal powers, found ${Object.keys(manifest.powers ?? {}).length}`,
+    );
+  }
+
+  const assetPaths = [
+    manifest.atlas?.src,
+    ...manifest.guides.map((guide) => guide.src),
+    ...manifest.locations.flatMap((location) => [
+      location.outer?.large,
+      location.outer?.small,
+      location.inner?.large,
+      location.inner?.small,
+    ]),
+  ].filter(Boolean);
+
+  for (const assetPath of assetPaths) {
+    const relativeAsset = assetPath.replace(/^\.\//, "");
+    try {
+      const metadata = await stat(
+        resolve(distDirectory, "assets", "immersive", relativeAsset),
+      );
+      if (metadata.size < 1_000) {
+        failures.push(
+          `Immersive asset is unexpectedly small: ${relativeAsset}`,
+        );
+      }
+    } catch {
+      failures.push(`Immersive asset is missing: ${relativeAsset}`);
+    }
+  }
+} catch (error) {
+  failures.push(`Could not validate the immersive manifest: ${error.message}`);
+}
+
+const immersiveRuntimePath = resolve(
+  distDirectory,
+  "assets",
+  "immersive",
+  "anzania-explorer.js",
+);
+try {
+  const runtime = await readFile(immersiveRuntimePath, "utf8");
+  const requiredRuntimeContracts = [
+    "calculateFraming",
+    "recalculateFraming",
+    "is-looking-back",
+    "is-traversing",
+    "0.14",
+    "0.2",
+    "ResizeObserver",
+    "prefers-reduced-motion",
+  ];
+  for (const contract of requiredRuntimeContracts) {
+    if (!runtime.includes(contract)) {
       failures.push(
-        `${displayPath(path)} contains forbidden Static View ${label}`,
+        `The Anzania runtime is missing framing contract: ${contract}`,
       );
     }
   }
+  if (/over-the-shoulder|\bOTS\b/i.test(runtime)) {
+    failures.push(
+      "The Anzania runtime contains prohibited OTS camera language",
+    );
+  }
+} catch {
+  failures.push("The Explore Anzania runtime is missing");
 }
 
 const expectedDocuments = [
@@ -174,6 +391,11 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
+const immersiveFiles = distFiles.filter((path) =>
+  distPath(path).startsWith(immersivePrefix),
+);
 console.log(
-  `Validated ${htmlFiles.length} HTML files, ${cssFiles.length} CSS files and four direct PDF downloads.`,
+  `Validated ${htmlFiles.length} HTML files, ${cssFiles.length} CSS files, ` +
+    `one progressive Static View runtime, ${immersiveFiles.length} approved ` +
+    "immersive assets and four direct PDF downloads.",
 );

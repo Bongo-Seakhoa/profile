@@ -1,0 +1,247 @@
+---
+import { sitePath } from "../../lib/urls";
+import AnzaniaPlate from "../media/AnzaniaPlate.astro";
+import type { PublishedAnzaniaPlateId } from "../../data/static-art";
+
+export interface NavigationItem {
+  id: string;
+  path: string;
+  label: string;
+}
+
+export interface DocumentDownload {
+  label: string;
+  path: string;
+}
+
+export interface Props {
+  primaryName: string;
+  activeRouteId?: string;
+  navigation: NavigationItem[];
+  documentsPath?: string;
+  documentDownloads?: DocumentDownload[];
+  showExploreAnzania?: boolean;
+  exploreAnzaniaPath?: string;
+}
+
+const {
+  primaryName,
+  activeRouteId = "home",
+  navigation,
+  documentsPath = "documents/",
+  documentDownloads = [],
+  showExploreAnzania = true,
+  exploreAnzaniaPath = "explore/",
+} = Astro.props;
+
+const archiveRoutes = new Set(["work", "research", "credentials", "documents"]);
+const oasisRoutes = new Set(["contact", "about", "education", "bongo-kosa"]);
+const sceneId: PublishedAnzaniaPlateId =
+  archiveRoutes.has(activeRouteId) ||
+  activeRouteId.startsWith("project-") ||
+  activeRouteId.startsWith("resume-") ||
+  activeRouteId.startsWith("cv-")
+    ? "archive-echoes-outer"
+    : oasisRoutes.has(activeRouteId)
+      ? "oasis-audience-inner"
+      : "threshold-dunes-outer";
+---
+
+<div
+  class="static-atmosphere"
+  data-static-scene={sceneId}
+  data-static-scene-route={activeRouteId}
+  aria-hidden="true"
+>
+  <div class="static-atmosphere__scene-frame">
+    <AnzaniaPlate
+      id={sceneId}
+      use="future-immersive-reference"
+      class="static-atmosphere__scene"
+      decorative
+      preload={false}
+      loading="eager"
+      fetchPriority="low"
+      sizes="(min-width: 72rem) 76vw, (min-width: 48rem) 92vw, 144vw"
+    />
+  </div>
+
+  <svg
+    class="static-atmosphere__cartography"
+    viewBox="0 0 1200 1200"
+    preserveAspectRatio="xMidYMid slice"
+  >
+    <g class="static-atmosphere__orbits">
+      <circle cx="600" cy="600" r="420"></circle>
+      <circle cx="600" cy="600" r="310"></circle>
+      <circle cx="600" cy="600" r="196"></circle>
+      <path d="M180 600h840M600 180v840"></path>
+      <path d="m303 303 594 594M897 303 303 897"></path>
+      <path d="m600 236 316 548H284Z"></path>
+    </g>
+    <g class="static-atmosphere__nodes">
+      <circle cx="600" cy="236" r="10"></circle>
+      <circle cx="916" cy="784" r="10"></circle>
+      <circle cx="284" cy="784" r="10"></circle>
+      <circle cx="600" cy="600" r="7"></circle>
+    </g>
+  </svg>
+
+  <svg
+    class="static-atmosphere__contours"
+    viewBox="0 0 1440 900"
+    preserveAspectRatio="none"
+  >
+    <path
+      d="M-80 720c180-120 306-54 422-118 130-72 170-238 344-246 169-8 226 134 376 125 156-10 236-170 476-142"
+    ></path>
+    <path
+      d="M-76 774c194-126 316-64 446-126 142-68 182-225 344-236 170-12 230 122 384 113 168-10 252-154 462-132"
+    ></path>
+    <path
+      d="M-64 824c212-118 340-72 472-132 147-67 198-204 350-218 180-16 238 108 404 102 164-6 242-130 390-118"
+    ></path>
+  </svg>
+
+  <div class="static-atmosphere__coordinates">
+    <span>ANZANIA / FICTIONAL WORLD</span>
+    <span>PROFESSIONAL RECORD</span>
+  </div>
+</div>
+
+<div class="static-transition-veil" aria-hidden="true"></div>
+
+<div class="static-reading-progress" aria-hidden="true">
+  <span data-static-progress></span>
+</div>
+
+<aside class="static-section-beacon" aria-hidden="true">
+  <span data-section-index>01</span>
+  <span class="static-section-beacon__rule"></span>
+  <span data-section-label>Overview</span>
+  <span data-section-progress>00%</span>
+</aside>
+
+<button
+  class="static-command-trigger"
+  type="button"
+  data-command-trigger
+  aria-haspopup="dialog"
+  aria-controls="static-command-dialog"
+>
+  <span aria-hidden="true">Ctrl K</span>
+  <span>Navigate</span>
+</button>
+
+<dialog
+  id="static-command-dialog"
+  class="static-command-dialog"
+  data-command-dialog
+  aria-labelledby="static-command-title"
+>
+  <div class="static-command-dialog__frame">
+    <header class="static-command-dialog__header">
+      <div>
+        <p>Professional record index</p>
+        <h2 id="static-command-title">Navigate {primaryName}</h2>
+      </div>
+      <form method="dialog">
+        <button type="submit" aria-label="Close navigation dialog">
+          Close
+        </button>
+      </form>
+    </header>
+
+    <label class="static-command-search">
+      <span>Filter destinations</span>
+      <input
+        type="search"
+        inputmode="search"
+        autocomplete="off"
+        placeholder="Work, research, resume, contact..."
+        data-command-search
+      />
+    </label>
+
+    <nav class="static-command-navigation" aria-label="Command navigation">
+      <p class="static-command-navigation__label">Profile routes</p>
+      <ul>
+        {
+          navigation.map((item, index) => (
+            <li data-command-item>
+              <a
+                href={sitePath(item.path)}
+                aria-current={item.id === activeRouteId ? "page" : undefined}
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{item.label}</strong>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))
+        }
+        <li data-command-item>
+          <a
+            href={sitePath(documentsPath)}
+            aria-current={activeRouteId === "documents" ||
+            activeRouteId.startsWith("resume-") ||
+            activeRouteId.startsWith("cv-")
+              ? "page"
+              : undefined}
+          >
+            <span>{String(navigation.length + 1).padStart(2, "0")}</span>
+            <strong>Resume and CV</strong>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+        {
+          showExploreAnzania && (
+            <li data-command-item>
+              <a
+                href={sitePath(exploreAnzaniaPath)}
+                aria-current={activeRouteId === "explore" ? "page" : undefined}
+              >
+                <span>{String(navigation.length + 2).padStart(2, "0")}</span>
+                <strong>Explore Anzania</strong>
+                <span aria-hidden="true">◇</span>
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
+
+    {
+      documentDownloads.length > 0 && (
+        <section
+          class="static-command-downloads"
+          aria-labelledby="download-title"
+        >
+          <p id="download-title">Direct downloads</p>
+          <div>
+            {documentDownloads.map((document) => (
+              <a href={sitePath(document.path)} download>
+                {document.label}
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <p
+      class="static-command-empty"
+      data-command-empty
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      No matching destination. Try a broader term.
+    </p>
+  </div>
+</dialog>
+
+<script
+  is:inline
+  type="module"
+  src={sitePath("assets/static/static-runtime.js")}></script>

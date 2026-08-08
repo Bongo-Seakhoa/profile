@@ -1003,3 +1003,32 @@ Release 1 is complete only when:
 - Remaining immersive work is either scheduled with its dependencies present or documented as blocked by a genuine external dependency.
 
 The full immersive roster is not declared complete without the canonical character pack and explicit owner approval of roster scope.
+
+## Release 2 addendum - production 2.5D Anzania journey
+
+**Adopted:** 2026-08-08
+**Authority:** D010
+**State:** Implementation complete, final publication gates pending
+
+The owner authorised a high-quality 2.5D or 2D result when full 3D would prevent
+completion. The production implementation therefore uses the approved Anzania
+world plates and full-body companion concepts as a cinematic 2.5D route rather
+than shipping unfinished or low-quality pseudo-3D.
+
+Release 2 adds:
+
+- `/explore/` as an opt-in original fictional-world journey;
+- eight locations with responsive outer and inner scene plates;
+- fifteen selectable full-body companions;
+- four authored traversal treatments;
+- atlas, guide and options interfaces;
+- a responsive animated-bound framing controller with no over-the-shoulder path;
+- look-back, presenting, idle, travel and portal states;
+- route, homepage, header, footer, sitemap and social-card integration;
+- unit, Playwright, public-output and release-budget gates; and
+- complete Static View and document-pipeline isolation.
+
+The final publication sequence and recovery plan are defined in
+`docs/PROFILE-UPGRADE-2-5D-RELEASE.md`. D010 supersedes D007 only where full
+Blender and browser 3D were mandatory. All quality, full-body camera,
+accessibility, fallback and recovery requirements remain in force.

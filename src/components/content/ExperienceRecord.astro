@@ -32,8 +32,11 @@ const dateRange = `${formatMonth(experience.dateStart)} to ${
 <article
   class:list={["experience-record", compact && "experience-record--compact"]}
   data-record-id={experience.id}
+  data-signal-card
 >
-  <div class="experience-record__marker" aria-hidden="true"></div>
+  <div class="experience-record__marker" aria-hidden="true">
+    <span></span>
+  </div>
   <div class="experience-record__content">
     <header>
       <div>
@@ -71,7 +74,7 @@ const dateRange = `${formatMonth(experience.dateStart)} to ${
   .experience-record {
     position: relative;
     display: grid;
-    grid-template-columns: 1.1rem minmax(0, 1fr);
+    grid-template-columns: 1.35rem minmax(0, 1fr);
     gap: var(--space-4);
   }
 
@@ -80,41 +83,53 @@ const dateRange = `${formatMonth(experience.dateStart)} to ${
     border-inline-start: 1px solid var(--line-strong);
   }
 
-  .experience-record__marker::before {
+  .experience-record__marker span {
     position: absolute;
-    top: 0.2rem;
-    left: -0.36rem;
-    inline-size: 0.65rem;
-    block-size: 0.65rem;
-    border: 0.12rem solid var(--surface);
-    border-radius: 50%;
+    inset-block-start: 0.2rem;
+    inset-inline-start: -0.43rem;
+    inline-size: 0.78rem;
+    block-size: 0.78rem;
+    border: 2px solid var(--surface);
     background: var(--rust);
     box-shadow: 0 0 0 1px var(--rust);
-    content: "";
+    transform: rotate(45deg);
   }
 
   .experience-record__content {
-    padding-block-end: clamp(2rem, 5vw, 3.5rem);
+    position: relative;
+    min-inline-size: 0;
+    padding: 0 0 clamp(2.25rem, 5vw, 4rem);
+  }
+
+  .experience-record__content::before {
+    position: absolute;
+    inset-block-start: -0.05rem;
+    inset-inline: 0;
+    block-size: 1px;
+    background: linear-gradient(90deg, var(--line-strong), transparent 82%);
+    content: "";
   }
 
   header {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(15rem, auto);
-    gap: var(--space-5);
+    padding-block-start: var(--space-5);
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, auto);
+    gap: clamp(1.5rem, 4vw, 4rem);
   }
 
   .experience-record__company {
     margin-block-end: var(--space-1);
     color: var(--rust-strong);
     font-family: var(--font-mono);
-    font-size: var(--step--1);
+    font-size: 0.67rem;
     font-weight: 700;
-    letter-spacing: 0.055em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
   }
 
   h3 {
-    font-size: var(--step-2);
+    max-inline-size: 24ch;
+    font-size: clamp(1.55rem, 2.6vw, 2.75rem);
   }
 
   dl {
@@ -125,40 +140,55 @@ const dateRange = `${formatMonth(experience.dateStart)} to ${
 
   dl > div {
     display: grid;
-    grid-template-columns: 3.5rem minmax(0, 1fr);
+    grid-template-columns: 4rem minmax(0, 1fr);
     gap: var(--space-2);
   }
 
   dt {
     color: var(--ink-soft);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   dd {
     margin: 0;
     font-size: var(--step--1);
-    font-weight: 600;
+    font-weight: 650;
   }
 
   .experience-record__summary {
     max-inline-size: 72ch;
     margin-block-start: var(--space-4);
     color: var(--ink-soft);
+    font-size: 1rem;
   }
 
   ul {
     display: grid;
     max-inline-size: 72ch;
-    margin: var(--space-4) 0;
-    padding-inline-start: 1.15rem;
-    gap: var(--space-2);
+    margin: var(--space-5) 0;
+    padding: 0;
+    gap: var(--space-3);
+    list-style: none;
   }
 
-  li::marker {
-    color: var(--gold);
+  li {
+    position: relative;
+    padding-inline-start: 1.2rem;
+  }
+
+  li::before {
+    position: absolute;
+    inset-block-start: 0.68em;
+    inset-inline-start: 0;
+    inline-size: 0.34rem;
+    block-size: 0.34rem;
+    background: var(--gold);
+    content: "";
+    transform: rotate(45deg);
   }
 
   .experience-record--compact .experience-record__content {
@@ -168,7 +198,7 @@ const dateRange = `${formatMonth(experience.dateStart)} to ${
   @media (max-width: 46rem) {
     header {
       grid-template-columns: 1fr;
-      gap: var(--space-3);
+      gap: var(--space-4);
     }
 
     dl > div {

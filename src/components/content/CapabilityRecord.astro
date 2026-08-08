@@ -13,22 +13,34 @@ const evidenceHref = (collection: "experience" | "project", id: string) =>
   collection === "project" ? sitePath(`work/${id}/`) : sitePath("experience/");
 ---
 
-<article class="capability-record" data-record-id={capability.id}>
-  <div class="capability-record__index" aria-hidden="true">
-    {String(index).padStart(2, "0")}
+<article
+  class="capability-record"
+  data-record-id={capability.id}
+  data-signal-card
+>
+  <div class="capability-record__rail" aria-hidden="true">
+    <span>{String(index).padStart(2, "0")}</span>
+    <svg viewBox="0 0 44 44">
+      <circle cx="22" cy="22" r="16"></circle>
+      <path d="M22 6v32M6 22h32M11 11l22 22M33 11 11 33"></path>
+      <circle class="capability-record__node" cx="22" cy="22" r="3"></circle>
+    </svg>
   </div>
   <div class="capability-record__main">
-    <h2>{capability.title}</h2>
-    <p class="capability-record__problem">{capability.problem}</p>
+    <header>
+      <p>Capability / evidence-linked</p>
+      <h2>{capability.title}</h2>
+      <span>{capability.problem}</span>
+    </header>
     <div class="capability-record__details">
-      <div>
-        <h3>What I deliver</h3>
+      <section aria-labelledby={`${capability.id}-deliveries`}>
+        <h3 id={`${capability.id}-deliveries`}>What I deliver</h3>
         <ul>
           {capability.delivers.map((deliverable) => <li>{deliverable}</li>)}
         </ul>
-      </div>
-      <div>
-        <h3>Selected evidence</h3>
+      </section>
+      <section aria-labelledby={`${capability.id}-evidence`}>
+        <h3 id={`${capability.id}-evidence`}>Selected evidence</h3>
         <ul>
           {
             capability.evidence.map((evidence) => (
@@ -40,7 +52,7 @@ const evidenceHref = (collection: "experience" | "project", id: string) =>
             ))
           }
         </ul>
-      </div>
+      </section>
     </div>
     <TechnologyList items={capability.tools} label="Working toolkit" />
   </div>
@@ -48,75 +60,140 @@ const evidenceHref = (collection: "experience" | "project", id: string) =>
 
 <style>
   .capability-record {
+    position: relative;
     display: grid;
-    padding-block: clamp(2rem, 5vw, 4rem);
-    grid-template-columns: minmax(3rem, 0.35fr) minmax(0, 2.65fr);
+    padding-block: clamp(2.25rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(3rem, 0.28fr) minmax(0, 2.72fr);
     gap: clamp(1rem, 4vw, 4rem);
     border-block-start: 1px solid var(--line-strong);
   }
 
-  .capability-record:nth-child(even) {
-    background: var(--surface-quiet);
+  .capability-record::before {
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: 0;
+    inline-size: 4.25rem;
+    block-size: 2px;
+    background: var(--gold);
+    content: "";
   }
 
-  .capability-record__index {
+  .capability-record__rail {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--space-5);
     color: var(--gold-ink);
     font-family: var(--font-mono);
     font-size: var(--step-1);
     font-weight: 700;
   }
 
+  .capability-record__rail svg {
+    inline-size: 2.75rem;
+    color: rgb(132 63 40 / 34%);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+  }
+
+  .capability-record__rail .capability-record__node {
+    fill: var(--gold-ink);
+    stroke: none;
+  }
+
   .capability-record__main {
-    max-inline-size: 64rem;
+    min-inline-size: 0;
+    max-inline-size: 68rem;
+  }
+
+  header > p {
+    margin: 0 0 var(--space-2);
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
   }
 
   h2 {
-    max-inline-size: 24ch;
-    font-size: var(--step-3);
+    max-inline-size: 22ch;
+    font-size: clamp(2rem, 3.2vw, 3.65rem);
+    letter-spacing: -0.025em;
   }
 
-  .capability-record__problem {
+  header > span {
+    display: block;
     max-inline-size: 64ch;
     margin-block-start: var(--space-4);
     color: var(--ink-soft);
     font-size: var(--step-1);
+    line-height: 1.55;
   }
 
   .capability-record__details {
     display: grid;
     margin-block: var(--space-6);
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-6);
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  .capability-record__details section {
+    min-inline-size: 0;
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid var(--line);
   }
 
   h3 {
     margin-block-end: var(--space-3);
     color: var(--indigo);
-    font-size: var(--step-0);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   ul {
     display: grid;
     margin: 0;
-    padding-inline-start: 1.2rem;
-    gap: var(--space-2);
+    padding: 0;
+    gap: var(--space-3);
     color: var(--ink-soft);
+    list-style: none;
   }
 
-  li::marker {
-    color: var(--gold);
+  li {
+    position: relative;
+    padding-inline-start: 1.15rem;
+  }
+
+  li::before {
+    position: absolute;
+    inset-block-start: 0.66em;
+    inset-inline-start: 0;
+    inline-size: 0.34rem;
+    block-size: 0.34rem;
+    background: var(--gold);
+    content: "";
+    transform: rotate(45deg);
   }
 
   a {
     color: var(--rust-strong);
-    font-weight: 650;
+    font-weight: 680;
     text-underline-offset: 0.2em;
   }
 
   @media (max-width: 42rem) {
     .capability-record {
-      grid-template-columns: 2rem minmax(0, 1fr);
+      grid-template-columns: 2.25rem minmax(0, 1fr);
       gap: var(--space-3);
+    }
+
+    .capability-record__rail svg {
+      inline-size: 2rem;
     }
 
     .capability-record__details {

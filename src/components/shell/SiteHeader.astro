@@ -45,66 +45,59 @@ function isActive(item: NavigationItem): boolean {
 ---
 
 <header class="site-header">
-  <div class="site-header__identity-bar">
-    <Container size="wide" class="site-header__identity-inner">
-      <a class="site-header__brand" href={sitePath("")}>
-        <span class="site-header__wordmark">{primaryName}</span>
-        <span class="site-header__descriptor">{headline}</span>
-      </a>
+  <Container size="wide" class="site-header__inner">
+    <a class="site-header__brand" href={sitePath("")}>
+      <span class="site-header__wordmark">{primaryName}</span>
+      <span class="site-header__descriptor">{headline}</span>
+    </a>
 
-      <div class="site-header__utilities">
-        <span class="view-indicator" aria-label="Current view: Static View">
-          Static View
-        </span>
-        <details class="header-documents">
-          <summary class="header-action">Resume &amp; CV</summary>
-          <div class="header-documents__menu">
-            <a href={sitePath(documentsPath)}>View all documents</a>
-            {
-              documentDownloads.map((document) => (
-                <a href={sitePath(document.path)} download>
-                  {document.label}
-                </a>
-              ))
-            }
-          </div>
-        </details>
+    <nav class="desktop-navigation" aria-label="Primary">
+      <ul>
         {
-          showExploreAnzania && (
-            <a
-              class="header-action header-action--accent"
-              href={sitePath(exploreAnzaniaPath)}
-              aria-describedby="anzania-load-note"
-            >
-              Explore Anzania
-            </a>
-          )
+          navigation.map((item) => (
+            <li>
+              <a
+                href={sitePath(item.path)}
+                aria-current={isActive(item) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
         }
-      </div>
-    </Container>
-  </div>
+      </ul>
+    </nav>
 
-  <div class="site-header__navigation-bar">
-    <Container size="wide">
-      <nav class="desktop-navigation" aria-label="Primary">
-        <ul>
+    <div class="site-header__utilities">
+      <details class="header-documents">
+        <summary class="header-action">Resume &amp; CV</summary>
+        <div class="header-documents__menu">
+          <a href={sitePath(documentsPath)}>View all documents</a>
           {
-            navigation.map((item) => (
-              <li>
-                <a
-                  href={sitePath(item.path)}
-                  aria-current={isActive(item) ? "page" : undefined}
-                >
-                  {item.label}
-                </a>
-              </li>
+            documentDownloads.map((document) => (
+              <a href={sitePath(document.path)} download>
+                {document.label}
+              </a>
             ))
           }
-        </ul>
-      </nav>
+        </div>
+      </details>
+
+      {
+        showExploreAnzania && (
+          <a
+            class="header-action header-action--accent"
+            href={sitePath(exploreAnzaniaPath)}
+            aria-describedby="anzania-load-note"
+          >
+            <span aria-hidden="true">◇</span>
+            Explore Anzania
+          </a>
+        )
+      }
 
       <details class="mobile-navigation">
-        <summary>Menu</summary>
+        <summary aria-label="Open navigation menu">Menu</summary>
         <nav aria-label="Primary mobile">
           <ul>
             {
@@ -146,14 +139,14 @@ function isActive(item: NavigationItem): boolean {
           </ul>
         </nav>
       </details>
-    </Container>
-  </div>
+    </div>
+  </Container>
 
   {
     showExploreAnzania && (
       <p id="anzania-load-note" class="visually-hidden">
-        Activating Explore Anzania leaves Static View and loads the optional
-        immersive experience.
+        Activating Explore Anzania leaves the professional record and loads the
+        optional cinematic experience.
       </p>
     )
   }

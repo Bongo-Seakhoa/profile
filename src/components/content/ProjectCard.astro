@@ -25,6 +25,7 @@ const statusTone =
 <article
   class:list={["project-card", `project-card--${variant}`]}
   data-project-status={project.status}
+  data-signal-card
 >
   <div class="project-card__meta">
     <StatusBadge label={statusLabel} tone={statusTone} />
@@ -53,29 +54,65 @@ const statusTone =
 
 <style>
   .project-card {
+    position: relative;
     display: flex;
     min-inline-size: 0;
-    padding: clamp(1.25rem, 3vw, 2rem);
+    min-block-size: 19rem;
+    overflow: hidden;
+    padding: clamp(1.35rem, 3vw, 2.2rem);
     flex-direction: column;
     gap: var(--space-5);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-medium);
-    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: rgb(251 245 234 / 88%);
+    box-shadow: 0 0.7rem 2.5rem rgb(44 30 18 / 6%);
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .project-card::before {
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: -1px;
+    inline-size: 3.8rem;
+    block-size: 2px;
+    background: var(--gold);
+    content: "";
+  }
+
+  .project-card:hover {
+    border-color: rgb(132 63 40 / 54%);
+    box-shadow: 0 1.4rem 4rem rgb(44 30 18 / 11%);
+    transform: translateY(-0.16rem);
   }
 
   .project-card--lead {
     min-block-size: 100%;
-    border-block-start: 0.35rem solid var(--rust);
-    background: var(--surface);
+    padding: clamp(1.8rem, 4vw, 3.2rem);
+    background: linear-gradient(
+      145deg,
+      rgb(251 245 234 / 96%),
+      rgb(231 215 189 / 91%)
+    );
+  }
+
+  .project-card--lead::before {
+    inline-size: 6rem;
+    background: var(--rust);
   }
 
   .project-card--archive {
+    min-block-size: 16rem;
     padding: var(--space-5);
-    border-radius: var(--radius-small);
-    background: transparent;
+    background: rgb(251 245 234 / 56%);
+    box-shadow: none;
   }
 
   .project-card__meta {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -83,17 +120,26 @@ const statusTone =
     gap: var(--space-3);
     color: var(--ink-soft);
     font-family: var(--font-mono);
-    font-size: var(--step--1);
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
   }
 
   h3 {
-    max-inline-size: 22ch;
-    font-size: clamp(1.45rem, 2vw, 2.25rem);
+    max-inline-size: 20ch;
+    font-size: clamp(1.55rem, 2vw, 2.4rem);
+    line-height: 1.02;
+  }
+
+  .project-card--lead h3 {
+    max-inline-size: 16ch;
+    font-size: clamp(2.3rem, 4.1vw, 4.25rem);
+    letter-spacing: -0.035em;
   }
 
   h3 a {
-    text-decoration-thickness: 0.08em;
+    color: var(--ink);
     text-decoration-color: transparent;
+    text-decoration-thickness: 0.08em;
     text-underline-offset: 0.15em;
   }
 
@@ -103,8 +149,11 @@ const statusTone =
   }
 
   .project-card__body {
+    position: relative;
+    z-index: 1;
     display: grid;
     gap: var(--space-3);
+    margin-block-start: auto;
   }
 
   .project-card__body > p {
@@ -114,10 +163,14 @@ const statusTone =
 
   .project-card__role {
     color: var(--indigo) !important;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
     font-weight: 700;
   }
 
   .project-card__actions {
+    position: relative;
+    z-index: 1;
     display: flex;
     margin-block-start: auto;
     padding-block-start: var(--space-4);
@@ -127,14 +180,33 @@ const statusTone =
   }
 
   .project-card__actions a {
+    display: inline-flex;
     min-block-size: var(--target-size);
-    padding-block: 0.65rem;
+    align-items: center;
     color: var(--rust-strong);
-    font-weight: 700;
+    font-size: 0.8rem;
+    font-weight: 750;
     text-underline-offset: 0.2em;
+  }
+
+  .project-card__actions a::after {
+    margin-inline-start: 0.4rem;
+    content: "→";
+    font-family: var(--font-mono);
+    font-size: 0.78em;
   }
 
   .project-card__actions a:last-child {
     color: var(--indigo);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card {
+      transition: none;
+    }
+
+    .project-card:hover {
+      transform: none;
+    }
   }
 </style>

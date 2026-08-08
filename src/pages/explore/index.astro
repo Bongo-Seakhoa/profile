@@ -1,0 +1,495 @@
+---
+import "@fontsource-variable/source-serif-4/wght.css";
+import "@fontsource-variable/ibm-plex-sans/wght.css";
+import "@fontsource/ibm-plex-mono/400.css";
+
+import { absoluteUrl, sitePath } from "../../lib/urls";
+
+const title = "Explore Anzania | Bongo Seakhoa";
+const description =
+  "Explore Anzania, Bongo Seakhoa's original fictional portfolio world: a cinematic 2.5D journey through identity, work, research, capability and purpose.";
+const canonicalUrl = absoluteUrl(
+  "explore/",
+  "https://bongo-seakhoa.github.io/profile/",
+);
+const socialImageUrl = absoluteUrl(
+  "assets/social/explore.jpg",
+  "https://bongo-seakhoa.github.io/profile/",
+);
+const sitemapUrl = absoluteUrl(
+  "sitemap-index.xml",
+  "https://bongo-seakhoa.github.io/profile/",
+);
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: "Explore Anzania",
+  alternateName: "Anzania Portfolio Journey",
+  description,
+  creator: {
+    "@type": "Person",
+    name: "Bongo Seakhoa",
+    alternateName: "Bongo Kosa",
+  },
+  genre: [
+    "Interactive portfolio",
+    "Original fictional world",
+    "2.5D experience",
+  ],
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Bongo Seakhoa - Portfolio",
+    url: "https://bongo-seakhoa.github.io/profile/",
+  },
+  url: canonicalUrl,
+}).replace(/</g, "\\u003c");
+---
+
+<!doctype html>
+<html lang="en" data-view="explore" data-experience-state="loading">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#15120e" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta
+      name="keywords"
+      content="Bongo Seakhoa, Bongo Kosa, interactive portfolio, Anzania, fictional world, data engineering, analytics, applied machine learning"
+    />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href={sitePath("favicon.svg")} type="image/svg+xml" />
+    <link
+      rel="icon"
+      href={sitePath("favicon-32.png")}
+      sizes="32x32"
+      type="image/png"
+    />
+    <link rel="manifest" href={sitePath("site.webmanifest")} />
+    <link rel="sitemap" href={sitemapUrl} type="application/xml" />
+    <link
+      rel="preload"
+      as="image"
+      href={sitePath("assets/immersive/scenes/threshold-dunes-outer-1600.webp")}
+      fetchpriority="high"
+    />
+    <link
+      rel="stylesheet"
+      href={sitePath("assets/immersive/anzania-explorer.css")}
+    />
+
+    <meta property="og:site_name" content="Bongo Seakhoa - Portfolio" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Explore Anzania, an original fictional portfolio world by Bongo Seakhoa."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <script type="application/ld+json" is:inline set:html={structuredData} />
+  </head>
+  <body>
+    <a class="explore-skip-link" href="#chapter-content">Skip to chapter</a>
+
+    <div
+      class="experience"
+      id="experience"
+      data-experience
+      data-scene-mode="outer"
+    >
+      <div class="scene" aria-hidden="true">
+        <div class="scene__image scene__image--previous" data-scene-previous>
+        </div>
+        <div class="scene__image scene__image--current" data-scene-current>
+        </div>
+        <div class="scene__foreground" data-scene-foreground></div>
+        <div class="scene__veil"></div>
+        <div class="scene__vignette"></div>
+        <div class="scene__grain"></div>
+        <div class="scene__dust scene__dust--near"></div>
+        <div class="scene__dust scene__dust--far"></div>
+        <div class="scene__horizon-line"></div>
+      </div>
+
+      <div class="power-transition" data-power-transition aria-hidden="true">
+        <span class="power-transition__sun"></span>
+        <span class="power-transition__sand"></span>
+        <span class="power-transition__wake"></span>
+      </div>
+
+      <div
+        class="loading-gate"
+        data-loading-gate
+        role="status"
+        aria-live="polite"
+      >
+        <div class="loading-gate__sigil" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <p class="loading-gate__eyebrow">Preparing the crossing</p>
+        <p class="loading-gate__title">ANZANIA</p>
+        <p class="loading-gate__world-note">
+          An original fictional portfolio world
+        </p>
+        <div class="loading-gate__track" aria-hidden="true">
+          <span data-loading-progress></span>
+        </div>
+        <p class="loading-gate__status" data-loading-status>
+          Reading the atlas...
+        </p>
+      </div>
+
+      <section
+        class="arrival-gate"
+        data-arrival-gate
+        aria-labelledby="arrival-title"
+        hidden
+      >
+        <div class="arrival-gate__frame">
+          <p class="arrival-gate__kicker">A portfolio told as a journey</p>
+          <h1 id="arrival-title">ANZANIA</h1>
+          <p class="arrival-gate__definition">
+            An original fictional world created for Bongo Seakhoa's portfolio.
+            Its places are narrative spaces, not real geography.
+          </p>
+          <p class="arrival-gate__invitation">
+            Cross eight locations. Meet the evidence behind the work. Choose a
+            companion to travel beside you.
+          </p>
+          <div class="arrival-gate__actions">
+            <button
+              class="explore-button explore-button--primary"
+              data-begin-journey
+              type="button"
+            >
+              Begin the journey
+              <span aria-hidden="true">→</span>
+            </button>
+            <a class="explore-button explore-button--quiet" href={sitePath("")}>
+              Continue in Static View
+            </a>
+          </div>
+          <p class="arrival-gate__note">
+            Keyboard: left and right travel · Enter opens a location · hold L to
+            look back
+          </p>
+        </div>
+      </section>
+
+      <div class="explorer-shell" data-explorer hidden>
+        <header class="explorer-topbar">
+          <a
+            class="explorer-brand"
+            href={sitePath("")}
+            aria-label="Return to Bongo Seakhoa's Static View portfolio"
+          >
+            <span class="explorer-brand__name">BONGO SEAKHOA</span>
+            <span class="explorer-brand__world">Explore Anzania</span>
+          </a>
+
+          <div class="journey-progress" aria-label="Journey progress">
+            <span class="journey-progress__label" data-progress-label
+              >01 / 08</span
+            >
+            <span class="journey-progress__track" aria-hidden="true">
+              <span data-progress-bar></span>
+            </span>
+          </div>
+
+          <nav class="explorer-tools" aria-label="Explore controls">
+            <button
+              class="tool-button"
+              data-map-button
+              type="button"
+              aria-haspopup="dialog"
+              aria-label="Atlas"
+            >
+              <span aria-hidden="true">◇</span>
+              <span>Atlas</span>
+            </button>
+            <button
+              class="tool-button"
+              data-guide-button
+              type="button"
+              aria-haspopup="dialog"
+              aria-label="Guide"
+            >
+              <span aria-hidden="true">◉</span>
+              <span>Guide</span>
+            </button>
+            <button
+              class="tool-button"
+              data-options-button
+              type="button"
+              aria-haspopup="dialog"
+              aria-label="Options"
+            >
+              <span aria-hidden="true">＋</span>
+              <span>Options</span>
+            </button>
+          </nav>
+        </header>
+
+        <aside class="location-rail" aria-label="Anzania locations">
+          <p class="location-rail__title">THE CROSSING</p>
+          <ol data-location-rail-list></ol>
+        </aside>
+
+        <section class="location-mark" aria-labelledby="location-name">
+          <p class="location-mark__number" data-location-number>01</p>
+          <div>
+            <p class="location-mark__region" data-location-region>
+              The Western Reach
+            </p>
+            <h2 id="location-name" data-location-name>Threshold Dunes</h2>
+          </div>
+        </section>
+
+        <main
+          class="chapter-panel"
+          id="chapter-content"
+          data-chapter-panel
+          tabindex="-1"
+        >
+          <div class="chapter-panel__rule" aria-hidden="true"></div>
+          <p class="chapter-panel__eyebrow" data-chapter-eyebrow>
+            The point of entry
+          </p>
+          <h2 data-chapter-title>
+            Work that turns ambiguity into usable systems.
+          </h2>
+          <p class="chapter-panel__lead" data-chapter-lead></p>
+          <div class="chapter-panel__evidence" data-chapter-evidence></div>
+          <div class="chapter-panel__actions" data-chapter-actions></div>
+          <button class="portal-button" data-portal-button type="button">
+            <span class="portal-button__icon" aria-hidden="true">◎</span>
+            <span class="portal-button__copy">
+              <span data-portal-action>Enter this place</span>
+              <small data-portal-caption>
+                Reality bends from the horizon into the evidence
+              </small>
+            </span>
+          </button>
+        </main>
+
+        <figure
+          class="companion"
+          data-companion
+          aria-labelledby="companion-name"
+        >
+          <div class="companion__aura" aria-hidden="true"></div>
+          <img
+            data-companion-image
+            src={sitePath("assets/immersive/characters/dn-m-afr-01.webp")}
+            alt="Full-body African-inspired masculine Anzania guide wearing layered desert garments."
+            width="540"
+            height="1280"
+            decoding="async"
+          />
+          <figcaption>
+            <span class="companion__role">YOUR GUIDE</span>
+            <strong id="companion-name" data-companion-name>Amani</strong>
+          </figcaption>
+        </figure>
+
+        <div class="look-control">
+          <button data-look-back-button type="button">
+            <span class="look-control__icon" aria-hidden="true">↶</span>
+            <span>Hold to look back</span>
+          </button>
+        </div>
+
+        <div class="traversal-controls" aria-label="Travel between locations">
+          <button
+            data-previous-location
+            type="button"
+            aria-label="Travel to previous location"
+          >
+            <span aria-hidden="true">←</span>
+            <span class="traversal-controls__copy">Previous</span>
+          </button>
+          <div class="traversal-controls__sigil" aria-hidden="true">
+            <span></span>
+          </div>
+          <button
+            data-next-location
+            type="button"
+            aria-label="Travel to next location"
+          >
+            <span class="traversal-controls__copy">Next crossing</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <p class="mode-indicator" data-mode-indicator>
+          <span aria-hidden="true"></span>
+          Outer approach
+        </p>
+      </div>
+
+      <dialog
+        class="explore-dialog map-dialog"
+        data-map-dialog
+        aria-labelledby="map-dialog-title"
+      >
+        <div class="explore-dialog__frame">
+          <header class="explore-dialog__header">
+            <div>
+              <p class="dialog-kicker">
+                Eight locations · one professional story
+              </p>
+              <h2 id="map-dialog-title">Atlas of Anzania</h2>
+              <p>
+                An original fictional portfolio world, mapped as a guided
+                narrative rather than real geography.
+              </p>
+            </div>
+            <button
+              class="dialog-close"
+              type="button"
+              data-close-dialog
+              aria-label="Close atlas"
+            >
+              ×
+            </button>
+          </header>
+          <div class="map-dialog__body">
+            <div class="map-dialog__art">
+              <img
+                src={sitePath("assets/immersive/maps/anzania-atlas.webp")}
+                alt="Illustrated atlas of the eight fictional locations in Anzania."
+                width="1400"
+                height="1050"
+                loading="lazy"
+              />
+              <span class="map-dialog__current" aria-hidden="true"></span>
+            </div>
+            <ol class="map-dialog__locations" data-map-location-list></ol>
+          </div>
+        </div>
+      </dialog>
+
+      <dialog
+        class="explore-dialog guide-dialog"
+        data-guide-dialog
+        aria-labelledby="guide-dialog-title"
+      >
+        <div class="explore-dialog__frame">
+          <header class="explore-dialog__header">
+            <div>
+              <p class="dialog-kicker">Fifteen complete silhouettes</p>
+              <h2 id="guide-dialog-title">Choose your companion</h2>
+              <p>
+                Your guide remains a distant, full-body companion throughout the
+                journey.
+              </p>
+            </div>
+            <button
+              class="dialog-close"
+              type="button"
+              data-close-dialog
+              aria-label="Close companion selection"
+            >
+              ×
+            </button>
+          </header>
+          <div class="guide-dialog__grid" data-guide-grid></div>
+        </div>
+      </dialog>
+
+      <dialog
+        class="explore-dialog options-dialog"
+        data-options-dialog
+        aria-labelledby="options-dialog-title"
+      >
+        <div class="explore-dialog__frame explore-dialog__frame--compact">
+          <header class="explore-dialog__header">
+            <div>
+              <p class="dialog-kicker">Make the journey yours</p>
+              <h2 id="options-dialog-title">Experience options</h2>
+            </div>
+            <button
+              class="dialog-close"
+              type="button"
+              data-close-dialog
+              aria-label="Close options"
+            >
+              ×
+            </button>
+          </header>
+          <div class="options-list">
+            <label class="option-row">
+              <span>
+                <strong>Atmospheric motion</strong>
+                <small>Parallax, dust and authored traversal effects.</small>
+              </span>
+              <input data-motion-toggle type="checkbox" checked />
+            </label>
+            <label class="option-row">
+              <span>
+                <strong>Ambient soundscape</strong>
+                <small>Reserved for a future rights-cleared audio layer.</small>
+              </span>
+              <input type="checkbox" disabled />
+            </label>
+            <div class="option-row option-row--stacked">
+              <span>
+                <strong>Keyboard controls</strong>
+                <small>
+                  Left / right travel · Enter portal · M atlas · G guide · hold
+                  L look back · Esc close
+                </small>
+              </span>
+            </div>
+            <a class="option-static-link" href={sitePath("")}>
+              Return to the complete Static View portfolio <span
+                aria-hidden="true">→</span
+              >
+            </a>
+          </div>
+        </div>
+      </dialog>
+
+      <div
+        class="experience-toast"
+        data-experience-toast
+        role="status"
+        aria-live="polite"
+      >
+      </div>
+      <div
+        class="experience-announcer visually-hidden"
+        data-experience-announcer
+        aria-live="polite"
+      >
+      </div>
+    </div>
+
+    <noscript>
+      <section class="noscript-fallback">
+        <p>Explore Anzania uses JavaScript for its guided 2.5D journey.</p>
+        <h1>
+          Bongo Seakhoa's portfolio remains fully available in Static View.
+        </h1>
+        <a href={sitePath("")}>Open Static View</a>
+      </section>
+    </noscript>
+
+    <script type="module" src={sitePath("assets/immersive/anzania-explorer.js")}
+    ></script>
+  </body>
+</html>

@@ -56,65 +56,147 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
 >
   <ContentStyles />
 
-  <section class="home-hero" aria-labelledby="home-title">
+  <section
+    class="home-hero"
+    aria-labelledby="home-title"
+    data-section-label="Profile signal"
+  >
     <Container>
-      <div class="home-hero__grid">
-        <div class="home-hero__copy">
-          <p class="home-hero__eyebrow">{identity.headline}</p>
-          <h1 id="home-title">{identity.primaryName}</h1>
-          <p class="home-hero__statement">{identity.valueStatement}</p>
-          <div class="home-hero__actions">
-            <ActionLink href="work/">View selected work</ActionLink>
-            <ActionLink href="contact/" variant="secondary">Contact</ActionLink>
-            <ActionLink href="documents/" variant="quiet">
-              Resume and CV
-            </ActionLink>
-          </div>
-          <dl class="home-hero__facts">
-            <div>
-              <dt>Based in</dt>
-              <dd>{identity.location}</dd>
-            </div>
-            <div>
-              <dt>Availability</dt>
-              <dd>{identity.availability}</dd>
-            </div>
-          </dl>
+      <div class="home-hero__frame">
+        <div class="home-hero__coordinate-line" aria-hidden="true">
+          <span>FIELD 00</span>
+          <span>PROFESSIONAL RECORD</span>
+          <span>ACTIVE SIGNAL</span>
         </div>
-        <figure class="home-hero__figure">
-          <AnzaniaPlate
-            id="threshold-dunes-outer"
-            use="home-hero"
-            priority
-            preload
-            decorative={false}
-            sizes="(min-width: 60rem) 55vw, 100vw"
-          />
-          <figcaption>
-            Threshold Dunes, an Anzania setting used as editorial artwork.
-          </figcaption>
-        </figure>
+
+        <div class="home-hero__grid">
+          <div class="home-hero__copy">
+            <p class="home-hero__eyebrow">{identity.headline}</p>
+            <h1 id="home-title">{identity.primaryName}</h1>
+            <p class="home-hero__statement">{identity.valueStatement}</p>
+
+            <div class="home-hero__actions">
+              <ActionLink href="work/">View selected work</ActionLink>
+              <ActionLink href="documents/" variant="secondary">
+                Resume and CV
+              </ActionLink>
+              <ActionLink href="contact/" variant="secondary"
+                >Contact</ActionLink
+              >
+            </div>
+
+            <p class="home-hero__experience-note">
+              Prefer the cinematic route? <a href={sitePath("explore/")}
+                >Explore Anzania</a
+              >, an optional journey through the same professional record.
+              Anzania is fictional.
+            </p>
+
+            <dl class="home-hero__meta">
+              <div>
+                <dt>Current focus</dt>
+                <dd>Data engineering and analytics at MetaPOS</dd>
+              </div>
+              <div>
+                <dt>Based in</dt>
+                <dd>{identity.location}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <aside
+            class="home-hero__ledger"
+            data-signal-card
+            aria-labelledby="system-profile-title"
+          >
+            <div class="home-hero__ledger-heading">
+              <strong>System profile / live index</strong>
+              <span>BS.2026.08</span>
+            </div>
+
+            <svg
+              class="home-hero__signal-graph"
+              viewBox="0 0 520 252"
+              role="img"
+              aria-label="A signal path connecting data, models, systems and decisions"
+            >
+              <path
+                class="home-hero__signal-grid"
+                d="M30 198h460M30 126h460M30 54h460"></path>
+              <path
+                class="home-hero__signal-path"
+                d="M30 198C110 198 98 68 190 68s76 104 154 104 78-116 146-116"
+              ></path>
+              <circle cx="30" cy="198" r="7"></circle>
+              <circle cx="190" cy="68" r="7"></circle>
+              <circle cx="344" cy="172" r="7"></circle>
+              <circle cx="490" cy="56" r="7"></circle>
+              <text x="30" y="226">DATA</text>
+              <text x="168" y="42">MODELS</text>
+              <text x="317" y="203">SYSTEMS</text>
+              <text x="424" y="31">DECISIONS</text>
+              <text class="home-hero__graph-copy" x="30" y="243">
+                SIGNAL / INTERPRETATION / DELIVERY / ACTION
+              </text>
+            </svg>
+
+            <div class="home-hero__ledger-copy">
+              <h2 id="system-profile-title">
+                From raw signal to usable systems.
+              </h2>
+              <p>
+                Cloud data engineering, applied machine learning and decision
+                support, communicated for the people who need to act.
+              </p>
+            </div>
+
+            <dl class="home-hero__console-grid">
+              <div>
+                <dt>{String(content.projects.length).padStart(2, "0")}</dt>
+                <dd>Documented project records</dd>
+              </div>
+              <div>
+                <dt>{String(content.experience.length).padStart(2, "0")}</dt>
+                <dd>Professional experience records</dd>
+              </div>
+              <div>
+                <dt>
+                  {String(activeCloudCredentials.length).padStart(2, "0")}
+                </dt>
+                <dd>Active cloud credentials</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+
+        <div class="home-hero__rune" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
       </div>
     </Container>
   </section>
 
-  <section class="proof-section" aria-label="Professional overview">
+  <section
+    class="proof-section"
+    aria-label="Professional overview"
+    data-section-label="Evidence overview"
+  >
     <Container>
       <div class="evidence-band">
         <div class="evidence-band__item">
-          <span class="evidence-band__index">01</span>
+          <span class="evidence-band__index">01 / CURRENT</span>
           <p>Current data engineering work at MetaPOS</p>
         </div>
         <div class="evidence-band__item">
-          <span class="evidence-band__index">02</span>
+          <span class="evidence-band__index">02 / RANGE</span>
           <p>Data engineering, analytics and applied machine learning</p>
         </div>
         <div class="evidence-band__item">
-          <span class="evidence-band__index">03</span>
+          <span class="evidence-band__index">03 / STUDY</span>
           <p>Engineering Management study at the University of Debrecen</p>
         </div>
         <div class="evidence-band__item">
-          <span class="evidence-band__index">04</span>
+          <span class="evidence-band__index">04 / VERIFIED</span>
           <p>
             {activeCloudCredentials.length} current Google Cloud credentials, active
             through 2027
@@ -124,7 +206,20 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     </Container>
   </section>
 
-  <section class="page-section" aria-labelledby="featured-work-title">
+  <section
+    class="page-section home-work-signal"
+    aria-labelledby="featured-work-title"
+    data-section-label="Selected work"
+  >
+    <div class="home-work-signal__atmosphere" aria-hidden="true">
+      <AnzaniaPlate
+        id="archive-echoes-outer"
+        use="work-evidence"
+        decorative
+        loading="lazy"
+        sizes="(min-width: 80rem) 72vw, 120vw"
+      />
+    </div>
     <Container>
       <SectionIntro
         id="featured-work-title"
@@ -142,19 +237,6 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
           }
         </div>
       </div>
-      <figure class="editorial-art editorial-art--work">
-        <AnzaniaPlate
-          id="archive-echoes-outer"
-          use="work-evidence"
-          decorative
-          loading="lazy"
-          sizes="(min-width: 80rem) 1248px, 100vw"
-        />
-        <figcaption>
-          Archive of Echoes artwork. Project evidence is linked within each
-          record above.
-        </figcaption>
-      </figure>
       <div class="section-actions">
         <ActionLink href="work/" variant="secondary">
           Browse the complete work index
@@ -166,6 +248,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   <section
     class="page-section page-section--surface"
     aria-labelledby="capabilities-title"
+    data-section-label="Capabilities"
   >
     <Container>
       <SectionIntro
@@ -189,7 +272,11 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     </Container>
   </section>
 
-  <section class="page-section" aria-labelledby="experience-title">
+  <section
+    class="page-section"
+    aria-labelledby="experience-title"
+    data-section-label="Experience"
+  >
     <Container>
       <SectionIntro
         id="experience-title"
@@ -215,6 +302,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   <section
     class="page-section page-section--muted"
     aria-labelledby="research-education-title"
+    data-section-label="Learning and inquiry"
   >
     <Container>
       <SectionIntro
@@ -223,7 +311,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
         title="Research experiments and formal study"
       />
       <div class="home-split-panels">
-        <article>
+        <article data-signal-card>
           <p class="home-split-panels__label">Research and experiments</p>
           <h3>Public technical explorations</h3>
           <p>
@@ -233,7 +321,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
           </p>
           <a href={sitePath("research/")}>Review research and experiments</a>
         </article>
-        <article>
+        <article data-signal-card>
           <p class="home-split-panels__label">Education and credentials</p>
           <h3>Current study and verified learning</h3>
           <p>
@@ -253,6 +341,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   <section
     class="page-section page-section--compact"
     aria-labelledby="about-preview-title"
+    data-section-label="Working approach"
   >
     <Container size="content">
       <div class="about-preview">
@@ -269,34 +358,33 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     </Container>
   </section>
 
-  <section class="page-section" aria-labelledby="contact-close-title">
+  <section
+    class="page-section home-contact-section"
+    aria-labelledby="contact-close-title"
+    data-section-label="Contact"
+  >
     <Container>
-      <div class="home-contact">
-        <div class="contact-panel">
-          <div>
-            <p class="contact-panel__eyebrow">Start a conversation</p>
-            <h2 id="contact-close-title">Bring a data problem into focus.</h2>
-            <p>{identity.availability}</p>
-          </div>
-          <div class="contact-panel__links">
-            <a href={`mailto:${identity.email}`}>Email Bongo</a>
-            {linkedin && <a href={linkedin.url}>LinkedIn profile</a>}
-            <a href={sitePath("documents/")}>Resume and CV</a>
-            <a href={sitePath("contact/")}>Contact details</a>
-          </div>
-        </div>
-        <figure class="editorial-art editorial-art--contact">
+      <div class="contact-panel home-contact-panel">
+        <div class="home-contact-panel__atmosphere" aria-hidden="true">
           <AnzaniaPlate
             id="oasis-audience-inner"
             use="contact-call-to-action"
             decorative
             loading="lazy"
-            sizes="(min-width: 60rem) 42vw, 100vw"
+            sizes="(min-width: 60rem) 58vw, 120vw"
           />
-          <figcaption>
-            Oasis of Audience artwork, paired with direct contact paths.
-          </figcaption>
-        </figure>
+        </div>
+        <div class="home-contact-panel__copy">
+          <p class="contact-panel__eyebrow">Start a conversation</p>
+          <h2 id="contact-close-title">Bring a data problem into focus.</h2>
+          <p>{identity.availability}</p>
+        </div>
+        <div class="contact-panel__links">
+          <a href={`mailto:${identity.email}`}>Email Bongo</a>
+          {linkedin && <a href={linkedin.url}>LinkedIn profile</a>}
+          <a href={sitePath("documents/")}>Resume and CV</a>
+          <a href={sitePath("contact/")}>Contact details</a>
+        </div>
       </div>
     </Container>
   </section>
@@ -304,16 +392,64 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
 
 <style>
   .home-hero {
-    padding-block: clamp(3.5rem, 8vw, 7.5rem);
-    border-block-end: 1px solid var(--line);
-    background: var(--surface);
+    position: relative;
+    display: grid;
+    min-block-size: min(52rem, calc(100svh - var(--header-offset)));
+    align-items: center;
+    overflow: hidden;
+    padding-block: clamp(2rem, 4vw, 4rem);
+    border-block-end: 1px solid var(--line-strong);
+  }
+
+  .home-hero::before {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgb(247 239 223 / 98%) 0%,
+        rgb(247 239 223 / 91%) 44%,
+        rgb(247 239 223 / 48%) 76%,
+        rgb(247 239 223 / 68%) 100%
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 7.9rem,
+        rgb(43 33 25 / 4%) 7.9rem 8rem
+      );
+    content: "";
+    pointer-events: none;
+  }
+
+  .home-hero__frame {
+    position: relative;
+    z-index: 1;
+    padding-block: 0;
+  }
+
+  .home-hero__coordinate-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 1.4rem;
+    margin-block-end: clamp(1.5rem, 3vw, 3rem);
+    color: rgb(72 48 31 / 58%);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+  }
+
+  .home-hero__coordinate-line span + span::before {
+    margin-inline-end: 1.4rem;
+    color: var(--gold-ink);
+    content: "◇";
   }
 
   .home-hero__grid {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    align-items: center;
-    gap: clamp(2rem, 5vw, 5rem);
+    grid-template-columns: minmax(0, 1.25fr) minmax(21rem, 0.75fr);
+    align-items: end;
+    gap: clamp(2rem, 6vw, 7rem);
   }
 
   .home-hero__copy {
@@ -327,25 +463,26 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     margin: 0 0 var(--space-3);
     color: var(--rust-strong);
     font-family: var(--font-mono);
-    font-size: var(--step--1);
+    font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 0.085em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   h1 {
-    max-inline-size: 9ch;
-    font-size: var(--step-5);
-    letter-spacing: -0.045em;
-    line-height: 0.94;
+    max-inline-size: 8ch;
+    font-size: clamp(4.2rem, 10vw, 9.2rem);
+    letter-spacing: -0.065em;
+    line-height: 0.82;
   }
 
   .home-hero__statement {
-    max-inline-size: 48ch;
-    margin-block-start: var(--space-5);
+    max-inline-size: 44ch;
+    margin-block-start: var(--space-6);
     color: var(--ink-soft);
-    font-size: var(--step-1);
-    line-height: 1.5;
+    font-family: var(--font-display);
+    font-size: clamp(1.28rem, 2vw, 1.85rem);
+    line-height: 1.42;
   }
 
   .home-hero__actions {
@@ -355,75 +492,292 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     gap: var(--space-3);
   }
 
-  .home-hero__facts {
-    display: grid;
-    margin: var(--space-7) 0 0;
-    grid-template-columns: 1fr;
-    gap: var(--space-3);
+  .home-hero__experience-note {
+    max-inline-size: 62ch;
+    margin: var(--space-4) 0 0;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.55;
   }
 
-  .home-hero__facts > div {
-    display: grid;
-    padding-block-start: var(--space-3);
-    grid-template-columns: 6rem minmax(0, 1fr);
-    gap: var(--space-3);
-    border-block-start: 1px solid var(--line);
+  .home-hero__experience-note a {
+    color: var(--rust-strong);
+    font-weight: 750;
   }
 
-  .home-hero__facts dt {
+  .home-hero__meta {
+    display: grid;
+    max-inline-size: 43rem;
+    margin: var(--space-6) 0 0;
+    padding-block-start: var(--space-4);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+    border-block-start: 1px solid var(--line-strong);
+  }
+
+  .home-hero__meta dt {
     color: var(--ink-soft);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.58rem;
     font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
-  .home-hero__facts dd {
-    margin: 0;
-    font-size: var(--step--1);
-    font-weight: 600;
+  .home-hero__meta dd {
+    margin: var(--space-2) 0 0;
+    font-size: 0.82rem;
+    font-weight: 750;
   }
 
-  .home-hero__figure,
-  .editorial-art {
-    margin: 0;
+  .home-hero__ledger {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.55rem, 3vw, 2.45rem);
+    border: 1px solid rgb(237 201 120 / 32%);
+    background:
+      linear-gradient(145deg, rgb(29 24 19 / 97%), rgb(24 20 16 / 94%)),
+      var(--route-scene);
+    background-position:
+      center,
+      74% 40%;
+    background-size: cover;
+    box-shadow: 0 1.8rem 5rem rgb(26 17 10 / 24%);
+    color: var(--surface);
+    backdrop-filter: blur(0.8rem);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 1.25rem) 0,
+      100% 1.25rem,
+      100% 100%,
+      1.25rem 100%,
+      0 calc(100% - 1.25rem)
+    );
   }
 
-  .home-hero__figure :global(.anzania-plate) {
-    aspect-ratio: 5 / 4;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-medium);
-    box-shadow: var(--shadow-medium);
+  .home-hero__ledger::before {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        circle at 82% 18%,
+        rgb(211 166 81 / 13%),
+        transparent 34%
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 4.9rem,
+        rgb(255 249 238 / 2.7%) 4.9rem 5rem
+      );
+    content: "";
+    pointer-events: none;
   }
 
-  figcaption {
-    margin-block-start: var(--space-2);
-    color: var(--ink-soft);
-    font-size: 0.78rem;
+  .home-hero__ledger-heading {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block-end: var(--space-4);
+    border-block-end: 1px solid rgb(255 249 238 / 15%);
+    color: var(--gold-light);
+    font-family: var(--font-mono);
+    font-size: 0.61rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .home-hero__ledger-heading span {
+    color: rgb(255 249 238 / 48%);
+    font-size: 0.55rem;
+  }
+
+  .home-hero__signal-graph {
+    position: relative;
+    z-index: 1;
+    inline-size: 100%;
+    margin-block-start: var(--space-5);
+    overflow: visible;
+  }
+
+  .home-hero__signal-grid,
+  .home-hero__signal-path {
+    fill: none;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .home-hero__signal-grid {
+    stroke: rgb(255 249 238 / 8%);
+  }
+
+  .home-hero__signal-path {
+    stroke: #6e9b91;
+    stroke-width: 2;
+  }
+
+  .home-hero__signal-graph circle {
+    fill: var(--gold-light);
+  }
+
+  .home-hero__signal-graph text {
+    fill: var(--gold-light);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .home-hero__signal-graph .home-hero__graph-copy {
+    fill: rgb(255 249 238 / 38%);
+    font-size: 6px;
+    letter-spacing: 0.06em;
+  }
+
+  .home-hero__ledger-copy {
+    position: relative;
+    z-index: 1;
+    margin-block-start: var(--space-3);
+  }
+
+  .home-hero__ledger-copy h2 {
+    max-inline-size: 18ch;
+    color: var(--surface);
+    font-size: clamp(1.75rem, 2.5vw, 2.6rem);
+  }
+
+  .home-hero__ledger-copy p {
+    max-inline-size: 48ch;
+    margin-block-start: var(--space-3);
+    color: rgb(255 249 238 / 68%);
+    font-size: 0.82rem;
+  }
+
+  .home-hero__console-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    margin: var(--space-5) 0 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    background: rgb(8 7 6 / 34%);
+  }
+
+  .home-hero__console-grid > div {
+    padding: var(--space-4);
+    border-inline-start: 1px solid rgb(255 249 238 / 14%);
+  }
+
+  .home-hero__console-grid > div:first-child {
+    border-inline-start: 0;
+  }
+
+  .home-hero__console-grid dt {
+    color: var(--gold-light);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .home-hero__console-grid dd {
+    margin: var(--space-2) 0 0;
+    color: rgb(255 249 238 / 58%);
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+
+  .home-hero__rune {
+    position: absolute;
+    inset-inline-end: -2rem;
+    inset-block-end: -3rem;
+    display: grid;
+    inline-size: clamp(9rem, 17vw, 16rem);
+    aspect-ratio: 1;
+    place-items: center;
+    opacity: 0.24;
+    pointer-events: none;
+  }
+
+  .home-hero__rune span {
+    position: absolute;
+    border: 1px solid var(--rust);
+    transform: rotate(45deg);
+  }
+
+  .home-hero__rune span:nth-child(1) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .home-hero__rune span:nth-child(2) {
+    inline-size: 68%;
+    block-size: 68%;
+  }
+
+  .home-hero__rune span:nth-child(3) {
+    inline-size: 28%;
+    block-size: 28%;
+    background: rgb(211 166 81 / 18%);
   }
 
   .proof-section {
-    background: var(--canvas);
+    position: relative;
+    z-index: 2;
+    margin-block-start: -1px;
+    background: rgb(243 234 217 / 82%);
+  }
+
+  .home-work-signal {
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .home-work-signal::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      var(--canvas) 0 38%,
+      rgb(243 234 217 / 82%) 67%,
+      var(--canvas) 100%
+    );
+    content: "";
+  }
+
+  .home-work-signal__atmosphere {
+    position: absolute;
+    z-index: -1;
+    inset-block: 0;
+    inset-inline-end: -8vw;
+    inline-size: min(68rem, 68vw);
+    opacity: 0.2;
+    filter: saturate(0.55) sepia(0.12);
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 34%,
+      black 78%,
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  .home-work-signal__atmosphere :global(.anzania-plate),
+  .home-work-signal__atmosphere :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
   }
 
   .featured-work-grid {
     display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-columns: minmax(0, 1.28fr) minmax(20rem, 0.72fr);
     gap: var(--space-5);
   }
 
   .featured-work-grid__supporting {
     display: grid;
     gap: var(--space-5);
-  }
-
-  .editorial-art--work {
-    margin-block-start: var(--space-7);
-  }
-
-  .editorial-art--work :global(.anzania-plate) {
-    aspect-ratio: 3 / 1;
-    border: 1px solid var(--line-strong);
   }
 
   .home-capabilities :global(.capability-record) {
@@ -439,7 +793,8 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   .home-split-panels article {
     padding: clamp(1.5rem, 4vw, 3rem);
     border: 1px solid var(--line-strong);
-    background: var(--surface);
+    background: rgb(251 245 234 / 80%);
+    backdrop-filter: blur(0.5rem);
   }
 
   .home-split-panels h3 {
@@ -498,82 +853,143 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     text-underline-offset: 0.2em;
   }
 
-  .home-contact {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    align-items: stretch;
+  .home-contact-section {
+    overflow: hidden;
   }
 
-  .home-contact > * {
-    min-inline-size: 0;
+  .home-contact-panel {
+    min-block-size: 28rem;
+    background: #1f1a15;
   }
 
-  .home-contact .contact-panel {
-    border-radius: var(--radius-medium) 0 0 var(--radius-medium);
+  .home-contact-panel__atmosphere {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    opacity: 0.28;
+    filter: saturate(0.74) contrast(1.04);
+    mask-image: linear-gradient(90deg, transparent 20%, black 58%, black);
+    pointer-events: none;
+  }
+
+  .home-contact-panel__atmosphere::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgb(31 26 21 / 98%) 0 42%,
+      rgb(31 26 21 / 58%) 72%,
+      rgb(31 26 21 / 42%)
+    );
+    content: "";
+  }
+
+  .home-contact-panel__atmosphere :global(.anzania-plate),
+  .home-contact-panel__atmosphere :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .home-contact-panel__copy,
+  .home-contact-panel .contact-panel__links {
+    position: relative;
+    z-index: 1;
   }
 
   .contact-panel__eyebrow {
     color: var(--gold-light);
   }
 
-  .editorial-art--contact :global(.anzania-plate) {
-    block-size: 100%;
-    min-block-size: 22rem;
-    border-radius: 0 var(--radius-medium) var(--radius-medium) 0;
-  }
-
-  .editorial-art--contact {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .editorial-art--contact figcaption {
-    max-inline-size: 40ch;
-  }
-
-  @media (max-width: 60rem) {
+  @media (max-width: 66rem) {
     .home-hero__grid,
     .featured-work-grid,
-    .home-split-panels,
-    .home-contact {
+    .home-split-panels {
       grid-template-columns: 1fr;
     }
 
+    .home-hero {
+      min-block-size: auto;
+    }
+
     .home-hero__copy {
+      max-inline-size: 46rem;
+    }
+
+    .home-hero__ledger {
       max-inline-size: 44rem;
     }
 
-    .home-contact {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .home-hero__figure :global(.anzania-plate) {
-      aspect-ratio: 16 / 10;
-    }
-
-    .home-contact .contact-panel {
-      border-radius: var(--radius-medium) var(--radius-medium) 0 0;
-    }
-
-    .editorial-art--contact :global(.anzania-plate) {
-      min-block-size: 16rem;
-      aspect-ratio: 16 / 9;
-      border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+    .home-work-signal__atmosphere {
+      inset-inline-end: -24vw;
+      inline-size: 104vw;
+      opacity: 0.15;
     }
   }
 
-  @media (max-width: 40rem) {
+  @media (max-width: 44rem) {
+    .home-hero {
+      padding-block: 2.5rem 4.5rem;
+    }
+
+    .home-hero::before {
+      background: linear-gradient(
+        180deg,
+        rgb(247 239 223 / 92%),
+        rgb(247 239 223 / 72%)
+      );
+    }
+
+    .home-hero__coordinate-line span:nth-child(3) {
+      display: none;
+    }
+
+    .home-hero__coordinate-line span + span::before {
+      margin-inline-end: 0.55rem;
+    }
+
+    h1 {
+      font-size: clamp(4rem, 22vw, 6.8rem);
+      line-height: 0.84;
+    }
+
     .home-hero__actions :global(.action-link) {
       inline-size: 100%;
     }
 
-    .home-hero__facts > div,
+    .home-hero__meta,
     .about-preview {
       grid-template-columns: 1fr;
     }
 
-    .home-hero__facts > div {
-      gap: var(--space-1);
+    .home-hero__console-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .home-hero__console-grid > div {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      align-items: center;
+      gap: var(--space-3);
+      border-block-start: 1px solid rgb(255 249 238 / 14%);
+      border-inline-start: 0;
+    }
+
+    .home-hero__console-grid > div:first-child {
+      border-block-start: 0;
+    }
+
+    .home-hero__console-grid dd {
+      margin: 0;
+    }
+
+    .home-hero__rune {
+      inset-inline-end: -5rem;
+      opacity: 0.14;
+    }
+
+    .home-contact-panel__atmosphere {
+      opacity: 0.2;
+      mask-image: linear-gradient(180deg, transparent, black 45%);
     }
   }
 </style>

@@ -1,66 +1,60 @@
 # Profile Upgrade status
 
-**Updated:** 2026-07-31
-**Lead:** Codex
-**Independent reviewer:** Claude, currently offline by heartbeat protocol
-**Current milestone:** DN-M-AFR-01 rights and pilot-silhouette gate
+**Updated:** 2026-08-08
+**Working branch:** `agent/profile-upgrade-20260808-final`
+**Target:** `https://bongo-seakhoa.github.io/profile/`
 
-## Overall
+## Current product state
 
-| Area | State | Evidence / next gate |
+| Area | State | Evidence and next gate |
 | --- | --- | --- |
-| Repository, references, build and deployment audit | Complete | Baseline `df410d5`; recovery tag `legacy-pages-baseline-20260730`; GitHub Pages project-site constraints recorded. |
-| Collaboration protocol | Active | Shared plans, decisions, risks, handoffs, inboxes, ignored runtime heartbeats and watcher are under `AI-COLLAB/`. |
-| Asset-linkage workbook | Complete | Corrected v2 workbook verified across all six sheets; reference original preserved. |
-| Static View implementation | Complete | Astro/TypeScript site builds 26 pages with 0 bytes of client JavaScript. |
-| Resume and CV | Complete | JavaScript/Chromium pipeline produces four exact-A4, selectable PDFs: two 2-page resumes and two 3-page CVs. |
-| Static release QA | Passed | 58 unit tests, 72 browser tests, public-output validation, metadata validation, budgets and three-run Lighthouse median passed. |
-| Privacy review | Passed for current tree | Retired phone removed from current tree and `dist`; no secrets or U+2014 em dashes found. Historical Git exposure is separately recorded in R-026. |
-| Deployment | Complete | Static View implementation revision `e29a4c9` is live; warning-clean Pages run `30605182973` and post-deploy HTTP/PDF verification passed. Live `version.json` is authoritative for later record-only revisions. |
-| Canonical character discovery | Complete | Desert Nomad v3 self-contained handoff verifies 32 of 32 manifest entries and defines the exact 15-character roster. |
-| Pilot reconstruction | Private review draft complete | DN-M-AFR-01 v2 orthographic reconstruction and Blender measurement blockout exist under ignored `source/private/`. |
-| Public character derivatives | Blocked externally | Bongo must confirm ownership or derivative and redistribution rights before public character art, meshes or textures ship. |
-| Full immersive production | Required, not started at scale | Character roster, sets, effects, animations, powers, runtime integration and the complete Blender/browser matrix remain mandatory milestones. |
+| Professional Static View | Release candidate complete | Premium systems-cartography shell, route-aware atmosphere, evidence-led homepage, redesigned work and contact routes, command navigator, reading beacon, transitions and no-JavaScript fallback are implemented. |
+| Explore Anzania | Release candidate complete | Eight locations, fifteen full-body companions, four traversal powers, atlas, dialogs and full-body safe-zone runtime are implemented. |
+| Anzania canon | Locked | Anzania is an original fictional portfolio world. It is not Tanzania or any other real location. |
+| Full-body framing | Passed in local browser QA | Complete silhouettes remained contained through tested viewport ratios, look-back, traversal, guide change and portal states. No OTS path exists. |
+| Runtime isolation | Implemented | One progressive runtime is confined to `public/assets/static/`; one immersive runtime is confined to `public/assets/immersive/`. Professional routes may not request immersive runtime assets. |
+| Resume and CV | Preserved | Four A4 documents remain generated through JavaScript, Chromium and `pdf-lib`; Python is not in the production document pipeline. |
+| Asset optimisation | Passed locally | The complete immersive bundle remains below 9 MB; each WebP is below 650 KB; compressed CSS and JavaScript remain within the release contracts. |
+| Automated release coverage | Updated | Unit, Playwright, public-output and budget contracts cover both products, no-JavaScript fallback, command navigation, reduced motion and runtime isolation. |
+| Local browser QA | Passed | Story mode passed the full matrix. The professional redesign passed desktop, intermediate, mobile, no-JavaScript, command navigation, scroll-state and reduced-motion checks without horizontal overflow or runtime errors. |
+| Canonical CI | Publication gate | Node 24.14 and pnpm 11.9 `pnpm qa` must run in GitHub Actions or an equivalent connected build environment. |
+| GitHub Pages publication | Publication gate | Push the release branch, merge to `main`, run Pages and verify live routes, documents and metadata. |
 
-## Static View release evidence
+## Release evidence
 
-- Production: `https://bongo-seakhoa.github.io/profile/`
-- Main revision: `e29a4c959c39fff6e93def841c0944db94bf013f`.
-- Warning-clean deployment: GitHub Actions run `30605182973`.
-- All 20 sitemap routes, four direct PDFs, `.nojekyll`, sitemap and robots returned HTTP 200 after deployment.
-- Live PDFs remained exact A4, selectable and visually intact after download and raster review.
-- Formatting and linting passed.
-- Astro and TypeScript reported 0 errors.
-- 58 unit tests passed, including character canon, full-body camera and animation-runtime contracts.
-- 72 Playwright checks passed across desktop Chrome, mobile Chrome, Firefox and WebKit.
-- 26 pages, 20 canonical sitemap routes and 26 unique social cards were built and validated.
-- Four direct-download PDFs passed page-count, A4, metadata, text-selection, link and layout checks.
-- Static budgets passed at 9,160 bytes maximum HTML gzip, 9,795 bytes CSS gzip and 0 bytes JavaScript gzip.
-- Lighthouse median passed at Performance 99, Accessibility 100, Best Practices 100 and SEO 100.
-- Median Lighthouse field proxies: LCP 1,508 ms, CLS 0.001 and TBT 49 ms.
+### Explore Anzania
 
-## Immersive production contract
+- Eight named narrative locations and 32 responsive outer and inner scene derivatives.
+- Fifteen selectable transparent 540 by 1280 full-body companions, with five masculine, five feminine and five neutral options.
+- Dune Surfing, Sand Teleportation, Solar Propulsion and Reality Bending transitions.
+- Responsive full-body framing at 390 by 844, 844 by 390, 768 by 1024, 1024 by 650, 1440 by 1000 and 1920 by 1080.
+- Guidance toast containment verified in portrait and low-height landscape without collisions against the companion, chapter panel, top bar, location label or traversal controls.
+- No canvas, WebGL, `.glb`, `.gltf`, `.fbx`, `.blend`, shader, audio or video runtime.
 
-The immersive work is explicitly required by
-`plans/IMMERSIVE-PRODUCTION-EVALUATION-MATRIX.md` and D007. It includes:
+### Professional Static View
 
-1. Canonical creation, rigging, materials, accessories and LODs for all 15 characters.
-2. Shared male, female and nonbinary locomotion families plus character-safe retargeting.
-3. Gesture, idle, interaction, traversal and power animations.
-4. Solar Propulsion, Sand Teleportation, surfing, launches, landings, look-back and edge-lean behaviour.
-5. Construction and enhancement of every required location set.
-6. Lighting, atmosphere, particles, environmental movement, background effects and transitions.
-7. Distant full-body animated-bound camera containment with no OTS path.
-8. Browser streaming, performance tiers, fallbacks and recovery.
-9. Blender and browser evaluation across characters, powers, locations, ratios, breakpoints and quality levels.
+- A shared dark editorial shell with compact primary navigation, documents access and a prominent but separate Explore Anzania action.
+- Information-first homepage with live systems console, proof ledger, selected work, capabilities, experience, research, education and contact actions.
+- Redesigned work and contact routes with evidence-flow graphics rather than scenic centrepieces.
+- Route-aware Threshold, Archive and Oasis atmosphere rendered behind the interface at restrained opacity.
+- Accessible `Ctrl/Cmd+K` or `/` command navigator, keyboard filtering, focus return, reading progress and active-section beacon.
+- Progressive enhancement only: every heading, record, link and document remains in semantic HTML and visible when JavaScript is disabled.
+- Dedicated reduced-motion, forced-colours and print contracts.
+- Final local visual checks at 1440 by 1000, 1366 by 900, 1280 by 900, 390 by 844 and 844 by 390 with zero horizontal overflow.
+- Command filtering, empty state, focus restoration, no-JavaScript fallback and reduced-motion reveal behaviour verified through Chromium DevTools Protocol.
 
-## Current external decisions
+## Prior production evidence
 
-1. Bongo confirms ownership or permission to create and publicly redistribute derivatives from the Desert Nomad canonical references.
-2. Bongo approves or comments on the private DN-M-AFR-01 v2 silhouette before final sculpt work scales to the remaining roster.
-3. Bongo may provide a LinkedIn export or current professional record to close the remaining evidence-only content warnings.
-4. Bongo decides whether historical Git phone exposure should be removed through a separately planned history rewrite.
+- Prior Static View implementation revision: `e29a4c959c39fff6e93def841c0944db94bf013f`.
+- Prior warning-clean GitHub Pages run: `30605182973`.
+- Prior Release 1 Lighthouse median: Performance 99, Accessibility 100, Best Practices 100 and SEO 100.
 
-## Claude coordination
+## Current publication gates
 
-Claude's R001 review is retained. Nine Codex-to-Claude messages document later architecture, camera, animation, immersive-scope and release-review requests. No current Claude heartbeat or new response is present. Under the three-hour protocol, Claude is marked offline and Codex continues without blocking; the inbox watcher remains available for immediate resumption.
+1. Push the release branch and run the canonical Node 24 `pnpm qa` workflow.
+2. Merge to `main` after the hosted gate passes.
+3. Verify the live homepage, Explore Anzania, sitemap, social metadata, `version.json` and all four PDF downloads.
+
+## Coordination
+
+Claude's earlier review history remains retained. No current Claude heartbeat or new response is present, so the lead continues under the written collaboration protocol without blocking completion. Automated evidence does not impersonate a second reviewer.

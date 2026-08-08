@@ -60,18 +60,28 @@ test.describe("Static View route and accessibility contract", () => {
       await expect(page.locator("header.site-header")).toHaveCount(1);
       await expect(page.locator("footer.site-footer")).toHaveCount(1);
       await expect(page.locator("canvas")).toHaveCount(0);
+      await page.waitForFunction(
+        () => document.documentElement.dataset.staticReady === "true",
+      );
 
       const staticState = await page.evaluate(() => ({
         bodyText: document.body.innerText,
         horizontalOverflow:
           document.documentElement.scrollWidth -
           document.documentElement.clientWidth,
-        animations: document.getAnimations().length,
+        enhanced:
+          document.documentElement.classList.contains("static-enhanced"),
+        scriptSources: Array.from(document.scripts)
+          .map((script) => script.getAttribute("src"))
+          .filter(Boolean),
       }));
 
       expect(staticState.bodyText).not.toContain("\u2014");
       expect(staticState.horizontalOverflow).toBeLessThanOrEqual(1);
-      expect(staticState.animations).toBe(0);
+      expect(staticState.enhanced).toBe(true);
+      expect(staticState.scriptSources).toEqual([
+        "/profile/assets/static/static-runtime.js",
+      ]);
       expect(consoleErrors).toEqual([]);
       expect(pageErrors).toEqual([]);
 
@@ -119,6 +129,52 @@ test.describe("Static View route and accessibility contract", () => {
     await skipLink.press("Enter");
     await expect(page.locator("#main-content")).toBeFocused();
   });
+
+  test("command navigator opens, filters and closes accessibly", async ({
+    page,
+  }) => {
+    await page.goto("", { waitUntil: "networkidle" });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.staticReady === "true",
+    );
+    await page.keyboard.press("Control+K");
+
+    const dialog = page.locator("[data-command-dialog]");
+    await expect(dialog).toBeVisible();
+    await expect(page.locator("[data-command-search]")).toBeFocused();
+
+    await page.locator("[data-command-search]").fill("research");
+    await expect(
+      page.locator(
+        '[data-command-item]:not([hidden]) a[href="/profile/research/"]',
+      ),
+    ).toHaveCount(1);
+    await expect(page.locator("[data-command-item]:not([hidden])")).toHaveCount(
+      1,
+    );
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(page.locator("[data-command-trigger]")).toBeFocused();
+  });
+
+  test("reduced motion keeps every record visible", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("", { waitUntil: "networkidle" });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.staticReady === "true",
+    );
+
+    await expect(page.locator('html[data-motion="reduced"]')).toHaveCount(1);
+    await expect(page.locator('[data-reveal-state="pending"]')).toHaveCount(0);
+    const hiddenRecords = await page.evaluate(
+      () =>
+        Array.from(
+          document.querySelectorAll("main section, [data-signal-card]"),
+        ).filter((element) => getComputedStyle(element).opacity === "0").length,
+    );
+    expect(hiddenRecords).toBe(0);
+  });
 });
 
 test.describe("Responsive layout", () => {
@@ -128,6 +184,7 @@ test.describe("Responsive layout", () => {
     { width: 390, height: 844 },
     { width: 768, height: 1024 },
     { width: 1024, height: 768 },
+    { width: 1280, height: 900 },
     { width: 1366, height: 650 },
     { width: 1440, height: 1000 },
   ]) {
@@ -162,9 +219,9 @@ test.describe("Responsive layout", () => {
             ? { left: box.left, right: box.right, width: box.width }
             : null;
         })(),
-        heroImage: (() => {
+        signalLedger: (() => {
           const box = document
-            .querySelector('[data-anzania-asset="threshold-dunes-outer"] img')
+            .querySelector(".home-hero__ledger")
             ?.getBoundingClientRect();
           return box
             ? { left: box.left, right: box.right, width: box.width }
@@ -177,13 +234,59 @@ test.describe("Responsive layout", () => {
         `Overflow sources: ${JSON.stringify(result.overflowSources)}`,
       ).toBeLessThanOrEqual(1);
       expect(result.h1?.width ?? 0).toBeGreaterThan(0);
-      expect(result.heroImage?.width ?? 0).toBeGreaterThan(0);
+      expect(result.signalLedger?.width ?? 0).toBeGreaterThan(0);
       expect(result.h1?.right ?? 0).toBeLessThanOrEqual(viewport.width + 1);
-      expect(result.heroImage?.right ?? 0).toBeLessThanOrEqual(
+      expect(result.signalLedger?.right ?? 0).toBeLessThanOrEqual(
         viewport.width + 1,
       );
     });
   }
+
+  test("professional header switches cleanly at laptop breakpoints", async ({
+    page,
+  }) => {
+    for (const scenario of [
+      { width: 1280, height: 900, desktop: false },
+      { width: 1366, height: 900, desktop: true },
+      { width: 1440, height: 1000, desktop: true },
+    ]) {
+      await page.setViewportSize({
+        width: scenario.width,
+        height: scenario.height,
+      });
+      await page.goto("", { waitUntil: "networkidle" });
+
+      const headerState = await page.evaluate(() => {
+        const header = document.querySelector(".site-header");
+        const desktopNavigation = document.querySelector(".desktop-navigation");
+        const mobileNavigation = document.querySelector(".mobile-navigation");
+        const utilities = document.querySelector(".site-header__utilities");
+        const box = header?.getBoundingClientRect();
+        const utilityBox = utilities?.getBoundingClientRect();
+        return {
+          overflow:
+            document.documentElement.scrollWidth -
+            document.documentElement.clientWidth,
+          headerRight: box?.right ?? 0,
+          utilitiesRight: utilityBox?.right ?? 0,
+          desktopDisplay: desktopNavigation
+            ? getComputedStyle(desktopNavigation).display
+            : "none",
+          mobileDisplay: mobileNavigation
+            ? getComputedStyle(mobileNavigation).display
+            : "none",
+        };
+      });
+
+      expect(headerState.overflow).toBeLessThanOrEqual(1);
+      expect(headerState.headerRight).toBeLessThanOrEqual(scenario.width + 1);
+      expect(headerState.utilitiesRight).toBeLessThanOrEqual(
+        scenario.width + 1,
+      );
+      expect(headerState.desktopDisplay === "block").toBe(scenario.desktop);
+      expect(headerState.mobileDisplay === "block").toBe(!scenario.desktop);
+    }
+  });
 });
 
 test("document previews and direct PDFs are available", async ({

@@ -29,7 +29,7 @@ const github = identity.links.find((link) => link.id === "github");
     slot="masthead"
     eyebrow="Direct contact"
     title={route.title}
-    lede="Email is the direct contact path. LinkedIn, GitHub and polished professional documents are available without a form or JavaScript."
+    lede="Email is the direct contact path. LinkedIn, GitHub and polished professional documents are available without a form or account wall."
   >
     <ActionLink href={`mailto:${identity.email}`}>Email Bongo</ActionLink>
     <ActionLink href="documents/" variant="secondary">
@@ -37,16 +37,31 @@ const github = identity.links.find((link) => link.id === "github");
     </ActionLink>
   </PageMasthead>
 
-  <section class="page-section" aria-labelledby="contact-methods-title">
+  <section
+    class="page-section contact-field-section"
+    aria-labelledby="contact-methods-title"
+    data-section-label="Contact methods"
+  >
+    <div class="contact-field-section__atmosphere" aria-hidden="true">
+      <AnzaniaPlate
+        id="oasis-audience-inner"
+        use="contact-call-to-action"
+        decorative
+        loading="eager"
+        sizes="(min-width: 80rem) 76vw, 130vw"
+      />
+    </div>
+
     <Container>
-      <div class="contact-layout">
-        <div>
+      <div class="contact-field">
+        <div class="contact-record" data-signal-card>
           <SectionIntro
             id="contact-methods-title"
             eyebrow="Contact methods"
             title="Choose the path that fits"
             description={identity.availability}
           />
+
           <dl class="contact-methods">
             <div>
               <dt>Email</dt>
@@ -90,49 +105,144 @@ const github = identity.links.find((link) => link.id === "github");
             </div>
           </dl>
         </div>
-        <figure>
-          <AnzaniaPlate
-            id="oasis-audience-inner"
-            use="contact-call-to-action"
-            decorative
-            loading="eager"
-            sizes="(min-width: 60rem) 42vw, 100vw"
-          />
-          <figcaption>
-            Oasis of Audience artwork used as a calm setting for direct contact.
-          </figcaption>
-        </figure>
+
+        <aside class="contact-brief" aria-labelledby="contact-brief-title">
+          <div class="contact-brief__heading">
+            <div>
+              <p>Useful first signal</p>
+              <h2 id="contact-brief-title">A clear opening message helps.</h2>
+            </div>
+            <svg class="signal-glyph" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="23"></circle>
+              <path d="M16 39 32 16l16 23-16 9Z"></path>
+              <circle class="signal-glyph__node" cx="32" cy="32" r="2.7"
+              ></circle>
+            </svg>
+          </div>
+
+          <ol>
+            <li>
+              <span>01</span>
+              <div>
+                <strong>The problem</strong>
+                <p>
+                  The data, analytics or machine learning problem you are
+                  solving.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <strong>The outcome</strong>
+                <p>What useful change should exist and who needs to use it.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <strong>The constraints</strong>
+                <p>Relevant timing, access limits and working arrangement.</p>
+              </div>
+            </li>
+          </ol>
+
+          <a class="contact-brief__action" href={`mailto:${identity.email}`}>
+            Start with email <span aria-hidden="true">↗</span>
+          </a>
+        </aside>
       </div>
     </Container>
   </section>
 
   <section
-    class="page-section page-section--surface"
-    aria-labelledby="collaboration-title"
+    class="page-section page-section--surface contact-assurance-section"
+    aria-labelledby="contact-assurance-title"
+    data-section-label="Professional record"
   >
     <Container size="content">
-      <SectionIntro
-        id="collaboration-title"
-        eyebrow="Good starting points"
-        title="Useful context for an enquiry"
-      />
-      <ul class="collaboration-list">
-        <li>
-          The data, analytics or machine learning problem you are solving.
-        </li>
-        <li>The expected outcome and who needs to use it.</li>
-        <li>Relevant timing, access constraints and working arrangement.</li>
-      </ul>
+      <div class="contact-assurance">
+        <p class="field-label">No form, no tracking wall</p>
+        <div>
+          <h2 id="contact-assurance-title">The direct paths remain direct.</h2>
+          <p>
+            Contact details, professional documents and public work evidence are
+            available in the page itself. JavaScript enhances navigation, but it
+            is not required to reach any essential information.
+          </p>
+        </div>
+      </div>
     </Container>
   </section>
 </BaseLayout>
 
 <style>
-  .contact-layout {
+  .contact-field-section {
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .contact-field-section::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(
+      98deg,
+      var(--canvas) 0 42%,
+      rgb(243 234 217 / 72%) 68%,
+      var(--canvas)
+    );
+    content: "";
+  }
+
+  .contact-field-section__atmosphere {
+    position: absolute;
+    z-index: -1;
+    inset-block: 0;
+    inset-inline-end: -6vw;
+    inline-size: min(80rem, 74vw);
+    opacity: 0.25;
+    filter: saturate(0.64) sepia(0.08) contrast(0.98);
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 28%,
+      black 88%,
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  .contact-field-section__atmosphere :global(.anzania-plate),
+  .contact-field-section__atmosphere :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .contact-field {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    align-items: start;
-    gap: clamp(2rem, 6vw, 6rem);
+    grid-template-columns: minmax(0, 1.12fr) minmax(20rem, 0.88fr);
+    align-items: stretch;
+    gap: var(--space-5);
+  }
+
+  .contact-record {
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--line-strong);
+    background: rgb(251 245 234 / 88%);
+    box-shadow: 0 1.2rem 3.5rem rgb(48 32 20 / 8%);
+    backdrop-filter: blur(0.7rem);
+  }
+
+  .contact-record :global(.section-intro) {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    margin-block-end: var(--space-5);
+  }
+
+  .contact-record :global(.section-intro__eyebrow) {
+    grid-row: auto;
+    padding-block-start: 0;
   }
 
   .contact-methods {
@@ -143,7 +253,7 @@ const github = identity.links.find((link) => link.id === "github");
   .contact-methods > div {
     display: grid;
     padding-block: var(--space-5);
-    grid-template-columns: 6rem minmax(0, 1fr);
+    grid-template-columns: 6.4rem minmax(0, 1fr);
     gap: var(--space-2) var(--space-4);
     border-block-start: 1px solid var(--line-strong);
   }
@@ -151,8 +261,9 @@ const github = identity.links.find((link) => link.id === "github");
   .contact-methods dt {
     color: var(--rust-strong);
     font-family: var(--font-mono);
-    font-size: var(--step--1);
+    font-size: 0.66rem;
     font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
@@ -163,9 +274,9 @@ const github = identity.links.find((link) => link.id === "github");
 
   .contact-methods__note {
     grid-column: 2;
-    margin: 0;
     color: var(--ink-soft);
-    font-size: var(--step--1);
+    font-size: 0.82rem;
+    font-weight: 500 !important;
   }
 
   .contact-methods a {
@@ -173,48 +284,147 @@ const github = identity.links.find((link) => link.id === "github");
     text-underline-offset: 0.2em;
   }
 
-  figure {
-    margin: 0;
+  .contact-brief {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    flex-direction: column;
+    border: 1px solid rgb(237 201 120 / 40%);
+    background: linear-gradient(
+      145deg,
+      rgb(31 26 21 / 98%),
+      rgb(37 70 80 / 96%)
+    );
+    box-shadow: 0 1.5rem 4rem rgb(34 23 15 / 16%);
+    color: var(--surface);
   }
 
-  figure :global(.anzania-plate) {
-    min-block-size: 34rem;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-medium);
+  .contact-brief::before {
+    position: absolute;
+    inset-block-start: -8rem;
+    inset-inline-end: -8rem;
+    inline-size: 20rem;
+    aspect-ratio: 1;
+    border: 1px solid rgb(237 201 120 / 14%);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 3rem rgb(237 201 120 / 4%),
+      0 0 0 6rem rgb(237 201 120 / 2.5%);
+    content: "";
   }
 
-  figcaption {
-    margin-block-start: var(--space-2);
-    color: var(--ink-soft);
-    font-size: 0.78rem;
+  .contact-brief__heading {
+    position: relative;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block-end: var(--space-5);
+    border-block-end: 1px solid rgb(255 249 238 / 18%);
   }
 
-  .collaboration-list {
+  .contact-brief__heading p {
+    color: var(--gold-light);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .contact-brief__heading h2 {
+    max-inline-size: 16ch;
+    margin-block-start: 0.3rem;
+    color: var(--surface);
+    font-size: var(--step-2);
+  }
+
+  .contact-brief .signal-glyph {
+    color: var(--gold-light);
+  }
+
+  .contact-brief ol {
+    position: relative;
     display: grid;
     margin: 0;
-    padding-inline-start: 1.2rem;
-    gap: var(--space-3);
+    list-style: none;
+  }
+
+  .contact-brief li {
+    display: grid;
+    padding-block: var(--space-5);
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--space-4);
+    border-block-end: 1px solid rgb(255 249 238 / 14%);
+  }
+
+  .contact-brief li > span {
+    color: var(--gold-light);
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    font-weight: 700;
+  }
+
+  .contact-brief li strong {
+    display: block;
+    color: var(--surface);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+  }
+
+  .contact-brief li p {
+    margin-block-start: 0.3rem;
+    color: rgb(255 249 238 / 68%);
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  .contact-brief__action {
+    position: relative;
+    display: flex;
+    min-block-size: var(--target-size);
+    margin-block-start: auto;
+    padding-block-start: var(--space-5);
+    align-items: center;
+    justify-content: space-between;
+    color: var(--gold-light);
+    font-weight: 700;
+  }
+
+  .contact-assurance {
+    display: grid;
+    grid-template-columns: minmax(9rem, 0.42fr) minmax(0, 1.58fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .contact-assurance h2 {
+    max-inline-size: 24ch;
+    font-size: var(--step-3);
+  }
+
+  .contact-assurance div > p {
+    max-inline-size: 62ch;
+    margin-block-start: var(--space-4);
     color: var(--ink-soft);
     font-size: var(--step-1);
   }
 
-  .collaboration-list li::marker {
-    color: var(--gold);
-  }
-
-  @media (max-width: 56rem) {
-    .contact-layout {
+  @media (max-width: 64rem) {
+    .contact-field {
       grid-template-columns: 1fr;
     }
 
-    figure :global(.anzania-plate) {
-      min-block-size: 0;
-      aspect-ratio: 16 / 9;
+    .contact-field-section__atmosphere {
+      inset-inline-end: -28vw;
+      inline-size: 120vw;
+      opacity: 0.17;
     }
   }
 
-  @media (max-width: 34rem) {
-    .contact-methods > div {
+  @media (max-width: 40rem) {
+    .contact-methods > div,
+    .contact-assurance {
       grid-template-columns: 1fr;
     }
 

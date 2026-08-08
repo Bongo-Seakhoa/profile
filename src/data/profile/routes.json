@@ -15,6 +15,21 @@
     "immersiveDestinationId": "overview"
   },
   {
+    "id": "explore",
+    "path": "explore/",
+    "kind": "page",
+    "label": "Explore Anzania",
+    "title": "Explore Anzania | An Original Fictional Portfolio World",
+    "description": "A cinematic 2.5D journey through Bongo Seakhoa's work, identity, research, capabilities and purpose in the original fictional world of Anzania.",
+    "navigation": false,
+    "navigationOrder": null,
+    "sitemap": true,
+    "canonicalRouteId": null,
+    "entityRef": null,
+    "staticRenderable": true,
+    "immersiveDestinationId": "explore-anzania"
+  },
+  {
     "id": "work",
     "path": "work/",
     "kind": "page",
