@@ -1,0 +1,58 @@
+name: Apply Anzania finalization pass
+
+on:
+  push:
+    branches:
+      - agent/anzania-final-wow-pass
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Apply the prepared release patch
+        shell: bash
+        run: |
+          tar --extract --gzip --file .agent/anzania-final-wow-pass.tar.gz --directory .
+          rm .agent/anzania-final-wow-pass.tar.gz
+          rmdir .agent
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format changed source files
+        run: >-
+          pnpm exec prettier --write
+          src/pages/explore/index.astro
+          src/pages/research/index.astro
+          src/components/content/ExperienceRecord.astro
+          tests/e2e/anzania-explorer.spec.ts
+          tests/unit/immersive/anzania-2-5d-runtime.test.ts
+
+      - name: Commit the completed implementation
+        shell: bash
+        run: |
+          git rm .github/workflows/agent-apply-anzania.yml
+          git add --all
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Implement Anzania final wow pass"
+          git push
