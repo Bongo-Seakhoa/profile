@@ -394,7 +394,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     min-block-size: min(52rem, calc(100svh - var(--header-offset)));
     align-items: center;
     overflow: hidden;
-    padding-block: clamp(3.5rem, 8vw, 7.5rem);
+    padding-block: clamp(2rem, 4vw, 4rem);
     border-block-end: 1px solid var(--line-strong);
   }
 
@@ -411,14 +411,14 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   .home-hero__frame {
     position: relative;
     z-index: 1;
-    padding-block: clamp(1.5rem, 4vw, 3rem);
+    padding-block: 0;
   }
 
   .home-hero__coordinate-line {
     display: flex;
     flex-wrap: wrap;
     gap: 0.55rem 1.4rem;
-    margin-block-end: clamp(2rem, 5vw, 4.5rem);
+    margin-block-end: clamp(1.5rem, 3vw, 3rem);
     color: rgb(72 48 31 / 58%);
     font-family: var(--font-mono);
     font-size: 0.58rem;

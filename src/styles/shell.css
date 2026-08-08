@@ -23,7 +23,7 @@
     min-block-size: 5.1rem;
     grid-template-columns: minmax(12rem, auto) minmax(0, 1fr) auto;
     align-items: center;
-    gap: clamp(1rem, 3vw, 2.6rem);
+    gap: clamp(0.85rem, 2vw, 2rem);
   }
 
   .site-header__brand {
@@ -426,13 +426,21 @@
   .header-documents {
     display: block;
   }
+}
 
+@media (min-width: 86rem) {
   .view-indicator {
     display: inline-flex;
   }
 }
 
 @media (min-width: 72rem) {
+  .site-footer__grid {
+    grid-template-columns: minmax(18rem, 1.35fr) 1fr 0.75fr;
+  }
+}
+
+@media (min-width: 82rem) {
   .desktop-navigation {
     display: block;
   }
@@ -440,13 +448,9 @@
   .mobile-navigation {
     display: none;
   }
-
-  .site-footer__grid {
-    grid-template-columns: minmax(18rem, 1.35fr) 1fr 0.75fr;
-  }
 }
 
-@media (min-width: 48rem) and (max-width: 71.99rem) {
+@media (min-width: 48rem) and (max-width: 81.99rem) {
   .site-header__inner {
     grid-template-columns: 1fr auto;
   }

@@ -715,6 +715,21 @@
     display: none;
   }
 
+  .static-command-trigger {
+    inline-size: 2.7rem;
+    min-inline-size: 2.7rem;
+    padding: 0;
+    justify-content: center;
+    font-size: 0;
+  }
+
+  .static-command-trigger::before {
+    content: "◇";
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+  }
+
   .static-command-navigation ul {
     grid-template-columns: 1fr;
   }
