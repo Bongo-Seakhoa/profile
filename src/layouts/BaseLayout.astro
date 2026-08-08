@@ -2,6 +2,7 @@
 import "@fontsource-variable/source-serif-4/wght.css";
 import "@fontsource-variable/ibm-plex-sans/wght.css";
 import "@fontsource/ibm-plex-mono/400.css";
+import sourceSerifLatinWoff2 from "@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2?url";
 
 import "../styles/global.css";
 import "../styles/tokens.css";
@@ -225,6 +226,17 @@ const jsonLd = JSON.stringify({
     <title>{documentTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {
+      resolvedActiveRouteId === "home" && (
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={sourceSerifLatinWoff2}
+          crossorigin="anonymous"
+        />
+      )
+    }
     <link rel="icon" href={faviconUrl} type="image/svg+xml" />
     <link rel="icon" href={faviconPngUrl} sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href={appleTouchIconUrl} sizes="180x180" />
