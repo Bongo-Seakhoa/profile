@@ -19,11 +19,6 @@ export default defineConfig({
     format: "directory",
     assets: "assets",
   },
-  vite: {
-    build: {
-      cssCodeSplit: false,
-    },
-  },
   integrations: [
     sitemap({
       filter: (page) =>
