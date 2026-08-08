@@ -8,6 +8,8 @@
 
 - Working branch: `agent/profile-upgrade-20260808-final`
 - Story-mode implementation commit: `b5ebe6b`
+- Professional Static View implementation commit: `bde74a4`
+- Command-navigation refinement commit: `7b212ef`
 - Target branch: `main`
 - Target site: `https://bongo-seakhoa.github.io/profile/`
 - Recovery tag: `legacy-pages-baseline-20260730`
@@ -56,10 +58,9 @@
 ## Verification still required before live publication
 
 1. Run the canonical Node 24.14 and pnpm 11.9 `pnpm qa` suite in a connected build environment.
-2. Review professional desktop and mobile screenshots and the complete story-mode matrix.
-3. Push the release branch and open the publication pull request.
-4. Merge to `main` only after hosted checks pass.
-5. Verify the live homepage, `/profile/explore/`, sitemap, social metadata, `version.json` and all four PDFs over HTTPS.
+2. Push the release branch and open the publication pull request.
+3. Merge to `main` only after hosted checks pass.
+4. Verify the live homepage, `/profile/explore/`, sitemap, social metadata, `version.json` and all four PDFs over HTTPS.
 
 ## Recovery
 

@@ -180,7 +180,8 @@ The release is acceptable only when all of the following are true:
 ### Professional browser experience
 
 - Homepage, work and contact visual checks at desktop and mobile ratios.
-- Accessible command dialog open, filter, close and focus-return behaviour.
+- Final homepage renders at 1440 by 1000, 1366 by 900, 1280 by 900 and 390 by 844 with zero horizontal overflow.
+- Accessible command dialog open, filter, empty-state, close and focus-return behaviour.
 - Reading progress and active-section state.
 - Reduced-motion behaviour with every record visible.
 - Complete no-JavaScript content and navigation fallback.
