@@ -1,0 +1,57 @@
+name: Apply Anzania UI payload
+
+on:
+  push:
+    branches:
+      - agent/anzania-ui-assets-stage
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-anzania-ui-payload
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out staging branch
+        uses: actions/checkout@v6
+        with:
+          ref: agent/anzania-ui-assets-stage
+          fetch-depth: 0
+
+      - name: Fetch and validate the production payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            'https://drive.usercontent.google.com/download?id=1Wo475zXZwDPBiGxw5jF3yXPIYweezzFa&export=download&confirm=t' \
+            --output /tmp/anzania-ui-upgrade-payload.zip
+          test "$(wc -c < /tmp/anzania-ui-upgrade-payload.zip)" -gt 400000
+          unzip -t /tmp/anzania-ui-upgrade-payload.zip
+
+      - name: Apply interface and rendered character assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf public/assets/immersive/characters
+          mkdir -p public/assets/immersive/characters
+          unzip -o /tmp/anzania-ui-upgrade-payload.zip -d .
+          rm -rf .payload
+          rm -f .github/workflows/apply-anzania-ui-payload.yml
+          node --check public/assets/immersive/anzania-explorer.js
+          node --check scripts/validate-public-output.mjs
+          test "$(find public/assets/immersive/characters/rendered -type f -name '*.webp' | wc -l)" -eq 15
+
+      - name: Commit the production upgrade
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Install rendered guides and deepen Explore Anzania UI'
+          git push origin HEAD:agent/anzania-ui-assets-stage
