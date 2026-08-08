@@ -12,12 +12,21 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Download exact Anzania asset package
+      - name: Inspect Anzania asset transport response
         run: |
           set -euo pipefail
-          curl --location --fail --silent --show-error \
-            'https://drive.usercontent.google.com/download?id=1svuhuliiJqSA5nphvWsP4ALt7RNJxh-C&export=download&confirm=t' \
-            --output /tmp/anzania-assets.zip
-          test "$(stat -c%s /tmp/anzania-assets.zip)" -gt 6000000
-          echo '12d4773f52ff97737c8ef0b5dbe4d863b019246bcee0f4009e60993fbad78a86  /tmp/anzania-assets.zip' | sha256sum --check
-          unzip -t /tmp/anzania-assets.zip
+          curl --location --silent --show-error \
+            --dump-header /tmp/headers.txt \
+            --cookie-jar /tmp/cookies.txt \
+            'https://drive.google.com/uc?export=download&id=1svuhuliiJqSA5nphvWsP4ALt7RNJxh-C' \
+            --output /tmp/response.bin
+          echo "Response bytes: $(stat -c%s /tmp/response.bin)"
+          file /tmp/response.bin
+          sed -n '1,40p' /tmp/headers.txt
+          if file /tmp/response.bin | grep -qi 'Zip archive'; then
+            echo '12d4773f52ff97737c8ef0b5dbe4d863b019246bcee0f4009e60993fbad78a86  /tmp/response.bin' | sha256sum --check
+            unzip -t /tmp/response.bin
+            exit 0
+          fi
+          head -c 800 /tmp/response.bin | tr '\n' ' ' | sed 's/<[^>]*>/ /g' | tr -s ' '
+          exit 1
