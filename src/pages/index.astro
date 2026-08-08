@@ -80,9 +80,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
               <ActionLink href="documents/" variant="secondary">
                 Resume and CV
               </ActionLink>
-              <ActionLink href="contact/" variant="secondary"
-                >Contact</ActionLink
-              >
+              <ActionLink href="contact/" variant="secondary">Contact</ActionLink>
             </div>
 
             <p class="home-hero__experience-note">
@@ -122,7 +120,8 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             >
               <path
                 class="home-hero__signal-grid"
-                d="M30 198h460M30 126h460M30 54h460"></path>
+                d="M30 198h460M30 126h460M30 54h460"
+              ></path>
               <path
                 class="home-hero__signal-path"
                 d="M30 198C110 198 98 68 190 68s76 104 154 104 78-116 146-116"
@@ -160,9 +159,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
                 <dd>Professional experience records</dd>
               </div>
               <div>
-                <dt>
-                  {String(activeCloudCredentials.length).padStart(2, "0")}
-                </dt>
+                <dt>{String(activeCloudCredentials.length).padStart(2, "0")}</dt>
                 <dd>Active cloud credentials</dd>
               </div>
             </dl>
@@ -198,8 +195,8 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
         <div class="evidence-band__item">
           <span class="evidence-band__index">04 / VERIFIED</span>
           <p>
-            {activeCloudCredentials.length} current Google Cloud credentials, active
-            through 2027
+            {activeCloudCredentials.length} current Google Cloud credentials,
+            active through 2027
           </p>
         </div>
       </div>
@@ -405,18 +402,8 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(
-        90deg,
-        rgb(247 239 223 / 98%) 0%,
-        rgb(247 239 223 / 91%) 44%,
-        rgb(247 239 223 / 48%) 76%,
-        rgb(247 239 223 / 68%) 100%
-      ),
-      repeating-linear-gradient(
-        90deg,
-        transparent 0 7.9rem,
-        rgb(43 33 25 / 4%) 7.9rem 8rem
-      );
+      linear-gradient(90deg, rgb(247 239 223 / 98%) 0%, rgb(247 239 223 / 91%) 44%, rgb(247 239 223 / 48%) 76%, rgb(247 239 223 / 68%) 100%),
+      repeating-linear-gradient(90deg, transparent 0 7.9rem, rgb(43 33 25 / 4%) 7.9rem 8rem);
     content: "";
     pointer-events: none;
   }
@@ -538,37 +525,20 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     background:
       linear-gradient(145deg, rgb(29 24 19 / 97%), rgb(24 20 16 / 94%)),
       var(--route-scene);
-    background-position:
-      center,
-      74% 40%;
+    background-position: center, 74% 40%;
     background-size: cover;
     box-shadow: 0 1.8rem 5rem rgb(26 17 10 / 24%);
     color: var(--surface);
     backdrop-filter: blur(0.8rem);
-    clip-path: polygon(
-      0 0,
-      calc(100% - 1.25rem) 0,
-      100% 1.25rem,
-      100% 100%,
-      1.25rem 100%,
-      0 calc(100% - 1.25rem)
-    );
+    clip-path: polygon(0 0, calc(100% - 1.25rem) 0, 100% 1.25rem, 100% 100%, 1.25rem 100%, 0 calc(100% - 1.25rem));
   }
 
   .home-hero__ledger::before {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(
-        circle at 82% 18%,
-        rgb(211 166 81 / 13%),
-        transparent 34%
-      ),
-      repeating-linear-gradient(
-        90deg,
-        transparent 0 4.9rem,
-        rgb(255 249 238 / 2.7%) 4.9rem 5rem
-      );
+      radial-gradient(circle at 82% 18%, rgb(211 166 81 / 13%), transparent 34%),
+      repeating-linear-gradient(90deg, transparent 0 4.9rem, rgb(255 249 238 / 2.7%) 4.9rem 5rem);
     content: "";
     pointer-events: none;
   }
@@ -736,12 +706,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     position: absolute;
     z-index: -1;
     inset: 0;
-    background: linear-gradient(
-      100deg,
-      var(--canvas) 0 38%,
-      rgb(243 234 217 / 82%) 67%,
-      var(--canvas) 100%
-    );
+    background: linear-gradient(100deg, var(--canvas) 0 38%, rgb(243 234 217 / 82%) 67%, var(--canvas) 100%);
     content: "";
   }
 
@@ -753,13 +718,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     inline-size: min(68rem, 68vw);
     opacity: 0.2;
     filter: saturate(0.55) sepia(0.12);
-    mask-image: linear-gradient(
-      90deg,
-      transparent,
-      black 34%,
-      black 78%,
-      transparent
-    );
+    mask-image: linear-gradient(90deg, transparent, black 34%, black 78%, transparent);
     pointer-events: none;
   }
 
@@ -875,12 +834,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   .home-contact-panel__atmosphere::after {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      90deg,
-      rgb(31 26 21 / 98%) 0 42%,
-      rgb(31 26 21 / 58%) 72%,
-      rgb(31 26 21 / 42%)
-    );
+    background: linear-gradient(90deg, rgb(31 26 21 / 98%) 0 42%, rgb(31 26 21 / 58%) 72%, rgb(31 26 21 / 42%));
     content: "";
   }
 
@@ -932,11 +886,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     }
 
     .home-hero::before {
-      background: linear-gradient(
-        180deg,
-        rgb(247 239 223 / 92%),
-        rgb(247 239 223 / 72%)
-      );
+      background: linear-gradient(180deg, rgb(247 239 223 / 92%), rgb(247 239 223 / 72%));
     }
 
     .home-hero__coordinate-line span:nth-child(3) {

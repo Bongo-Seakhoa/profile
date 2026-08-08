@@ -47,7 +47,13 @@ const routes = JSON.parse(
 );
 const documentPlans = JSON.parse(
   await readFile(
-    resolve(repositoryRoot, "src", "data", "profile", "document-manifest.json"),
+    resolve(
+      repositoryRoot,
+      "src",
+      "data",
+      "profile",
+      "document-manifest.json",
+    ),
     "utf8",
   ),
 );
@@ -96,9 +102,7 @@ const cssPaths = byExtension(".css");
 const staticCssPaths = cssPaths.filter((path) => !isImmersive(path));
 const immersiveCssPaths = cssPaths.filter(isImmersive);
 const javascriptPaths = [...byExtension(".js"), ...byExtension(".mjs")];
-const staticJavaScriptPaths = javascriptPaths.filter(
-  (path) => !isImmersive(path),
-);
+const staticJavaScriptPaths = javascriptPaths.filter((path) => !isImmersive(path));
 const immersiveJavaScriptPaths = javascriptPaths.filter(isImmersive);
 
 const staticCss = await compressedTotal(staticCssPaths);
@@ -139,7 +143,8 @@ if (
   );
 }
 if (
-  staticJavaScript.gzipBytes > limits.maximumCompressedStaticJavaScriptTotal
+  staticJavaScript.gzipBytes >
+  limits.maximumCompressedStaticJavaScriptTotal
 ) {
   failures.push(
     `Static View JavaScript compresses to ${staticJavaScript.gzipBytes} bytes, ` +
@@ -212,7 +217,9 @@ for (const path of immersiveImages) {
   }
 }
 const immersiveAssetBytes = (
-  await Promise.all(immersiveFiles.map(async (path) => (await stat(path)).size))
+  await Promise.all(
+    immersiveFiles.map(async (path) => (await stat(path)).size),
+  )
 ).reduce((total, bytes) => total + bytes, 0);
 if (immersiveAssetBytes > limits.maximumImmersiveAssetTotal) {
   failures.push(
@@ -250,7 +257,9 @@ const report = {
     pdfCount: pdfs.length,
     largestPdfBytes: Math.max(
       0,
-      ...(await Promise.all(pdfs.map(async (path) => (await stat(path)).size))),
+      ...(await Promise.all(
+        pdfs.map(async (path) => (await stat(path)).size),
+      )),
     ),
     immersiveFileCount: immersiveFiles.length,
     immersiveImageCount: immersiveImages.length,
