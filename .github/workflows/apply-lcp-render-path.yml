@@ -1,0 +1,82 @@
+name: Apply final LCP render-path correction
+
+on:
+  push:
+    branches:
+      - agent/anzania-final-wow-pass
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out upgrade branch
+        uses: actions/checkout@v6
+        with:
+          ref: agent/anzania-final-wow-pass
+          fetch-depth: 0
+
+      - name: Apply targeted render-path changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          astro = Path("astro.config.ts")
+          source = astro.read_text()
+          source = source.replace(
+              '  vite: {\n    build: {\n      cssCodeSplit: false,\n    },\n  },\n',
+              '',
+          )
+          astro.write_text(source)
+
+          plate = Path("src/components/media/AnzaniaPlate.astro")
+          source = plate.read_text()
+          source = source.replace(
+              '  fetchPriority?: "high" | "low" | "auto";\n  fit?: "cover" | "contain";\n',
+              '  fetchPriority?: "high" | "low" | "auto";\n  decoding?: "async" | "sync" | "auto";\n  fit?: "cover" | "contain";\n',
+          )
+          source = source.replace(
+              '  fetchPriority = priority || preload ? "high" : "auto",\n  fit = "cover",\n',
+              '  fetchPriority = priority || preload ? "high" : "auto",\n  decoding = "async",\n  fit = "cover",\n',
+          )
+          source = source.replace(
+              '    decoding="async"\n    fetchpriority={fetchPriority}\n',
+              '    decoding={decoding}\n    fetchpriority={fetchPriority}\n',
+          )
+          plate.write_text(source)
+
+          interface = Path("src/components/shell/StaticInterface.astro")
+          source = interface.read_text()
+          source = source.replace(
+              '      loading="eager"\n      fetchPriority="low"\n      sizes="(min-width: 72rem) 76vw, (min-width: 48rem) 92vw, 144vw"\n',
+              '      loading="eager"\n      fetchPriority="low"\n      decoding={activeRouteId === "home" ? "sync" : "async"}\n      sizes="(min-width: 72rem) 76vw, (min-width: 48rem) 92vw, 144vw"\n',
+              1,
+          )
+          interface.write_text(source)
+
+          homepage = Path("src/pages/index.astro")
+          source = homepage.read_text()
+          old = '''    background:\n      linear-gradient(145deg, rgb(29 24 19 / 97%), rgb(24 20 16 / 94%)),\n      var(--route-scene);\n    background-position:\n      center,\n      74% 40%;\n    background-size: cover;\n'''
+          new = '''    background: linear-gradient(\n      145deg,\n      rgb(29 24 19 / 97%),\n      rgb(24 20 16 / 94%)\n    );\n'''
+          if old not in source:
+              raise SystemExit("Homepage ledger background contract not found")
+          homepage.write_text(source.replace(old, new, 1))
+
+          Path(".github/workflows/export-upgrade-source.yml").unlink(missing_ok=True)
+          Path(".github/workflows/apply-lcp-render-path.yml").unlink(missing_ok=True)
+          PY
+
+      - name: Commit final render-path correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Optimize the homepage LCP render path"
+          git push origin HEAD:agent/anzania-final-wow-pass
