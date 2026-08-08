@@ -1,0 +1,23 @@
+name: Asset transport smoke test
+
+on:
+  push:
+    branches:
+      - agent/asset-transport-smoke-20260808
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download exact Anzania asset package
+        run: |
+          set -euo pipefail
+          curl --location --fail --silent --show-error \
+            'https://drive.usercontent.google.com/download?id=1svuhuliiJqSA5nphvWsP4ALt7RNJxh-C&export=download&confirm=t' \
+            --output /tmp/anzania-assets.zip
+          test "$(stat -c%s /tmp/anzania-assets.zip)" -gt 6000000
+          echo '12d4773f52ff97737c8ef0b5dbe4d863b019246bcee0f4009e60993fbad78a86  /tmp/anzania-assets.zip' | sha256sum --check
+          unzip -t /tmp/anzania-assets.zip
