@@ -45,7 +45,6 @@ const sceneId: PublishedAnzaniaPlateId =
     : oasisRoutes.has(activeRouteId)
       ? "oasis-audience-inner"
       : "threshold-dunes-outer";
-const isHomepageScene = activeRouteId === "home";
 ---
 
 <div
@@ -60,10 +59,10 @@ const isHomepageScene = activeRouteId === "home";
       use="future-immersive-reference"
       class="static-atmosphere__scene"
       decorative
-      priority={isHomepageScene}
-      preload={isHomepageScene}
+      priority={false}
+      preload={false}
       loading="eager"
-      fetchPriority={isHomepageScene ? "high" : "low"}
+      fetchPriority="low"
       sizes="(min-width: 72rem) 76vw, (min-width: 48rem) 92vw, 144vw"
     />
   </div>
