@@ -15,24 +15,91 @@ async function beginJourney(page: Page) {
   );
 }
 
-async function settleCompanionTransform(page: Page) {
+// Framing can change through both the image transform and the companion's
+// top/left/size transitions. Wait for active CSS transitions and then require
+// several geometrically stable frames before sampling the full-body contract.
+async function settleCompanionFrame(page: Page) {
   await page.evaluate(async () => {
+    const companion = document.querySelector<HTMLElement>("[data-companion]");
     const image = document.querySelector<HTMLElement>("[data-companion-image]");
-    if (!image) return;
+    if (!companion || !image) return;
 
-    let previous = "";
+    const nextFrame = () =>
+      new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+
+    // Allow a just-applied state class to instantiate its CSS transitions.
+    await nextFrame();
+    await nextFrame();
+
+    const transitions = companion
+      .getAnimations({ subtree: true })
+      .filter((animation) => {
+        const isCssTransition =
+          typeof CSSTransition !== "undefined" &&
+          animation instanceof CSSTransition;
+        return (
+          isCssTransition &&
+          animation.playState !== "finished" &&
+          animation.playState !== "idle"
+        );
+      });
+    await Promise.allSettled(
+      transitions.map((animation) => animation.finished),
+    );
+
+    type FrameSnapshot = {
+      transform: string;
+      imageTop: number;
+      imageLeft: number;
+      imageWidth: number;
+      imageHeight: number;
+      companionTop: number;
+      companionLeft: number;
+      companionWidth: number;
+      companionHeight: number;
+    };
+
+    let previous: FrameSnapshot | null = null;
     let stableFrames = 0;
-    for (let frame = 0; frame < 90 && stableFrames < 2; frame += 1) {
-      const current = window.getComputedStyle(image).transform;
-      stableFrames = current === previous ? stableFrames + 1 : 0;
+    for (let frame = 0; frame < 120 && stableFrames < 4; frame += 1) {
+      const imageRect = image.getBoundingClientRect();
+      const companionRect = companion.getBoundingClientRect();
+      const current: FrameSnapshot = {
+        transform: window.getComputedStyle(image).transform,
+        imageTop: imageRect.top,
+        imageLeft: imageRect.left,
+        imageWidth: imageRect.width,
+        imageHeight: imageRect.height,
+        companionTop: companionRect.top,
+        companionLeft: companionRect.left,
+        companionWidth: companionRect.width,
+        companionHeight: companionRect.height,
+      };
+      const stable =
+        previous !== null &&
+        current.transform === previous.transform &&
+        Math.abs(current.imageTop - previous.imageTop) < 0.1 &&
+        Math.abs(current.imageLeft - previous.imageLeft) < 0.1 &&
+        Math.abs(current.imageWidth - previous.imageWidth) < 0.1 &&
+        Math.abs(current.imageHeight - previous.imageHeight) < 0.1 &&
+        Math.abs(current.companionTop - previous.companionTop) < 0.1 &&
+        Math.abs(current.companionLeft - previous.companionLeft) < 0.1 &&
+        Math.abs(current.companionWidth - previous.companionWidth) < 0.1 &&
+        Math.abs(current.companionHeight - previous.companionHeight) < 0.1;
+
+      stableFrames = stable ? stableFrames + 1 : 0;
       previous = current;
-      await new Promise((resolve) => window.requestAnimationFrame(resolve));
+      await nextFrame();
+    }
+
+    if (stableFrames < 4) {
+      throw new Error("Companion geometry did not settle before framing was sampled.");
     }
   });
 }
 
 async function framingMetrics(page: Page) {
-  await settleCompanionTransform(page);
+  await settleCompanionFrame(page);
   return page.evaluate(() => {
     const avatar = document
       .querySelector<HTMLElement>("[data-companion-image]")
