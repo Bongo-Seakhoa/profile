@@ -28,6 +28,7 @@
 - Fifteen selectable transparent 540 by 1280 full-body companions, with five masculine, five feminine and five neutral options.
 - Dune Surfing, Sand Teleportation, Solar Propulsion and Reality Bending transitions.
 - Responsive full-body framing at 390 by 844, 844 by 390, 768 by 1024, 1024 by 650, 1440 by 1000 and 1920 by 1080.
+- Guidance toast containment verified in portrait and low-height landscape without collisions against the companion, chapter panel, top bar, location label or traversal controls.
 - No canvas, WebGL, `.glb`, `.gltf`, `.fbx`, `.blend`, shader, audio or video runtime.
 
 ### Professional Static View
@@ -39,7 +40,7 @@
 - Accessible `Ctrl/Cmd+K` or `/` command navigator, keyboard filtering, focus return, reading progress and active-section beacon.
 - Progressive enhancement only: every heading, record, link and document remains in semantic HTML and visible when JavaScript is disabled.
 - Dedicated reduced-motion, forced-colours and print contracts.
-- Final local visual checks at 1440 by 1000, 1366 by 900, 1280 by 900 and 390 by 844 with zero horizontal overflow.
+- Final local visual checks at 1440 by 1000, 1366 by 900, 1280 by 900, 390 by 844 and 844 by 390 with zero horizontal overflow.
 - Command filtering, empty state, focus restoration, no-JavaScript fallback and reduced-motion reveal behaviour verified through Chromium DevTools Protocol.
 
 ## Prior production evidence

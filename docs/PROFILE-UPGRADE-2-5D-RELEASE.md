@@ -180,7 +180,7 @@ The release is acceptable only when all of the following are true:
 ### Professional browser experience
 
 - Homepage, work and contact visual checks at desktop and mobile ratios.
-- Final homepage renders at 1440 by 1000, 1366 by 900, 1280 by 900 and 390 by 844 with zero horizontal overflow.
+- Final homepage renders at 1440 by 1000, 1366 by 900, 1280 by 900, 390 by 844 and 844 by 390 with zero horizontal overflow.
 - Accessible command dialog open, filter, empty-state, close and focus-return behaviour.
 - Reading progress and active-section state.
 - Reduced-motion behaviour with every record visible.
@@ -191,6 +191,7 @@ The release is acceptable only when all of the following are true:
 
 - Arrival and Static View fallback.
 - Full-body framing at 390 by 844, 844 by 390, 768 by 1024, 1024 by 650, 1440 by 1000 and 1920 by 1080.
+- Guidance toast containment in portrait and low-height landscape, with no collision against the companion or active interface safe zones.
 - Look-back hold and release.
 - Traversal to the next location.
 - Outer-to-inner portal transition.
