@@ -1,0 +1,33 @@
+name: Export upgrade source
+
+on:
+  push:
+    branches:
+      - agent/anzania-final-wow-pass
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out upgrade source
+        uses: actions/checkout@v6
+        with:
+          ref: agent/anzania-final-wow-pass
+          fetch-depth: 0
+
+      - name: Upload source snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: zanzania-upgrade-source
+          path: |
+            .
+            !.git
+            !node_modules
+            !dist
+            !playwright-report
+            !test-results
+          include-hidden-files: true
+          retention-days: 2
