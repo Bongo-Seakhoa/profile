@@ -1,9 +1,7 @@
 name: Apply Anzania UI payload
 
 on:
-  push:
-    branches:
-      - agent/anzania-ui-assets-stage
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,7 +12,6 @@ concurrency:
 
 jobs:
   apply:
-    if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out staging branch
@@ -23,14 +20,13 @@ jobs:
           ref: agent/anzania-ui-assets-stage
           fetch-depth: 0
 
-      - name: Fetch and validate the production payload
+      - name: Reconstruct and validate the production payload
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --retry 3 \
-            'https://drive.usercontent.google.com/download?id=1Wo475zXZwDPBiGxw5jF3yXPIYweezzFa&export=download&confirm=t' \
-            --output /tmp/anzania-ui-upgrade-payload.zip
-          test "$(wc -c < /tmp/anzania-ui-upgrade-payload.zip)" -gt 400000
+          cat .payload/chunk-*.b64 | base64 --decode > /tmp/anzania-ui-upgrade-payload.zip
+          test "$(wc -c < /tmp/anzania-ui-upgrade-payload.zip)" -eq 469446
+          printf '%s  %s\n' '3ac8452ca0bdaa23f7e4a7c63df43a8efea7c2002cdfdc81f659d5831472505e' '/tmp/anzania-ui-upgrade-payload.zip' | sha256sum --check
           unzip -t /tmp/anzania-ui-upgrade-payload.zip
 
       - name: Apply interface and rendered character assets
