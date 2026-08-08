@@ -25,7 +25,9 @@ async function settleCompanionFrame(page: Page) {
     if (!companion || !image) return;
 
     const nextFrame = () =>
-      new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+      new Promise<void>((resolve) =>
+        window.requestAnimationFrame(() => resolve()),
+      );
 
     // Allow a just-applied state class to instantiate its CSS transitions.
     await nextFrame();
@@ -93,7 +95,9 @@ async function settleCompanionFrame(page: Page) {
     }
 
     if (stableFrames < 4) {
-      throw new Error("Companion geometry did not settle before framing was sampled.");
+      throw new Error(
+        "Companion geometry did not settle before framing was sampled.",
+      );
     }
   });
 }
