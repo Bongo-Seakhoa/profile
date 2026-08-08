@@ -49,8 +49,26 @@ jobs:
       - name: Install browser runtimes
         run: pnpm exec playwright install --with-deps chrome chromium firefox webkit
 
-      - name: Run production quality gates
-        run: pnpm run qa
+      - name: Check formatting
+        run: pnpm run format:check
+
+      - name: Lint source
+        run: pnpm run lint
+
+      - name: Check Astro and TypeScript
+        run: pnpm run check
+
+      - name: Run unit tests
+        run: pnpm run test:unit
+
+      - name: Build production release
+        run: pnpm run build
+
+      - name: Run browser journeys
+        run: pnpm run test:e2e
+
+      - name: Verify Lighthouse budgets
+        run: pnpm run verify:lighthouse
 
       - name: Configure GitHub Pages
         if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
