@@ -62,7 +62,7 @@ const sceneId: PublishedAnzaniaPlateId =
       priority={false}
       preload={false}
       loading="eager"
-      fetchPriority="low"
+      fetchPriority={activeRouteId === "home" ? "high" : "low"}
       sizes="(min-width: 72rem) 76vw, (min-width: 48rem) 92vw, 144vw"
     />
   </div>
