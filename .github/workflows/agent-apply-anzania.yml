@@ -31,6 +31,8 @@ jobs:
           rm -rf .agent
           sed -i 's/Cinematic 2.5D guided portfolio journey/Interactive 2.5D guided portfolio journey/' tests/unit/immersive/anzania-2-5d-runtime.test.ts
           sed -i 's/<script type="module" src={sitePath(/<script is:inline type="module" src={sitePath(/' src/pages/explore/index.astro
+          sed -i 's/Choose an original illustrated companion and/Choose an original illustrated full-body companion and/' src/pages/explore/index.astro
+          sed -i 's/\["\.css", "\.js", "\.json", "\.webp"\]/[".css", ".js", ".json", ".svg", ".webp"]/' scripts/validate-public-output.mjs
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v6
@@ -58,6 +60,7 @@ jobs:
           src/components/content/ExperienceRecord.astro
           tests/e2e/anzania-explorer.spec.ts
           tests/unit/immersive/anzania-2-5d-runtime.test.ts
+          scripts/validate-public-output.mjs
 
       - name: Commit the completed implementation locally
         shell: bash
