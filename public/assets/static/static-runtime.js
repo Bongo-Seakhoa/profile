@@ -120,13 +120,13 @@ if (!reducedMotion.matches && "IntersectionObserver" in window) {
         observer.unobserve(entry.target);
       });
     },
-    { rootMargin: "0px 0px -9% 0px", threshold: 0.08 },
+    { rootMargin: "0px 0px -2% 0px", threshold: 0.05 },
   );
 
   revealTargets.forEach((target, index) => {
     const box = target.getBoundingClientRect();
     target.style.setProperty("--reveal-order", String(index % 6));
-    if (box.top < window.innerHeight * 0.86) {
+    if (box.top < window.innerHeight * 0.98) {
       target.dataset.revealState = "visible";
     } else {
       target.dataset.revealState = "pending";
