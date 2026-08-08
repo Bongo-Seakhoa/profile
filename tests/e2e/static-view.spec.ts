@@ -181,6 +181,7 @@ test.describe("Responsive layout", () => {
     { width: 390, height: 844 },
     { width: 768, height: 1024 },
     { width: 1024, height: 768 },
+    { width: 1280, height: 900 },
     { width: 1366, height: 650 },
     { width: 1440, height: 1000 },
   ]) {
@@ -237,6 +238,52 @@ test.describe("Responsive layout", () => {
       );
     });
   }
+
+  test("professional header switches cleanly at laptop breakpoints", async ({
+    page,
+  }) => {
+    for (const scenario of [
+      { width: 1280, height: 900, desktop: false },
+      { width: 1366, height: 900, desktop: true },
+      { width: 1440, height: 1000, desktop: true },
+    ]) {
+      await page.setViewportSize({
+        width: scenario.width,
+        height: scenario.height,
+      });
+      await page.goto("", { waitUntil: "networkidle" });
+
+      const headerState = await page.evaluate(() => {
+        const header = document.querySelector(".site-header");
+        const desktopNavigation = document.querySelector(".desktop-navigation");
+        const mobileNavigation = document.querySelector(".mobile-navigation");
+        const utilities = document.querySelector(".site-header__utilities");
+        const box = header?.getBoundingClientRect();
+        const utilityBox = utilities?.getBoundingClientRect();
+        return {
+          overflow:
+            document.documentElement.scrollWidth -
+            document.documentElement.clientWidth,
+          headerRight: box?.right ?? 0,
+          utilitiesRight: utilityBox?.right ?? 0,
+          desktopDisplay: desktopNavigation
+            ? getComputedStyle(desktopNavigation).display
+            : "none",
+          mobileDisplay: mobileNavigation
+            ? getComputedStyle(mobileNavigation).display
+            : "none",
+        };
+      });
+
+      expect(headerState.overflow).toBeLessThanOrEqual(1);
+      expect(headerState.headerRight).toBeLessThanOrEqual(scenario.width + 1);
+      expect(headerState.utilitiesRight).toBeLessThanOrEqual(
+        scenario.width + 1,
+      );
+      expect(headerState.desktopDisplay === "block").toBe(scenario.desktop);
+      expect(headerState.mobileDisplay === "block").toBe(!scenario.desktop);
+    }
+  });
 });
 
 test("document previews and direct PDFs are available", async ({

@@ -29,6 +29,9 @@ sectionCandidates.forEach((section, index) => {
 });
 
 let activeSection = sectionCandidates[0] ?? null;
+if (activeSection) {
+  root.dataset.activeSection = activeSection.dataset.fieldSection || "01";
+}
 let scrollFrame = 0;
 
 function updateScrollState() {

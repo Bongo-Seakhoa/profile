@@ -174,7 +174,10 @@ const sceneId: PublishedAnzaniaPlateId =
         {
           navigation.map((item, index) => (
             <li data-command-item>
-              <a href={sitePath(item.path)}>
+              <a
+                href={sitePath(item.path)}
+                aria-current={item.id === activeRouteId ? "page" : undefined}
+              >
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{item.label}</strong>
                 <span aria-hidden="true">↗</span>
@@ -183,7 +186,16 @@ const sceneId: PublishedAnzaniaPlateId =
           ))
         }
         <li data-command-item>
-          <a href={sitePath(documentsPath)}>
+          <a
+            href={sitePath(documentsPath)}
+            aria-current={
+              activeRouteId === "documents" ||
+              activeRouteId.startsWith("resume-") ||
+              activeRouteId.startsWith("cv-")
+                ? "page"
+                : undefined
+            }
+          >
             <span>{String(navigation.length + 1).padStart(2, "0")}</span>
             <strong>Resume and CV</strong>
             <span aria-hidden="true">↗</span>
@@ -192,7 +204,12 @@ const sceneId: PublishedAnzaniaPlateId =
         {
           showExploreAnzania && (
             <li data-command-item>
-              <a href={sitePath(exploreAnzaniaPath)}>
+              <a
+                href={sitePath(exploreAnzaniaPath)}
+                aria-current={
+                  activeRouteId === "explore" ? "page" : undefined
+                }
+              >
                 <span>{String(navigation.length + 2).padStart(2, "0")}</span>
                 <strong>Explore Anzania</strong>
                 <span aria-hidden="true">◇</span>

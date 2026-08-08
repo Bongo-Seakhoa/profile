@@ -225,6 +225,18 @@ test.describe("Explore Anzania release experience", () => {
     await page.locator("[data-guide-button]").click();
     await expect(page.locator("[data-guide-dialog]")).toBeVisible();
     await expect(page.locator("[data-guide-id]")).toHaveCount(15);
+    await expect
+      .poll(() =>
+        page.locator("[data-guide-id] img").evaluateAll((images) =>
+          images.every(
+            (image) =>
+              image instanceof HTMLImageElement &&
+              image.complete &&
+              image.naturalWidth > 0,
+          ),
+        ),
+      )
+      .toBe(true);
     await page.locator('[data-guide-id="dn-f-afr-01"]').click();
     await expect(page.locator("[data-companion-name]")).toHaveText("Zuri");
     expectCompleteFullBody(await framingMetrics(page));
