@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -93,6 +93,15 @@ jobs:
 
       - name: Verify Lighthouse budgets
         run: pnpm run verify:lighthouse
+
+      - name: Upload Lighthouse failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-failure-report
+          path: AI-COLLAB/.watch-state/lighthouse
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Configure GitHub Pages
         if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
