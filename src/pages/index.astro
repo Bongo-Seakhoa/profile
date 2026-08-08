@@ -64,12 +64,20 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
           <h1 id="home-title">{identity.primaryName}</h1>
           <p class="home-hero__statement">{identity.valueStatement}</p>
           <div class="home-hero__actions">
-            <ActionLink href="work/">View selected work</ActionLink>
-            <ActionLink href="contact/" variant="secondary">Contact</ActionLink>
+            <ActionLink href="explore/">Explore Anzania</ActionLink>
+            <ActionLink href="work/" variant="secondary">
+              View selected work
+            </ActionLink>
             <ActionLink href="documents/" variant="quiet">
               Resume and CV
             </ActionLink>
+            <ActionLink href="contact/" variant="quiet">Contact</ActionLink>
           </div>
+          <p class="home-hero__experience-note">
+            Anzania is an original fictional portfolio world, presented as an
+            optional cinematic 2.5D journey. Static View remains the complete
+            professional record.
+          </p>
           <dl class="home-hero__facts">
             <div>
               <dt>Based in</dt>
@@ -91,7 +99,8 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             sizes="(min-width: 60rem) 55vw, 100vw"
           />
           <figcaption>
-            Threshold Dunes, an Anzania setting used as editorial artwork.
+            Threshold Dunes, the opening landscape of Anzania, an original
+            fictional world.
           </figcaption>
         </figure>
       </div>
@@ -353,6 +362,14 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     margin-block-start: var(--space-6);
     flex-wrap: wrap;
     gap: var(--space-3);
+  }
+
+  .home-hero__experience-note {
+    max-inline-size: 58ch;
+    margin: var(--space-4) 0 0;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.55;
   }
 
   .home-hero__facts {

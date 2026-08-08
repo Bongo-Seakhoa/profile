@@ -10,15 +10,19 @@ const reportPath = resolve(
   ".watch-state",
   "static-budget.json",
 );
+const immersivePrefix = "assets/immersive/";
 
 const limits = {
   maximumCompressedHtmlPerRoute: 100 * 1024,
-  maximumCompressedCssTotal: 60 * 1024,
-  maximumCompressedJavaScriptTotal: 80 * 1024,
+  maximumCompressedStaticCssTotal: 60 * 1024,
+  maximumCompressedImmersiveCssTotal: 24 * 1024,
+  maximumCompressedImmersiveJavaScriptTotal: 80 * 1024,
   maximumHeroAvif: 450 * 1024,
   maximumSocialCard: 100 * 1024,
   maximumPdf: 750 * 1024,
-  maximumDist: 15 * 1024 * 1024,
+  maximumImmersiveImage: 650 * 1024,
+  maximumImmersiveAssetTotal: 9 * 1024 * 1024,
+  maximumDist: 25 * 1024 * 1024,
 };
 
 async function walk(directory) {
@@ -41,7 +45,13 @@ const routes = JSON.parse(
 );
 const documentPlans = JSON.parse(
   await readFile(
-    resolve(repositoryRoot, "src", "data", "profile", "document-manifest.json"),
+    resolve(
+      repositoryRoot,
+      "src",
+      "data",
+      "profile",
+      "document-manifest.json",
+    ),
     "utf8",
   ),
 );
@@ -56,6 +66,7 @@ const relativePath = (path) =>
   relative(distDirectory, path).replaceAll("\\", "/");
 const byExtension = (extension) =>
   files.filter((path) => extname(path).toLowerCase() === extension);
+const isImmersive = (path) => relativePath(path).startsWith(immersivePrefix);
 
 const html = [];
 for (const path of byExtension(".html")) {
@@ -85,25 +96,46 @@ async function compressedTotal(paths) {
   return { count: paths.length, rawBytes, gzipBytes };
 }
 
-const css = await compressedTotal(byExtension(".css"));
-const javascript = await compressedTotal([
-  ...byExtension(".js"),
-  ...byExtension(".mjs"),
-]);
+const cssPaths = byExtension(".css");
+const staticCssPaths = cssPaths.filter((path) => !isImmersive(path));
+const immersiveCssPaths = cssPaths.filter(isImmersive);
+const javascriptPaths = [...byExtension(".js"), ...byExtension(".mjs")];
+const staticJavaScriptPaths = javascriptPaths.filter((path) => !isImmersive(path));
+const immersiveJavaScriptPaths = javascriptPaths.filter(isImmersive);
 
-if (css.gzipBytes > limits.maximumCompressedCssTotal) {
+const staticCss = await compressedTotal(staticCssPaths);
+const immersiveCss = await compressedTotal(immersiveCssPaths);
+const staticJavaScript = await compressedTotal(staticJavaScriptPaths);
+const immersiveJavaScript = await compressedTotal(immersiveJavaScriptPaths);
+
+if (staticCss.gzipBytes > limits.maximumCompressedStaticCssTotal) {
   failures.push(
-    `CSS compresses to ${css.gzipBytes} bytes, above the 60 KB initial budget`,
+    `Static View CSS compresses to ${staticCss.gzipBytes} bytes, above the 60 KB budget`,
   );
 }
-if (javascript.gzipBytes > limits.maximumCompressedJavaScriptTotal) {
+if (immersiveCss.gzipBytes > limits.maximumCompressedImmersiveCssTotal) {
   failures.push(
-    `JavaScript compresses to ${javascript.gzipBytes} bytes, above the 80 KB initial budget`,
+    `Explore Anzania CSS compresses to ${immersiveCss.gzipBytes} bytes, above the 24 KB budget`,
   );
 }
-if (javascript.count > 0) {
+if (
+  immersiveJavaScript.gzipBytes >
+  limits.maximumCompressedImmersiveJavaScriptTotal
+) {
   failures.push(
-    `Static View contains ${javascript.count} JavaScript artifact(s); the release target is zero`,
+    `Explore Anzania JavaScript compresses to ` +
+      `${immersiveJavaScript.gzipBytes} bytes, above the 80 KB budget`,
+  );
+}
+if (staticJavaScript.count > 0) {
+  failures.push(
+    `Static View contains ${staticJavaScript.count} JavaScript artifact(s); ` +
+      "the release target remains zero",
+  );
+}
+if (immersiveJavaScript.count !== 1) {
+  failures.push(
+    `Expected one isolated Explore Anzania JavaScript runtime, found ${immersiveJavaScript.count}`,
   );
 }
 
@@ -154,23 +186,48 @@ for (const path of pdfs) {
   }
 }
 
+const immersiveFiles = files.filter(isImmersive);
+const immersiveImages = immersiveFiles.filter(
+  (path) => extname(path).toLowerCase() === ".webp",
+);
+for (const path of immersiveImages) {
+  const bytes = (await stat(path)).size;
+  if (bytes > limits.maximumImmersiveImage) {
+    failures.push(
+      `${relativePath(path)} is ${bytes} bytes, above the 650 KB immersive-image budget`,
+    );
+  }
+}
+const immersiveAssetBytes = (
+  await Promise.all(
+    immersiveFiles.map(async (path) => (await stat(path)).size),
+  )
+).reduce((total, bytes) => total + bytes, 0);
+if (immersiveAssetBytes > limits.maximumImmersiveAssetTotal) {
+  failures.push(
+    `Explore Anzania assets total ${immersiveAssetBytes} bytes, above the 9 MB budget`,
+  );
+}
+
 const distBytes = (
   await Promise.all(files.map(async (path) => (await stat(path)).size))
 ).reduce((total, bytes) => total + bytes, 0);
 if (distBytes > limits.maximumDist) {
   failures.push(
-    `The complete release artifact is ${distBytes} bytes, above the 15 MB budget`,
+    `The complete release artifact is ${distBytes} bytes, above the 25 MB budget`,
   );
 }
 
 const report = {
-  schemaVersion: "1.0.0",
+  schemaVersion: "2.0.0",
   generatedAt: new Date().toISOString(),
   limits,
   measured: {
     routes: html.sort((left, right) => left.path.localeCompare(right.path)),
-    css,
-    javascript,
+    staticCss,
+    immersiveCss,
+    staticJavaScript,
+    immersiveJavaScript,
     heroAvifBytes: heroBytes,
     socialCardCount: socialCards.length,
     largestSocialCardBytes: Math.max(
@@ -182,7 +239,18 @@ const report = {
     pdfCount: pdfs.length,
     largestPdfBytes: Math.max(
       0,
-      ...(await Promise.all(pdfs.map(async (path) => (await stat(path)).size))),
+      ...(await Promise.all(
+        pdfs.map(async (path) => (await stat(path)).size),
+      )),
+    ),
+    immersiveFileCount: immersiveFiles.length,
+    immersiveImageCount: immersiveImages.length,
+    immersiveAssetBytes,
+    largestImmersiveImageBytes: Math.max(
+      0,
+      ...(await Promise.all(
+        immersiveImages.map(async (path) => (await stat(path)).size),
+      )),
     ),
     distFileCount: files.length,
     distBytes,
@@ -200,6 +268,10 @@ if (failures.length > 0) {
 } else {
   const maximumHtml = Math.max(0, ...html.map((route) => route.gzipBytes));
   console.log(
-    `Static budgets passed: ${maximumHtml} B max HTML gzip, ${css.gzipBytes} B CSS gzip, ${javascript.gzipBytes} B JavaScript gzip, ${distBytes} B artifact.`,
+    `Release budgets passed: ${maximumHtml} B max HTML gzip, ` +
+      `${staticCss.gzipBytes} B Static View CSS gzip, ` +
+      `${immersiveCss.gzipBytes} B Anzania CSS gzip, ` +
+      `${immersiveJavaScript.gzipBytes} B Anzania JavaScript gzip, ` +
+      `${distBytes} B artifact.`,
   );
 }

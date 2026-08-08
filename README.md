@@ -2,20 +2,31 @@
 
 Production portfolio for [bongo-seakhoa.github.io/profile](https://bongo-seakhoa.github.io/profile/).
 
-Release 1 is a complete, semantic Static View with an Anzania-inspired editorial
-system, conventional professional routes, and polished browser-native Resume and
-CV downloads. The opt-in immersive Anzania experience follows as required
-production work; Static View remains its accessible and professional fallback.
+Release 2 combines two deliberately separated experiences:
+
+- **Static View** is the complete, semantic and conventional professional record.
+  It renders without client JavaScript, remains usable with JavaScript disabled and
+  provides all work, experience, education, credential, document and contact routes.
+- **Explore Anzania** is an optional cinematic 2.5D portfolio journey through eight
+  illustrated locations with fifteen selectable full-body companions and four
+  authored traversal powers.
+
+Anzania is an original fictional portfolio world created for Bongo Seakhoa. It is
+not Tanzania or any other real location.
 
 ## Production architecture
 
 - Astro 6 and TypeScript generate every public route as static HTML.
-- Static View renders without client JavaScript, canvas, WebGL, decorative
-  animation or immersive asset requests.
+- Static View does not load the immersive runtime or its artwork.
+- Explore Anzania loads one isolated, framework-free JavaScript module and
+  responsive WebP assets only after the visitor chooses the immersive route.
+- A responsive framing controller tracks browser safe zones and keeps the complete
+  companion silhouette visible during idle, presenting, look-back and traversal
+  states. There is no over-the-shoulder camera path.
 - One validated content model feeds the website, document previews and PDFs.
 - Resume and CV PDFs are created with JavaScript, print CSS, Chromium and
   `pdf-lib`. Python is not part of the production build or document pipeline.
-- Responsive Anzania artwork is generated with Sharp from an approved,
+- Responsive Static View artwork is generated with Sharp from an approved,
   hash-verified allowlist.
 - The site is built for the GitHub Pages `/profile/` base path.
 - Playwright, Axe, Vitest, Astro Check, TypeScript, ESLint and release validators
@@ -27,21 +38,28 @@ production work; Static View remains its accessible and professional fallback.
   Evidence-bound identity, work, experience, education, credential, route and
   document manifests.
 - `src/data/static-art/`
-  Typed Anzania location registry, derivative manifest and provenance records.
+  Typed Anzania location registry, derivative manifest and provenance records for
+  Static View.
 - `src/pages/`
-  Static routes, project detail pages and browser document previews.
+  Static routes, project detail pages, browser document previews and the isolated
+  `explore/` entry route.
 - `src/components/`
   Site shell, content, media and professional document components.
 - `src/immersive/`
-  Full-body camera and animation runtime contracts for the later opt-in mode.
+  Full-body camera, animated-bound and animation contracts retained for deeper 3D
+  evolution and shared validation.
+- `public/assets/immersive/`
+  The production 2.5D runtime, eight outer and eight inner scene pairs, atlas and
+  fifteen transparent full-body companion assets.
 - `public/assets/images/anzania/`
-  Approved responsive artwork derivatives only.
+  Approved responsive Static View artwork derivatives only.
 - `scripts/build-documents.mjs`
   Browser-native Resume and CV PDF generator.
 - `scripts/build-static-art.mjs`
-  Hash-checked responsive art pipeline.
+  Hash-checked responsive Static View art pipeline.
 - `scripts/validate-public-output.mjs`
-  Public artifact, base-path, PDF-link and prohibited-output checks.
+  Static and immersive boundary checks, base-path checks, framing contracts,
+  runtime-asset allowlists and PDF-link validation.
 - `AI-COLLAB/`
   Plans, decisions, audits, risks, status, handoffs, communications and watcher
   protocol for Codex and Claude.
@@ -69,7 +87,7 @@ pnpm run dev
 ```
 
 Astro serves the site under `/profile/`. Use the URL printed by the development
-server.
+server. The immersive route is available at `/profile/explore/`.
 
 ## Build and quality gates
 
@@ -89,13 +107,15 @@ The full gate covers:
 
 - content and route integrity;
 - formatting, linting and TypeScript;
-- immersive camera and animation contract tests;
-- responsive static-art integrity;
+- complete eight-location, fifteen-guide and four-power immersive manifests;
+- full-body companion dimensions, transparency and responsive framing;
+- responsive Static View art integrity;
 - A4 page counts, overflow, section boundaries, fonts, metadata and PDF links;
 - desktop, mobile, no-JavaScript and accessibility browser tests;
-- GitHub Pages base paths, sitemap, robots, icons and release metadata; and
-- absence of public em dash characters, canvas, decorative motion and
-  unrequested immersive assets.
+- GitHub Pages base paths, sitemap, robots, icons and release metadata;
+- zero JavaScript in Static View and one isolated immersive runtime; and
+- absence of public em dash characters, canvas, heavy 3D formats and unapproved
+  runtime assets.
 
 Generated PDFs are written to:
 
@@ -119,11 +139,14 @@ known-good artifact without rebuilding it from unreviewed source.
 - Do not publish private phone numbers or raw certificate files.
 - Do not infer contract type, contribution, outcome or metrics without evidence.
 - Keep both surname document variants aligned from the shared manifest.
-- Never copy reference masters directly into `public/`.
-- Never ship assets marked `SUPERSEDED_DO_NOT_SHIP` or noncanonical character
-  concepts.
-- Full character production waits for the approved canonical character reference
-  pack. This dependency does not remove the required immersive milestones.
+- Never copy unapproved reference masters into Static View.
+- Never ship assets marked `SUPERSEDED_DO_NOT_SHIP`.
+- Keep the immersive runtime isolated under `public/assets/immersive/`.
+- Keep the entire full-body companion visible whenever the companion is authored
+  to be on screen.
+- Keep Anzania explicitly fictional in metadata and visitor-facing copy.
 
-See `AI-COLLAB/plans/MASTER-EXECUTION-PLAN.md` and
-`AI-COLLAB/status/STATUS.md` for the current production sequence and blockers.
+See `AI-COLLAB/plans/MASTER-EXECUTION-PLAN.md`,
+`AI-COLLAB/status/STATUS.md` and
+`docs/PROFILE-UPGRADE-2-5D-RELEASE.md` for the execution record and release
+criteria.

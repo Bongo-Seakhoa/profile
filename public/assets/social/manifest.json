@@ -13,6 +13,15 @@
       "sha256": "c1d61a4582c2d85aaa05c91193430e93419be7263901cafbc3ec93a11b93ceea"
     },
     {
+      "routeId": "explore",
+      "routePath": "explore/",
+      "path": "assets/social/explore.jpg",
+      "width": 1200,
+      "height": 630,
+      "bytes": 76694,
+      "sha256": "589e3211550ec415f5b192ad0e2c527c78ff7d8a923edc22c1cee1265229ea5c"
+    },
+    {
       "routeId": "work",
       "routePath": "work/",
       "path": "assets/social/work.jpg",
