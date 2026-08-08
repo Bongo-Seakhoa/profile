@@ -4,7 +4,9 @@ import { expect, test, type Page } from "@playwright/test";
 async function beginJourney(page: Page) {
   await page.goto("explore/", { waitUntil: "networkidle" });
   await expect(page.locator("[data-arrival-gate]")).toBeVisible();
-  await expect(page.getByText("An original fictional world", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText("An original fictional world", { exact: false }),
+  ).toBeVisible();
   await page.locator("[data-begin-journey]").click();
   await expect(page.locator("[data-explorer]")).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute(
@@ -13,7 +15,28 @@ async function beginJourney(page: Page) {
   );
 }
 
+// The companion image carries a 420ms transform transition, so a look-back or
+// traversal is still rotating when the class lands. Measuring then samples a
+// mid-flight bounding box and the ratio drifts. Wait for the transform to hold
+// steady across consecutive frames so every measurement is taken at rest.
+async function settleCompanionTransform(page: Page) {
+  await page.evaluate(async () => {
+    const image = document.querySelector<HTMLElement>("[data-companion-image]");
+    if (!image) return;
+
+    let previous = "";
+    let stableFrames = 0;
+    for (let frame = 0; frame < 90 && stableFrames < 2; frame += 1) {
+      const current = window.getComputedStyle(image).transform;
+      stableFrames = current === previous ? stableFrames + 1 : 0;
+      previous = current;
+      await new Promise((resolve) => window.requestAnimationFrame(resolve));
+    }
+  });
+}
+
 async function framingMetrics(page: Page) {
+  await settleCompanionTransform(page);
   return page.evaluate(() => {
     const avatar = document
       .querySelector<HTMLElement>("[data-companion-image]")
@@ -48,9 +71,9 @@ async function framingMetrics(page: Page) {
       },
       ratio: avatar.height / window.innerHeight,
       overlapsPanel,
-      frameStatus: document
-        .querySelector<HTMLElement>("[data-companion]")
-        ?.dataset.frameStatus,
+      frameStatus:
+        document.querySelector<HTMLElement>("[data-companion]")?.dataset
+          .frameStatus,
     };
   });
 }
@@ -105,7 +128,9 @@ function expectCompleteFullBody(
 
   expect(metrics.avatar.top).toBeGreaterThanOrEqual(-0.5);
   expect(metrics.avatar.left).toBeGreaterThanOrEqual(-0.5);
-  expect(metrics.avatar.right).toBeLessThanOrEqual(metrics.viewport.width + 0.5);
+  expect(metrics.avatar.right).toBeLessThanOrEqual(
+    metrics.viewport.width + 0.5,
+  );
   expect(metrics.avatar.bottom).toBeLessThanOrEqual(
     metrics.viewport.height + 0.5,
   );
@@ -126,10 +151,9 @@ test.describe("Explore Anzania release experience", () => {
     await expect(
       page.getByText("Its places are narrative spaces, not real geography."),
     ).toBeVisible();
-    await expect(page.getByRole("link", { name: "Continue in Static View" })).toHaveAttribute(
-      "href",
-      "/profile/",
-    );
+    await expect(
+      page.getByRole("link", { name: "Continue in Static View" }),
+    ).toHaveAttribute("href", "/profile/");
     await expect(page.locator("canvas")).toHaveCount(0);
   });
 
@@ -185,12 +209,14 @@ test.describe("Explore Anzania release experience", () => {
     expectCompleteFullBody(before);
 
     await page.keyboard.down("l");
-    await expect(page.locator("[data-experience]")).toHaveClass(/is-looking-back/);
+    await expect(page.locator("[data-experience]")).toHaveClass(
+      /is-looking-back/,
+    );
     const lookingBack = await framingMetrics(page);
     expectCompleteFullBody(lookingBack);
-    expect(Math.abs((lookingBack?.ratio ?? 0) - (before?.ratio ?? 0))).toBeLessThan(
-      0.005,
-    );
+    expect(
+      Math.abs((lookingBack?.ratio ?? 0) - (before?.ratio ?? 0)),
+    ).toBeLessThan(0.005);
     await page.keyboard.up("l");
     await expect(page.locator("[data-experience]")).not.toHaveClass(
       /is-looking-back/,
@@ -227,14 +253,16 @@ test.describe("Explore Anzania release experience", () => {
     await expect(page.locator("[data-guide-id]")).toHaveCount(15);
     await expect
       .poll(() =>
-        page.locator("[data-guide-id] img").evaluateAll((images) =>
-          images.every(
-            (image) =>
-              image instanceof HTMLImageElement &&
-              image.complete &&
-              image.naturalWidth > 0,
+        page
+          .locator("[data-guide-id] img")
+          .evaluateAll((images) =>
+            images.every(
+              (image) =>
+                image instanceof HTMLImageElement &&
+                image.complete &&
+                image.naturalWidth > 0,
+            ),
           ),
-        ),
       )
       .toBe(true);
     await page.locator('[data-guide-id="dn-f-afr-01"]').click();

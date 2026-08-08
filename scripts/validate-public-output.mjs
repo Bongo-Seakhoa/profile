@@ -120,6 +120,11 @@ for (const path of htmlFiles) {
   const html = await readFile(path, "utf8");
   const publicPath = distPath(path);
   const isExploreRoute = publicPath === "explore/index.html";
+  // Resume and CV previews are deliberately chrome-less print layouts. They carry
+  // no site shell, no client runtime and no Anzania framing, so the Static View
+  // contracts below do not apply to them.
+  const isDocumentPreview =
+    /^documents\/(?:resume|cv)\/[^/]+\/index\.html$/.test(publicPath);
 
   if (/<canvas(?:\s|>)/i.test(html)) {
     failures.push(`${displayPath(path)} contains a canvas`);
@@ -158,7 +163,15 @@ for (const path of htmlFiles) {
         html,
       )
     ) {
-      failures.push("explore/index.html does not load the approved module runtime");
+      failures.push(
+        "explore/index.html does not load the approved module runtime",
+      );
+    }
+  } else if (isDocumentPreview) {
+    if (scriptSources.length !== 0) {
+      failures.push(
+        `${displayPath(path)} must stay script-free, found ${scriptSources.length}`,
+      );
     }
   } else {
     if (scriptSources.length !== 1) {
@@ -238,7 +251,9 @@ try {
   if (/document\.createElement\((?:"|')canvas/i.test(runtime)) {
     failures.push("The Static View runtime creates a canvas");
   }
-  if (/\bWebGL(?:2)?RenderingContext\b|\.getContext\((?:"|')webgl/i.test(runtime)) {
+  if (
+    /\bWebGL(?:2)?RenderingContext\b|\.getContext\((?:"|')webgl/i.test(runtime)
+  ) {
     failures.push("The Static View runtime initializes WebGL");
   }
 } catch {
@@ -298,7 +313,9 @@ try {
         resolve(distDirectory, "assets", "immersive", relativeAsset),
       );
       if (metadata.size < 1_000) {
-        failures.push(`Immersive asset is unexpectedly small: ${relativeAsset}`);
+        failures.push(
+          `Immersive asset is unexpectedly small: ${relativeAsset}`,
+        );
       }
     } catch {
       failures.push(`Immersive asset is missing: ${relativeAsset}`);
@@ -328,11 +345,15 @@ try {
   ];
   for (const contract of requiredRuntimeContracts) {
     if (!runtime.includes(contract)) {
-      failures.push(`The Anzania runtime is missing framing contract: ${contract}`);
+      failures.push(
+        `The Anzania runtime is missing framing contract: ${contract}`,
+      );
     }
   }
   if (/over-the-shoulder|\bOTS\b/i.test(runtime)) {
-    failures.push("The Anzania runtime contains prohibited OTS camera language");
+    failures.push(
+      "The Anzania runtime contains prohibited OTS camera language",
+    );
   }
 } catch {
   failures.push("The Explore Anzania runtime is missing");

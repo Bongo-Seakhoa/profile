@@ -98,7 +98,11 @@
         rgb(247 239 223 / 58%) 68%,
         rgb(247 239 223 / 78%) 100%
       ),
-      linear-gradient(180deg, rgb(247 239 223 / 10%), rgb(243 234 217 / 94%) 92%);
+      linear-gradient(
+        180deg,
+        rgb(247 239 223 / 10%),
+        rgb(243 234 217 / 94%) 92%
+      );
   }
 
   .static-atmosphere::after {
@@ -121,7 +125,13 @@
     block-size: min(54rem, 88svh);
     opacity: 0.5;
     filter: saturate(0.8) sepia(0.08) contrast(0.96);
-    mask-image: linear-gradient(90deg, transparent 0%, black 19%, black 86%, transparent 100%);
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 19%,
+      black 86%,
+      transparent 100%
+    );
     transform: translate3d(0, calc(var(--static-scroll-ratio) * -1.5rem), 0);
     transform-origin: center;
   }
@@ -702,7 +712,11 @@
         rgb(247 239 223 / 52%) 78%,
         rgb(247 239 223 / 72%) 100%
       ),
-      linear-gradient(180deg, rgb(247 239 223 / 18%), rgb(243 234 217 / 98%) 80%);
+      linear-gradient(
+        180deg,
+        rgb(247 239 223 / 18%),
+        rgb(243 234 217 / 98%) 80%
+      );
   }
 
   .static-atmosphere__cartography {

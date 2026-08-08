@@ -115,7 +115,8 @@ const github = identity.links.find((link) => link.id === "github");
             <svg class="signal-glyph" viewBox="0 0 64 64" aria-hidden="true">
               <circle cx="32" cy="32" r="23"></circle>
               <path d="M16 39 32 16l16 23-16 9Z"></path>
-              <circle class="signal-glyph__node" cx="32" cy="32" r="2.7"></circle>
+              <circle class="signal-glyph__node" cx="32" cy="32" r="2.7"
+              ></circle>
             </svg>
           </div>
 
@@ -124,7 +125,10 @@ const github = identity.links.find((link) => link.id === "github");
               <span>01</span>
               <div>
                 <strong>The problem</strong>
-                <p>The data, analytics or machine learning problem you are solving.</p>
+                <p>
+                  The data, analytics or machine learning problem you are
+                  solving.
+                </p>
               </div>
             </li>
             <li>
@@ -182,7 +186,12 @@ const github = identity.links.find((link) => link.id === "github");
     position: absolute;
     z-index: -1;
     inset: 0;
-    background: linear-gradient(98deg, var(--canvas) 0 42%, rgb(243 234 217 / 72%) 68%, var(--canvas));
+    background: linear-gradient(
+      98deg,
+      var(--canvas) 0 42%,
+      rgb(243 234 217 / 72%) 68%,
+      var(--canvas)
+    );
     content: "";
   }
 
@@ -194,7 +203,13 @@ const github = identity.links.find((link) => link.id === "github");
     inline-size: min(80rem, 74vw);
     opacity: 0.25;
     filter: saturate(0.64) sepia(0.08) contrast(0.98);
-    mask-image: linear-gradient(90deg, transparent, black 28%, black 88%, transparent);
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 28%,
+      black 88%,
+      transparent
+    );
     pointer-events: none;
   }
 
@@ -276,7 +291,11 @@ const github = identity.links.find((link) => link.id === "github");
     padding: clamp(1.5rem, 4vw, 3rem);
     flex-direction: column;
     border: 1px solid rgb(237 201 120 / 40%);
-    background: linear-gradient(145deg, rgb(31 26 21 / 98%), rgb(37 70 80 / 96%));
+    background: linear-gradient(
+      145deg,
+      rgb(31 26 21 / 98%),
+      rgb(37 70 80 / 96%)
+    );
     box-shadow: 0 1.5rem 4rem rgb(34 23 15 / 16%);
     color: var(--surface);
   }

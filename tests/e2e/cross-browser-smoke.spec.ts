@@ -43,7 +43,8 @@ test.describe("Cross-browser Static View smoke", () => {
         horizontalOverflow:
           document.documentElement.scrollWidth -
           document.documentElement.clientWidth,
-        enhanced: document.documentElement.classList.contains("static-enhanced"),
+        enhanced:
+          document.documentElement.classList.contains("static-enhanced"),
       }));
 
       expect(staticState.bodyText).not.toContain("\u2014");

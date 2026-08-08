@@ -34,12 +34,7 @@ const {
   exploreAnzaniaPath = "explore/",
 } = Astro.props;
 
-const archiveRoutes = new Set([
-  "work",
-  "research",
-  "credentials",
-  "documents",
-]);
+const archiveRoutes = new Set(["work", "research", "credentials", "documents"]);
 const oasisRoutes = new Set(["contact", "about", "education", "bongo-kosa"]);
 const sceneId: PublishedAnzaniaPlateId =
   archiveRoutes.has(activeRouteId) ||
@@ -188,13 +183,11 @@ const sceneId: PublishedAnzaniaPlateId =
         <li data-command-item>
           <a
             href={sitePath(documentsPath)}
-            aria-current={
-              activeRouteId === "documents" ||
-              activeRouteId.startsWith("resume-") ||
-              activeRouteId.startsWith("cv-")
-                ? "page"
-                : undefined
-            }
+            aria-current={activeRouteId === "documents" ||
+            activeRouteId.startsWith("resume-") ||
+            activeRouteId.startsWith("cv-")
+              ? "page"
+              : undefined}
           >
             <span>{String(navigation.length + 1).padStart(2, "0")}</span>
             <strong>Resume and CV</strong>
@@ -206,9 +199,7 @@ const sceneId: PublishedAnzaniaPlateId =
             <li data-command-item>
               <a
                 href={sitePath(exploreAnzaniaPath)}
-                aria-current={
-                  activeRouteId === "explore" ? "page" : undefined
-                }
+                aria-current={activeRouteId === "explore" ? "page" : undefined}
               >
                 <span>{String(navigation.length + 2).padStart(2, "0")}</span>
                 <strong>Explore Anzania</strong>
@@ -222,7 +213,10 @@ const sceneId: PublishedAnzaniaPlateId =
 
     {
       documentDownloads.length > 0 && (
-        <section class="static-command-downloads" aria-labelledby="download-title">
+        <section
+          class="static-command-downloads"
+          aria-labelledby="download-title"
+        >
           <p id="download-title">Direct downloads</p>
           <div>
             {documentDownloads.map((document) => (
@@ -250,5 +244,4 @@ const sceneId: PublishedAnzaniaPlateId =
 <script
   is:inline
   type="module"
-  src={sitePath("assets/static/static-runtime.js")}
-></script>
+  src={sitePath("assets/static/static-runtime.js")}></script>

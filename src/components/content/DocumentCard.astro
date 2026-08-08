@@ -49,7 +49,11 @@ const {
     border: 1px solid var(--line-strong);
     border-radius: 0;
     background:
-      radial-gradient(circle at var(--signal-x, 86%) var(--signal-y, 10%), rgb(211 166 81 / 14%), transparent 32%),
+      radial-gradient(
+        circle at var(--signal-x, 86%) var(--signal-y, 10%),
+        rgb(211 166 81 / 14%),
+        transparent 32%
+      ),
       rgb(251 245 234 / 84%);
     box-shadow: 0 1rem 3.5rem rgb(43 30 19 / 7%);
   }
@@ -65,8 +69,11 @@ const {
   }
 
   .document-card--primary {
-    background:
-      linear-gradient(145deg, rgb(251 245 234 / 96%), rgb(231 215 189 / 88%));
+    background: linear-gradient(
+      145deg,
+      rgb(251 245 234 / 96%),
+      rgb(231 215 189 / 88%)
+    );
   }
 
   .document-card--primary::before {
