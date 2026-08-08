@@ -453,6 +453,11 @@
     list-style: none;
   }
 
+  .static-command-navigation ul[data-filtered="true"] {
+    grid-template-columns: 1fr;
+    background: transparent;
+  }
+
   .static-command-navigation li {
     min-inline-size: 0;
     background: #1a1510;

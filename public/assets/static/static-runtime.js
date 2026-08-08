@@ -175,6 +175,7 @@ const trigger = document.querySelector("[data-command-trigger]");
 const search = document.querySelector("[data-command-search]");
 const commandItems = Array.from(document.querySelectorAll("[data-command-item]"));
 const emptyState = document.querySelector("[data-command-empty]");
+const commandGrid = document.querySelector(".static-command-navigation ul");
 let returnFocus = null;
 
 function isEditableTarget(target) {
@@ -196,6 +197,10 @@ function filterCommands() {
     if (matches) visibleCount += 1;
   });
   if (emptyState) emptyState.hidden = visibleCount > 0;
+  if (commandGrid instanceof HTMLElement) {
+    commandGrid.dataset.filtered = query ? "true" : "false";
+    commandGrid.dataset.visibleCount = String(visibleCount);
+  }
 }
 
 function isDialogElement(value) {
