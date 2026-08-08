@@ -69,7 +69,8 @@ test.describe("Static View route and accessibility contract", () => {
         horizontalOverflow:
           document.documentElement.scrollWidth -
           document.documentElement.clientWidth,
-        enhanced: document.documentElement.classList.contains("static-enhanced"),
+        enhanced:
+          document.documentElement.classList.contains("static-enhanced"),
         scriptSources: Array.from(document.scripts)
           .map((script) => script.getAttribute("src"))
           .filter(Boolean),
@@ -166,9 +167,11 @@ test.describe("Static View route and accessibility contract", () => {
 
     await expect(page.locator('html[data-motion="reduced"]')).toHaveCount(1);
     await expect(page.locator('[data-reveal-state="pending"]')).toHaveCount(0);
-    const hiddenRecords = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("main section, [data-signal-card]"))
-        .filter((element) => getComputedStyle(element).opacity === "0").length,
+    const hiddenRecords = await page.evaluate(
+      () =>
+        Array.from(
+          document.querySelectorAll("main section, [data-signal-card]"),
+        ).filter((element) => getComputedStyle(element).opacity === "0").length,
     );
     expect(hiddenRecords).toBe(0);
   });

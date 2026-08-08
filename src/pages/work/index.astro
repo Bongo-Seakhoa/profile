@@ -72,7 +72,11 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
       <div class="work-lead">
         {leadProject && <ProjectCard project={leadProject} variant="lead" />}
 
-        <aside class="work-protocol" data-signal-card aria-labelledby="work-protocol-title">
+        <aside
+          class="work-protocol"
+          data-signal-card
+          aria-labelledby="work-protocol-title"
+        >
           <div class="work-protocol__header">
             <div>
               <p>Record protocol</p>
@@ -81,7 +85,8 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
             <svg class="signal-glyph" viewBox="0 0 64 64" aria-hidden="true">
               <circle cx="32" cy="32" r="23"></circle>
               <path d="M32 9v46M9 32h46M16 16l32 32M48 16 16 48"></path>
-              <circle class="signal-glyph__node" cx="32" cy="32" r="2.7"></circle>
+              <circle class="signal-glyph__node" cx="32" cy="32" r="2.7"
+              ></circle>
             </svg>
           </div>
 
@@ -92,15 +97,22 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
             </div>
             <div>
               <dt>Evidence</dt>
-              <dd>Public repositories and websites remain the source authority.</dd>
+              <dd>
+                Public repositories and websites remain the source authority.
+              </dd>
             </div>
             <div>
               <dt>Privacy</dt>
-              <dd>Client-sensitive work is presented as a concise, safe summary.</dd>
+              <dd>
+                Client-sensitive work is presented as a concise, safe summary.
+              </dd>
             </div>
             <div>
               <dt>Status</dt>
-              <dd>Professional work, public projects and experiments are labelled directly.</dd>
+              <dd>
+                Professional work, public projects and experiments are labelled
+                directly.
+              </dd>
             </div>
           </dl>
         </aside>
@@ -142,7 +154,9 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
         title="Additional systems and experiments"
         description="These records are useful evidence of range. Their labels distinguish public work, experiments and archived material."
       />
-      <div class="project-archive-grid work-record-grid work-record-grid--archive">
+      <div
+        class="project-archive-grid work-record-grid work-record-grid--archive"
+      >
         {
           archiveProjects.map((project) => (
             <ProjectCard project={project} variant="archive" />
@@ -163,7 +177,12 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
     position: absolute;
     z-index: -1;
     inset: 0;
-    background: linear-gradient(98deg, var(--canvas) 0 42%, rgb(243 234 217 / 82%) 67%, var(--canvas));
+    background: linear-gradient(
+      98deg,
+      var(--canvas) 0 42%,
+      rgb(243 234 217 / 82%) 67%,
+      var(--canvas)
+    );
     content: "";
   }
 
@@ -175,7 +194,13 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
     inline-size: min(78rem, 72vw);
     opacity: 0.2;
     filter: saturate(0.5) sepia(0.13) contrast(0.96);
-    mask-image: linear-gradient(90deg, transparent, black 30%, black 82%, transparent);
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black 30%,
+      black 82%,
+      transparent
+    );
     pointer-events: none;
   }
 

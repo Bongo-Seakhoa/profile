@@ -39,7 +39,11 @@ interface RuntimeManifest {
   readonly powers: Readonly<
     Record<
       string,
-      { readonly name: string; readonly durationMs: number; readonly className: string }
+      {
+        readonly name: string;
+        readonly durationMs: number;
+        readonly className: string;
+      }
     >
   >;
   readonly guides: readonly GuideRecord[];
@@ -64,8 +68,10 @@ describe("Explore Anzania 2.5D release manifest", () => {
 
     expect(manifest.world).toEqual({
       name: "Anzania",
-      definition: "An original fictional portfolio world created for Bongo Seakhoa.",
-      disclaimer: "Anzania is fictional. It is not Tanzania or any other real location.",
+      definition:
+        "An original fictional portfolio world created for Bongo Seakhoa.",
+      disclaimer:
+        "Anzania is fictional. It is not Tanzania or any other real location.",
       experience: "Cinematic 2.5D guided portfolio journey",
     });
   });
@@ -103,7 +109,7 @@ describe("Explore Anzania 2.5D release manifest", () => {
       inner.small,
     ]);
 
-    expect(new Set(paths)).toHaveSize(32);
+    expect(new Set(paths).size).toBe(32);
     await Promise.all(
       paths.map(async (path) => {
         expect(path).toMatch(/^\.\/scenes\/.+-\d+\.webp$/);
@@ -130,7 +136,7 @@ describe("full-body companion roster", () => {
     expect(counts.Masculine).toBe(5);
     expect(counts.Feminine).toBe(5);
     expect(counts.Neutral).toBe(5);
-    expect(new Set(manifest.guides.map(({ id }) => id))).toHaveSize(15);
+    expect(new Set(manifest.guides.map(({ id }) => id)).size).toBe(15);
   });
 
   it("keeps every runtime guide transparent, portrait-oriented and full-body sized", async () => {
@@ -180,7 +186,9 @@ describe("responsive framing and interaction runtime", () => {
   it("keeps the immersive runtime isolated from the Static View source tree", async () => {
     const runtime = await readFile(runtimePath, "utf8");
 
-    expect(runtime).toContain('new URL("./runtime-manifest.json", import.meta.url)');
+    expect(runtime).toContain(
+      'new URL("./runtime-manifest.json", import.meta.url)',
+    );
     expect(runtime).toContain('new URL("../../", import.meta.url)');
     expect(runtime).not.toContain("document.write");
     expect(runtime).not.toContain("eval(");

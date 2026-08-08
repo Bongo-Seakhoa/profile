@@ -16,6 +16,10 @@ const socialImageUrl = absoluteUrl(
   "assets/social/explore.jpg",
   "https://bongo-seakhoa.github.io/profile/",
 );
+const sitemapUrl = absoluteUrl(
+  "sitemap-index.xml",
+  "https://bongo-seakhoa.github.io/profile/",
+);
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "CreativeWork",
@@ -27,7 +31,11 @@ const structuredData = JSON.stringify({
     name: "Bongo Seakhoa",
     alternateName: "Bongo Kosa",
   },
-  genre: ["Interactive portfolio", "Original fictional world", "2.5D experience"],
+  genre: [
+    "Interactive portfolio",
+    "Original fictional world",
+    "2.5D experience",
+  ],
   isPartOf: {
     "@type": "WebSite",
     name: "Bongo Seakhoa - Portfolio",
@@ -63,6 +71,8 @@ const structuredData = JSON.stringify({
       sizes="32x32"
       type="image/png"
     />
+    <link rel="manifest" href={sitePath("site.webmanifest")} />
+    <link rel="sitemap" href={sitemapUrl} type="application/xml" />
     <link
       rel="preload"
       as="image"
@@ -80,6 +90,8 @@ const structuredData = JSON.stringify({
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
       content="Explore Anzania, an original fictional portfolio world by Bongo Seakhoa."
@@ -88,15 +100,22 @@ const structuredData = JSON.stringify({
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageUrl} />
-    <script type="application/ld+json" is:inline set:html={structuredData}></script>
+    <script type="application/ld+json" is:inline set:html={structuredData} />
   </head>
   <body>
     <a class="explore-skip-link" href="#chapter-content">Skip to chapter</a>
 
-    <div class="experience" id="experience" data-experience data-scene-mode="outer">
+    <div
+      class="experience"
+      id="experience"
+      data-experience
+      data-scene-mode="outer"
+    >
       <div class="scene" aria-hidden="true">
-        <div class="scene__image scene__image--previous" data-scene-previous></div>
-        <div class="scene__image scene__image--current" data-scene-current></div>
+        <div class="scene__image scene__image--previous" data-scene-previous>
+        </div>
+        <div class="scene__image scene__image--current" data-scene-current>
+        </div>
         <div class="scene__foreground" data-scene-foreground></div>
         <div class="scene__veil"></div>
         <div class="scene__vignette"></div>
@@ -112,17 +131,26 @@ const structuredData = JSON.stringify({
         <span class="power-transition__wake"></span>
       </div>
 
-      <div class="loading-gate" data-loading-gate role="status" aria-live="polite">
+      <div
+        class="loading-gate"
+        data-loading-gate
+        role="status"
+        aria-live="polite"
+      >
         <div class="loading-gate__sigil" aria-hidden="true">
           <span></span><span></span><span></span>
         </div>
         <p class="loading-gate__eyebrow">Preparing the crossing</p>
         <p class="loading-gate__title">ANZANIA</p>
-        <p class="loading-gate__world-note">An original fictional portfolio world</p>
+        <p class="loading-gate__world-note">
+          An original fictional portfolio world
+        </p>
         <div class="loading-gate__track" aria-hidden="true">
           <span data-loading-progress></span>
         </div>
-        <p class="loading-gate__status" data-loading-status>Reading the atlas...</p>
+        <p class="loading-gate__status" data-loading-status>
+          Reading the atlas...
+        </p>
       </div>
 
       <section
@@ -174,7 +202,9 @@ const structuredData = JSON.stringify({
           </a>
 
           <div class="journey-progress" aria-label="Journey progress">
-            <span class="journey-progress__label" data-progress-label>01 / 08</span>
+            <span class="journey-progress__label" data-progress-label
+              >01 / 08</span
+            >
             <span class="journey-progress__track" aria-hidden="true">
               <span data-progress-bar></span>
             </span>
@@ -186,6 +216,7 @@ const structuredData = JSON.stringify({
               data-map-button
               type="button"
               aria-haspopup="dialog"
+              aria-label="Atlas"
             >
               <span aria-hidden="true">◇</span>
               <span>Atlas</span>
@@ -195,6 +226,7 @@ const structuredData = JSON.stringify({
               data-guide-button
               type="button"
               aria-haspopup="dialog"
+              aria-label="Guide"
             >
               <span aria-hidden="true">◉</span>
               <span>Guide</span>
@@ -204,6 +236,7 @@ const structuredData = JSON.stringify({
               data-options-button
               type="button"
               aria-haspopup="dialog"
+              aria-label="Options"
             >
               <span aria-hidden="true">＋</span>
               <span>Options</span>
@@ -253,7 +286,11 @@ const structuredData = JSON.stringify({
           </button>
         </main>
 
-        <figure class="companion" data-companion aria-labelledby="companion-name">
+        <figure
+          class="companion"
+          data-companion
+          aria-labelledby="companion-name"
+        >
           <div class="companion__aura" aria-hidden="true"></div>
           <img
             data-companion-image
@@ -285,7 +322,9 @@ const structuredData = JSON.stringify({
             <span aria-hidden="true">←</span>
             <span class="traversal-controls__copy">Previous</span>
           </button>
-          <div class="traversal-controls__sigil" aria-hidden="true"><span></span></div>
+          <div class="traversal-controls__sigil" aria-hidden="true">
+            <span></span>
+          </div>
           <button
             data-next-location
             type="button"
@@ -310,7 +349,9 @@ const structuredData = JSON.stringify({
         <div class="explore-dialog__frame">
           <header class="explore-dialog__header">
             <div>
-              <p class="dialog-kicker">Eight locations · one professional story</p>
+              <p class="dialog-kicker">
+                Eight locations · one professional story
+              </p>
               <h2 id="map-dialog-title">Atlas of Anzania</h2>
               <p>
                 An original fictional portfolio world, mapped as a guided
@@ -409,13 +450,15 @@ const structuredData = JSON.stringify({
               <span>
                 <strong>Keyboard controls</strong>
                 <small>
-                  Left / right travel · Enter portal · M atlas · G guide · hold L
-                  look back · Esc close
+                  Left / right travel · Enter portal · M atlas · G guide · hold
+                  L look back · Esc close
                 </small>
               </span>
             </div>
             <a class="option-static-link" href={sitePath("")}>
-              Return to the complete Static View portfolio <span aria-hidden="true">→</span>
+              Return to the complete Static View portfolio <span
+                aria-hidden="true">→</span
+              >
             </a>
           </div>
         </div>
@@ -426,25 +469,27 @@ const structuredData = JSON.stringify({
         data-experience-toast
         role="status"
         aria-live="polite"
-      ></div>
+      >
+      </div>
       <div
         class="experience-announcer visually-hidden"
         data-experience-announcer
         aria-live="polite"
-      ></div>
+      >
+      </div>
     </div>
 
     <noscript>
       <section class="noscript-fallback">
         <p>Explore Anzania uses JavaScript for its guided 2.5D journey.</p>
-        <h1>Bongo Seakhoa's portfolio remains fully available in Static View.</h1>
+        <h1>
+          Bongo Seakhoa's portfolio remains fully available in Static View.
+        </h1>
         <a href={sitePath("")}>Open Static View</a>
       </section>
     </noscript>
 
-    <script
-      type="module"
-      src={sitePath("assets/immersive/anzania-explorer.js")}
+    <script type="module" src={sitePath("assets/immersive/anzania-explorer.js")}
     ></script>
   </body>
 </html>

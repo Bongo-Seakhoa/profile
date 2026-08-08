@@ -73,7 +73,9 @@ if ("IntersectionObserver" in window && sectionCandidates.length > 0) {
     (entries) => {
       const visible = entries
         .filter((entry) => entry.isIntersecting)
-        .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
+        .sort(
+          (left, right) => right.intersectionRatio - left.intersectionRatio,
+        );
       if (!visible[0]) return;
 
       activeSection = visible[0].target;
@@ -176,7 +178,9 @@ if (finePointer.matches) {
 const dialog = document.querySelector("[data-command-dialog]");
 const trigger = document.querySelector("[data-command-trigger]");
 const search = document.querySelector("[data-command-search]");
-const commandItems = Array.from(document.querySelectorAll("[data-command-item]"));
+const commandItems = Array.from(
+  document.querySelectorAll("[data-command-item]"),
+);
 const emptyState = document.querySelector("[data-command-empty]");
 const commandGrid = document.querySelector(".static-command-navigation ul");
 let returnFocus = null;
@@ -208,7 +212,8 @@ function filterCommands() {
 
 function isDialogElement(value) {
   return (
-    typeof HTMLDialogElement !== "undefined" && value instanceof HTMLDialogElement
+    typeof HTMLDialogElement !== "undefined" &&
+    value instanceof HTMLDialogElement
   );
 }
 
@@ -241,6 +246,18 @@ dialog?.addEventListener("close", () => {
 dialog?.addEventListener("click", (event) => {
   if (event.target === dialog) closeDialog();
 });
+// The filter field is type="search", and Chromium consumes the first Escape to
+// clear it instead of dismissing the dialog. Capture the key before the input
+// sees it so one Escape always closes the navigator, in every browser.
+dialog?.addEventListener(
+  "keydown",
+  (event) => {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    closeDialog();
+  },
+  true,
+);
 search?.addEventListener("input", filterCommands);
 commandItems.forEach((item) => {
   item.querySelector("a")?.addEventListener("click", () => closeDialog());
@@ -282,7 +299,8 @@ function eligibleInternalLink(anchor, event) {
   if (reducedMotion.matches || event.defaultPrevented || event.button !== 0) {
     return null;
   }
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return null;
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+    return null;
   if (anchor.hasAttribute("download") || anchor.target) return null;
 
   const url = new URL(anchor.href, window.location.href);
@@ -298,18 +316,19 @@ function eligibleInternalLink(anchor, event) {
 }
 
 document.addEventListener("click", (event) => {
-  const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
+  const anchor =
+    event.target instanceof Element ? event.target.closest("a[href]") : null;
   if (!(anchor instanceof HTMLAnchorElement)) return;
   const destination = eligibleInternalLink(anchor, event);
   if (!destination) return;
 
   event.preventDefault();
-  root.dataset.leaving = "true";
+  root.setAttribute("data-leaving", "true");
   window.setTimeout(() => window.location.assign(destination.href), 135);
 });
 
 window.addEventListener("pageshow", () => {
-  delete root.dataset.leaving;
+  root.removeAttribute("data-leaving");
   window.requestAnimationFrame(() => {
     root.classList.add("static-ready");
     root.dataset.staticReady = "true";
