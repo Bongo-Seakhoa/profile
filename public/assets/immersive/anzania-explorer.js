@@ -273,6 +273,16 @@ function renderGuides() {
     .join("");
 }
 
+function warmGuideCards() {
+  elements.guideGrid?.querySelectorAll("img").forEach((image) => {
+    image.loading = "eager";
+    image.fetchPriority = "low";
+    if (!image.complete && typeof image.decode === "function") {
+      image.decode().catch(() => undefined);
+    }
+  });
+}
+
 function renderGuide() {
   const guide = getCurrentGuide();
   if (!guide) return;
@@ -794,7 +804,7 @@ function beginJourney() {
     elements.chapterPanel?.focus({ preventScroll: true });
   });
   resetIdleTimer();
-  showToast("Use the arrows to cross Anzania. Every location opens into the complete Static View record.", 4200);
+  showToast("Use the arrows to cross Anzania. Every location opens into the complete Static View record.", 3200);
 }
 
 function parseInitialLocation() {
@@ -851,7 +861,10 @@ function bindEvents() {
   });
 
   elements.mapButton?.addEventListener("click", () => openDialog(elements.mapDialog));
-  elements.guideButton?.addEventListener("click", () => openDialog(elements.guideDialog));
+  elements.guideButton?.addEventListener("click", () => {
+    warmGuideCards();
+    openDialog(elements.guideDialog);
+  });
   elements.optionsButton?.addEventListener("click", () => openDialog(elements.optionsDialog));
   document.querySelectorAll("[data-close-dialog]").forEach((button) => {
     button.addEventListener("click", () => closeDialog(button.closest("dialog")));

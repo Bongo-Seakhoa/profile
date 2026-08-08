@@ -20,8 +20,14 @@ const {
 } = Astro.props;
 ---
 
-<article class:list={["document-card", primary && "document-card--primary"]}>
-  <p class="document-card__format">A4 · {pageCount} pages</p>
+<article
+  class:list={["document-card", primary && "document-card--primary"]}
+  data-signal-card
+>
+  <div class="document-card__header">
+    <p class="document-card__format">A4 / {pageCount} pages</p>
+    <span aria-hidden="true">DOCUMENT</span>
+  </div>
   <h2>{label}</h2>
   <p>{description}</p>
   <div class="document-card__actions">
@@ -32,32 +38,64 @@ const {
 
 <style>
   .document-card {
+    position: relative;
     display: flex;
     min-inline-size: 0;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
+    min-block-size: 22rem;
+    overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 2.8rem);
     flex-direction: column;
     gap: var(--space-4);
     border: 1px solid var(--line-strong);
-    border-radius: var(--radius-medium);
-    background: var(--surface);
+    border-radius: 0;
+    background:
+      radial-gradient(circle at var(--signal-x, 86%) var(--signal-y, 10%), rgb(211 166 81 / 14%), transparent 32%),
+      rgb(251 245 234 / 84%);
+    box-shadow: 0 1rem 3.5rem rgb(43 30 19 / 7%);
+  }
+
+  .document-card::before {
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: -1px;
+    inline-size: 4.8rem;
+    block-size: 2px;
+    background: var(--gold);
+    content: "";
   }
 
   .document-card--primary {
-    border-block-start: 0.35rem solid var(--rust);
-    background: var(--surface);
+    background:
+      linear-gradient(145deg, rgb(251 245 234 / 96%), rgb(231 215 189 / 88%));
+  }
+
+  .document-card--primary::before {
+    inline-size: 7rem;
+    background: var(--rust);
+  }
+
+  .document-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
   }
 
   .document-card__format {
     color: var(--rust-strong) !important;
-    font-family: var(--font-mono);
-    font-size: var(--step--1);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
   }
 
   h2 {
-    font-size: var(--step-2);
+    max-inline-size: 20ch;
+    margin-block-start: auto;
+    font-size: clamp(2rem, 3vw, 3.3rem);
+    line-height: 1;
   }
 
   article > p {
@@ -67,10 +105,11 @@ const {
 
   .document-card__actions {
     display: flex;
-    margin-block-start: auto;
-    padding-block-start: var(--space-3);
+    margin-block-start: var(--space-3);
+    padding-block-start: var(--space-4);
     flex-wrap: wrap;
     gap: var(--space-3) var(--space-5);
+    border-block-start: 1px solid var(--line);
   }
 
   a {
@@ -79,16 +118,24 @@ const {
     padding-block: 0.65rem;
     align-items: center;
     color: var(--rust-strong);
-    font-weight: 700;
+    font-size: 0.8rem;
+    font-weight: 750;
     text-underline-offset: 0.2em;
   }
 
   a:first-child {
     padding-inline: 1rem;
-    border: 0.12rem solid var(--rust);
-    border-radius: var(--radius-small);
+    border: 1px solid var(--rust);
+    border-radius: 0;
     color: var(--surface);
     background: var(--rust);
     text-decoration: none;
+  }
+
+  a::after {
+    margin-inline-start: 0.45rem;
+    content: "↗";
+    font-family: var(--font-mono);
+    font-size: 0.75em;
   }
 </style>

@@ -1,90 +1,69 @@
-# Handoff and lane claims
+# Profile Upgrade handoff
 
-Live coordination state for the Profile Upgrade project.
+**Updated:** 2026-08-08
+**Lead lane:** Codex
+**Review lane:** Claude or another independent reviewer when available
 
-## Active lanes
+## Current release branch
 
-| Agent | Lane | State |
-| --- | --- | --- |
-| Codex | Static View release, canonical pilot, immersive architecture and implementation | Active |
-| Claude | Independent review through `AI-COLLAB/inbox/claude/` | Offline by heartbeat protocol; no source files held |
-
-No implementation file is reserved for Claude. Codex continues autonomously and
-will route any later Claude response through the written review process.
-
-## Repository state
-
-- Canonical release branch: `main`.
-- Legacy baseline: `df410d5`
+- Working branch: `agent/profile-upgrade-20260808-final`
+- Story-mode implementation commit: `b5ebe6b`
+- Target branch: `main`
+- Target site: `https://bongo-seakhoa.github.io/profile/`
 - Recovery tag: `legacy-pages-baseline-20260730`
-- Production implementation merge: `f007d7c84222bc099650538143c2081df54ae398`
-- Verified Static View implementation revision: `e29a4c959c39fff6e93def841c0944db94bf013f`
-- Live site: `https://bongo-seakhoa.github.io/profile/`
-- Warning-clean Pages run: `30605182973`
-- Live `version.json` is authoritative for later record-only main revisions.
-- Production deployment and live HTTP/PDF smoke verification passed.
 
-## Completed implementation
+## Completed product scope
 
-- Astro 6 and TypeScript production foundation.
-- Evidence-bound route, project, credential and document manifests.
-- Anzania-aligned Static View with 26 pages and no client JavaScript.
-- JavaScript/Chromium document pipeline with four polished A4 PDFs.
-- Canonical metadata, sitemap, icons, unique social cards and Pages workflow.
-- Full Static View QA: 58 unit tests, 72 browser tests and Lighthouse 99/100/100/100.
-- Current-tree privacy remediation and independent pre-commit scan.
-- Corrected and verified asset-linkage workbook.
-- Distant full-body camera, safe-zone, bounds-tracking and animation-runtime contracts.
-- Verified Desert Nomad v3 handoff and exact 15-character roster.
-- Private DN-M-AFR-01 v2 reconstruction and Blender 5.2 measurement blockout.
-- Production release through PR 1, followed by the Node 24 Pages-action update
-  through PR 2; both hosted quality gates and main deployments passed.
+### Professional Static View
 
-## Required immersive continuation
+- Astro 6 and TypeScript evidence-led professional record.
+- Premium cream, ink, gold, rust and teal systems-cartography design language.
+- Route-aware Anzania atmosphere that remains visually subordinate to information.
+- Editorial homepage with systems console, evidence ledger and direct conversion paths.
+- Redesigned work and contact routes with professional signal graphics.
+- Shared content, capability, experience, credential, project and document components.
+- Reading progress, active-section beacon, progressive reveals, pointer spotlights and restrained route transitions.
+- Accessible command navigator with keyboard shortcuts, filtering and focus return.
+- Fully useful semantic no-JavaScript fallback.
+- Reduced-motion, forced-colours and print support.
 
-The next work is not a future-option backlog. It is the remaining production
-scope:
+### Explore Anzania
 
-1. Confirm character derivative and redistribution rights.
-2. Obtain owner approval of the DN-M-AFR-01 pilot silhouette.
-3. Finish the pilot sculpt, garments, materials, rig, deformation, animations,
-   LODs and runtime export.
-4. Scale the approved pipeline to all 15 canonical identities.
-5. Build and enhance the complete Anzania location-set roster.
-6. Author lighting, atmosphere, particles, environmental motion, transitions
-   and background effects.
-7. Complete locomotion, gestures, idle behaviour, interactions, traversal and
-   powers.
-8. Integrate streaming, quality tiers, fallbacks and the full-body camera in the
-   browser runtime.
-9. Execute the full character by power by location by viewport Blender/browser
-   matrix and release only after all required gates pass.
+- Eight outer and inner narrative locations.
+- Fifteen transparent full-body companions.
+- Dune Surfing, Sand Teleportation, Solar Propulsion and Reality Bending.
+- Atlas, guide selector, experience options and Static View exits.
+- Distant full-body framing controller with responsive safe zones and animated-state containment.
+- No OTS path and no authored camera crop.
 
-## Authoritative corrections
+### Documents and release system
 
-- D004 is the only allowed immersive framing direction. No OTS or OTS variant
-  may exist.
-- The complete animated character bounds, including accessories, garments and
-  power-relevant silhouette elements, remain inside the visible safe envelope.
-- The lower third is the avatar's home stage. Authored powers may temporarily
-  use middle or upper safe pockets, after which the avatar returns home.
-- D006 applies to public copy and documents: no U+2014 em dashes, no repeated
-  ideas, conservative professional typography and direct PDF access.
-- Resume and CV generation remains JavaScript/Chromium only.
+- Four browser-native A4 Resume and CV PDFs generated with JavaScript, Chromium and `pdf-lib`.
+- Canonical metadata, sitemap, icons, social cards and GitHub Pages workflow.
+- Updated public-output, budget, unit and browser contracts for both runtime lanes.
+- Runtime isolation under `public/assets/static/` and `public/assets/immersive/`.
 
-## External owner gates
+## Authoritative design rules
 
-- `DN-CHAR-RIGHTS-001`: Bongo confirms ownership or applicable permission for
-  public derivatives of the canonical Desert Nomad references.
-- `DN-ORTHO-001`: Bongo approves or comments on the DN-M-AFR-01 v2 silhouette.
-- `DEP-CONTENT-001`: a LinkedIn export or current professional record can close
-  remaining evidence-only content warnings.
-- R-026: complete historical removal of the retired phone requires a separately
-  approved history-rewrite and recovery plan.
+- Anzania is fictional and must never be presented as Tanzania or another real location.
+- The professional record remains central in Static View. Location imagery may support composition as atmosphere, but must not become the main content object.
+- Static View and Explore Anzania are equal-quality products with different interaction goals.
+- The complete companion bounds, including headwear, hands, scarves, pouches, garment tails and footwear, remain inside the visible frame whenever authored on screen.
+- D004 remains the only allowed immersive framing direction. No OTS or OTS variant may exist.
+- Resume and CV production remains JavaScript and Chromium based.
+- Public copy avoids U+2014 em dashes and unverified claims.
+
+## Verification still required before live publication
+
+1. Run the canonical Node 24.14 and pnpm 11.9 `pnpm qa` suite in a connected build environment.
+2. Review professional desktop and mobile screenshots and the complete story-mode matrix.
+3. Push the release branch and open the publication pull request.
+4. Merge to `main` only after hosted checks pass.
+5. Verify the live homepage, `/profile/explore/`, sitemap, social metadata, `version.json` and all four PDFs over HTTPS.
 
 ## Recovery
 
-- The old site is recoverable from `legacy-pages-baseline-20260730`.
+- The prior production site is recoverable from `legacy-pages-baseline-20260730` and GitHub Pages deployment history.
+- The professional and immersive runtimes are isolated, allowing either interaction layer to be diagnosed without removing the evidence base or document routes.
 - The Pages workflow deploys only a quality-gated `dist` artifact.
-- If live verification fails, restore the last known-good Pages deployment and
-  correct the release branch before retrying.
+- If live verification fails, restore the last known-good deployment, correct the release branch and rerun the complete gate.

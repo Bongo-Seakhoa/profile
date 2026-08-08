@@ -46,28 +46,64 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
     lede="Professional contributions, public repositories and technical experiments. Each record states its evidence and privacy boundary."
   />
 
-  <section class="page-section" aria-labelledby="lead-work-title">
+  <section
+    class="page-section work-lead-section"
+    aria-labelledby="lead-work-title"
+    data-section-label="Lead system"
+  >
+    <div class="work-lead-section__atmosphere" aria-hidden="true">
+      <AnzaniaPlate
+        id="archive-echoes-outer"
+        use="work-evidence"
+        decorative
+        loading="eager"
+        sizes="(min-width: 80rem) 72vw, 120vw"
+      />
+    </div>
+
     <Container>
       <SectionIntro
         id="lead-work-title"
         eyebrow="Lead system"
         title="A closer look at applied technical work"
+        description="The project record remains the centre of the page. Atmosphere supports the evidence rather than replacing it."
       />
+
       <div class="work-lead">
         {leadProject && <ProjectCard project={leadProject} variant="lead" />}
-        <figure>
-          <AnzaniaPlate
-            id="archive-echoes-outer"
-            use="work-evidence"
-            decorative
-            loading="eager"
-            sizes="(min-width: 60rem) 45vw, 100vw"
-          />
-          <figcaption>
-            Archive of Echoes artwork. It provides visual context only; project
-            evidence remains linked in the project record.
-          </figcaption>
-        </figure>
+
+        <aside class="work-protocol" data-signal-card aria-labelledby="work-protocol-title">
+          <div class="work-protocol__header">
+            <div>
+              <p>Record protocol</p>
+              <h2 id="work-protocol-title">How to read the portfolio</h2>
+            </div>
+            <svg class="signal-glyph" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="23"></circle>
+              <path d="M32 9v46M9 32h46M16 16l32 32M48 16 16 48"></path>
+              <circle class="signal-glyph__node" cx="32" cy="32" r="2.7"></circle>
+            </svg>
+          </div>
+
+          <dl>
+            <div>
+              <dt>Scope</dt>
+              <dd>Each record separates stated contribution from inference.</dd>
+            </div>
+            <div>
+              <dt>Evidence</dt>
+              <dd>Public repositories and websites remain the source authority.</dd>
+            </div>
+            <div>
+              <dt>Privacy</dt>
+              <dd>Client-sensitive work is presented as a concise, safe summary.</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>Professional work, public projects and experiments are labelled directly.</dd>
+            </div>
+          </dl>
+        </aside>
       </div>
     </Container>
   </section>
@@ -75,6 +111,7 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
   <section
     class="page-section page-section--surface"
     aria-labelledby="selected-work-title"
+    data-section-label="Selected records"
   >
     <Container>
       <SectionIntro
@@ -83,7 +120,7 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
         title="Professional and public project work"
         description="Client-sensitive contributions are intentionally concise. Public repositories link directly to their source evidence."
       />
-      <div class="project-archive-grid">
+      <div class="project-archive-grid work-record-grid">
         {
           selectedProjects.map((project) => (
             <ProjectCard project={project} variant="standard" />
@@ -93,7 +130,11 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
     </Container>
   </section>
 
-  <section class="page-section" aria-labelledby="archive-title">
+  <section
+    class="page-section"
+    aria-labelledby="archive-title"
+    data-section-label="Project archive"
+  >
     <Container>
       <SectionIntro
         id="archive-title"
@@ -101,7 +142,7 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
         title="Additional systems and experiments"
         description="These records are useful evidence of range. Their labels distinguish public work, experiments and archived material."
       />
-      <div class="project-archive-grid">
+      <div class="project-archive-grid work-record-grid work-record-grid--archive">
         {
           archiveProjects.map((project) => (
             <ProjectCard project={project} variant="archive" />
@@ -113,40 +154,145 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
 </BaseLayout>
 
 <style>
+  .work-lead-section {
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .work-lead-section::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(98deg, var(--canvas) 0 42%, rgb(243 234 217 / 82%) 67%, var(--canvas));
+    content: "";
+  }
+
+  .work-lead-section__atmosphere {
+    position: absolute;
+    z-index: -1;
+    inset-block: 0;
+    inset-inline-end: -8vw;
+    inline-size: min(78rem, 72vw);
+    opacity: 0.2;
+    filter: saturate(0.5) sepia(0.13) contrast(0.96);
+    mask-image: linear-gradient(90deg, transparent, black 30%, black 82%, transparent);
+    pointer-events: none;
+  }
+
+  .work-lead-section__atmosphere :global(.anzania-plate),
+  .work-lead-section__atmosphere :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
   .work-lead {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-columns: minmax(0, 1.3fr) minmax(19rem, 0.7fr);
     align-items: stretch;
     gap: var(--space-5);
   }
 
-  figure {
+  .work-protocol {
     display: flex;
-    margin: 0;
+    min-inline-size: 0;
+    padding: clamp(1.4rem, 3vw, 2.2rem);
     flex-direction: column;
-  }
-
-  figure :global(.anzania-plate) {
-    min-block-size: 28rem;
-    flex: 1;
     border: 1px solid var(--line-strong);
-    border-radius: var(--radius-medium);
+    background: rgb(251 245 234 / 84%);
+    box-shadow: 0 1.2rem 3rem rgb(48 32 20 / 8%);
+    backdrop-filter: blur(0.65rem);
   }
 
-  figcaption {
-    margin-block-start: var(--space-2);
+  .work-protocol__header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1.4rem;
+    padding-block-end: var(--space-5);
+    border-block-end: 1px solid var(--line);
+  }
+
+  .work-protocol__header p {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.61rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .work-protocol__header h2 {
+    max-inline-size: 17ch;
+    margin-block-start: 0.3rem;
+    font-size: var(--step-2);
+  }
+
+  .work-protocol dl {
+    display: grid;
+    margin: 0;
+  }
+
+  .work-protocol dl > div {
+    display: grid;
+    padding-block: var(--space-4);
+    grid-template-columns: 5.4rem minmax(0, 1fr);
+    gap: var(--space-3);
+    border-block-end: 1px solid var(--line);
+  }
+
+  .work-protocol dt {
     color: var(--ink-soft);
-    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
   }
 
-  @media (max-width: 58rem) {
+  .work-protocol dd {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.46;
+  }
+
+  .work-record-grid {
+    align-items: stretch;
+  }
+
+  .work-record-grid--archive {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 66rem) {
     .work-lead {
       grid-template-columns: 1fr;
     }
 
-    figure :global(.anzania-plate) {
-      min-block-size: 0;
-      aspect-ratio: 16 / 9;
+    .work-protocol {
+      max-inline-size: 46rem;
+    }
+
+    .work-lead-section__atmosphere {
+      inset-inline-end: -26vw;
+      inline-size: 112vw;
+      opacity: 0.15;
+    }
+
+    .work-record-grid--archive {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .work-protocol dl > div {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+
+    .work-record-grid--archive {
+      grid-template-columns: 1fr;
     }
   }
 </style>

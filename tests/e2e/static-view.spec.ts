@@ -60,18 +60,27 @@ test.describe("Static View route and accessibility contract", () => {
       await expect(page.locator("header.site-header")).toHaveCount(1);
       await expect(page.locator("footer.site-footer")).toHaveCount(1);
       await expect(page.locator("canvas")).toHaveCount(0);
+      await page.waitForFunction(
+        () => document.documentElement.dataset.staticReady === "true",
+      );
 
       const staticState = await page.evaluate(() => ({
         bodyText: document.body.innerText,
         horizontalOverflow:
           document.documentElement.scrollWidth -
           document.documentElement.clientWidth,
-        animations: document.getAnimations().length,
+        enhanced: document.documentElement.classList.contains("static-enhanced"),
+        scriptSources: Array.from(document.scripts)
+          .map((script) => script.getAttribute("src"))
+          .filter(Boolean),
       }));
 
       expect(staticState.bodyText).not.toContain("\u2014");
       expect(staticState.horizontalOverflow).toBeLessThanOrEqual(1);
-      expect(staticState.animations).toBe(0);
+      expect(staticState.enhanced).toBe(true);
+      expect(staticState.scriptSources).toEqual([
+        "/profile/assets/static/static-runtime.js",
+      ]);
       expect(consoleErrors).toEqual([]);
       expect(pageErrors).toEqual([]);
 
@@ -119,6 +128,50 @@ test.describe("Static View route and accessibility contract", () => {
     await skipLink.press("Enter");
     await expect(page.locator("#main-content")).toBeFocused();
   });
+
+  test("command navigator opens, filters and closes accessibly", async ({
+    page,
+  }) => {
+    await page.goto("", { waitUntil: "networkidle" });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.staticReady === "true",
+    );
+    await page.keyboard.press("Control+K");
+
+    const dialog = page.locator("[data-command-dialog]");
+    await expect(dialog).toBeVisible();
+    await expect(page.locator("[data-command-search]")).toBeFocused();
+
+    await page.locator("[data-command-search]").fill("research");
+    await expect(
+      page.locator(
+        '[data-command-item]:not([hidden]) a[href="/profile/research/"]',
+      ),
+    ).toHaveCount(1);
+    await expect(page.locator("[data-command-item]:not([hidden])")).toHaveCount(
+      1,
+    );
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(page.locator("[data-command-trigger]")).toBeFocused();
+  });
+
+  test("reduced motion keeps every record visible", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("", { waitUntil: "networkidle" });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.staticReady === "true",
+    );
+
+    await expect(page.locator('html[data-motion="reduced"]')).toHaveCount(1);
+    await expect(page.locator('[data-reveal-state="pending"]')).toHaveCount(0);
+    const hiddenRecords = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("main section, [data-signal-card]"))
+        .filter((element) => getComputedStyle(element).opacity === "0").length,
+    );
+    expect(hiddenRecords).toBe(0);
+  });
 });
 
 test.describe("Responsive layout", () => {
@@ -162,9 +215,9 @@ test.describe("Responsive layout", () => {
             ? { left: box.left, right: box.right, width: box.width }
             : null;
         })(),
-        heroImage: (() => {
+        signalLedger: (() => {
           const box = document
-            .querySelector('[data-anzania-asset="threshold-dunes-outer"] img')
+            .querySelector(".home-hero__ledger")
             ?.getBoundingClientRect();
           return box
             ? { left: box.left, right: box.right, width: box.width }
@@ -177,9 +230,9 @@ test.describe("Responsive layout", () => {
         `Overflow sources: ${JSON.stringify(result.overflowSources)}`,
       ).toBeLessThanOrEqual(1);
       expect(result.h1?.width ?? 0).toBeGreaterThan(0);
-      expect(result.heroImage?.width ?? 0).toBeGreaterThan(0);
+      expect(result.signalLedger?.width ?? 0).toBeGreaterThan(0);
       expect(result.h1?.right ?? 0).toBeLessThanOrEqual(viewport.width + 1);
-      expect(result.heroImage?.right ?? 0).toBeLessThanOrEqual(
+      expect(result.signalLedger?.right ?? 0).toBeLessThanOrEqual(
         viewport.width + 1,
       );
     });

@@ -55,6 +55,48 @@ async function framingMetrics(page: Page) {
   });
 }
 
+async function toastCollisionMetrics(page: Page) {
+  return page.evaluate(() => {
+    const toast = document
+      .querySelector<HTMLElement>("[data-experience-toast]")
+      ?.getBoundingClientRect();
+    if (!toast) return null;
+
+    const namedTargets = [
+      ["chapter", "[data-chapter-panel]"],
+      ["companion", "[data-companion-image]"],
+      ["location", ".location-mark"],
+      ["controls", ".traversal-controls"],
+      ["topbar", ".explorer-topbar"],
+    ] as const;
+
+    const collisions = namedTargets.flatMap(([name, selector]) => {
+      const target = document
+        .querySelector<HTMLElement>(selector)
+        ?.getBoundingClientRect();
+      if (!target) return [];
+      const overlaps = !(
+        toast.right <= target.left ||
+        toast.left >= target.right ||
+        toast.bottom <= target.top ||
+        toast.top >= target.bottom
+      );
+      return overlaps ? [name] : [];
+    });
+
+    return {
+      toast: {
+        top: toast.top,
+        right: toast.right,
+        bottom: toast.bottom,
+        left: toast.left,
+      },
+      viewport: { width: innerWidth, height: innerHeight },
+      collisions,
+    };
+  });
+}
+
 function expectCompleteFullBody(
   metrics: Awaited<ReturnType<typeof framingMetrics>>,
 ) {
@@ -107,6 +149,29 @@ test.describe("Explore Anzania release experience", () => {
         .poll(async () => (await framingMetrics(page))?.frameStatus)
         .toBe("safe");
       expectCompleteFullBody(await framingMetrics(page));
+    });
+  }
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 844, height: 390 },
+  ]) {
+    test(`keeps guidance toast inside its safe zone at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      await beginJourney(page);
+      const toast = page.locator("[data-experience-toast]");
+      await expect(toast).toHaveClass(/is-visible/);
+
+      const metrics = await toastCollisionMetrics(page);
+      expect(metrics).not.toBeNull();
+      if (!metrics) return;
+      expect(metrics.toast.top).toBeGreaterThanOrEqual(0);
+      expect(metrics.toast.left).toBeGreaterThanOrEqual(0);
+      expect(metrics.toast.right).toBeLessThanOrEqual(metrics.viewport.width);
+      expect(metrics.toast.bottom).toBeLessThanOrEqual(metrics.viewport.height);
+      expect(metrics.collisions).toEqual([]);
     });
   }
 

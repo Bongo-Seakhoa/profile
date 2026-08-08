@@ -21,7 +21,13 @@ test.describe("Cross-browser Static View smoke", () => {
       await expect(page.locator("header.site-header")).toHaveCount(1);
       await expect(page.locator("footer.site-footer")).toHaveCount(1);
       await expect(page.locator("canvas")).toHaveCount(0);
-      await expect(page.locator("script[src]")).toHaveCount(0);
+      await expect(
+        page.locator('script[src="/profile/assets/static/static-runtime.js"]'),
+      ).toHaveCount(1);
+      await expect(page.locator("script[src]")).toHaveCount(1);
+      await page.waitForFunction(
+        () => document.documentElement.dataset.staticReady === "true",
+      );
       await page.waitForFunction(() =>
         Array.from(document.images)
           .filter(
@@ -37,12 +43,12 @@ test.describe("Cross-browser Static View smoke", () => {
         horizontalOverflow:
           document.documentElement.scrollWidth -
           document.documentElement.clientWidth,
-        animations: document.getAnimations().length,
+        enhanced: document.documentElement.classList.contains("static-enhanced"),
       }));
 
       expect(staticState.bodyText).not.toContain("\u2014");
       expect(staticState.horizontalOverflow).toBeLessThanOrEqual(1);
-      expect(staticState.animations).toBe(0);
+      expect(staticState.enhanced).toBe(true);
       expect(consoleErrors).toEqual([]);
       expect(pageErrors).toEqual([]);
 

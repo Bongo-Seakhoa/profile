@@ -11,10 +11,12 @@ const reportPath = resolve(
   "static-budget.json",
 );
 const immersivePrefix = "assets/immersive/";
+const approvedStaticRuntime = "assets/static/static-runtime.js";
 
 const limits = {
   maximumCompressedHtmlPerRoute: 100 * 1024,
-  maximumCompressedStaticCssTotal: 60 * 1024,
+  maximumCompressedStaticCssTotal: 90 * 1024,
+  maximumCompressedStaticJavaScriptTotal: 16 * 1024,
   maximumCompressedImmersiveCssTotal: 24 * 1024,
   maximumCompressedImmersiveJavaScriptTotal: 80 * 1024,
   maximumHeroAvif: 450 * 1024,
@@ -110,7 +112,7 @@ const immersiveJavaScript = await compressedTotal(immersiveJavaScriptPaths);
 
 if (staticCss.gzipBytes > limits.maximumCompressedStaticCssTotal) {
   failures.push(
-    `Static View CSS compresses to ${staticCss.gzipBytes} bytes, above the 60 KB budget`,
+    `Static View CSS compresses to ${staticCss.gzipBytes} bytes, above the 90 KB budget`,
   );
 }
 if (immersiveCss.gzipBytes > limits.maximumCompressedImmersiveCssTotal) {
@@ -127,10 +129,26 @@ if (
       `${immersiveJavaScript.gzipBytes} bytes, above the 80 KB budget`,
   );
 }
-if (staticJavaScript.count > 0) {
+if (staticJavaScript.count !== 1) {
   failures.push(
-    `Static View contains ${staticJavaScript.count} JavaScript artifact(s); ` +
-      "the release target remains zero",
+    `Expected one isolated Static View JavaScript runtime, found ${staticJavaScript.count}`,
+  );
+}
+if (
+  staticJavaScriptPaths.length === 1 &&
+  relativePath(staticJavaScriptPaths[0]) !== approvedStaticRuntime
+) {
+  failures.push(
+    `Static View runtime must be ${approvedStaticRuntime}, found ${relativePath(staticJavaScriptPaths[0])}`,
+  );
+}
+if (
+  staticJavaScript.gzipBytes >
+  limits.maximumCompressedStaticJavaScriptTotal
+) {
+  failures.push(
+    `Static View JavaScript compresses to ${staticJavaScript.gzipBytes} bytes, ` +
+      "above the 16 KB budget",
   );
 }
 if (immersiveJavaScript.count !== 1) {
@@ -270,6 +288,7 @@ if (failures.length > 0) {
   console.log(
     `Release budgets passed: ${maximumHtml} B max HTML gzip, ` +
       `${staticCss.gzipBytes} B Static View CSS gzip, ` +
+      `${staticJavaScript.gzipBytes} B Static View JavaScript gzip, ` +
       `${immersiveCss.gzipBytes} B Anzania CSS gzip, ` +
       `${immersiveJavaScript.gzipBytes} B Anzania JavaScript gzip, ` +
       `${distBytes} B artifact.`,

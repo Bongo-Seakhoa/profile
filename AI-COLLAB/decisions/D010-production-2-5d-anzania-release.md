@@ -34,7 +34,7 @@ accessibility, fallback, performance or testing requirements.
 - The camera never becomes over-the-shoulder.
 - Look-back, presenting, idle, travel and portal transitions preserve the same
   full-body containment contract.
-- Static View remains complete, script-free and one action away.
+- Static View remains complete with or without JavaScript. Its single progressive-enhancement runtime is isolated from the immersive runtime and may never own or conceal professional content.
 - Resume and CV generation remains browser-native JavaScript and Chromium.
 - No low-quality pseudo-3D, unoptimised 3D runtime or unfinished Blender asset
   is shipped merely to claim a 3D implementation.

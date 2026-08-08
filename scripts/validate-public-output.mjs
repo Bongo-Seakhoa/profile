@@ -8,6 +8,8 @@ const sourceRoots = [
   resolve(repositoryRoot, "src", "components"),
   resolve(repositoryRoot, "src", "layouts"),
   resolve(repositoryRoot, "src", "pages"),
+  resolve(repositoryRoot, "src", "styles"),
+  resolve(repositoryRoot, "public", "assets", "static"),
   resolve(repositoryRoot, "public", "assets", "immersive"),
 ];
 const textExtensions = new Set([
@@ -71,6 +73,9 @@ const distFiles = await walk(distDirectory);
 for (const path of distFiles) await rejectEmDashes(path);
 
 const immersivePrefix = "assets/immersive/";
+const staticPrefix = "assets/static/";
+const approvedStaticRuntime = `${staticPrefix}static-runtime.js`;
+const approvedStaticRuntimeHref = `/profile/${approvedStaticRuntime}`;
 const forbiddenRuntimeExtensions = new Set([
   ".bin",
   ".blend",
@@ -83,26 +88,30 @@ const forbiddenRuntimeExtensions = new Set([
   ".wasm",
   ".webm",
 ]);
-const allowedImmersiveExtensions = new Set([
-  ".css",
-  ".js",
-  ".json",
-  ".webp",
-]);
+const allowedImmersiveExtensions = new Set([".css", ".js", ".json", ".webp"]);
+const allowedStaticExtensions = new Set([".js"]);
 
 for (const path of distFiles) {
   const extension = extname(path).toLowerCase();
   const publicPath = distPath(path);
   const isImmersive = publicPath.startsWith(immersivePrefix);
+  const isStaticRuntime = publicPath.startsWith(staticPrefix);
 
   if (forbiddenRuntimeExtensions.has(extension)) {
     failures.push(`${publicPath} is a prohibited heavy runtime asset`);
   }
-  if ((extension === ".js" || extension === ".mjs") && !isImmersive) {
-    failures.push(`${publicPath} adds JavaScript outside Explore Anzania`);
+  if (
+    (extension === ".js" || extension === ".mjs") &&
+    !isImmersive &&
+    publicPath !== approvedStaticRuntime
+  ) {
+    failures.push(`${publicPath} adds an unapproved client runtime`);
   }
   if (isImmersive && !allowedImmersiveExtensions.has(extension)) {
     failures.push(`${publicPath} uses an unapproved immersive asset type`);
+  }
+  if (isStaticRuntime && !allowedStaticExtensions.has(extension)) {
+    failures.push(`${publicPath} uses an unapproved Static View asset type`);
   }
 }
 
@@ -115,17 +124,6 @@ for (const path of htmlFiles) {
   if (/<canvas(?:\s|>)/i.test(html)) {
     failures.push(`${displayPath(path)} contains a canvas`);
   }
-  if (!isExploreRoute && /<script\b[^>]*\bsrc\s*=/i.test(html)) {
-    failures.push(`${displayPath(path)} loads a client script in Static View`);
-  }
-  if (
-    !isExploreRoute &&
-    /<script\b[^>]*\btype=(?:"|')module(?:"|')/i.test(html)
-  ) {
-    failures.push(
-      `${displayPath(path)} contains a client module in Static View`,
-    );
-  }
   if (/href=(?:"|')tel:/i.test(html)) {
     failures.push(`${displayPath(path)} exposes a public telephone link`);
   }
@@ -134,6 +132,11 @@ for (const path of htmlFiles) {
       `${displayPath(path)} references immersive assets from Static View`,
     );
   }
+
+  const scriptSources = Array.from(
+    html.matchAll(/<script\b[^>]*\bsrc=(?:"|')([^"']+)(?:"|')[^>]*>/gi),
+    (match) => match[1],
+  );
 
   if (isExploreRoute) {
     const requiredFragments = [
@@ -157,6 +160,25 @@ for (const path of htmlFiles) {
     ) {
       failures.push("explore/index.html does not load the approved module runtime");
     }
+  } else {
+    if (scriptSources.length !== 1) {
+      failures.push(
+        `${displayPath(path)} must load exactly one Static View runtime, found ${scriptSources.length}`,
+      );
+    }
+    if (scriptSources.some((source) => source !== approvedStaticRuntimeHref)) {
+      failures.push(
+        `${displayPath(path)} loads an unapproved client script: ${scriptSources.join(", ")}`,
+      );
+    }
+    if (!html.includes('data-view="static"')) {
+      failures.push(`${displayPath(path)} is missing the Static View contract`);
+    }
+    if (!html.includes("ANZANIA / FICTIONAL WORLD")) {
+      failures.push(
+        `${displayPath(path)} is missing the canonical fictional-world marker`,
+      );
+    }
   }
 
   const attributePattern = /\b(?:href|src)=(?:"|')([^"']+)(?:"|')/gi;
@@ -173,22 +195,54 @@ for (const path of htmlFiles) {
 }
 
 const cssFiles = distFiles.filter((path) => extname(path) === ".css");
-for (const path of cssFiles) {
-  if (distPath(path).startsWith(immersivePrefix)) continue;
-  const css = await readFile(path, "utf8");
-  const forbiddenMotion = [
-    [/@keyframes\b/i, "@keyframes"],
-    [/\banimation(?:-name)?\s*:(?!\s*none\b)/i, "animation"],
-    [/\bscroll-behavior\s*:\s*smooth/i, "smooth scrolling"],
-    [/\btransition\s*:/i, "transition"],
+const staticCssFiles = cssFiles.filter(
+  (path) => !distPath(path).startsWith(immersivePrefix),
+);
+const combinedStaticCss = (
+  await Promise.all(staticCssFiles.map((path) => readFile(path, "utf8")))
+).join("\n");
+if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/i.test(combinedStaticCss)) {
+  failures.push("Static View CSS is missing a reduced-motion contract");
+}
+if (/\bscroll-behavior\s*:\s*smooth/i.test(combinedStaticCss)) {
+  failures.push("Static View CSS contains prohibited forced smooth scrolling");
+}
+for (const contract of [
+  ".static-atmosphere",
+  ".static-command-dialog",
+  ".static-transition-veil",
+  "@view-transition",
+]) {
+  if (!combinedStaticCss.includes(contract)) {
+    failures.push(`Static View CSS is missing contract: ${contract}`);
+  }
+}
+
+const staticRuntimePath = resolve(distDirectory, approvedStaticRuntime);
+try {
+  const runtime = await readFile(staticRuntimePath, "utf8");
+  const requiredStaticContracts = [
+    "static-enhanced",
+    "prefers-reduced-motion",
+    "IntersectionObserver",
+    "data-command-dialog",
+    "data-static-progress",
+    "data-leaving",
+    "ResizeObserver",
   ];
-  for (const [pattern, label] of forbiddenMotion) {
-    if (pattern.test(css)) {
-      failures.push(
-        `${displayPath(path)} contains forbidden Static View ${label}`,
-      );
+  for (const contract of requiredStaticContracts) {
+    if (!runtime.includes(contract)) {
+      failures.push(`The Static View runtime is missing contract: ${contract}`);
     }
   }
+  if (/document\.createElement\((?:"|')canvas/i.test(runtime)) {
+    failures.push("The Static View runtime creates a canvas");
+  }
+  if (/\bWebGL(?:2)?RenderingContext\b|\.getContext\((?:"|')webgl/i.test(runtime)) {
+    failures.push("The Static View runtime initializes WebGL");
+  }
+} catch {
+  failures.push("The approved Static View runtime is missing");
 }
 
 const manifestPath = resolve(
@@ -254,14 +308,14 @@ try {
   failures.push(`Could not validate the immersive manifest: ${error.message}`);
 }
 
-const runtimePath = resolve(
+const immersiveRuntimePath = resolve(
   distDirectory,
   "assets",
   "immersive",
   "anzania-explorer.js",
 );
 try {
-  const runtime = await readFile(runtimePath, "utf8");
+  const runtime = await readFile(immersiveRuntimePath, "utf8");
   const requiredRuntimeContracts = [
     "calculateFraming",
     "recalculateFraming",
@@ -274,9 +328,7 @@ try {
   ];
   for (const contract of requiredRuntimeContracts) {
     if (!runtime.includes(contract)) {
-      failures.push(
-        `The Anzania runtime is missing framing contract: ${contract}`,
-      );
+      failures.push(`The Anzania runtime is missing framing contract: ${contract}`);
     }
   }
   if (/over-the-shoulder|\bOTS\b/i.test(runtime)) {
@@ -323,5 +375,6 @@ const immersiveFiles = distFiles.filter((path) =>
 );
 console.log(
   `Validated ${htmlFiles.length} HTML files, ${cssFiles.length} CSS files, ` +
-    `${immersiveFiles.length} approved immersive assets and four direct PDF downloads.`,
+    `one progressive Static View runtime, ${immersiveFiles.length} approved ` +
+    "immersive assets and four direct PDF downloads.",
 );

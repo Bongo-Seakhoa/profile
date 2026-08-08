@@ -1,25 +1,25 @@
 @layer tokens {
   :root {
-    --canvas: #f5e9d2;
-    --surface: #fff9ee;
-    --surface-muted: #ead9b8;
-    --surface-quiet: #f0e2c7;
-    --ink: #2b2119;
-    --ink-soft: #5b4a3a;
-    --rust: #985132;
-    --rust-strong: #73361f;
-    --gold: #b98b3d;
-    --gold-ink: #806020;
-    --gold-light: #e3c477;
-    --indigo: #344e60;
+    --canvas: #f3ead9;
+    --surface: #fbf5ea;
+    --surface-muted: #e7d7bd;
+    --surface-quiet: #efe2cf;
+    --ink: #19140f;
+    --ink-soft: #685b4e;
+    --rust: #994a2f;
+    --rust-strong: #843f28;
+    --gold: #d3a651;
+    --gold-ink: #8c6928;
+    --gold-light: #edc978;
+    --indigo: #274e5c;
     --teal: #47716c;
     --teal-strong: #315b56;
-    --leather: #4a3327;
-    --line: rgba(74, 51, 39, 0.18);
-    --line-strong: rgba(74, 51, 39, 0.42);
+    --leather: #211c16;
+    --line: rgba(43, 33, 25, 0.18);
+    --line-strong: rgba(43, 33, 25, 0.38);
     --focus: #173f57;
     --shadow-small: 0 1px 0 rgba(43, 33, 25, 0.12);
-    --shadow-medium: 0 14px 34px rgba(43, 33, 25, 0.1);
+    --shadow-medium: 0 24px 70px rgba(43, 33, 25, 0.13);
 
     --font-display: "Source Serif 4 Variable", Georgia, serif;
     --font-body: "IBM Plex Sans Variable", "Segoe UI", sans-serif;
@@ -49,11 +49,11 @@
     --container-prose: 47rem;
     --reading-measure: 70ch;
     --case-study-measure: 65ch;
-    --radius-small: 0.2rem;
-    --radius-medium: 0.45rem;
-    --radius-large: 0.75rem;
+    --radius-small: 0;
+    --radius-medium: 0.08rem;
+    --radius-large: 0.15rem;
     --target-size: 2.75rem;
-    --header-offset: 8rem;
+    --header-offset: 6rem;
     --section-space: clamp(3.75rem, 8vw, 7rem);
   }
 }
