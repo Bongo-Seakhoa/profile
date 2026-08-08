@@ -13,7 +13,9 @@ const selectors = {
   scenePrevious: "[data-scene-previous]",
   sceneCurrent: "[data-scene-current]",
   sceneForeground: "[data-scene-foreground]",
+  environmentFx: "[data-environment-fx]",
   powerTransition: "[data-power-transition]",
+  powerTransitionName: "[data-power-transition-name]",
   progressLabel: "[data-progress-label]",
   progressBar: "[data-progress-bar]",
   locationRailList: "[data-location-rail-list]",
@@ -25,18 +27,35 @@ const selectors = {
   chapterEyebrow: "[data-chapter-eyebrow]",
   chapterTitle: "[data-chapter-title]",
   chapterLead: "[data-chapter-lead]",
+  chapterSignal: "[data-chapter-signal]",
+  chapterSignalValue: "[data-chapter-signal-value]",
   chapterEvidence: "[data-chapter-evidence]",
+  chapterFacts: "[data-chapter-facts]",
   chapterActions: "[data-chapter-actions]",
+  chapterInside: "[data-chapter-inside]",
+  chapterInsideKicker: "[data-chapter-inside-kicker]",
+  chapterInsideTitle: "[data-chapter-inside-title]",
+  chapterInsideSummary: "[data-chapter-inside-summary]",
+  chapterTabs: "[data-chapter-tabs]",
+  chapterTabPanel: "[data-chapter-tab-panel]",
+  chapterArtifact: "[data-chapter-artifact]",
   portalButton: "[data-portal-button]",
   portalAction: "[data-portal-action]",
   portalCaption: "[data-portal-caption]",
   companion: "[data-companion]",
   companionImage: "[data-companion-image]",
   companionName: "[data-companion-name]",
+  guideSpecialty: "[data-guide-specialty]",
+  guideTemperament: "[data-guide-temperament]",
+  guideInsight: "[data-guide-insight]",
   lookBackButton: "[data-look-back-button]",
   previousLocation: "[data-previous-location]",
   nextLocation: "[data-next-location]",
   modeIndicator: "[data-mode-indicator]",
+  modeCopy: "[data-mode-copy]",
+  abilityDock: "[data-ability-dock]",
+  abilityList: "[data-ability-list]",
+  selectedAbilityName: "[data-selected-ability-name]",
   mapButton: "[data-map-button]",
   guideButton: "[data-guide-button]",
   optionsButton: "[data-options-button]",
@@ -50,7 +69,10 @@ const selectors = {
 };
 
 const elements = Object.fromEntries(
-  Object.entries(selectors).map(([key, selector]) => [key, document.querySelector(selector)]),
+  Object.entries(selectors).map(([key, selector]) => [
+    key,
+    document.querySelector(selector),
+  ]),
 );
 
 const atlasCoordinates = {
@@ -65,9 +87,10 @@ const atlasCoordinates = {
 };
 
 const storageKeys = {
-  guide: "anzania-guide-v1",
-  motion: "anzania-motion-v1",
-  visited: "anzania-visited-v1",
+  guide: "anzania-guide-v2",
+  power: "anzania-power-v2",
+  motion: "anzania-motion-v2",
+  visited: "anzania-visited-v2",
 };
 
 const state = {
@@ -75,6 +98,8 @@ const state = {
   locationIndex: 0,
   sceneMode: "outer",
   selectedGuideId: "dn-m-afr-01",
+  selectedPowerId: "sand-teleportation",
+  activeInsideTab: "now",
   motionEnabled: true,
   isTraversing: false,
   isLookingBack: false,
@@ -88,8 +113,10 @@ const state = {
   parallaxFrame: 0,
 };
 
-const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
-const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
+const wait = (duration) =>
+  new Promise((resolve) => window.setTimeout(resolve, duration));
+const clamp = (value, minimum, maximum) =>
+  Math.min(maximum, Math.max(minimum, value));
 
 function safeStorageGet(key) {
   try {
@@ -103,7 +130,7 @@ function safeStorageSet(key, value) {
   try {
     window.localStorage.setItem(key, value);
   } catch {
-    // Storage may be unavailable in private or file-based browsing contexts.
+    // Storage can be unavailable in privacy-restricted browsing contexts.
   }
 }
 
@@ -147,8 +174,7 @@ function loadImage(src) {
 function chooseSceneSource(scene) {
   const requiredWidth =
     window.innerWidth * clamp(window.devicePixelRatio || 1, 1, 2);
-  const useSmall = requiredWidth <= 1_050;
-  return resolveAsset(useSmall ? scene.small : scene.large);
+  return resolveAsset(requiredWidth <= 1_050 ? scene.small : scene.large);
 }
 
 function escapeHtml(value) {
@@ -168,13 +194,15 @@ function announce(message) {
   });
 }
 
-function showToast(message, duration = 2600) {
+function showToast(message, duration = 2_600) {
   if (!elements.toast) return;
   window.clearTimeout(state.toastTimer);
   elements.toast.textContent = message;
   elements.toast.classList.add("is-visible");
+  window.requestAnimationFrame(() => recalculateFraming());
   state.toastTimer = window.setTimeout(() => {
     elements.toast.classList.remove("is-visible");
+    window.requestAnimationFrame(() => recalculateFraming());
   }, duration);
 }
 
@@ -199,6 +227,9 @@ function setInteractionLock(locked) {
   ]) {
     control?.toggleAttribute("disabled", locked);
   }
+  elements.abilityList
+    ?.querySelectorAll("button")
+    .forEach((control) => control.toggleAttribute("disabled", locked));
 }
 
 function getCurrentLocation() {
@@ -206,7 +237,21 @@ function getCurrentLocation() {
 }
 
 function getCurrentGuide() {
-  return state.manifest?.guides.find((guide) => guide.id === state.selectedGuideId) ?? state.manifest?.guides[0] ?? null;
+  return (
+    state.manifest?.guides.find(
+      (guide) => guide.id === state.selectedGuideId,
+    ) ??
+    state.manifest?.guides[0] ??
+    null
+  );
+}
+
+function getCurrentPower() {
+  return (
+    state.manifest?.powers[state.selectedPowerId] ??
+    state.manifest?.powers["reality-bending"] ??
+    null
+  );
 }
 
 function renderNavigation() {
@@ -250,6 +295,33 @@ function renderNavigation() {
   }
 }
 
+function renderAbilities() {
+  if (!state.manifest || !elements.abilityList) return;
+
+  elements.abilityList.innerHTML = Object.entries(state.manifest.powers)
+    .map(
+      ([powerId, power]) => `
+        <button
+          type="button"
+          data-power-id="${escapeHtml(powerId)}"
+          aria-pressed="${powerId === state.selectedPowerId ? "true" : "false"}"
+          aria-label="Use ${escapeHtml(power.name)} for travel"
+        >
+          <span class="ability-dock__glyph" aria-hidden="true"><i>${escapeHtml(power.glyph ?? "◇")}</i></span>
+          <span class="ability-dock__copy">
+            <strong>${escapeHtml(power.name)}</strong>
+            <small>${escapeHtml(power.description ?? "Choose this crossing style")}</small>
+          </span>
+        </button>`,
+    )
+    .join("");
+
+  const power = getCurrentPower();
+  if (elements.selectedAbilityName && power) {
+    elements.selectedAbilityName.textContent = power.name;
+  }
+}
+
 function renderGuides() {
   if (!state.manifest || !elements.guideGrid) return;
 
@@ -261,13 +333,16 @@ function renderGuides() {
           type="button"
           data-guide-id="${escapeHtml(guide.id)}"
           aria-pressed="${guide.id === state.selectedGuideId ? "true" : "false"}"
-          aria-label="Choose ${escapeHtml(guide.name)}, ${escapeHtml(guide.inspiration)} ${escapeHtml(guide.presentation.toLowerCase())} guide"
+          aria-label="Choose ${escapeHtml(guide.name)}, ${escapeHtml(guide.specialty)}"
+          style="--card-accent:${escapeHtml(guide.accent ?? "#d7a94c")}" 
         >
           <span class="guide-card__figure">
+            <span class="guide-card__halo" aria-hidden="true"></span>
             <img src="${resolveAsset(guide.src)}" alt="" width="540" height="1280" loading="lazy" decoding="async" />
           </span>
           <strong>${escapeHtml(guide.name)}</strong>
-          <small>${escapeHtml(guide.presentation)} · ${escapeHtml(guide.inspiration)}</small>
+          <small>${escapeHtml(guide.specialty)}</small>
+          <span class="guide-card__origin">${escapeHtml(guide.presentation)} · ${escapeHtml(guide.inspiration)}</span>
         </button>`,
     )
     .join("");
@@ -285,19 +360,158 @@ function warmGuideCards() {
 
 function renderGuide() {
   const guide = getCurrentGuide();
+  const location = getCurrentLocation();
   if (!guide) return;
 
   if (elements.companionImage) {
     elements.companionImage.src = resolveAsset(guide.src);
     elements.companionImage.alt = guide.alt;
   }
-  if (elements.companionName) {
-    elements.companionName.textContent = guide.name;
+  if (elements.companionName) elements.companionName.textContent = guide.name;
+  if (elements.guideSpecialty) {
+    elements.guideSpecialty.textContent = guide.specialty;
+  }
+  if (elements.guideTemperament) {
+    elements.guideTemperament.textContent = guide.temperament;
+  }
+  if (elements.guideInsight) {
+    elements.guideInsight.textContent = location?.guideInsight ?? guide.quote;
   }
 
+  document.documentElement.style.setProperty(
+    "--guide-accent",
+    guide.accent ?? "#d7a94c",
+  );
+  elements.experience.dataset.guide = guide.id;
+
   elements.guideGrid?.querySelectorAll("[data-guide-id]").forEach((button) => {
-    button.setAttribute("aria-pressed", String(button.dataset.guideId === guide.id));
+    button.setAttribute(
+      "aria-pressed",
+      String(button.dataset.guideId === guide.id),
+    );
   });
+}
+
+function tabDefinitions(location) {
+  return [
+    {
+      id: "now",
+      label: "Now",
+      eyebrow: "Live work",
+      description: "Current work, accepted research and systems in development.",
+      render: () => `
+        <div class="inside-now-grid">
+          ${location.deepDive.now
+            .map(
+              (item) => `
+                <article class="inside-now-card">
+                  <span>${escapeHtml(item.status)}</span>
+                  <h4>${escapeHtml(item.title)}</h4>
+                  <p>${escapeHtml(item.detail)}</p>
+                </article>`,
+            )
+            .join("")}
+        </div>`,
+    },
+    {
+      id: "logic",
+      label: "Design logic",
+      eyebrow: "How the work is shaped",
+      description: "The principles used to move from ambiguity to something dependable.",
+      render: () => `
+        <div class="inside-pillar-grid">
+          ${location.deepDive.pillars
+            .map(
+              (pillar, index) => `
+                <article class="inside-pillar-card">
+                  <span>${String(index + 1).padStart(2, "0")}</span>
+                  <h4>${escapeHtml(pillar.title)}</h4>
+                  <p>${escapeHtml(pillar.body)}</p>
+                </article>`,
+            )
+            .join("")}
+        </div>`,
+    },
+    {
+      id: "field-notes",
+      label: "Field notes",
+      eyebrow: "Questions worth carrying",
+      description: "Concise answers that reveal the operating judgement behind the record.",
+      render: () => `
+        <div class="inside-notes">
+          ${location.deepDive.notes
+            .map(
+              (note) => `
+                <details>
+                  <summary>${escapeHtml(note.question)}</summary>
+                  <p>${escapeHtml(note.answer)}</p>
+                </details>`,
+            )
+            .join("")}
+        </div>`,
+    },
+  ];
+}
+
+function renderDeepDive() {
+  const location = getCurrentLocation();
+  if (!location?.deepDive) return;
+
+  if (elements.chapterInsideKicker) {
+    elements.chapterInsideKicker.textContent = location.deepDive.kicker;
+  }
+  if (elements.chapterInsideTitle) {
+    elements.chapterInsideTitle.textContent = location.deepDive.heading;
+  }
+  if (elements.chapterInsideSummary) {
+    elements.chapterInsideSummary.textContent = location.deepDive.summary;
+  }
+
+  const tabs = tabDefinitions(location);
+  if (!tabs.some((tab) => tab.id === state.activeInsideTab)) {
+    state.activeInsideTab = tabs[0].id;
+  }
+  const active = tabs.find((tab) => tab.id === state.activeInsideTab) ?? tabs[0];
+
+  if (elements.chapterTabs) {
+    elements.chapterTabs.innerHTML = tabs
+      .map(
+        (tab) => `
+          <button
+            id="inside-tab-${escapeHtml(tab.id)}"
+            type="button"
+            role="tab"
+            data-inside-tab="${escapeHtml(tab.id)}"
+            aria-selected="${tab.id === active.id ? "true" : "false"}"
+            aria-controls="inside-panel"
+            tabindex="${tab.id === active.id ? "0" : "-1"}"
+          >${escapeHtml(tab.label)}</button>`,
+      )
+      .join("");
+  }
+
+  if (elements.chapterTabPanel) {
+    elements.chapterTabPanel.setAttribute(
+      "aria-labelledby",
+      `inside-tab-${active.id}`,
+    );
+    elements.chapterTabPanel.innerHTML = `
+      <header class="inside-panel__header">
+        <p>${escapeHtml(active.eyebrow)}</p>
+        <span>${escapeHtml(active.description)}</span>
+      </header>
+      ${active.render()}`;
+  }
+
+  if (elements.chapterArtifact) {
+    const artifact = location.deepDive.artifact;
+    elements.chapterArtifact.href = resolveSitePath(artifact.path);
+    elements.chapterArtifact.innerHTML = `
+      <span>${escapeHtml(artifact.label)}</span>
+      <strong>${escapeHtml(artifact.title)}</strong>
+      <small>${escapeHtml(artifact.detail)}</small>
+      <b aria-hidden="true">↗</b>`;
+  }
 }
 
 function renderLocation({ announceChange = false } = {}) {
@@ -307,13 +521,24 @@ function renderLocation({ announceChange = false } = {}) {
   if (state.hasBegun && !state.isTraversing) {
     document.documentElement.dataset.experienceState = "exploring";
   }
+
   elements.experience.dataset.sceneMode = state.sceneMode;
+  elements.experience.dataset.biome = location.biome;
+  elements.experience.dataset.location = location.id;
+  elements.chapterPanel.dataset.mode = state.sceneMode;
+  if (elements.chapterInside) {
+    elements.chapterInside.hidden = state.sceneMode !== "inner";
+  }
 
   if (elements.progressLabel) {
-    elements.progressLabel.textContent = `${location.number} / ${String(state.manifest.locations.length).padStart(2, "0")}`;
+    elements.progressLabel.textContent = `${location.number} / ${String(
+      state.manifest.locations.length,
+    ).padStart(2, "0")}`;
   }
   if (elements.progressBar) {
-    elements.progressBar.style.width = `${((state.locationIndex + 1) / state.manifest.locations.length) * 100}%`;
+    elements.progressBar.style.width = `${
+      ((state.locationIndex + 1) / state.manifest.locations.length) * 100
+    }%`;
   }
   if (elements.locationNumber) elements.locationNumber.textContent = location.number;
   if (elements.locationRegion) elements.locationRegion.textContent = location.region;
@@ -321,17 +546,27 @@ function renderLocation({ announceChange = false } = {}) {
   if (elements.chapterEyebrow) elements.chapterEyebrow.textContent = location.eyebrow;
   if (elements.chapterTitle) elements.chapterTitle.textContent = location.title;
   if (elements.chapterLead) elements.chapterLead.textContent = location.lead;
+  if (elements.chapterSignal) elements.chapterSignal.textContent = location.signal;
+  if (elements.chapterSignalValue) {
+    elements.chapterSignalValue.textContent = location.signalValue;
+  }
   if (elements.portalAction) {
-    elements.portalAction.textContent = state.sceneMode === "outer" ? location.portalAction : "Return to the outer approach";
+    elements.portalAction.textContent =
+      state.sceneMode === "outer"
+        ? location.portalAction
+        : "Return to the outer approach";
   }
   if (elements.portalCaption) {
     elements.portalCaption.textContent =
       state.sceneMode === "outer"
         ? location.portalCaption
-        : "The evidence recedes and the wider landscape returns";
+        : "Close the field notes and restore the wider landscape";
   }
-  if (elements.modeIndicator) {
-    elements.modeIndicator.lastChild.textContent = state.sceneMode === "outer" ? " Outer approach" : " Inner place";
+  if (elements.modeCopy) {
+    elements.modeCopy.textContent =
+      state.sceneMode === "outer"
+        ? "Outer approach"
+        : "Inner place · expanded record";
   }
 
   if (elements.chapterEvidence) {
@@ -346,35 +581,61 @@ function renderLocation({ announceChange = false } = {}) {
       .join("");
   }
 
-  if (elements.chapterActions) {
-    elements.chapterActions.innerHTML = location.actions
+  if (elements.chapterFacts) {
+    elements.chapterFacts.innerHTML = location.facts
       .map(
-        (action) => `<a href="${resolveSitePath(action.path)}">${escapeHtml(action.label)} <span aria-hidden="true">→</span></a>`,
+        (fact) => `
+          <div class="chapter-fact">
+            <strong>${escapeHtml(fact.value)}</strong>
+            <span>${escapeHtml(fact.label)}</span>
+          </div>`,
       )
       .join("");
   }
 
-  elements.previousLocation?.toggleAttribute("disabled", state.locationIndex === 0 || state.isTraversing);
+  if (elements.chapterActions) {
+    elements.chapterActions.innerHTML = location.actions
+      .map(
+        (action) => `
+          <a href="${resolveSitePath(action.path)}">
+            ${escapeHtml(action.label)} <span aria-hidden="true">→</span>
+          </a>`,
+      )
+      .join("");
+  }
+
+  renderDeepDive();
+  renderGuide();
+
+  elements.previousLocation?.toggleAttribute(
+    "disabled",
+    state.locationIndex === 0 || state.isTraversing,
+  );
   elements.nextLocation?.toggleAttribute(
     "disabled",
-    state.locationIndex === state.manifest.locations.length - 1 || state.isTraversing,
+    state.locationIndex === state.manifest.locations.length - 1 ||
+      state.isTraversing,
   );
 
-  elements.locationRailList?.querySelectorAll("[data-location-index]").forEach((button) => {
-    if (Number(button.dataset.locationIndex) === state.locationIndex) {
-      button.setAttribute("aria-current", "step");
-    } else {
-      button.removeAttribute("aria-current");
-    }
-  });
+  elements.locationRailList
+    ?.querySelectorAll("[data-location-index]")
+    .forEach((button) => {
+      if (Number(button.dataset.locationIndex) === state.locationIndex) {
+        button.setAttribute("aria-current", "step");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
 
-  elements.mapLocationList?.querySelectorAll("[data-map-location-index]").forEach((button) => {
-    if (Number(button.dataset.mapLocationIndex) === state.locationIndex) {
-      button.setAttribute("aria-current", "step");
-    } else {
-      button.removeAttribute("aria-current");
-    }
-  });
+  elements.mapLocationList
+    ?.querySelectorAll("[data-map-location-index]")
+    .forEach((button) => {
+      if (Number(button.dataset.mapLocationIndex) === state.locationIndex) {
+        button.setAttribute("aria-current", "step");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
 
   const [atlasX, atlasY] = atlasCoordinates[location.id] ?? [50, 50];
   elements.mapDialog?.style.setProperty("--atlas-x", `${atlasX}%`);
@@ -386,7 +647,7 @@ function renderLocation({ announceChange = false } = {}) {
   try {
     window.history.replaceState(null, "", `#${location.id}`);
   } catch {
-    // Hash state is an enhancement only.
+    // Hash state is progressive enhancement only.
   }
 
   window.requestAnimationFrame(() => recalculateFraming());
@@ -394,7 +655,13 @@ function renderLocation({ announceChange = false } = {}) {
 }
 
 function transitionScene(nextSource, { immediate = false } = {}) {
-  if (!elements.sceneCurrent || !elements.scenePrevious || !elements.sceneForeground) return;
+  if (
+    !elements.sceneCurrent ||
+    !elements.scenePrevious ||
+    !elements.sceneForeground
+  ) {
+    return;
+  }
 
   const currentBackground = elements.sceneCurrent.style.backgroundImage;
   if (immediate || !currentBackground) {
@@ -424,8 +691,7 @@ function transitionScene(nextSource, { immediate = false } = {}) {
 function renderScene(options = {}) {
   const location = getCurrentLocation();
   if (!location) return;
-  const scene = location[state.sceneMode];
-  transitionScene(chooseSceneSource(scene), options);
+  transitionScene(chooseSceneSource(location[state.sceneMode]), options);
 }
 
 function rectFromElement(element, expansion = 0) {
@@ -445,14 +711,46 @@ function rectFromElement(element, expansion = 0) {
 }
 
 function intersectionArea(a, b) {
-  const width = Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left));
-  const height = Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+  const width = Math.max(
+    0,
+    Math.min(a.right, b.right) - Math.max(a.left, b.left),
+  );
+  const height = Math.max(
+    0,
+    Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top),
+  );
   return width * height;
 }
 
 function getCssPixelValue(propertyName, fallback) {
-  const value = Number.parseFloat(window.getComputedStyle(document.documentElement).getPropertyValue(propertyName));
+  const value = Number.parseFloat(
+    window
+      .getComputedStyle(document.documentElement)
+      .getPropertyValue(propertyName),
+  );
   return Number.isFinite(value) ? value : fallback;
+}
+
+// The first release used a 0.14 to 0.2 viewport-height guide. V2 deliberately makes the guide materially larger.
+function frameRange(viewport) {
+  const compact = viewport.width <= 820;
+  const veryCompact = viewport.width <= 520;
+  const short = viewport.height <= 540;
+  const portrait = viewport.height > viewport.width;
+
+  if (veryCompact && portrait) {
+    return { target: 0.27, minimum: 0.22, maximum: 0.32 };
+  }
+  if (compact && portrait) {
+    return { target: 0.31, minimum: 0.24, maximum: 0.38 };
+  }
+  if (short) {
+    return { target: 0.34, minimum: 0.25, maximum: 0.39 };
+  }
+  if (viewport.width <= 1180) {
+    return { target: 0.38, minimum: 0.3, maximum: 0.44 };
+  }
+  return { target: 0.43, minimum: 0.34, maximum: 0.48 };
 }
 
 function calculateFraming() {
@@ -461,59 +759,109 @@ function calculateFraming() {
     height: Math.max(1, window.innerHeight),
   };
   const compact = viewport.width <= 820;
-  const veryCompact = viewport.width <= 520;
-  const shortViewport = viewport.height < 700;
-  const safeLeft = getCssPixelValue("--safe-left", veryCompact ? 12 : 22);
-  const safeRight = getCssPixelValue("--safe-right", veryCompact ? 12 : 22);
-  const safeTop = getCssPixelValue("--safe-top", veryCompact ? 12 : 22);
+  const portrait = viewport.height > viewport.width;
+  const safeLeft = getCssPixelValue("--safe-left", compact ? 12 : 22);
+  const safeRight = getCssPixelValue("--safe-right", compact ? 12 : 22);
+  const safeTop = getCssPixelValue("--safe-top", compact ? 12 : 22);
   const safeBottom = getCssPixelValue("--safe-bottom", 18);
-  const captionAllowance = compact ? 34 : 38;
+  const captionAllowance = compact ? 48 : viewport.width <= 1180 ? 52 : 70;
   const avatarAspect = 540 / 1280;
+  const range = frameRange(viewport);
+  let targetRatio = range.target;
+  if (state.sceneMode === "inner") targetRatio *= 0.94;
+  if (state.isTraversing) targetRatio *= 0.92;
+  targetRatio = clamp(targetRatio, range.minimum, range.maximum);
 
-  let targetRatio = compact ? 0.19 : 0.18;
-  if (shortViewport) targetRatio = compact ? 0.17 : 0.16;
-  if (state.isTraversing) targetRatio *= 0.86;
-  targetRatio = clamp(targetRatio, 0.14, 0.2);
+  const topbarRect = rectFromElement(
+    document.querySelector(".explorer-topbar"),
+    10,
+  );
+  const chapterRect = rectFromElement(elements.chapterPanel, compact ? 16 : 24);
+  const locationRect = rectFromElement(
+    document.querySelector(".location-mark"),
+    14,
+  );
+  const railRect = rectFromElement(
+    document.querySelector(".location-rail"),
+    10,
+  );
+  const abilityRect = rectFromElement(elements.abilityDock, compact ? 8 : 14);
+  const lookRect = rectFromElement(document.querySelector(".look-control"), 10);
+  const traversalRect = rectFromElement(
+    document.querySelector(".traversal-controls"),
+    12,
+  );
+  const modeRect = rectFromElement(elements.modeIndicator, 8);
+  const toastRect = elements.toast?.classList.contains("is-visible")
+    ? rectFromElement(elements.toast, 8)
+    : null;
+  const obstacles = [
+    topbarRect,
+    chapterRect,
+    locationRect,
+    railRect,
+    abilityRect,
+    lookRect,
+    traversalRect,
+    modeRect,
+    toastRect,
+  ].filter(Boolean);
 
-  const topbarRect = rectFromElement(document.querySelector(".explorer-topbar"), 10);
-  const chapterRect = rectFromElement(elements.chapterPanel, compact ? 16 : 22);
-  const locationRect = rectFromElement(document.querySelector(".location-mark"), 14);
-  const railRect = rectFromElement(document.querySelector(".location-rail"), 12);
-  const lookRect = rectFromElement(document.querySelector(".look-control"), 12);
-  const traversalRect = rectFromElement(document.querySelector(".traversal-controls"), 12);
-  const modeRect = rectFromElement(elements.modeIndicator, 10);
-  const obstacles = [topbarRect, chapterRect, locationRect, railRect, lookRect, traversalRect, modeRect].filter(Boolean);
-
-  const minimumTop = Math.max(safeTop, (topbarRect?.bottom ?? safeTop) + 10);
+  const minimumTop = Math.max(safeTop, (topbarRect?.bottom ?? safeTop) + 12);
   const maximumBottom = viewport.height - safeBottom;
-  let best = null;
+  const ratioCandidates = [
+    targetRatio,
+    targetRatio - 0.025,
+    targetRatio - 0.05,
+    targetRatio - 0.075,
+    range.minimum,
+  ]
+    .map((ratio) => clamp(ratio, range.minimum, range.maximum))
+    .filter((ratio, index, values) => values.indexOf(ratio) === index);
 
-  const ratioCandidates = [targetRatio, targetRatio - 0.012, targetRatio - 0.024, 0.14, 0.132];
+  const xFractions = compact
+    ? portrait
+      ? [0.78, 0.7, 0.27, 0.5, 0.86, 0.14]
+      : [0.24, 0.34, 0.16, 0.46, 0.58]
+    : [0.28, 0.38, 0.18, 0.46, 0.56, 0.1];
+
+  let best = null;
   for (const ratio of ratioCandidates) {
-    const avatarHeight = clamp(
-      viewport.height * ratio,
-      viewport.height * 0.132,
-      viewport.height * 0.2,
-    );
+    const avatarHeight = viewport.height * ratio;
     const avatarWidth = avatarHeight * avatarAspect;
     const maximumTop = maximumBottom - avatarHeight - captionAllowance;
     if (maximumTop <= minimumTop) continue;
 
-    const preferredTop = compact && chapterRect
-      ? clamp(chapterRect.top - avatarHeight - captionAllowance - 14, minimumTop, maximumTop)
-      : clamp(viewport.height * 0.68, minimumTop, maximumTop);
-
-    const xFractions = compact ? [0.76, 0.64, 0.36, 0.24, 0.5] : [0.32, 0.43, 0.22, 0.5, 0.62];
-    const yOffsets = compact ? [0, -26, 24, -52] : [0, -34, 26, -64];
+    const preferredTop =
+      compact && portrait && chapterRect
+        ? chapterRect.top - avatarHeight - captionAllowance - 16
+        : viewport.height * (viewport.height <= 540 ? 0.42 : 0.43);
+    const yCandidates = [
+      preferredTop,
+      preferredTop - 36,
+      preferredTop + 32,
+      minimumTop + 8,
+      (locationRect?.bottom ?? minimumTop) + 16,
+      abilityRect
+        ? abilityRect.top - avatarHeight - captionAllowance - 16
+        : preferredTop,
+      chapterRect && compact
+        ? chapterRect.top - avatarHeight - captionAllowance - 18
+        : preferredTop,
+      maximumTop,
+      maximumTop - 42,
+      viewport.height * 0.34,
+      viewport.height * 0.5,
+    ].map((value) => clamp(value, minimumTop, maximumTop));
 
     for (const xFraction of xFractions) {
-      for (const yOffset of yOffsets) {
+      for (const yPosition of yCandidates) {
         const left = clamp(
           viewport.width * xFraction - avatarWidth / 2,
-          safeLeft + 8,
-          viewport.width - safeRight - avatarWidth - 8,
+          safeLeft + 4,
+          viewport.width - safeRight - avatarWidth - 4,
         );
-        const top = clamp(preferredTop + yOffset, minimumTop, maximumTop);
+        const top = clamp(yPosition, minimumTop, maximumTop);
         const candidate = {
           left,
           top,
@@ -523,20 +871,23 @@ function calculateFraming() {
           height: avatarHeight,
           ratio: avatarHeight / viewport.height,
         };
-
-        const overlap = obstacles.reduce((sum, obstacle) => sum + intersectionArea(candidate, obstacle), 0);
-        const preferredX = viewport.width * (compact ? 0.74 : 0.34);
-        const preferredY = compact
-          ? (chapterRect ? chapterRect.top - avatarHeight - captionAllowance - 14 : viewport.height * 0.42)
-          : viewport.height * 0.68;
-        const distancePenalty = Math.abs(left + avatarWidth / 2 - preferredX) * 0.55 + Math.abs(top - preferredY) * 0.42;
-        const edgePenalty =
-          Math.max(0, safeLeft + 14 - left) * 40 +
-          Math.max(0, left + avatarWidth + safeRight + 14 - viewport.width) * 40 +
-          Math.max(0, minimumTop - top) * 40 +
-          Math.max(0, top + avatarHeight + captionAllowance + safeBottom - viewport.height) * 40;
-        const sizePenalty = Math.abs(targetRatio - candidate.ratio) * 900;
-        const score = overlap * 125 + distancePenalty + edgePenalty + sizePenalty;
+        const collisionCandidate = {
+          ...candidate,
+          bottom: candidate.bottom + captionAllowance,
+          height: candidate.height + captionAllowance,
+        };
+        const overlap = obstacles.reduce(
+          (sum, obstacle) =>
+            sum + intersectionArea(collisionCandidate, obstacle),
+          0,
+        );
+        const preferredX =
+          viewport.width * (compact && portrait ? 0.76 : 0.3);
+        const distancePenalty =
+          Math.abs(left + avatarWidth / 2 - preferredX) * 0.42 +
+          Math.abs(top - preferredTop) * 0.35;
+        const sizePenalty = Math.abs(targetRatio - candidate.ratio) * 1_400;
+        const score = overlap * 220 + distancePenalty + sizePenalty;
 
         if (!best || score < best.score) {
           best = { ...candidate, score, overlap };
@@ -544,20 +895,30 @@ function calculateFraming() {
       }
     }
 
-    if (best && best.overlap === 0 && best.ratio >= 0.14) break;
+    if (best && best.overlap === 0 && best.ratio >= targetRatio - 0.03) {
+      break;
+    }
   }
 
   if (!best) {
-    const avatarHeight = viewport.height * 0.14;
+    const avatarHeight = viewport.height * range.minimum;
     const avatarWidth = avatarHeight * avatarAspect;
     best = {
-      left: clamp(viewport.width * 0.5 - avatarWidth / 2, safeLeft, viewport.width - safeRight - avatarWidth),
-      top: clamp(viewport.height - avatarHeight - captionAllowance - safeBottom - 60, minimumTop, viewport.height - avatarHeight - captionAllowance - safeBottom),
+      left: clamp(
+        viewport.width * 0.28 - avatarWidth / 2,
+        safeLeft,
+        viewport.width - safeRight - avatarWidth,
+      ),
+      top: clamp(
+        viewport.height - avatarHeight - captionAllowance - safeBottom,
+        minimumTop,
+        viewport.height - avatarHeight - safeBottom,
+      ),
       right: 0,
       bottom: 0,
       width: avatarWidth,
       height: avatarHeight,
-      ratio: 0.14,
+      ratio: range.minimum,
       score: Number.POSITIVE_INFINITY,
       overlap: 0,
     };
@@ -588,11 +949,21 @@ function recalculateFraming({ immediate = false } = {}) {
   const frame = calculateFraming();
   state.lastFrame = frame;
 
-  document.documentElement.style.setProperty("--avatar-height", `${frame.height.toFixed(2)}px`);
-  document.documentElement.style.setProperty("--avatar-left", `${frame.left.toFixed(2)}px`);
-  document.documentElement.style.setProperty("--avatar-top", `${frame.top.toFixed(2)}px`);
+  document.documentElement.style.setProperty(
+    "--avatar-height",
+    `${frame.height.toFixed(2)}px`,
+  );
+  document.documentElement.style.setProperty(
+    "--avatar-left",
+    `${frame.left.toFixed(2)}px`,
+  );
+  document.documentElement.style.setProperty(
+    "--avatar-top",
+    `${frame.top.toFixed(2)}px`,
+  );
   elements.companion.dataset.frameRatio = frame.ratio.toFixed(4);
-  elements.companion.dataset.frameStatus = frame.fullyVisible && frame.overlap === 0 ? "safe" : "clamped";
+  elements.companion.dataset.frameStatus =
+    frame.fullyVisible && frame.overlap < 25 ? "safe" : "clamped";
 
   if (immediate) {
     state.reframeTimer = window.setTimeout(() => {
@@ -603,17 +974,34 @@ function recalculateFraming({ immediate = false } = {}) {
   return frame;
 }
 
-async function travelTo(nextIndex, { focusChapter = false, announceChange = true } = {}) {
+function activatePower(power) {
+  if (!power) return;
+  if (elements.powerTransitionName) {
+    elements.powerTransitionName.textContent = power.name;
+  }
+  elements.experience.dataset.activePower = state.selectedPowerId;
+}
+
+async function travelTo(
+  nextIndex,
+  { focusChapter = false, announceChange = true } = {},
+) {
   if (!state.manifest || state.isTraversing) return;
-  const clampedIndex = clamp(nextIndex, 0, state.manifest.locations.length - 1);
+  const clampedIndex = clamp(
+    nextIndex,
+    0,
+    state.manifest.locations.length - 1,
+  );
   if (clampedIndex === state.locationIndex) return;
 
   const nextLocation = state.manifest.locations[clampedIndex];
-  const power = state.manifest.powers[nextLocation.power] ?? state.manifest.powers["reality-bending"];
+  const power = getCurrentPower();
   const duration = state.motionEnabled ? power.durationMs : 40;
 
   state.isTraversing = true;
   state.sceneMode = "outer";
+  state.activeInsideTab = "now";
+  activatePower(power);
   elements.experience.classList.add("is-traversing", power.className);
   document.documentElement.dataset.experienceState = "traversing";
   setInteractionLock(true);
@@ -634,7 +1022,7 @@ async function travelTo(nextIndex, { focusChapter = false, announceChange = true
   setInteractionLock(false);
   document.documentElement.dataset.experienceState = "exploring";
   renderLocation({ announceChange });
-  setPresenting(true, 720);
+  setPresenting(true, 780);
   recalculateFraming();
 
   if (focusChapter) elements.chapterPanel?.focus({ preventScroll: true });
@@ -644,11 +1032,12 @@ async function travelTo(nextIndex, { focusChapter = false, announceChange = true
 async function togglePortal() {
   if (!state.manifest || state.isTraversing) return;
   const location = getCurrentLocation();
-  if (!location) return;
+  const power = getCurrentPower();
+  if (!location || !power) return;
 
-  const power = state.manifest.powers["reality-bending"];
   const duration = state.motionEnabled ? power.durationMs : 40;
   state.isTraversing = true;
+  activatePower(power);
   elements.experience.classList.add("is-traversing", power.className);
   document.documentElement.dataset.experienceState = "transitioning";
   setInteractionLock(true);
@@ -656,6 +1045,7 @@ async function togglePortal() {
 
   await wait(Math.max(16, duration * 0.43));
   state.sceneMode = state.sceneMode === "outer" ? "inner" : "outer";
+  if (state.sceneMode === "inner") state.activeInsideTab = "now";
   renderScene();
   renderLocation({ announceChange: false });
   await wait(Math.max(16, duration * 0.57));
@@ -664,18 +1054,20 @@ async function togglePortal() {
   state.isTraversing = false;
   setInteractionLock(false);
   document.documentElement.dataset.experienceState = "exploring";
-  recalculateFraming();
+  recalculateFraming({ immediate: true });
   announce(
     state.sceneMode === "inner"
-      ? `Entered ${location.formalName}. ${location.title}`
+      ? `Entered ${location.formalName}. ${location.deepDive.heading}`
       : `Returned to the outer approach of ${location.formalName}.`,
   );
-  setPresenting(true, 820);
+  setPresenting(true, 860);
 }
 
 function selectGuide(guideId) {
   if (!state.manifest) return;
-  const guide = state.manifest.guides.find((candidate) => candidate.id === guideId);
+  const guide = state.manifest.guides.find(
+    (candidate) => candidate.id === guideId,
+  );
   if (!guide) return;
   state.selectedGuideId = guide.id;
   safeStorageSet(storageKeys.guide, guide.id);
@@ -683,8 +1075,36 @@ function selectGuide(guideId) {
   closeDialog(elements.guideDialog);
   setPresenting(true, 900);
   recalculateFraming();
-  showToast(`${guide.name} will travel beside you.`);
+  showToast(`${guide.name}, ${guide.specialty}, will travel beside you.`);
   announce(`${guide.name} selected as your Anzania guide.`);
+}
+
+function selectPower(powerId, { announceSelection = true } = {}) {
+  if (!state.manifest?.powers[powerId] || state.isTraversing) return;
+  state.selectedPowerId = powerId;
+  safeStorageSet(storageKeys.power, powerId);
+  renderAbilities();
+  const power = getCurrentPower();
+  activatePower(power);
+  if (announceSelection) {
+    showToast(`${power.name} selected. Your next crossing will use this ability.`);
+    announce(`${power.name} selected as the traversal ability.`);
+  }
+}
+
+function selectInsideTab(tabId, { focus = false } = {}) {
+  const location = getCurrentLocation();
+  if (!location) return;
+  const available = tabDefinitions(location).map((tab) => tab.id);
+  if (!available.includes(tabId)) return;
+  state.activeInsideTab = tabId;
+  renderDeepDive();
+  if (focus) {
+    elements.chapterTabs
+      ?.querySelector(`[data-inside-tab="${CSS.escape(tabId)}"]`)
+      ?.focus();
+  }
+  window.requestAnimationFrame(() => recalculateFraming());
 }
 
 function openDialog(dialog) {
@@ -730,16 +1150,16 @@ function applyMotionPreference(enabled, { persist = true } = {}) {
   state.motionEnabled = Boolean(enabled);
   elements.experience.dataset.motion = state.motionEnabled ? "on" : "off";
   if (elements.motionToggle) elements.motionToggle.checked = state.motionEnabled;
-  if (!state.motionEnabled) {
-    document.documentElement.style.setProperty("--parallax-x", "0px");
-    document.documentElement.style.setProperty("--parallax-y", "0px");
-    document.documentElement.style.setProperty("--foreground-x", "0px");
-    document.documentElement.style.setProperty("--foreground-y", "0px");
+  if (!state.motionEnabled) resetParallax();
+  if (persist) {
+    safeStorageSet(
+      storageKeys.motion,
+      state.motionEnabled ? "on" : "off",
+    );
   }
-  if (persist) safeStorageSet(storageKeys.motion, state.motionEnabled ? "on" : "off");
 }
 
-function handleParallax(event) {
+function handlePointer(event) {
   if (!state.motionEnabled || !state.hasBegun || state.isTraversing) return;
   if (state.parallaxFrame) return;
   const pointerX = event.clientX;
@@ -748,15 +1168,40 @@ function handleParallax(event) {
     state.parallaxFrame = 0;
     const x = (pointerX / window.innerWidth - 0.5) * 2;
     const y = (pointerY / window.innerHeight - 0.5) * 2;
-    document.documentElement.style.setProperty("--parallax-x", `${(-x * 8).toFixed(2)}px`);
-    document.documentElement.style.setProperty("--parallax-y", `${(-y * 5).toFixed(2)}px`);
-    document.documentElement.style.setProperty("--foreground-x", `${(-x * 15).toFixed(2)}px`);
-    document.documentElement.style.setProperty("--foreground-y", `${(-y * 9).toFixed(2)}px`);
+    document.documentElement.style.setProperty(
+      "--pointer-x",
+      `${((x + 1) * 50).toFixed(2)}%`,
+    );
+    document.documentElement.style.setProperty(
+      "--pointer-y",
+      `${((y + 1) * 50).toFixed(2)}%`,
+    );
+    document.documentElement.style.setProperty("--pointer-nx", x.toFixed(3));
+    document.documentElement.style.setProperty("--pointer-ny", y.toFixed(3));
+    document.documentElement.style.setProperty(
+      "--parallax-x",
+      `${(-x * 10).toFixed(2)}px`,
+    );
+    document.documentElement.style.setProperty(
+      "--parallax-y",
+      `${(-y * 6).toFixed(2)}px`,
+    );
+    document.documentElement.style.setProperty(
+      "--foreground-x",
+      `${(-x * 18).toFixed(2)}px`,
+    );
+    document.documentElement.style.setProperty(
+      "--foreground-y",
+      `${(-y * 11).toFixed(2)}px`,
+    );
   });
 }
 
 function resetParallax() {
-  if (!state.motionEnabled) return;
+  document.documentElement.style.setProperty("--pointer-x", "50%");
+  document.documentElement.style.setProperty("--pointer-y", "50%");
+  document.documentElement.style.setProperty("--pointer-nx", "0");
+  document.documentElement.style.setProperty("--pointer-ny", "0");
   document.documentElement.style.setProperty("--parallax-x", "0px");
   document.documentElement.style.setProperty("--parallax-y", "0px");
   document.documentElement.style.setProperty("--foreground-x", "0px");
@@ -764,12 +1209,24 @@ function resetParallax() {
 }
 
 function activateIdleLean() {
-  if (!state.hasBegun || state.isTraversing || document.querySelector("dialog[open]")) return;
+  if (
+    !state.hasBegun ||
+    state.isTraversing ||
+    document.querySelector("dialog[open]")
+  ) {
+    return;
+  }
   const frame = state.lastFrame ?? recalculateFraming();
   if (!frame) return;
   const leanLeft = frame.left + frame.width / 2 < window.innerWidth / 2;
-  document.documentElement.style.setProperty("--idle-lean-angle", leanLeft ? "-3deg" : "3deg");
-  document.documentElement.style.setProperty("--idle-lean-shift", leanLeft ? "-2.5%" : "2.5%");
+  document.documentElement.style.setProperty(
+    "--idle-lean-angle",
+    leanLeft ? "-2.6deg" : "2.6deg",
+  );
+  document.documentElement.style.setProperty(
+    "--idle-lean-shift",
+    leanLeft ? "-2%" : "2%",
+  );
   elements.experience.classList.add("is-idle-leaning");
 }
 
@@ -777,17 +1234,26 @@ function resetIdleTimer() {
   window.clearTimeout(state.idleTimer);
   elements.experience?.classList.remove("is-idle-leaning");
   if (state.hasBegun) {
-    state.idleTimer = window.setTimeout(activateIdleLean, 22000);
+    state.idleTimer = window.setTimeout(activateIdleLean, 20_000);
   }
 }
 
 function preloadAdjacentScenes() {
   if (!state.manifest) return;
-  const candidates = [state.locationIndex, state.locationIndex + 1, state.locationIndex - 1]
-    .filter((index) => index >= 0 && index < state.manifest.locations.length)
+  const candidates = [
+    state.locationIndex,
+    state.locationIndex + 1,
+    state.locationIndex - 1,
+  ]
+    .filter(
+      (index) => index >= 0 && index < state.manifest.locations.length,
+    )
     .flatMap((index) => {
       const location = state.manifest.locations[index];
-      return [chooseSceneSource(location.outer), chooseSceneSource(location.inner)];
+      return [
+        chooseSceneSource(location.outer),
+        chooseSceneSource(location.inner),
+      ];
     });
   for (const src of [...new Set(candidates)]) void loadImage(src);
 }
@@ -799,46 +1265,71 @@ function beginJourney() {
   document.documentElement.dataset.experienceState = "exploring";
   renderLocation({ announceChange: true });
   renderGuide();
+  renderAbilities();
   window.requestAnimationFrame(() => {
     recalculateFraming({ immediate: true });
     elements.chapterPanel?.focus({ preventScroll: true });
   });
   resetIdleTimer();
-  showToast("Use the arrows to cross Anzania. Every location opens into the complete Static View record.", 3200);
+  showToast(
+    "Choose a crossing ability, then use the arrows. Enter each place to open its living professional record.",
+    4_200,
+  );
 }
 
 function parseInitialLocation() {
   if (!state.manifest) return 0;
   const hash = window.location.hash.replace(/^#/, "");
-  const index = state.manifest.locations.findIndex((location) => location.id === hash);
+  const index = state.manifest.locations.findIndex(
+    (location) => location.id === hash,
+  );
   return index >= 0 ? index : 0;
 }
 
 function restorePreferences() {
   const storedGuide = safeStorageGet(storageKeys.guide);
-  if (storedGuide && state.manifest?.guides.some((guide) => guide.id === storedGuide)) {
+  if (
+    storedGuide &&
+    state.manifest?.guides.some((guide) => guide.id === storedGuide)
+  ) {
     state.selectedGuideId = storedGuide;
+  }
+
+  const storedPower = safeStorageGet(storageKeys.power);
+  if (storedPower && state.manifest?.powers[storedPower]) {
+    state.selectedPowerId = storedPower;
   }
 
   const visited = safeStorageGet(storageKeys.visited);
   if (visited) {
     try {
       const parsed = JSON.parse(visited);
-      if (Array.isArray(parsed)) state.visited = new Set(parsed.filter((value) => typeof value === "string"));
+      if (Array.isArray(parsed)) {
+        state.visited = new Set(
+          parsed.filter((value) => typeof value === "string"),
+        );
+      }
     } catch {
       state.visited = new Set();
     }
   }
 
-  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  const reducedMotion =
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
   const storedMotion = safeStorageGet(storageKeys.motion);
-  applyMotionPreference(storedMotion ? storedMotion === "on" : !reducedMotion, { persist: false });
+  applyMotionPreference(storedMotion ? storedMotion === "on" : !reducedMotion, {
+    persist: false,
+  });
 }
 
 function bindEvents() {
   elements.beginJourney?.addEventListener("click", beginJourney);
-  elements.previousLocation?.addEventListener("click", () => travelTo(state.locationIndex - 1));
-  elements.nextLocation?.addEventListener("click", () => travelTo(state.locationIndex + 1));
+  elements.previousLocation?.addEventListener("click", () =>
+    travelTo(state.locationIndex - 1),
+  );
+  elements.nextLocation?.addEventListener("click", () =>
+    travelTo(state.locationIndex + 1),
+  );
   elements.portalButton?.addEventListener("click", togglePortal);
 
   elements.locationRailList?.addEventListener("click", (event) => {
@@ -860,12 +1351,44 @@ function bindEvents() {
     selectGuide(button.dataset.guideId);
   });
 
-  elements.mapButton?.addEventListener("click", () => openDialog(elements.mapDialog));
+  elements.abilityList?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-power-id]");
+    if (!button) return;
+    selectPower(button.dataset.powerId);
+  });
+
+  elements.chapterTabs?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-inside-tab]");
+    if (!button) return;
+    selectInsideTab(button.dataset.insideTab);
+  });
+
+  elements.chapterTabs?.addEventListener("keydown", (event) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    const location = getCurrentLocation();
+    if (!location) return;
+    const ids = tabDefinitions(location).map((tab) => tab.id);
+    const current = ids.indexOf(state.activeInsideTab);
+    let next = current;
+    if (event.key === "ArrowLeft") next = (current - 1 + ids.length) % ids.length;
+    if (event.key === "ArrowRight") next = (current + 1) % ids.length;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = ids.length - 1;
+    event.preventDefault();
+    selectInsideTab(ids[next], { focus: true });
+  });
+
+  elements.mapButton?.addEventListener("click", () =>
+    openDialog(elements.mapDialog),
+  );
   elements.guideButton?.addEventListener("click", () => {
     warmGuideCards();
     openDialog(elements.guideDialog);
   });
-  elements.optionsButton?.addEventListener("click", () => openDialog(elements.optionsDialog));
+  elements.optionsButton?.addEventListener("click", () =>
+    openDialog(elements.optionsDialog),
+  );
+
   document.querySelectorAll("[data-close-dialog]").forEach((button) => {
     button.addEventListener("click", () => closeDialog(button.closest("dialog")));
   });
@@ -881,16 +1404,25 @@ function bindEvents() {
 
   elements.motionToggle?.addEventListener("change", () => {
     applyMotionPreference(elements.motionToggle.checked);
-    showToast(state.motionEnabled ? "Atmospheric motion enabled." : "Atmospheric motion reduced.");
+    showToast(
+      state.motionEnabled
+        ? "Atmospheric motion enabled."
+        : "Atmospheric motion reduced.",
+    );
   });
 
   const startLookBack = (event) => {
     event.preventDefault();
-    if (event.pointerId != null) elements.lookBackButton?.setPointerCapture?.(event.pointerId);
+    if (event.pointerId != null) {
+      elements.lookBackButton?.setPointerCapture?.(event.pointerId);
+    }
     setLookBack(true);
   };
   const endLookBack = (event) => {
-    if (event?.pointerId != null && elements.lookBackButton?.hasPointerCapture?.(event.pointerId)) {
+    if (
+      event?.pointerId != null &&
+      elements.lookBackButton?.hasPointerCapture?.(event.pointerId)
+    ) {
       elements.lookBackButton.releasePointerCapture(event.pointerId);
     }
     setLookBack(false);
@@ -898,11 +1430,21 @@ function bindEvents() {
   elements.lookBackButton?.addEventListener("pointerdown", startLookBack);
   elements.lookBackButton?.addEventListener("pointerup", endLookBack);
   elements.lookBackButton?.addEventListener("pointercancel", endLookBack);
-  elements.lookBackButton?.addEventListener("lostpointercapture", () => setLookBack(false));
-  elements.lookBackButton?.addEventListener("contextmenu", (event) => event.preventDefault());
+  elements.lookBackButton?.addEventListener("lostpointercapture", () =>
+    setLookBack(false),
+  );
+  elements.lookBackButton?.addEventListener("contextmenu", (event) =>
+    event.preventDefault(),
+  );
 
   window.addEventListener("keydown", (event) => {
-    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLSelectElement) return;
+    if (
+      event.target instanceof HTMLInputElement ||
+      event.target instanceof HTMLTextAreaElement ||
+      event.target instanceof HTMLSelectElement
+    ) {
+      return;
+    }
     resetIdleTimer();
 
     if (event.key === "Escape" && closeOpenDialog()) {
@@ -932,6 +1474,7 @@ function bindEvents() {
       openDialog(elements.mapDialog);
     } else if (event.key.toLowerCase() === "g") {
       event.preventDefault();
+      warmGuideCards();
       openDialog(elements.guideDialog);
     } else if (event.key.toLowerCase() === "l" && !event.repeat) {
       event.preventDefault();
@@ -943,10 +1486,14 @@ function bindEvents() {
     if (event.key.toLowerCase() === "l") setLookBack(false);
   });
 
-  window.addEventListener("pointermove", (event) => {
-    handleParallax(event);
-    resetIdleTimer();
-  }, { passive: true });
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      handlePointer(event);
+      resetIdleTimer();
+    },
+    { passive: true },
+  );
   window.addEventListener("pointerleave", resetParallax);
   window.addEventListener("pointerdown", resetIdleTimer, { passive: true });
   window.addEventListener("touchstart", resetIdleTimer, { passive: true });
@@ -973,13 +1520,16 @@ async function initialise() {
   try {
     setLoadingProgress(12, "Reading the atlas…");
     const response = await fetch(manifestUrl, { credentials: "same-origin" });
-    if (!response.ok) throw new Error(`Manifest request failed with ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Manifest request failed with ${response.status}`);
+    }
     state.manifest = await response.json();
 
-    setLoadingProgress(34, "Opening the western reach…");
+    setLoadingProgress(32, "Opening the western reach…");
     state.locationIndex = parseInitialLocation();
     restorePreferences();
     renderNavigation();
+    renderAbilities();
     renderGuides();
     renderGuide();
     renderScene({ immediate: true });
@@ -997,7 +1547,12 @@ async function initialise() {
     setLoadingProgress(58, "Gathering the first horizon…");
     const preloadResults = await Promise.all(preloadSources.map(loadImage));
     const loadedCount = preloadResults.filter((result) => result.loaded).length;
-    setLoadingProgress(82, loadedCount === preloadResults.length ? "Calling your guide…" : "Completing the crossing…");
+    setLoadingProgress(
+      82,
+      loadedCount === preloadResults.length
+        ? "Calling your guide…"
+        : "Completing the crossing…",
+    );
     await wait(state.motionEnabled ? 260 : 20);
 
     bindEvents();
@@ -1010,7 +1565,9 @@ async function initialise() {
     elements.loadingGate.hidden = true;
     elements.arrivalGate.hidden = false;
     document.documentElement.dataset.experienceState = "arrival";
-    announce("Explore Anzania is ready. Anzania is an original fictional portfolio world.");
+    announce(
+      "Explore Anzania is ready. Anzania is an original fictional portfolio world.",
+    );
   } catch (error) {
     console.error("Explore Anzania could not initialise", error);
     setLoadingProgress(100, "The immersive atlas could not be opened.");
@@ -1035,6 +1592,8 @@ window.__ANZANIA_DEBUG__ = {
     locationId: getCurrentLocation()?.id ?? null,
     sceneMode: state.sceneMode,
     guideId: state.selectedGuideId,
+    powerId: state.selectedPowerId,
+    activeInsideTab: state.activeInsideTab,
     isTraversing: state.isTraversing,
     isLookingBack: state.isLookingBack,
     hasBegun: state.hasBegun,
@@ -1043,6 +1602,7 @@ window.__ANZANIA_DEBUG__ = {
   recalculateFraming,
   travelTo,
   togglePortal,
+  selectPower,
 };
 
 void initialise();
