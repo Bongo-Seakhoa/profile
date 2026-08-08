@@ -10,11 +10,12 @@
 | Viewport | Result | Evidence |
 | --- | --- | --- |
 | 1440 by 1000 | Passed | Editorial desktop shell, complete hero, systems console and command trigger rendered without overflow. |
-| 1366 by 900 | Passed | Full desktop navigation remained contained; the view indicator correctly yielded space. |
+| 1366 by 900 | Passed | Full desktop navigation remained contained after removing the redundant view label. |
 | 1280 by 900 | Passed | Intermediate shell switched to the compact menu while keeping direct document and Anzania actions. |
 | 390 by 844 | Passed | Full mobile hero, calls to action and compact navigation rendered without horizontal clipping. |
+| 844 by 390 | Passed | Low-height landscape retained the compact shell, readable hero controls and safe fixed-interface spacing. |
 
-All four checks reported `scrollWidth === clientWidth` and no captured runtime errors.
+All five checks reported `scrollWidth === clientWidth` and no captured runtime errors.
 
 ## Interaction checks
 

@@ -14,6 +14,7 @@
 - Short-viewport reveal refinement commit: `3e98cc5`
 - Professional browser-verification record: `49311f6`
 - Final responsive and accessibility closure: `4b14e37`
+- Wide-screen professional navigation simplification: `8433033`
 - Target branch: `main`
 - Target site: `https://bongo-seakhoa.github.io/profile/`
 - Recovery tag: `legacy-pages-baseline-20260730`
