@@ -1,0 +1,56 @@
+name: Install rendered Anzania release
+
+on:
+  push:
+    branches:
+      - agent/anzania-rendered-ui-final
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: install-rendered-anzania
+  cancel-in-progress: true
+
+jobs:
+  install:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release branch
+        uses: actions/checkout@v6
+        with:
+          ref: agent/anzania-rendered-ui-final
+          fetch-depth: 0
+
+      - name: Download the verified release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --quiet 'gdown==5.2.0'
+          gdown --id '1Wo475zXZwDPBiGxw5jF3yXPIYweezzFa' --output /tmp/anzania-ui-upgrade-payload.zip
+          test "$(wc -c < /tmp/anzania-ui-upgrade-payload.zip)" -eq 469446
+          printf '%s  %s\n' '3ac8452ca0bdaa23f7e4a7c63df43a8efea7c2002cdfdc81f659d5831472505e' '/tmp/anzania-ui-upgrade-payload.zip' | sha256sum --check
+          unzip -t /tmp/anzania-ui-upgrade-payload.zip
+
+      - name: Install the UI and rendered guide assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf public/assets/immersive/characters
+          unzip -o /tmp/anzania-ui-upgrade-payload.zip -d .
+          rm -f .github/workflows/install-rendered-anzania.yml
+          node --check public/assets/immersive/anzania-explorer.js
+          node --check scripts/validate-public-output.mjs
+          test "$(find public/assets/immersive/characters/rendered -type f -name '*.webp' | wc -l)" -eq 15
+
+      - name: Commit the installed release
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Install rendered guides and deepen Explore Anzania UI'
+          git push origin HEAD:agent/anzania-rendered-ui-final
