@@ -1,10 +1,10 @@
 {
-  "schemaVersion": "3.0.0",
+  "schemaVersion": "2.5.0",
   "world": {
     "name": "Anzania",
     "definition": "An original fictional portfolio world created for Bongo Seakhoa.",
     "disclaimer": "Anzania is fictional. It is not Tanzania or any other real location.",
-    "experience": "Interactive 2.5D guided portfolio journey"
+    "experience": "Cinematic 2.5D guided portfolio journey"
   },
   "locations": [
     {
@@ -16,115 +16,20 @@
       "eyebrow": "The point of entry",
       "title": "Work that turns ambiguity into usable systems.",
       "lead": "I turn complex information into reliable data systems, practical analysis and decisions people can act on.",
-      "signal": "Now building",
-      "signalValue": "Reliable company intelligence and retail data systems",
-      "biome": "sand",
       "evidence": [
-        {
-          "label": "Current focus",
-          "value": "Data engineering, analytics and organizational intelligence at MetaPOS"
-        },
-        {
-          "label": "Working range",
-          "value": "Data systems, decision support, applied machine learning and technical communication"
-        },
-        {
-          "label": "Based in",
-          "value": "Debrecen, Hungary, working across distributed teams"
-        }
-      ],
-      "facts": [
-        {
-          "value": "4",
-          "label": "core practice areas"
-        },
-        {
-          "value": "3",
-          "label": "active professional lanes"
-        },
-        {
-          "value": "1",
-          "label": "connected body of work"
-        }
+        { "label": "Current focus", "value": "Data engineering and analytics at MetaPOS" },
+        { "label": "Working range", "value": "Data systems, decision support and applied machine learning" },
+        { "label": "Based in", "value": "Debrecen, Hungary" }
       ],
       "actions": [
-        {
-          "label": "View selected work",
-          "path": "work/"
-        },
-        {
-          "label": "Start a conversation",
-          "path": "contact/"
-        }
+        { "label": "View selected work", "path": "work/" },
+        { "label": "Start a conversation", "path": "contact/" }
       ],
-      "outer": {
-        "large": "./scenes/threshold-dunes-outer-1600.webp",
-        "small": "./scenes/threshold-dunes-outer-960.webp"
-      },
-      "inner": {
-        "large": "./scenes/threshold-dunes-inner-1600.webp",
-        "small": "./scenes/threshold-dunes-inner-960.webp"
-      },
+      "outer": { "large": "./scenes/threshold-dunes-outer-1600.webp", "small": "./scenes/threshold-dunes-outer-960.webp" },
+      "inner": { "large": "./scenes/threshold-dunes-inner-1600.webp", "small": "./scenes/threshold-dunes-inner-960.webp" },
       "power": "sand-teleportation",
       "portalAction": "Enter the waystation",
-      "portalCaption": "Open the working map behind the portfolio",
-      "guideInsight": "Begin with the system, then follow the evidence that makes it real.",
-      "deepDive": {
-        "kicker": "Inside the waystation",
-        "heading": "A live map of what Bongo is building now.",
-        "summary": "The portfolio is not a museum of completed work. It is a working interface for an active practice spanning retail data, governed AI context, research validation and technical learning.",
-        "pillars": [
-          {
-            "title": "Make complexity navigable",
-            "body": "Translate scattered requirements, data and stakeholder context into systems people can understand and use."
-          },
-          {
-            "title": "Protect the evidence chain",
-            "body": "Keep claims connected to code, documents, measurements and clearly labelled client-safe records."
-          },
-          {
-            "title": "Design for ownership",
-            "body": "Build workflows that can be tested, explained, recovered and handed over without losing meaning."
-          }
-        ],
-        "now": [
-          {
-            "status": "Active",
-            "title": "MetaPOS Mind",
-            "detail": "A governed company-state and execution context system that joins product, business and delivery knowledge without overriding core policy."
-          },
-          {
-            "status": "Accepted",
-            "title": "Validation-gate research",
-            "detail": "Simulation and historical evaluation of validation-gate design in a regime-adaptive decision system, accepted for ISM 2026."
-          },
-          {
-            "status": "In development",
-            "title": "Anzania portfolio world",
-            "detail": "A high-quality 2.5D professional narrative that lets visitors choose how they travel through the evidence."
-          }
-        ],
-        "notes": [
-          {
-            "question": "What problem do you enjoy most?",
-            "answer": "The point where a valuable idea is trapped inside fragmented data, unclear ownership or a system nobody fully trusts."
-          },
-          {
-            "question": "What does good delivery look like?",
-            "answer": "The result works, its limits are visible, and another person can continue from a reliable record."
-          },
-          {
-            "question": "What makes the work durable?",
-            "answer": "A visible operating model: defined sources, validation, ownership, recovery paths and communication that survives handover."
-          }
-        ],
-        "artifact": {
-          "label": "Recommended route",
-          "title": "Systems, research and professional record",
-          "detail": "Move from current work into the Archive of Echoes, then use the Observatory to inspect research in progress.",
-          "path": "work/"
-        }
-      }
+      "portalCaption": "The horizon folds into the first evidence"
     },
     {
       "id": "stone-pass",
@@ -135,110 +40,20 @@
       "eyebrow": "Identity without mythology",
       "title": "One person, two surnames, one continuous body of work.",
       "lead": "Bongo Seakhoa is the default professional name. Bongo Kosa is the alternate and legal name used in some records. The distinction is continuity, not a second persona.",
-      "signal": "Identity record",
-      "signalValue": "Bongo Seakhoa by default; Bongo Kosa where legal continuity matters",
-      "biome": "stone",
       "evidence": [
-        {
-          "label": "Primary public name",
-          "value": "Bongo Seakhoa"
-        },
-        {
-          "label": "Alternate and legal name",
-          "value": "Bongo Kosa"
-        },
-        {
-          "label": "Professional principle",
-          "value": "Clarity over performance; evidence over ornament"
-        }
-      ],
-      "facts": [
-        {
-          "value": "2",
-          "label": "surname variants"
-        },
-        {
-          "value": "1",
-          "label": "professional record"
-        },
-        {
-          "value": "0",
-          "label": "invented personas"
-        }
+        { "label": "Primary public name", "value": "Bongo Seakhoa" },
+        { "label": "Alternate name", "value": "Bongo Kosa" },
+        { "label": "Professional principle", "value": "Clarity over performance, evidence over ornament" }
       ],
       "actions": [
-        {
-          "label": "Read the full background",
-          "path": "about/"
-        },
-        {
-          "label": "Review experience",
-          "path": "experience/"
-        }
+        { "label": "Read the full background", "path": "about/" },
+        { "label": "Review experience", "path": "experience/" }
       ],
-      "outer": {
-        "large": "./scenes/stone-pass-outer-1600.webp",
-        "small": "./scenes/stone-pass-outer-960.webp"
-      },
-      "inner": {
-        "large": "./scenes/stone-pass-inner-1600.webp",
-        "small": "./scenes/stone-pass-inner-960.webp"
-      },
+      "outer": { "large": "./scenes/stone-pass-outer-1600.webp", "small": "./scenes/stone-pass-outer-960.webp" },
+      "inner": { "large": "./scenes/stone-pass-inner-1600.webp", "small": "./scenes/stone-pass-inner-960.webp" },
       "power": "reality-bending",
       "portalAction": "Pass beneath the arch",
-      "portalCaption": "Resolve the inscriptions into a factual record",
-      "guideInsight": "Names can change across documents. The evidence trail should not.",
-      "deepDive": {
-        "kicker": "Inside the pass",
-        "heading": "Continuity is treated as a data-quality problem.",
-        "summary": "The site keeps both surnames aligned across routes, resume and CV variants, metadata and project records. Visitors should never have to guess whether the names refer to different people.",
-        "pillars": [
-          {
-            "title": "Default name",
-            "body": "Bongo Seakhoa leads the public portfolio and day-to-day professional presentation."
-          },
-          {
-            "title": "Legal continuity",
-            "body": "Bongo Kosa is preserved where legal or historical records require the alternate surname."
-          },
-          {
-            "title": "Single source",
-            "body": "Both variants are produced from the same structured professional record to prevent drift."
-          }
-        ],
-        "now": [
-          {
-            "status": "Canonical",
-            "title": "Shared document pipeline",
-            "detail": "Resume and CV variants are generated from one JavaScript-backed manifest."
-          },
-          {
-            "status": "Documented",
-            "title": "Identity note",
-            "detail": "The relationship between names remains a supporting footnote, not the main portfolio narrative."
-          }
-        ],
-        "notes": [
-          {
-            "question": "Why state this at all?",
-            "answer": "Because transparent continuity removes ambiguity from credentials and professional records."
-          },
-          {
-            "question": "Is this a character backstory?",
-            "answer": "No. It is a simple identity clarification attached to one real person and one body of work."
-          },
-          {
-            "question": "Does the alternate name change the professional story?",
-            "answer": "No. It is a record-continuity note. The work, evidence and professional direction remain one continuous body."
-          }
-        ],
-        "artifact": {
-          "label": "Direct record",
-          "title": "About and professional timeline",
-          "detail": "Read the concise identity note, then continue into the complete experience record.",
-          "path": "about/"
-        }
-      }
+      "portalCaption": "The inscriptions resolve into a factual record"
     },
     {
       "id": "garden-origins",
@@ -249,110 +64,20 @@
       "eyebrow": "Learning as a living system",
       "title": "Scientific roots, systems thinking and continued formal study.",
       "lead": "A foundation in science grew into data, engineering and decision systems. The path remains deliberately interdisciplinary and grounded in continuous learning.",
-      "signal": "Learning system",
-      "signalValue": "Formal study, verified credentials and practical experimentation",
-      "biome": "water",
       "evidence": [
-        {
-          "label": "Current study",
-          "value": "Engineering Management at the University of Debrecen"
-        },
-        {
-          "label": "Scientific foundation",
-          "value": "Microbiology, biochemistry and environmental systems"
-        },
-        {
-          "label": "Technical development",
-          "value": "Data science, analytics, cloud engineering and financial engineering"
-        }
-      ],
-      "facts": [
-        {
-          "value": "Science",
-          "label": "foundation"
-        },
-        {
-          "value": "Data",
-          "label": "translation layer"
-        },
-        {
-          "value": "Systems",
-          "label": "current direction"
-        }
+        { "label": "Current study", "value": "BSc in Engineering Management, University of Debrecen" },
+        { "label": "Technical foundation", "value": "Data science, analytics and cloud engineering" },
+        { "label": "Learning practice", "value": "Formal study, public experiments and verified credentials" }
       ],
       "actions": [
-        {
-          "label": "View education",
-          "path": "education/"
-        },
-        {
-          "label": "Verify credentials",
-          "path": "credentials/"
-        }
+        { "label": "View education", "path": "education/" },
+        { "label": "Verify credentials", "path": "credentials/" }
       ],
-      "outer": {
-        "large": "./scenes/garden-origins-outer-1600.webp",
-        "small": "./scenes/garden-origins-outer-960.webp"
-      },
-      "inner": {
-        "large": "./scenes/garden-origins-inner-1600.webp",
-        "small": "./scenes/garden-origins-inner-960.webp"
-      },
+      "outer": { "large": "./scenes/garden-origins-outer-1600.webp", "small": "./scenes/garden-origins-outer-960.webp" },
+      "inner": { "large": "./scenes/garden-origins-inner-1600.webp", "small": "./scenes/garden-origins-inner-960.webp" },
       "power": "reality-bending",
       "portalAction": "Enter the memory court",
-      "portalCaption": "Follow the roots from science into engineered systems",
-      "guideInsight": "A useful career does not need a straight line. It needs a coherent one.",
-      "deepDive": {
-        "kicker": "Inside the memory court",
-        "heading": "Each discipline contributes a different way of seeing.",
-        "summary": "Science trained careful observation. Data work added reproducibility and scale. Engineering management adds delivery context, ownership and the economics of making systems useful.",
-        "pillars": [
-          {
-            "title": "Scientific reasoning",
-            "body": "Form hypotheses, distinguish observation from inference and stay alert to confounding factors."
-          },
-          {
-            "title": "Computational practice",
-            "body": "Turn questions into repeatable transformations, models, tests and visible outputs."
-          },
-          {
-            "title": "Management context",
-            "body": "Connect technical decisions to people, constraints, priorities and operational ownership."
-          }
-        ],
-        "now": [
-          {
-            "status": "Current",
-            "title": "University of Debrecen",
-            "detail": "Formal study in Engineering Management while continuing active technical delivery."
-          },
-          {
-            "status": "Ongoing",
-            "title": "Cloud and analytics credentials",
-            "detail": "Verified learning remains tied to practical workflows rather than collected as decoration."
-          }
-        ],
-        "notes": [
-          {
-            "question": "Why keep learning across fields?",
-            "answer": "Because the hardest systems problems are rarely purely technical or purely organizational."
-          },
-          {
-            "question": "What remains constant?",
-            "answer": "A preference for evidence, structured reasoning and useful communication."
-          },
-          {
-            "question": "How does science still shape the work?",
-            "answer": "It reinforces hypothesis discipline, attention to confounding factors and a preference for evidence that can be challenged and reproduced."
-          }
-        ],
-        "artifact": {
-          "label": "Learning record",
-          "title": "Education and verified credentials",
-          "detail": "Inspect formal study, training and active credentials with dates and verification paths.",
-          "path": "education/"
-        }
-      }
+      "portalCaption": "Hard desert light softens into water and shade"
     },
     {
       "id": "archive-echoes",
@@ -363,115 +88,20 @@
       "eyebrow": "Proof before proclamation",
       "title": "Every claim should resolve into a project, role or verifiable artefact.",
       "lead": "The archive is where reputation is tested. Public projects and client-safe summaries state scope, evidence and status directly rather than inflating experiments into outcomes.",
-      "signal": "Evidence index",
-      "signalValue": "Public repositories, client-safe summaries and explicit status labels",
-      "biome": "archive",
       "evidence": [
-        {
-          "label": "Selected systems",
-          "value": "Retail data, portfolio management, recommender systems and organizational AI context"
-        },
-        {
-          "label": "Evidence standard",
-          "value": "Public code or clearly labelled client-safe summaries"
-        },
-        {
-          "label": "Research posture",
-          "value": "Accepted work, active studies and experiments remain visibly distinct"
-        }
-      ],
-      "facts": [
-        {
-          "value": "Public",
-          "label": "code where possible"
-        },
-        {
-          "value": "Scoped",
-          "label": "client-safe records"
-        },
-        {
-          "value": "Labelled",
-          "label": "evidence status"
-        }
+        { "label": "Selected systems", "value": "Retail data, portfolio management and recommender workflows" },
+        { "label": "Evidence standard", "value": "Public repositories or clearly labelled client-safe summaries" },
+        { "label": "Research posture", "value": "Experiments are distinguished from publications" }
       ],
       "actions": [
-        {
-          "label": "Browse all work",
-          "path": "work/"
-        },
-        {
-          "label": "Review research",
-          "path": "research/"
-        }
+        { "label": "Browse all work", "path": "work/" },
+        { "label": "Review research", "path": "research/" }
       ],
-      "outer": {
-        "large": "./scenes/archive-echoes-outer-1600.webp",
-        "small": "./scenes/archive-echoes-outer-960.webp"
-      },
-      "inner": {
-        "large": "./scenes/archive-echoes-inner-1600.webp",
-        "small": "./scenes/archive-echoes-inner-960.webp"
-      },
+      "outer": { "large": "./scenes/archive-echoes-outer-1600.webp", "small": "./scenes/archive-echoes-outer-960.webp" },
+      "inner": { "large": "./scenes/archive-echoes-inner-1600.webp", "small": "./scenes/archive-echoes-inner-960.webp" },
       "power": "sand-teleportation",
       "portalAction": "Open the archive",
-      "portalCaption": "Bring projects, roles and research into the same evidence view",
-      "guideInsight": "The archive does not reward the loudest claim. It rewards the clearest chain of proof.",
-      "deepDive": {
-        "kicker": "Inside the archive",
-        "heading": "The portfolio separates delivery, experimentation and research status.",
-        "summary": "A project can still be valuable without being production software or a publication. Clear status language makes the work more credible, not less impressive.",
-        "pillars": [
-          {
-            "title": "Public project",
-            "body": "Source code or a public artifact supports the description and technology claims."
-          },
-          {
-            "title": "Client-safe contribution",
-            "body": "The role and problem are explained without exposing private systems or invented metrics."
-          },
-          {
-            "title": "Research record",
-            "body": "Accepted papers, reproducibility extensions and experiments carry distinct labels."
-          }
-        ],
-        "now": [
-          {
-            "status": "Production",
-            "title": "MetaPOS data systems",
-            "detail": "Retail data and reporting work presented through a client-safe professional record."
-          },
-          {
-            "status": "Public",
-            "title": "FxPM portfolio manager",
-            "detail": "Trading-system architecture, analytics and risk workflows supported by repository evidence."
-          },
-          {
-            "status": "Accepted",
-            "title": "Validation-gate paper",
-            "detail": "Formal research now has a dedicated accepted-paper record rather than an empty publication state."
-          }
-        ],
-        "notes": [
-          {
-            "question": "Why not attach a metric to everything?",
-            "answer": "A metric without the approved source, scope and comparison point creates false certainty."
-          },
-          {
-            "question": "What makes a strong portfolio claim?",
-            "answer": "Specific scope, visible status, useful context and a path to evidence."
-          },
-          {
-            "question": "What belongs in the archive next?",
-            "answer": "Accepted research, current system work and project evidence that is clear enough for another person to inspect without narration."
-          }
-        ],
-        "artifact": {
-          "label": "Archive route",
-          "title": "Complete work index",
-          "detail": "Browse public projects, professional contributions and experiments with status and evidence paths.",
-          "path": "work/"
-        }
-      }
+      "portalCaption": "Scrolls, instruments and evidence move into reach"
     },
     {
       "id": "forge-resolve",
@@ -482,115 +112,20 @@
       "eyebrow": "Systems must survive reality",
       "title": "Reliability is designed through constraints, tests and ownership.",
       "lead": "Useful technical work is not only a clever model or query. It is the discipline of making data flows dependable, explainable and maintainable under real operating pressure.",
-      "signal": "Engineering practice",
-      "signalValue": "Validation, observability, documentation and recovery",
-      "biome": "forge",
       "evidence": [
-        {
-          "label": "Engineering emphasis",
-          "value": "Data quality, transformation logic and operational reporting"
-        },
-        {
-          "label": "Delivery practice",
-          "value": "Validation, documentation, review gates and clear recovery paths"
-        },
-        {
-          "label": "Tooling",
-          "value": "Python, SQL, cloud platforms, Docker, Git and browser-native JavaScript"
-        }
-      ],
-      "facts": [
-        {
-          "value": "Test",
-          "label": "before trust"
-        },
-        {
-          "value": "Explain",
-          "label": "before handoff"
-        },
-        {
-          "value": "Recover",
-          "label": "before scale"
-        }
+        { "label": "Engineering emphasis", "value": "Data quality, transformation logic and operational reporting" },
+        { "label": "Delivery practice", "value": "Validation, documentation and clear recovery paths" },
+        { "label": "Tooling", "value": "Python, SQL, cloud platforms, Docker and Git" }
       ],
       "actions": [
-        {
-          "label": "Explore capabilities",
-          "path": "capabilities/"
-        },
-        {
-          "label": "Read professional experience",
-          "path": "experience/"
-        }
+        { "label": "Explore capabilities", "path": "capabilities/" },
+        { "label": "Read professional experience", "path": "experience/" }
       ],
-      "outer": {
-        "large": "./scenes/forge-resolve-outer-1600.webp",
-        "small": "./scenes/forge-resolve-outer-960.webp"
-      },
-      "inner": {
-        "large": "./scenes/forge-resolve-inner-1600.webp",
-        "small": "./scenes/forge-resolve-inner-960.webp"
-      },
+      "outer": { "large": "./scenes/forge-resolve-outer-1600.webp", "small": "./scenes/forge-resolve-outer-960.webp" },
+      "inner": { "large": "./scenes/forge-resolve-inner-1600.webp", "small": "./scenes/forge-resolve-inner-960.webp" },
       "power": "solar-propulsion",
       "portalAction": "Cross the foundry floor",
-      "portalCaption": "Inspect how systems are made to endure",
-      "guideInsight": "Heat reveals weak joints. Testing reveals weak assumptions.",
-      "deepDive": {
-        "kicker": "Inside the foundry",
-        "heading": "Reliability is a product feature, not a cleanup phase.",
-        "summary": "The strongest work combines correct logic with quality controls, useful logs, explicit assumptions and a recovery route for when reality disagrees with the design.",
-        "pillars": [
-          {
-            "title": "Validation gates",
-            "body": "Reject data, states or decisions that fail explicit contracts before they contaminate later outputs."
-          },
-          {
-            "title": "Operational visibility",
-            "body": "Make system state understandable enough to diagnose, review and improve."
-          },
-          {
-            "title": "Human ownership",
-            "body": "Leave behind documentation and interfaces that support the people responsible for the system."
-          }
-        ],
-        "now": [
-          {
-            "status": "Active",
-            "title": "Retail data reliability",
-            "detail": "Improving the structure and trustworthiness of product, pricing and operational records."
-          },
-          {
-            "status": "Research",
-            "title": "Gate-design evaluation",
-            "detail": "Testing how validation gates affect decisions across changing market regimes."
-          },
-          {
-            "status": "Portfolio",
-            "title": "Release-quality automation",
-            "detail": "The site itself uses automated content, accessibility, browser and document quality gates."
-          }
-        ],
-        "notes": [
-          {
-            "question": "What is the most common hidden failure?",
-            "answer": "A pipeline that runs successfully while silently weakening the meaning of the data."
-          },
-          {
-            "question": "What is the recovery principle?",
-            "answer": "Preserve a known-good state and make the path back explicit before the next release."
-          },
-          {
-            "question": "When is a system ready to trust?",
-            "answer": "When its meaning, failure modes, tests, monitoring and recovery path are understood by more than the person who built it."
-          }
-        ],
-        "artifact": {
-          "label": "Capability route",
-          "title": "Data engineering and reliability",
-          "detail": "See the problem framing, delivery pattern, tools and linked evidence behind this practice.",
-          "path": "capabilities/"
-        }
-      }
+      "portalCaption": "The system reveals how it is built to endure"
     },
     {
       "id": "bazaar-skill",
@@ -601,115 +136,20 @@
       "eyebrow": "Capability made practical",
       "title": "Choose the problem first. Then choose the tools that earn their place.",
       "lead": "The bazaar connects technical capability to useful engagements: reliable data foundations, analysis for decisions, applied models and clear technical communication.",
-      "signal": "Capability map",
-      "signalValue": "Problem framing first; tools second; evidence always",
-      "biome": "bazaar",
       "evidence": [
-        {
-          "label": "Data engineering",
-          "value": "Structured flows, modelling, quality controls and reporting foundations"
-        },
-        {
-          "label": "Analytics",
-          "value": "Findings, transparent assumptions and stakeholder-ready recommendations"
-        },
-        {
-          "label": "Applied machine learning",
-          "value": "Problem framing, evaluation and lightweight delivery"
-        }
-      ],
-      "facts": [
-        {
-          "value": "Data",
-          "label": "foundations"
-        },
-        {
-          "value": "Decisions",
-          "label": "analysis"
-        },
-        {
-          "value": "Delivery",
-          "label": "models and tools"
-        }
+        { "label": "Data engineering", "value": "Structured flows, modelling and quality foundations" },
+        { "label": "Analytics", "value": "Findings, reporting and transparent recommendations" },
+        { "label": "Applied ML", "value": "Framing, evaluation and lightweight delivery" }
       ],
       "actions": [
-        {
-          "label": "See capability detail",
-          "path": "capabilities/"
-        },
-        {
-          "label": "Match capabilities to work",
-          "path": "work/"
-        }
+        { "label": "See capability detail", "path": "capabilities/" },
+        { "label": "Match capabilities to work", "path": "work/" }
       ],
-      "outer": {
-        "large": "./scenes/bazaar-skill-outer-1600.webp",
-        "small": "./scenes/bazaar-skill-outer-960.webp"
-      },
-      "inner": {
-        "large": "./scenes/bazaar-skill-inner-1600.webp",
-        "small": "./scenes/bazaar-skill-inner-960.webp"
-      },
+      "outer": { "large": "./scenes/bazaar-skill-outer-1600.webp", "small": "./scenes/bazaar-skill-outer-960.webp" },
+      "inner": { "large": "./scenes/bazaar-skill-inner-1600.webp", "small": "./scenes/bazaar-skill-inner-960.webp" },
       "power": "dune-surfing",
       "portalAction": "Walk the market court",
-      "portalCaption": "Compare practical service paths and supporting evidence",
-      "guideInsight": "A long tool list is not a capability. A repeatable way of solving problems is.",
-      "deepDive": {
-        "kicker": "Inside the market court",
-        "heading": "Capability is organized around outcomes, not software logos.",
-        "summary": "Each practice begins with the problem a team faces, then shows what gets delivered, how the work is communicated and where supporting evidence can be inspected.",
-        "pillars": [
-          {
-            "title": "Data engineering",
-            "body": "Build dependable data flows, transformation logic, quality checks and reporting foundations."
-          },
-          {
-            "title": "Analytics and decision support",
-            "body": "Explain what is happening, why it matters and what decision the evidence supports."
-          },
-          {
-            "title": "Applied ML and communication",
-            "body": "Evaluate models honestly, deliver them lightly and explain them to technical and non-technical audiences."
-          }
-        ],
-        "now": [
-          {
-            "status": "Core",
-            "title": "Python and SQL",
-            "detail": "Primary implementation tools for data processing, analysis, validation and automation."
-          },
-          {
-            "status": "Platform",
-            "title": "Google Cloud and containers",
-            "detail": "Cloud data work, deployment foundations and reproducible delivery environments."
-          },
-          {
-            "status": "Interface",
-            "title": "Looker, Power BI, Streamlit and web UI",
-            "detail": "Ways to make analytical outputs usable by the people making decisions."
-          }
-        ],
-        "notes": [
-          {
-            "question": "How do you choose a stack?",
-            "answer": "Start from the decision, data, constraints, ownership and operating environment."
-          },
-          {
-            "question": "What does a good interface do?",
-            "answer": "It reduces interpretation effort without hiding the assumptions that shape the result."
-          },
-          {
-            "question": "What capability matters beyond tools?",
-            "answer": "The ability to translate between business questions, data constraints, technical design and the people who must act on the result."
-          }
-        ],
-        "artifact": {
-          "label": "Capability route",
-          "title": "Practical technical work, communicated clearly",
-          "detail": "Open the full capability map with problems, delivery patterns, tools and selected evidence.",
-          "path": "capabilities/"
-        }
-      }
+      "portalCaption": "The avenue resolves into practical service paths"
     },
     {
       "id": "observatory-horizons",
@@ -718,117 +158,22 @@
       "formalName": "The Observatory of Horizons",
       "region": "The High Plateau",
       "eyebrow": "Foresight without fortune-telling",
-      "title": "Research examines possible directions without pretending uncertainty is gone.",
-      "lead": "The observatory holds accepted research, active reproducibility work, public technical experiments and long-range questions. Evidence, interpretation and ambition remain visibly distinct.",
-      "signal": "Research live",
-      "signalValue": "Accepted ISM 2026 paper plus active validation and reproducibility work",
-      "biome": "astral",
+      "title": "Research and analytics help examine possible directions, not pretend uncertainty is gone.",
+      "lead": "The observatory holds public technical experiments, current questions and long-range interests. Evidence, interpretation and ambition remain visibly distinct.",
       "evidence": [
-        {
-          "label": "Accepted paper",
-          "value": "Simulation and Historical Evaluation of Validation-Gate Design in a Regime-Adaptive Decision System"
-        },
-        {
-          "label": "Current extension",
-          "value": "Gate ablation, reproducibility and generalizability across proxy environments"
-        },
-        {
-          "label": "Broader inquiry",
-          "value": "Trading systems, applied machine learning, environmental data and decision architecture"
-        }
-      ],
-      "facts": [
-        {
-          "value": "Accepted",
-          "label": "ISM 2026"
-        },
-        {
-          "value": "Active",
-          "label": "reproducibility extension"
-        },
-        {
-          "value": "Explicit",
-          "label": "validation design"
-        }
+        { "label": "Inquiry", "value": "Trading systems, machine learning and environmental data" },
+        { "label": "Method", "value": "Simulation, historical evaluation and explicit validation" },
+        { "label": "Horizon", "value": "Systems thinking that connects technical and operating context" }
       ],
       "actions": [
-        {
-          "label": "Review research and experiments",
-          "path": "research/"
-        },
-        {
-          "label": "See current study",
-          "path": "education/"
-        }
+        { "label": "Review research and experiments", "path": "research/" },
+        { "label": "See current study", "path": "education/" }
       ],
-      "outer": {
-        "large": "./scenes/observatory-horizons-outer-1600.webp",
-        "small": "./scenes/observatory-horizons-outer-960.webp"
-      },
-      "inner": {
-        "large": "./scenes/observatory-horizons-inner-1600.webp",
-        "small": "./scenes/observatory-horizons-inner-960.webp"
-      },
+      "outer": { "large": "./scenes/observatory-horizons-outer-1600.webp", "small": "./scenes/observatory-horizons-outer-960.webp" },
+      "inner": { "large": "./scenes/observatory-horizons-inner-1600.webp", "small": "./scenes/observatory-horizons-inner-960.webp" },
       "power": "solar-propulsion",
       "portalAction": "Enter the charting chamber",
-      "portalCaption": "Open accepted work, active questions and next experiments",
-      "guideInsight": "A horizon is useful because it invites measurement, not because it promises certainty.",
-      "deepDive": {
-        "kicker": "Inside the charting chamber",
-        "heading": "The research program asks when a decision system should be allowed to act.",
-        "summary": "The accepted paper studies validation-gate design through simulation and historical evaluation in a regime-adaptive decision system. Current work extends that foundation through ablation, reproducibility and generalizability tests.",
-        "pillars": [
-          {
-            "title": "Gate design",
-            "body": "Evaluate how explicit validation conditions alter behavior, error exposure and decision quality."
-          },
-          {
-            "title": "Historical evaluation",
-            "body": "Test across changing regimes rather than assuming one stable environment."
-          },
-          {
-            "title": "Reproducibility",
-            "body": "Separate the research claim from one implementation and record enough evidence for independent checking."
-          }
-        ],
-        "now": [
-          {
-            "status": "Accepted",
-            "title": "ISM 2026 paper",
-            "detail": "Simulation and Historical Evaluation of Validation-Gate Design in a Regime-Adaptive Decision System."
-          },
-          {
-            "status": "In progress",
-            "title": "Gate ablation study",
-            "detail": "Measure what changes when individual gates are removed, weakened or recombined."
-          },
-          {
-            "status": "Next question",
-            "title": "Generalizability",
-            "detail": "Examine whether the design logic transfers beyond the original financial decision setting."
-          }
-        ],
-        "notes": [
-          {
-            "question": "Is the goal a perfect predictor?",
-            "answer": "No. The goal is a better-governed decision process with visible validation logic."
-          },
-          {
-            "question": "Why use historical evaluation?",
-            "answer": "Because changing regimes expose assumptions that a single aggregate result can hide."
-          },
-          {
-            "question": "What is the next research standard?",
-            "answer": "Ablation, reproducibility and generalizability checks that show which gates matter, under which regimes and with what uncertainty."
-          }
-        ],
-        "artifact": {
-          "label": "Research route",
-          "title": "Accepted work and active experiments",
-          "detail": "Read the new publication record, methodology summary and clearly labelled technical experiments.",
-          "path": "research/"
-        }
-      }
+      "portalCaption": "The horizon rises into a field of tested questions"
     },
     {
       "id": "oasis-audience",
@@ -839,331 +184,44 @@
       "eyebrow": "The journey becomes a conversation",
       "title": "Bring a data problem, a research question or a system that needs clarity.",
       "lead": "The final location is not an ending. It is a direct path to collaboration, documents and the conventional portfolio for visitors who want every detail without the journey.",
-      "signal": "Open channel",
-      "signalValue": "Remote, contract and globally distributed opportunities",
-      "biome": "lagoon",
       "evidence": [
-        {
-          "label": "Availability",
-          "value": "Remote, contract and globally distributed opportunities"
-        },
-        {
-          "label": "Best starting point",
-          "value": "A clear problem, current constraints and the decision at stake"
-        },
-        {
-          "label": "Direct record",
-          "value": "Resume, CV, project summaries and public contact paths"
-        }
-      ],
-      "facts": [
-        {
-          "value": "Clear",
-          "label": "problem"
-        },
-        {
-          "value": "Shared",
-          "label": "context"
-        },
-        {
-          "value": "Useful",
-          "label": "next step"
-        }
+        { "label": "Availability", "value": "Remote, contract and globally distributed opportunities" },
+        { "label": "Best starting point", "value": "A clear problem, current constraints and the decision at stake" },
+        { "label": "Direct record", "value": "Resume, CV, project summaries and public contact paths" }
       ],
       "actions": [
-        {
-          "label": "Contact Bongo",
-          "path": "contact/"
-        },
-        {
-          "label": "Open resume and CV",
-          "path": "documents/"
-        }
+        { "label": "Contact Bongo", "path": "contact/" },
+        { "label": "Open resume and CV", "path": "documents/" }
       ],
-      "outer": {
-        "large": "./scenes/oasis-audience-outer-1600.webp",
-        "small": "./scenes/oasis-audience-outer-960.webp"
-      },
-      "inner": {
-        "large": "./scenes/oasis-audience-inner-1600.webp",
-        "small": "./scenes/oasis-audience-inner-960.webp"
-      },
+      "outer": { "large": "./scenes/oasis-audience-outer-1600.webp", "small": "./scenes/oasis-audience-outer-960.webp" },
+      "inner": { "large": "./scenes/oasis-audience-inner-1600.webp", "small": "./scenes/oasis-audience-inner-960.webp" },
       "power": "reality-bending",
       "portalAction": "Enter the consultation pavilion",
-      "portalCaption": "Turn the journey into a concrete next step",
-      "guideInsight": "The best collaboration begins with the real constraint, not the polished pitch.",
-      "deepDive": {
-        "kicker": "Inside the pavilion",
-        "heading": "A strong first conversation can be simple.",
-        "summary": "Share the problem, who it affects, what has already been tried, the current constraints and the decision that needs support. That is enough to begin finding the right shape of work.",
-        "pillars": [
-          {
-            "title": "Data and analytics",
-            "body": "Untangle unreliable data flows, unclear reporting logic or decisions that need stronger evidence."
-          },
-          {
-            "title": "Applied systems",
-            "body": "Review models, automation, AI context or technical workflows that need validation and ownership."
-          },
-          {
-            "title": "Research and learning",
-            "body": "Discuss reproducibility, technical mentoring, academic collaboration or evidence-based communication."
-          }
-        ],
-        "now": [
-          {
-            "status": "Available",
-            "title": "Distributed collaboration",
-            "detail": "Open to remote, contract and globally distributed opportunities."
-          },
-          {
-            "status": "Direct",
-            "title": "Resume and CV",
-            "detail": "Browser-native documents and downloadable PDF variants remain one action away."
-          },
-          {
-            "status": "Preferred",
-            "title": "Problem-led introduction",
-            "detail": "A concise explanation of the problem and decision is more useful than a generic opportunity message."
-          }
-        ],
-        "notes": [
-          {
-            "question": "What should the first message include?",
-            "answer": "The problem, the current state, the constraint and what a useful outcome would change."
-          },
-          {
-            "question": "Where is the conventional portfolio?",
-            "answer": "Static View remains available from every major surface of the experience."
-          },
-          {
-            "question": "What kind of collaboration fits best?",
-            "answer": "Work where evidence, systems thinking and clear delivery can turn a complex operating question into a usable decision or dependable product."
-          }
-        ],
-        "artifact": {
-          "label": "Next step",
-          "title": "Contact and professional documents",
-          "detail": "Open direct contact paths or review the complete resume and CV before reaching out.",
-          "path": "contact/"
-        }
-      }
+      "portalCaption": "The route settles into a clear next step"
     }
   ],
   "powers": {
-    "dune-surfing": {
-      "name": "Dune Surf",
-      "durationMs": 1050,
-      "className": "is-dune-surfing",
-      "glyph": "≈",
-      "description": "Ride a fast sand wake across the horizon."
-    },
-    "sand-teleportation": {
-      "name": "Sandfold",
-      "durationMs": 920,
-      "className": "is-sand-teleporting",
-      "glyph": "✦",
-      "description": "Dissolve the route into grains and reform at the next waystation."
-    },
-    "solar-propulsion": {
-      "name": "Solar Step",
-      "durationMs": 1120,
-      "className": "is-solar-propelling",
-      "glyph": "☼",
-      "description": "Cross the map in a controlled burst of warm light."
-    },
-    "reality-bending": {
-      "name": "Reality Fold",
-      "durationMs": 980,
-      "className": "is-reality-bending",
-      "glyph": "◇",
-      "description": "Fold the current scene through a mirrored threshold."
-    }
+    "dune-surfing": { "name": "Dune Surfing", "durationMs": 1050, "className": "is-dune-surfing" },
+    "sand-teleportation": { "name": "Sand Teleportation", "durationMs": 920, "className": "is-sand-teleporting" },
+    "solar-propulsion": { "name": "Solar Propulsion", "durationMs": 1120, "className": "is-solar-propelling" },
+    "reality-bending": { "name": "Reality Bending", "durationMs": 980, "className": "is-reality-bending" }
   },
   "guides": [
-    {
-      "id": "dn-m-afr-01",
-      "name": "Amani",
-      "presentation": "Masculine",
-      "inspiration": "African-inspired",
-      "src": "./characters/dn-m-afr-01.svg",
-      "alt": "Full-body african-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Systems pathfinder",
-      "temperament": "Measured and resolute",
-      "accent": "#d7a94c",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-m-eas-01",
-      "name": "Ren",
-      "presentation": "Masculine",
-      "inspiration": "East Asian-inspired",
-      "src": "./characters/dn-m-eas-01.svg",
-      "alt": "Full-body east asian-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Pattern reader",
-      "temperament": "Quiet and exact",
-      "accent": "#73a6ad",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-m-sas-01",
-      "name": "Arun",
-      "presentation": "Masculine",
-      "inspiration": "South Asian-inspired",
-      "src": "./characters/dn-m-sas-01.svg",
-      "alt": "Full-body south asian-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Model cartographer",
-      "temperament": "Curious and analytical",
-      "accent": "#d28b55",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-m-mena-01",
-      "name": "Zayd",
-      "presentation": "Masculine",
-      "inspiration": "Middle Eastern and North African-inspired",
-      "src": "./characters/dn-m-mena-01.svg",
-      "alt": "Full-body middle eastern and north african-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Instrument keeper",
-      "temperament": "Patient and observant",
-      "accent": "#c5a45e",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-m-eur-01",
-      "name": "Rowan",
-      "presentation": "Masculine",
-      "inspiration": "European-inspired",
-      "src": "./characters/dn-m-eur-01.svg",
-      "alt": "Full-body european-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Route engineer",
-      "temperament": "Practical and direct",
-      "accent": "#6e94aa",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-f-afr-01",
-      "name": "Zuri",
-      "presentation": "Feminine",
-      "inspiration": "African-inspired",
-      "src": "./characters/dn-f-afr-01.svg",
-      "alt": "Full-body african-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Evidence guardian",
-      "temperament": "Warm and fearless",
-      "accent": "#d65d69",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-f-eas-01",
-      "name": "Mei",
-      "presentation": "Feminine",
-      "inspiration": "East Asian-inspired",
-      "src": "./characters/dn-f-eas-01.svg",
-      "alt": "Full-body east asian-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Signal interpreter",
-      "temperament": "Calm and perceptive",
-      "accent": "#70aaa7",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-f-sas-01",
-      "name": "Priya",
-      "presentation": "Feminine",
-      "inspiration": "South Asian-inspired",
-      "src": "./characters/dn-f-sas-01.svg",
-      "alt": "Full-body south asian-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Research lantern",
-      "temperament": "Reflective and inventive",
-      "accent": "#c86d99",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-f-mena-01",
-      "name": "Layla",
-      "presentation": "Feminine",
-      "inspiration": "Middle Eastern and North African-inspired",
-      "src": "./characters/dn-f-mena-01.svg",
-      "alt": "Full-body middle eastern and north african-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Atlas historian",
-      "temperament": "Steady and insightful",
-      "accent": "#c5935b",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-f-eur-01",
-      "name": "Elara",
-      "presentation": "Feminine",
-      "inspiration": "European-inspired",
-      "src": "./characters/dn-f-eur-01.svg",
-      "alt": "Full-body european-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Archive editor",
-      "temperament": "Clear and attentive",
-      "accent": "#809bb1",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-afr-01",
-      "name": "Nia",
-      "presentation": "Neutral",
-      "inspiration": "African-inspired",
-      "src": "./characters/dn-n-afr-01.svg",
-      "alt": "Full-body african-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Constraint scout",
-      "temperament": "Bold and grounded",
-      "accent": "#d5a65b",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-eas-01",
-      "name": "Sora",
-      "presentation": "Neutral",
-      "inspiration": "East Asian-inspired",
-      "src": "./characters/dn-n-eas-01.svg",
-      "alt": "Full-body east asian-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Interface weaver",
-      "temperament": "Playful and precise",
-      "accent": "#74a98d",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-sas-01",
-      "name": "Kavi",
-      "presentation": "Neutral",
-      "inspiration": "South Asian-inspired",
-      "src": "./characters/dn-n-sas-01.svg",
-      "alt": "Full-body south asian-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Experiment guide",
-      "temperament": "Open and methodical",
-      "accent": "#a489ba",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-mena-01",
-      "name": "Noor",
-      "presentation": "Neutral",
-      "inspiration": "Middle Eastern and North African-inspired",
-      "src": "./characters/dn-n-mena-01.svg",
-      "alt": "Full-body middle eastern and north african-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Horizon reader",
-      "temperament": "Reserved and discerning",
-      "accent": "#b99a67",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-eur-01",
-      "name": "Avery",
-      "presentation": "Neutral",
-      "inspiration": "European-inspired",
-      "src": "./characters/dn-n-eur-01.svg",
-      "alt": "Full-body european-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Lens maker",
-      "temperament": "Adaptable and candid",
-      "accent": "#7d929d",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    }
+    { "id": "dn-m-afr-01", "name": "Amani", "presentation": "Masculine", "inspiration": "African-inspired", "src": "./characters/dn-m-afr-01.webp", "alt": "Full-body African-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-m-eas-01", "name": "Ren", "presentation": "Masculine", "inspiration": "East Asian-inspired", "src": "./characters/dn-m-eas-01.webp", "alt": "Full-body East Asian-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-m-sas-01", "name": "Arun", "presentation": "Masculine", "inspiration": "South Asian-inspired", "src": "./characters/dn-m-sas-01.webp", "alt": "Full-body South Asian-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-m-mena-01", "name": "Zayd", "presentation": "Masculine", "inspiration": "Middle Eastern and North African-inspired", "src": "./characters/dn-m-mena-01.webp", "alt": "Full-body Middle Eastern and North African-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-m-eur-01", "name": "Rowan", "presentation": "Masculine", "inspiration": "European-inspired", "src": "./characters/dn-m-eur-01.webp", "alt": "Full-body European-inspired masculine Anzania guide in layered desert garments." },
+    { "id": "dn-f-afr-01", "name": "Zuri", "presentation": "Feminine", "inspiration": "African-inspired", "src": "./characters/dn-f-afr-01.webp", "alt": "Full-body African-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-f-eas-01", "name": "Mei", "presentation": "Feminine", "inspiration": "East Asian-inspired", "src": "./characters/dn-f-eas-01.webp", "alt": "Full-body East Asian-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-f-sas-01", "name": "Priya", "presentation": "Feminine", "inspiration": "South Asian-inspired", "src": "./characters/dn-f-sas-01.webp", "alt": "Full-body South Asian-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-f-mena-01", "name": "Layla", "presentation": "Feminine", "inspiration": "Middle Eastern and North African-inspired", "src": "./characters/dn-f-mena-01.webp", "alt": "Full-body Middle Eastern and North African-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-f-eur-01", "name": "Elara", "presentation": "Feminine", "inspiration": "European-inspired", "src": "./characters/dn-f-eur-01.webp", "alt": "Full-body European-inspired feminine Anzania guide in layered desert garments." },
+    { "id": "dn-n-afr-01", "name": "Nia", "presentation": "Neutral", "inspiration": "African-inspired", "src": "./characters/dn-n-afr-01.webp", "alt": "Full-body African-inspired gender-neutral Anzania guide in layered desert garments." },
+    { "id": "dn-n-eas-01", "name": "Sora", "presentation": "Neutral", "inspiration": "East Asian-inspired", "src": "./characters/dn-n-eas-01.webp", "alt": "Full-body East Asian-inspired gender-neutral Anzania guide in layered desert garments." },
+    { "id": "dn-n-sas-01", "name": "Kavi", "presentation": "Neutral", "inspiration": "South Asian-inspired", "src": "./characters/dn-n-sas-01.webp", "alt": "Full-body South Asian-inspired gender-neutral Anzania guide in layered desert garments." },
+    { "id": "dn-n-mena-01", "name": "Noor", "presentation": "Neutral", "inspiration": "Middle Eastern and North African-inspired", "src": "./characters/dn-n-mena-01.webp", "alt": "Full-body Middle Eastern and North African-inspired gender-neutral Anzania guide in layered desert garments." },
+    { "id": "dn-n-eur-01", "name": "Avery", "presentation": "Neutral", "inspiration": "European-inspired", "src": "./characters/dn-n-eur-01.webp", "alt": "Full-body European-inspired gender-neutral Anzania guide in layered desert garments." }
   ],
-  "atlas": {
-    "src": "./maps/anzania-atlas.webp",
-    "alt": "Illustrated atlas of the eight fictional locations in Anzania."
-  }
+  "atlas": { "src": "./maps/anzania-atlas.webp", "alt": "Illustrated atlas of the eight fictional locations in Anzania." }
 }

@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -49,59 +49,8 @@ jobs:
       - name: Install browser runtimes
         run: pnpm exec playwright install --with-deps chrome chromium firefox webkit
 
-      - name: Check formatting
-        run: pnpm run format:check
-
-      - name: Lint source
-        run: pnpm run lint
-
-      - name: Check Astro and TypeScript
-        run: pnpm run check
-
-      - name: Run unit tests
-        run: pnpm run test:unit
-
-      - name: Build production release
-        run: pnpm run build
-
-      - name: Run browser journeys
-        shell: bash
-        run: |
-          set -o pipefail
-          if ! pnpm run test:e2e 2>&1 | tee playwright-e2e.log; then
-            {
-              echo "## Playwright browser-journey failure"
-              echo
-              echo '```text'
-              tail -n 240 playwright-e2e.log
-              echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
-            exit 1
-          fi
-
-      - name: Upload browser failure evidence
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-failure-report
-          path: |
-            playwright-e2e.log
-            playwright-report
-            test-results
-          if-no-files-found: ignore
-          retention-days: 7
-
-      - name: Verify Lighthouse budgets
-        run: pnpm run verify:lighthouse
-
-      - name: Upload Lighthouse failure evidence
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-failure-report
-          path: AI-COLLAB/.watch-state/lighthouse
-          if-no-files-found: ignore
-          retention-days: 7
+      - name: Run production quality gates
+        run: pnpm run qa
 
       - name: Configure GitHub Pages
         if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
