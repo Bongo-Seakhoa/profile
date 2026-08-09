@@ -88,13 +88,7 @@ const forbiddenRuntimeExtensions = new Set([
   ".wasm",
   ".webm",
 ]);
-const allowedImmersiveExtensions = new Set([
-  ".css",
-  ".js",
-  ".json",
-  ".svg",
-  ".webp",
-]);
+const allowedImmersiveExtensions = new Set([".css", ".js", ".json", ".webp"]);
 const allowedStaticExtensions = new Set([".js"]);
 
 for (const path of distFiles) {
@@ -155,7 +149,7 @@ for (const path of htmlFiles) {
       "/profile/assets/immersive/anzania-explorer.js",
       "An original fictional world",
       "Continue in Static View",
-      'data-guide-contract="full-body companion"',
+      "full-body companion",
     ];
     for (const fragment of requiredFragments) {
       if (!html.includes(fragment)) {

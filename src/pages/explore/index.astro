@@ -83,10 +83,6 @@ const structuredData = JSON.stringify({
       rel="stylesheet"
       href={sitePath("assets/immersive/anzania-explorer.css")}
     />
-    <link
-      rel="stylesheet"
-      href={sitePath("assets/immersive/anzania-explorer-v2.css")}
-    />
 
     <meta property="og:site_name" content="Bongo Seakhoa - Portfolio" />
     <meta property="og:type" content="website" />
@@ -114,8 +110,6 @@ const structuredData = JSON.stringify({
       id="experience"
       data-experience
       data-scene-mode="outer"
-      data-biome="sand"
-      data-active-power="sand-teleportation"
     >
       <div class="scene" aria-hidden="true">
         <div class="scene__image scene__image--previous" data-scene-previous>
@@ -129,21 +123,12 @@ const structuredData = JSON.stringify({
         <div class="scene__dust scene__dust--near"></div>
         <div class="scene__dust scene__dust--far"></div>
         <div class="scene__horizon-line"></div>
-        <div class="scene__environment" data-environment-fx>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-        </div>
-        <div class="scene__cursor-field"></div>
       </div>
 
       <div class="power-transition" data-power-transition aria-hidden="true">
         <span class="power-transition__sun"></span>
         <span class="power-transition__sand"></span>
         <span class="power-transition__wake"></span>
-        <span class="power-transition__name" data-power-transition-name
-          >Sandfold</span
-        >
       </div>
 
       <div
@@ -182,9 +167,8 @@ const structuredData = JSON.stringify({
             Its places are narrative spaces, not real geography.
           </p>
           <p class="arrival-gate__invitation">
-            Cross eight locations. Choose an original illustrated companion and
-            decide how you travel. Every place opens into a deeper, living
-            record of the work.
+            Cross eight locations. Meet the evidence behind the work. Choose a
+            companion to travel beside you.
           </p>
           <div class="arrival-gate__actions">
             <button
@@ -279,26 +263,16 @@ const structuredData = JSON.stringify({
           class="chapter-panel"
           id="chapter-content"
           data-chapter-panel
-          data-mode="outer"
           tabindex="-1"
         >
           <div class="chapter-panel__rule" aria-hidden="true"></div>
-          <div class="chapter-panel__meta">
-            <p class="chapter-panel__eyebrow" data-chapter-eyebrow>
-              The point of entry
-            </p>
-            <p class="chapter-panel__signal">
-              <span data-chapter-signal>Now building</span>
-              <strong data-chapter-signal-value
-                >Reliable company intelligence and retail data systems</strong
-              >
-            </p>
-          </div>
+          <p class="chapter-panel__eyebrow" data-chapter-eyebrow>
+            The point of entry
+          </p>
           <h2 data-chapter-title>
             Work that turns ambiguity into usable systems.
           </h2>
           <p class="chapter-panel__lead" data-chapter-lead></p>
-          <div class="chapter-panel__facts" data-chapter-facts></div>
           <div class="chapter-panel__evidence" data-chapter-evidence></div>
           <div class="chapter-panel__actions" data-chapter-actions></div>
           <button class="portal-button" data-portal-button type="button">
@@ -306,72 +280,22 @@ const structuredData = JSON.stringify({
             <span class="portal-button__copy">
               <span data-portal-action>Enter this place</span>
               <small data-portal-caption>
-                Open the working map behind the portfolio
+                Reality bends from the horizon into the evidence
               </small>
             </span>
           </button>
-
-          <section
-            class="chapter-panel__inside"
-            data-chapter-inside
-            aria-labelledby="inside-title"
-            hidden
-          >
-            <div class="chapter-panel__inside-header">
-              <div>
-                <p data-chapter-inside-kicker>Inside the waystation</p>
-                <h3 id="inside-title" data-chapter-inside-title>
-                  A live map of what Bongo is building now.
-                </h3>
-              </div>
-              <p
-                class="chapter-panel__inside-summary"
-                data-chapter-inside-summary
-              >
-              </p>
-            </div>
-            <div
-              class="chapter-panel__tabs"
-              data-chapter-tabs
-              role="tablist"
-              aria-label="Inside this place"
-            >
-            </div>
-            <div
-              class="chapter-panel__tab-panel"
-              id="inside-panel"
-              data-chapter-tab-panel
-              role="tabpanel"
-              tabindex="0"
-            >
-            </div>
-            <a
-              class="chapter-panel__artifact"
-              data-chapter-artifact
-              href={sitePath("work/")}
-            >
-              <span>Recommended route</span>
-              <strong>Systems, research and professional record</strong>
-              <small>Continue into the complete evidence.</small>
-              <b aria-hidden="true">↗</b>
-            </a>
-          </section>
         </main>
 
         <figure
           class="companion"
           data-companion
-          data-guide-contract="full-body companion"
           aria-labelledby="companion-name"
         >
-          <div class="companion__plate" aria-hidden="true"></div>
-          <div class="companion__rim" aria-hidden="true"></div>
           <div class="companion__aura" aria-hidden="true"></div>
-          <div class="companion__ground" aria-hidden="true"></div>
           <img
             data-companion-image
-            src={sitePath("assets/immersive/characters/dn-m-afr-01.svg")}
-            alt="Full-body African-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style."
+            src={sitePath("assets/immersive/characters/dn-m-afr-01.webp")}
+            alt="Full-body African-inspired masculine Anzania guide wearing layered desert garments."
             width="540"
             height="1280"
             decoding="async"
@@ -379,32 +303,11 @@ const structuredData = JSON.stringify({
           <figcaption>
             <span class="companion__role">YOUR GUIDE</span>
             <strong id="companion-name" data-companion-name>Amani</strong>
-            <span class="companion__specialty" data-guide-specialty
-              >Systems pathfinder</span
-            >
-            <span class="companion__temperament" data-guide-temperament
-              >Measured and resolute</span
-            >
           </figcaption>
-          <blockquote class="companion__insight" data-guide-insight>
-            Begin with the system, then follow the evidence that makes it real.
-          </blockquote>
         </figure>
 
-        <section
-          class="ability-dock"
-          data-ability-dock
-          aria-labelledby="ability-dock-title"
-        >
-          <header class="ability-dock__header">
-            <p id="ability-dock-title">Choose how you cross</p>
-            <span data-selected-ability-name>Sandfold</span>
-          </header>
-          <div class="ability-dock__list" data-ability-list></div>
-        </section>
-
         <div class="look-control">
-          <button data-look-back-button type="button" aria-pressed="false">
+          <button data-look-back-button type="button">
             <span class="look-control__icon" aria-hidden="true">↶</span>
             <span>Hold to look back</span>
           </button>
@@ -434,7 +337,7 @@ const structuredData = JSON.stringify({
 
         <p class="mode-indicator" data-mode-indicator>
           <span aria-hidden="true"></span>
-          <b data-mode-copy>Outer approach</b>
+          Outer approach
         </p>
       </div>
 
@@ -488,14 +391,11 @@ const structuredData = JSON.stringify({
         <div class="explore-dialog__frame">
           <header class="explore-dialog__header">
             <div>
-              <p class="dialog-kicker">
-                Fifteen original illustrated companions
-              </p>
-              <h2 id="guide-dialog-title">Choose your guide</h2>
+              <p class="dialog-kicker">Fifteen complete silhouettes</p>
+              <h2 id="guide-dialog-title">Choose your companion</h2>
               <p>
-                Every guide is a newly authored 2.5D vector character with a
-                distinct role, temperament and expedition silhouette. The full
-                body remains visible throughout the journey.
+                Your guide remains a distant, full-body companion throughout the
+                journey.
               </p>
             </div>
             <button
@@ -535,10 +435,7 @@ const structuredData = JSON.stringify({
             <label class="option-row">
               <span>
                 <strong>Atmospheric motion</strong>
-                <small>
-                  Pointer-responsive sand, water, fire, parallax and authored
-                  traversal effects.
-                </small>
+                <small>Parallax, dust and authored traversal effects.</small>
               </span>
               <input data-motion-toggle type="checkbox" checked />
             </label>
@@ -553,8 +450,8 @@ const structuredData = JSON.stringify({
               <span>
                 <strong>Keyboard controls</strong>
                 <small>
-                  Left / right travel · Enter opens a place · M atlas · G guide
-                  · hold L look back · Esc close
+                  Left / right travel · Enter portal · M atlas · G guide · hold
+                  L look back · Esc close
                 </small>
               </span>
             </div>
@@ -592,9 +489,7 @@ const structuredData = JSON.stringify({
       </section>
     </noscript>
 
-    <script
-      is:inline
-      type="module"
-      src={sitePath("assets/immersive/anzania-explorer.js")}></script>
+    <script type="module" src={sitePath("assets/immersive/anzania-explorer.js")}
+    ></script>
   </body>
 </html>
