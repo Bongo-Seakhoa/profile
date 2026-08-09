@@ -29,6 +29,30 @@ const experiments = researchProjects.filter(
 const technicalStudies = researchProjects.filter(
   (project) => project.status !== "experiment",
 );
+
+const currentResearch = [
+  {
+    index: "01",
+    status: "Reproducibility",
+    title: "Validation-gate ablation",
+    summary:
+      "Isolate the contribution of individual validation gates and test whether the observed effect survives alternative specifications, seeds and reporting choices.",
+  },
+  {
+    index: "02",
+    status: "Generalizability",
+    title: "Cross-domain proxy evaluation",
+    summary:
+      "Examine how the decision-system logic transfers beyond the original market setting, including the limits of manufacturing and operational proxy data.",
+  },
+  {
+    index: "03",
+    status: "Research design",
+    title: "Regime-aware historical evaluation",
+    summary:
+      "Refine the separation between simulation, historical evidence and production claims while preserving an explicit audit trail for every conclusion.",
+  },
+];
 ---
 
 <BaseLayout
@@ -40,10 +64,99 @@ const technicalStudies = researchProjects.filter(
   <ContentStyles />
   <PageMasthead
     slot="masthead"
-    eyebrow="Inquiry and experimentation"
+    eyebrow="Inquiry, validation and experimentation"
     title={route.title}
-    lede="Public notebooks, model interpretation work and trading-system experiments. Status labels distinguish evidence without presenting experiments as publications."
+    lede="Accepted research, active validation work, public notebooks and technical experiments. Each record states what has been tested, what remains open and what the evidence can support."
   />
+
+  <section
+    class="page-section research-feature"
+    aria-labelledby="accepted-paper-title"
+  >
+    <Container>
+      <article class="accepted-paper" data-signal-card>
+        <div class="accepted-paper__signal" aria-hidden="true">
+          <span>ISM</span>
+          <strong>2026</strong>
+          <i></i>
+        </div>
+        <div class="accepted-paper__body">
+          <div class="accepted-paper__meta">
+            <p>Accepted research paper</p>
+            <StatusBadge label="Accepted for ISM 2026" tone="public" />
+          </div>
+          <h2 id="accepted-paper-title">
+            Simulation and Historical Evaluation of Validation-Gate Design in a
+            Regime-Adaptive Decision System
+          </h2>
+          <p class="accepted-paper__summary">
+            The study examines how validation gates shape the behaviour and
+            historical evaluation of a regime-adaptive decision system. It keeps
+            simulation, historical evidence and operational claims distinct so
+            that the result remains useful without overstating certainty.
+          </p>
+          <div class="accepted-paper__methods" aria-label="Research design">
+            <div>
+              <span>01</span>
+              <strong>Simulation</strong>
+              <p>
+                Controlled evaluation of gate behaviour under explicit
+                conditions.
+              </p>
+            </div>
+            <div>
+              <span>02</span>
+              <strong>Historical evaluation</strong>
+              <p>
+                Performance examined against recorded market regimes and
+                constraints.
+              </p>
+            </div>
+            <div>
+              <span>03</span>
+              <strong>Claim discipline</strong>
+              <p>
+                Clear boundaries between experiment, evidence and production
+                readiness.
+              </p>
+            </div>
+          </div>
+          <p class="accepted-paper__note">
+            Acceptance is reported directly. Publication details and final
+            proceedings links will be added when they become publicly available.
+          </p>
+        </div>
+      </article>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface current-program"
+    aria-labelledby="current-program-title"
+  >
+    <Container>
+      <SectionIntro
+        id="current-program-title"
+        eyebrow="Current research program"
+        title="What is being tested next"
+        description="The accepted paper is a milestone, not an endpoint. The next work focuses on reproducibility, ablation and the boundaries of generalization."
+      />
+      <div class="current-program__grid">
+        {
+          currentResearch.map((record) => (
+            <article class="research-track" data-signal-card>
+              <header>
+                <span>{record.index}</span>
+                <p>{record.status}</p>
+              </header>
+              <h3>{record.title}</h3>
+              <p>{record.summary}</p>
+            </article>
+          ))
+        }
+      </div>
+    </Container>
+  </section>
 
   <section
     class="page-section page-section--compact"
@@ -54,29 +167,14 @@ const technicalStudies = researchProjects.filter(
         <div>
           <h2 id="status-legend-title">Status legend</h2>
           <p>
-            Labels describe the record type. They do not imply peer review or
-            publication.
+            Labels describe the record type. They do not turn experiments into
+            publications or private work into public evidence.
           </p>
         </div>
         <div>
           <StatusBadge label="Public project" tone="public" />
           <StatusBadge label="Experiment" tone="experiment" />
         </div>
-      </div>
-    </Container>
-  </section>
-
-  <section
-    class="page-section page-section--surface"
-    aria-labelledby="publications-title"
-  >
-    <Container>
-      <div class="empty-state">
-        <h2 id="publications-title">Publications</h2>
-        <p>
-          No approved publication record is currently listed. Public technical
-          projects and experiments appear below with direct source links.
-        </p>
       </div>
     </Container>
   </section>
@@ -121,6 +219,258 @@ const technicalStudies = researchProjects.filter(
 </BaseLayout>
 
 <style>
+  .research-feature {
+    position: relative;
+    padding-block-start: clamp(2.5rem, 6vw, 6rem);
+  }
+
+  .accepted-paper {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.28fr) minmax(0, 1fr);
+    min-height: 34rem;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    background:
+      radial-gradient(
+        circle at 86% 12%,
+        rgb(211 166 81 / 18%),
+        transparent 30%
+      ),
+      linear-gradient(145deg, rgb(251 245 234 / 98%), rgb(229 214 189 / 90%));
+    box-shadow: 0 2rem 6rem rgb(43 30 19 / 9%);
+  }
+
+  .accepted-paper::after {
+    position: absolute;
+    z-index: 0;
+    right: -8rem;
+    bottom: -11rem;
+    inline-size: 30rem;
+    block-size: 30rem;
+    border: 1px solid rgb(126 75 45 / 13%);
+    content: "";
+    transform: rotate(45deg);
+  }
+
+  .accepted-paper__signal {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: space-between;
+    min-block-size: 100%;
+    padding: clamp(1.6rem, 4vw, 3rem);
+    color: var(--cream);
+    background:
+      linear-gradient(180deg, rgb(56 47 38 / 96%), rgb(31 27 23 / 98%)),
+      var(--ink);
+  }
+
+  .accepted-paper__signal::before {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      135deg,
+      transparent 0 2.2rem,
+      rgb(237 201 120 / 6%) 2.25rem 2.3rem
+    );
+    content: "";
+  }
+
+  .accepted-paper__signal span,
+  .accepted-paper__signal strong,
+  .accepted-paper__signal i {
+    position: relative;
+    z-index: 1;
+  }
+
+  .accepted-paper__signal span {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: 0.18em;
+  }
+
+  .accepted-paper__signal strong {
+    align-self: center;
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 7vw, 7rem);
+    font-weight: 450;
+    line-height: 0.8;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  .accepted-paper__signal i {
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
+  }
+
+  .accepted-paper__body {
+    position: relative;
+    z-index: 1;
+    padding: clamp(2rem, 6vw, 5rem);
+  }
+
+  .accepted-paper__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .accepted-paper__meta p {
+    margin: 0;
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .accepted-paper h2 {
+    max-inline-size: 22ch;
+    margin-block: clamp(1.8rem, 4vw, 3.5rem) var(--space-5);
+    font-size: clamp(2.25rem, 5vw, 5.5rem);
+    font-weight: 470;
+    letter-spacing: -0.045em;
+    line-height: 0.96;
+  }
+
+  .accepted-paper__summary {
+    max-inline-size: 72ch;
+    color: var(--ink-soft);
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .accepted-paper__methods {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin-block-start: clamp(2rem, 5vw, 4rem);
+    border: 1px solid var(--line-strong);
+    background: var(--line-strong);
+  }
+
+  .accepted-paper__methods > div {
+    min-inline-size: 0;
+    padding: var(--space-5);
+    background: rgb(251 245 234 / 88%);
+  }
+
+  .accepted-paper__methods span,
+  .accepted-paper__methods strong {
+    display: block;
+  }
+
+  .accepted-paper__methods span {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+  }
+
+  .accepted-paper__methods strong {
+    margin-block-start: var(--space-3);
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+  }
+
+  .accepted-paper__methods p {
+    margin-block: var(--space-2) 0;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+
+  .accepted-paper__note {
+    max-inline-size: 76ch;
+    margin-block: var(--space-5) 0;
+    padding-inline-start: var(--space-4);
+    border-inline-start: 2px solid var(--gold);
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  .current-program {
+    position: relative;
+  }
+
+  .current-program__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin-block-start: var(--space-7);
+  }
+
+  .research-track {
+    position: relative;
+    min-block-size: 22rem;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    background:
+      radial-gradient(
+        circle at var(--signal-x, 86%) var(--signal-y, 10%),
+        rgb(211 166 81 / 13%),
+        transparent 34%
+      ),
+      rgb(251 245 234 / 86%);
+  }
+
+  .research-track::after {
+    position: absolute;
+    right: -4.5rem;
+    bottom: -4.5rem;
+    inline-size: 9rem;
+    block-size: 9rem;
+    border: 1px solid rgb(126 75 45 / 15%);
+    content: "";
+    transform: rotate(45deg);
+  }
+
+  .research-track header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .research-track header span,
+  .research-track header p {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .research-track header span {
+    color: var(--rust-strong);
+  }
+
+  .research-track header p {
+    color: var(--ink-soft);
+  }
+
+  .research-track h3 {
+    max-inline-size: 14ch;
+    margin-block: clamp(2.8rem, 6vw, 5.5rem) var(--space-4);
+    font-size: clamp(1.9rem, 3.2vw, 3.1rem);
+    line-height: 1;
+  }
+
+  .research-track > p {
+    position: relative;
+    z-index: 1;
+    max-inline-size: 45ch;
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+
   .research-legend {
     display: flex;
     padding: var(--space-5);
@@ -146,10 +496,53 @@ const technicalStudies = researchProjects.filter(
     gap: var(--space-2);
   }
 
+  @media (max-width: 64rem) {
+    .accepted-paper {
+      grid-template-columns: minmax(6rem, 0.18fr) minmax(0, 1fr);
+    }
+
+    .accepted-paper__methods,
+    .current-program__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .research-track {
+      min-block-size: 18rem;
+    }
+  }
+
   @media (max-width: 42rem) {
+    .accepted-paper {
+      grid-template-columns: 1fr;
+    }
+
+    .accepted-paper__signal {
+      grid-template-columns: auto 1fr auto;
+      min-block-size: auto;
+      align-items: center;
+      padding: var(--space-4);
+    }
+
+    .accepted-paper__signal strong {
+      justify-self: center;
+      font-size: 2.5rem;
+      writing-mode: horizontal-tb;
+      transform: none;
+    }
+
+    .accepted-paper__signal i {
+      inline-size: 1.5rem;
+      block-size: 1.5rem;
+    }
+
+    .accepted-paper__meta,
     .research-legend {
-      align-items: start;
+      align-items: flex-start;
       flex-direction: column;
+    }
+
+    .accepted-paper h2 {
+      font-size: clamp(2rem, 11vw, 3.6rem);
     }
   }
 </style>

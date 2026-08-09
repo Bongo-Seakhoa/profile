@@ -31,6 +31,7 @@ type Props = AccessibilityProps & {
   preload?: boolean;
   loading?: "eager" | "lazy";
   fetchPriority?: "high" | "low" | "auto";
+  decoding?: "async" | "sync" | "auto";
   fit?: "cover" | "contain";
 };
 
@@ -44,6 +45,7 @@ const {
   preload = priority,
   loading = priority || preload ? "eager" : "lazy",
   fetchPriority = priority || preload ? "high" : "auto",
+  decoding = "async",
   fit = "cover",
   decorative,
   alt,
@@ -126,7 +128,7 @@ const style = [
     alt={resolvedAlt}
     aria-hidden={isDecorative ? "true" : undefined}
     loading={loading}
-    decoding="async"
+    decoding={decoding}
     fetchpriority={fetchPriority}
   />
 </picture>

@@ -1,7 +1,6 @@
 import { readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 
-import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 
 interface SceneRecord {
@@ -16,6 +15,16 @@ interface LocationRecord {
   readonly outer: SceneRecord;
   readonly inner: SceneRecord;
   readonly power: string;
+  readonly biome: string;
+  readonly deepDive: {
+    readonly heading: string;
+    readonly pillars: readonly unknown[];
+    readonly now: readonly unknown[];
+    readonly notes: readonly {
+      readonly question: string;
+      readonly answer: string;
+    }[];
+  };
 }
 
 interface GuideRecord {
@@ -23,6 +32,8 @@ interface GuideRecord {
   readonly name: string;
   readonly presentation: "Masculine" | "Feminine" | "Neutral";
   readonly inspiration: string;
+  readonly specialty: string;
+  readonly temperament: string;
   readonly src: string;
   readonly alt: string;
 }
@@ -54,7 +65,8 @@ const repositoryRoot = resolve(import.meta.dirname, "..", "..", "..");
 const immersiveRoot = resolve(repositoryRoot, "public", "assets", "immersive");
 const manifestPath = resolve(immersiveRoot, "runtime-manifest.json");
 const runtimePath = resolve(immersiveRoot, "anzania-explorer.js");
-const cssPath = resolve(immersiveRoot, "anzania-explorer.css");
+const baseCssPath = resolve(immersiveRoot, "anzania-explorer.css");
+const v2CssPath = resolve(immersiveRoot, "anzania-explorer-v2.css");
 
 const parseManifest = async (): Promise<RuntimeManifest> =>
   JSON.parse(await readFile(manifestPath, "utf8")) as RuntimeManifest;
@@ -72,13 +84,14 @@ describe("Explore Anzania 2.5D release manifest", () => {
         "An original fictional portfolio world created for Bongo Seakhoa.",
       disclaimer:
         "Anzania is fictional. It is not Tanzania or any other real location.",
-      experience: "Cinematic 2.5D guided portfolio journey",
+      experience: "Interactive 2.5D guided portfolio journey",
     });
   });
 
-  it("ships the complete eight-location narrative and four traversal powers", async () => {
+  it("ships the complete eight-location narrative and four selectable traversal powers", async () => {
     const manifest = await parseManifest();
 
+    expect(manifest.schemaVersion).toBe("3.0.0");
     expect(manifest.locations.map(({ name }) => name)).toEqual([
       "Threshold Dunes",
       "Stone Pass of Names",
@@ -97,6 +110,16 @@ describe("Explore Anzania 2.5D release manifest", () => {
     ]);
     expect(
       manifest.locations.every(({ power }) => power in manifest.powers),
+    ).toBe(true);
+    expect(
+      manifest.locations.every(
+        ({ biome, deepDive }) =>
+          biome.length > 0 &&
+          deepDive.heading.length > 0 &&
+          deepDive.pillars.length >= 3 &&
+          deepDive.now.length >= 2 &&
+          deepDive.notes.length >= 3,
+      ),
     ).toBe(true);
   });
 
@@ -121,8 +144,8 @@ describe("Explore Anzania 2.5D release manifest", () => {
   });
 });
 
-describe("full-body companion roster", () => {
-  it("provides fifteen complete silhouettes across three presentations", async () => {
+describe("original illustrated full-body companion roster", () => {
+  it("provides fifteen distinct guides across three presentations", async () => {
     const manifest = await parseManifest();
     const counts = manifest.guides.reduce(
       (accumulator, guide) => {
@@ -137,32 +160,43 @@ describe("full-body companion roster", () => {
     expect(counts.Feminine).toBe(5);
     expect(counts.Neutral).toBe(5);
     expect(new Set(manifest.guides.map(({ id }) => id)).size).toBe(15);
+    expect(
+      manifest.guides.every(
+        ({ specialty, temperament }) =>
+          specialty.length > 0 && temperament.length > 0,
+      ),
+    ).toBe(true);
   });
 
-  it("keeps every runtime guide transparent, portrait-oriented and full-body sized", async () => {
+  it("keeps every runtime guide transparent, portrait-oriented and authored as a layered SVG", async () => {
     const manifest = await parseManifest();
 
     await Promise.all(
       manifest.guides.map(async (guide) => {
         const path = resolveManifestAsset(guide.src);
-        const metadata = await sharp(path).metadata();
+        const [source, metadata] = await Promise.all([
+          readFile(path, "utf8"),
+          stat(path),
+        ]);
 
-        expect(guide.src).toMatch(/^\.\/characters\/.+\.webp$/);
+        expect(guide.src).toMatch(/^\.\/characters\/.+\.svg$/);
         expect(guide.alt).toContain("Full-body");
-        expect(metadata.width).toBe(540);
-        expect(metadata.height).toBe(1280);
-        expect(metadata.hasAlpha).toBe(true);
-        expect((await stat(path)).size).toBeGreaterThan(50_000);
+        expect(source).toContain('<svg xmlns="http://www.w3.org/2000/svg"');
+        expect(source).toContain('viewBox="0 0 540 1280"');
+        expect(source).toContain("<linearGradient");
+        expect(source).toContain("<filter");
+        expect(metadata.size).toBeGreaterThan(4_000);
       }),
     );
   });
 });
 
 describe("responsive framing and interaction runtime", () => {
-  it("implements animated-bound safe zones without OTS framing", async () => {
-    const [runtime, css] = await Promise.all([
+  it("implements larger safe-zone framing, deep records and biome effects without OTS framing", async () => {
+    const [runtime, baseCss, v2Css] = await Promise.all([
       readFile(runtimePath, "utf8"),
-      readFile(cssPath, "utf8"),
+      readFile(baseCssPath, "utf8"),
+      readFile(v2CssPath, "utf8"),
     ]);
 
     expect(runtime).toContain("calculateFraming");
@@ -171,16 +205,24 @@ describe("responsive framing and interaction runtime", () => {
     expect(runtime).toContain("ResizeObserver");
     expect(runtime).toContain("state.isTraversing");
     expect(runtime).toContain("targetRatio");
+    expect(runtime).toContain("renderDeepDive");
+    expect(runtime).toContain("selectPower");
     expect(runtime).toContain("0.14");
     expect(runtime).toContain("0.2");
     expect(runtime).not.toMatch(/over-the-shoulder|\bOTS\b/i);
 
-    expect(css).toContain("--avatar-height");
-    expect(css).toContain("--avatar-left");
-    expect(css).toContain("--avatar-top");
-    expect(css).toContain(".experience.is-looking-back .companion img");
-    expect(css).toContain(".experience.is-traversing .companion");
-    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
+    expect(baseCss).toContain("--avatar-height");
+    expect(baseCss).toContain("--avatar-left");
+    expect(baseCss).toContain("--avatar-top");
+    expect(baseCss).toContain(".experience.is-looking-back .companion img");
+    expect(baseCss).toContain(".experience.is-traversing .companion");
+    expect(baseCss).toContain("@media (prefers-reduced-motion: reduce)");
+
+    expect(v2Css).toContain(".scene__environment");
+    expect(v2Css).toContain('.experience[data-biome="garden"]');
+    expect(v2Css).toContain('.experience[data-biome="forge"]');
+    expect(v2Css).toContain(".ability-dock");
+    expect(v2Css).toContain(".chapter-panel__inside");
   });
 
   it("keeps the immersive runtime isolated from the Static View source tree", async () => {
@@ -192,5 +234,6 @@ describe("responsive framing and interaction runtime", () => {
     expect(runtime).toContain('new URL("../../", import.meta.url)');
     expect(runtime).not.toContain("document.write");
     expect(runtime).not.toContain("eval(");
+    expect(runtime).not.toContain("canvas");
   });
 });

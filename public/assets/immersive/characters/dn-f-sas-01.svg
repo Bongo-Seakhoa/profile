@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1280" role="img" aria-labelledby="title desc">
+<title id="title">Priya, an Anzania guide</title><desc id="desc">A polished full-body 2.5D character illustration with layered desert expedition clothing and transparent background.</desc>
+<defs>
+  <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a86643"/><stop offset="1" stop-color="#77412f"/></linearGradient>
+  <linearGradient id="cloth" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8d3f6b"/><stop offset=".55" stop-color="#53243f"/><stop offset="1" stop-color="#1d1815"/></linearGradient>
+  <linearGradient id="cloth2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d08a3d"/><stop offset="1" stop-color="#182b2f"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0b2"/><stop offset=".35" stop-color="#f4cc72"/><stop offset="1" stop-color="#6d4a24"/></linearGradient>
+  <radialGradient id="faceLight" cx="35%" cy="25%" r="75%"><stop stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#090706" flood-opacity=".45"/></filter>
+  <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="12"/></filter>
+  <clipPath id="torsoClip"><path d="M91 371Q250 330 409 371L361 641Q250 670 139 641Z"/></clipPath>
+  <style>
+    .line{stroke:#251a16;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+    .fine{stroke:#2b1e18;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+    .pattern{fill:none;stroke:#f4cc72;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+  </style>
+</defs>
+<!-- grounding shadow and aura -->
+<ellipse cx="254" cy="1210" rx="151" ry="34" fill="#0b0908" opacity=".42" filter="url(#soft)"/>
+<path d="M116 1165c57-28 104-44 138-47 52-4 107 14 166 55-63-19-116-27-158-24-42 4-91 10-146 16z" fill="#f4cc72" opacity=".13"/>
+<!-- rear cape -->
+<path filter="url(#shadow)" fill="#3b293c" stroke="#201612" stroke-width="7" d="M101 392Q250 338 399 392L440 1002Q250 1088 60 1002Z"/>
+<path fill="#fff" opacity=".07" d="M123 418Q250 374 387 414L402 942Q250 1022 88 950Z"/>
+<!-- legs -->
+<g filter="url(#shadow)">
+  <path fill="url(#cloth2)" class="line" d="M132 809L232 809 234 1137 150 1137 170 797Z"/>
+  <path fill="url(#cloth2)" class="line" d="M268 809L368 809 342 1137 258 1137Z"/>
+  <path fill="#2a211b" class="line" d="M142 1111l97 2 6 78-129 0q-12-32 26-80z"/>
+  <path fill="#2a211b" class="line" d="M257 1113l96-2q39 46 27 80H251z"/>
+  <path fill="#f4cc72" opacity=".7" d="M134 1152h109v15H127zM258 1152h112l7 15H258z"/>
+</g>
+<!-- arms -->
+<g filter="url(#shadow)">
+  <path fill="url(#cloth)" class="line" d="M116 396Q111 491 118 671l69 16 45-224z"/>
+  <path fill="url(#cloth)" class="line" d="M384 396q102 95 95 275l-69 16-45-224z"/>
+  <path fill="url(#skin)" class="line" d="M116 652q18-20 48-8l30 32-16 63q-57 6-72-28z"/>
+  <path fill="url(#skin)" class="line" d="M384 652q-18-20-48-8l-30 32 16 63q57 6 72-28z"/>
+</g>
+<!-- torso and layered tunic -->
+<path filter="url(#shadow)" fill="url(#cloth)" class="line" d="M91 371Q250 330 409 371L361 641Q250 670 139 641Z"/>
+<path fill="url(#cloth2)" class="line" d="M129 616Q250 650 371 616L437 858Q250 913 63 858Z"/>
+<path fill="#d08a3d" opacity=".45" d="M109 389Q250 354 391 389L343 608Q250 632 157 608Z"/>
+<!-- sash and ornament -->
+<path fill="#d08a3d" stroke="#241915" stroke-width="6" d="M99 399l42-24 189 264-48 31z"/>
+<path fill="#f4cc72" opacity=".35" d="M123 397l16-10 188 257-16 10z"/>
+<path fill="#2e211b" stroke="#1b1310" stroke-width="6" d="M121 610Q250 638 379 610l8 52Q250 688 129 662Z"/>
+<circle fill="url(#metal)" stroke="#3d2a1f" stroke-width="5" cx="250" cy="646" r="25"/>
+<path fill="none" stroke="#fff1b2" stroke-width="5" d="M238 646l9 9 17-19"/>
+<!-- pattern panel -->
+<g class="pattern" clip-path="url(#torsoClip)"><path d="M250 570c-18-11-30-26-30-45 17 4 27 14 30 28 3-14 13-24 30-28 0 19-12 34-30 45zm0-17c-11-12-12-28 0-42 12 14 11 30 0 42z"/></g>
+<!-- neck and head -->
+<path fill="url(#skin)" class="line" d="M222 301h56l8 78q-36 33-72 0z"/>
+<ellipse fill="url(#skin)" class="line" cx="250" cy="237" rx="74" ry="92"/>
+<ellipse fill="url(#faceLight)" cx="250" cy="237" rx="69" ry="87"/>
+<path fill="#1a1512" d="M195 245c-2-65 23-98 56-98 37 0 62 36 59 99l-9 186-24-10 8-194c-10-21-22-31-34-31s-25 10-35 31l8 194-24 10z"/>
+<!-- face -->
+<path fill="none" class="fine" d="M210 228q20-12 39 0M258 228q20-12 39 0"/>
+<ellipse fill="#1d1714" cx="228" cy="242" rx="5" ry="7"/><ellipse fill="#1d1714" cx="275" cy="242" rx="5" ry="7"/>
+<path fill="none" class="fine" d="M251 244l-4 31 14 3M226 297q25 18 51 0"/>
+<path fill="#fff" opacity=".22" d="M206 194q22-34 50-35-32 18-42 57z"/>
+<!-- collar and shoulder armor -->
+<path fill="#d08a3d" class="line" d="M206 338l44 38 44-38 25 60-69 43-69-43z"/>
+<path fill="url(#metal)" class="fine" d="M86 370l62-24 17 65-73 20zM414 370l-62-24-17 65 73 20z"/>
+<!-- highlights -->
+<path fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="10" stroke-linecap="round" d="M166 430q-22 106-19 190M209 683q41 22 84 0M186 902q54 24 121 0"/>
+<!-- accessory -->
+<g class="accessory" filter="url(#shadow)"><path fill="none" stroke="#4b3224" stroke-width="14" d="M287 383c87 120 96 282 35 407"/><path fill="#53243f" d="M315 681l92 15-15 115-96-12z"/><path fill="#f4cc72" d="M328 696l64 11-8 70-70-9z"/><path fill="none" stroke="#f6d788" stroke-width="7" d="M346 715h30M343 737h34"/></g>
+<!-- foreground fabric tabs -->
+<path fill="#8d3f6b" class="line" d="M198 651l44 18-31 319-63 63z"/>
+<path fill="#d08a3d" class="line" d="M258 668l46-17 91 400-66-63z"/>
+<path fill="#f4cc72" opacity=".78" d="M208 681l15 6-28 269-17 18zM278 682l15-6 65 287-18-18z"/>
+<!-- dust flecks -->
+<g fill="#f4cc72" opacity=".38"><circle cx="92" cy="1100" r="5"/><circle cx="116" cy="1073" r="3"/><circle cx="428" cy="1124" r="4"/><circle cx="451" cy="1089" r="6"/><circle cx="81" cy="1142" r="3"/></g>
+</svg>
