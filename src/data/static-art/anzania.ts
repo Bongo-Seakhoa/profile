@@ -126,7 +126,7 @@ export const ANZANIA_PLATES = {
     sourceHeight: 941,
     focalDesktop: { xPercent: 51, yPercent: 54 },
     focalMobile: { xPercent: 51, yPercent: 55 },
-    alt: "A monumental carved arch and blue banners mark a road through the Stone Pass of Names.",
+    alt: "A monumental carved arch and blue banners mark a road through the Stone Pass of Context.",
     defaultPresentation: "decorative",
     approvedUses: ["about-identity", "future-immersive-reference"],
     publishForStaticView: false,

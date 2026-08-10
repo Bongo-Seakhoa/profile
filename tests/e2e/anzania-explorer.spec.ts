@@ -308,7 +308,7 @@ test.describe("Explore Anzania release experience", () => {
     );
     expectCompleteFullBody(await framingMetrics(page));
     await expect(page.locator("[data-location-name]")).toHaveText(
-      "Stone Pass of Names",
+      "Stone Pass of Context",
     );
     await expect(page.locator("html")).toHaveAttribute(
       "data-experience-state",
@@ -329,7 +329,7 @@ test.describe("Explore Anzania release experience", () => {
 
     await page.locator("[data-guide-button]").click();
     await expect(page.locator("[data-guide-dialog]")).toBeVisible();
-    await expect(page.locator("[data-guide-id]")).toHaveCount(15);
+    await expect(page.locator("[data-guide-id]")).toHaveCount(6);
     await expect
       .poll(() =>
         page

@@ -26,10 +26,7 @@ const featuredProjects = content.projects
       (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
       (right.featuredOrder ?? Number.MAX_SAFE_INTEGER),
   );
-const leadProject =
-  featuredProjects.find(
-    (project) => project.id === "fxpm-1-4-forex-portfolio-manager",
-  ) ?? featuredProjects[0];
+const leadProject = featuredProjects[0];
 const supportingProjects = featuredProjects.filter(
   (project) => project.id !== leadProject?.id,
 );
@@ -76,7 +73,9 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             <p class="home-hero__statement">{identity.valueStatement}</p>
 
             <div class="home-hero__actions">
-              <ActionLink href="work/">View selected work</ActionLink>
+              <ActionLink href="work/metapos-app-data-management/">
+                See MetaPOS Mind
+              </ActionLink>
               <ActionLink href="documents/" variant="secondary">
                 Resume and CV
               </ActionLink>
@@ -95,7 +94,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             <dl class="home-hero__meta">
               <div>
                 <dt>Current focus</dt>
-                <dd>Data engineering and analytics at MetaPOS</dd>
+                <dd>MetaPOS Mind, AI systems and retail data engineering</dd>
               </div>
               <div>
                 <dt>Based in</dt>
@@ -118,7 +117,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
               class="home-hero__signal-graph"
               viewBox="0 0 520 252"
               role="img"
-              aria-label="A signal path connecting data, models, systems and decisions"
+              aria-label="A signal path connecting data, AI, systems and decisions"
             >
               <path
                 class="home-hero__signal-grid"
@@ -132,7 +131,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
               <circle cx="344" cy="172" r="7"></circle>
               <circle cx="490" cy="56" r="7"></circle>
               <text x="30" y="226">DATA</text>
-              <text x="168" y="42">MODELS</text>
+              <text x="168" y="42">AI</text>
               <text x="317" y="203">SYSTEMS</text>
               <text x="424" y="31">DECISIONS</text>
               <text class="home-hero__graph-copy" x="30" y="243">
@@ -141,23 +140,33 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             </svg>
 
             <div class="home-hero__ledger-copy">
+              <p class="home-hero__flagship-label">
+                Flagship build / primary developer
+              </p>
               <h2 id="system-profile-title">
-                From raw signal to usable systems.
+                MetaPOS Mind gives AI assistants governed context.
               </h2>
               <p>
-                Cloud data engineering, applied machine learning and decision
-                support, communicated for the people who need to act.
+                A custom Python and MCP-compatible system for permission-aware
+                context, supporting evidence, work assurance and safe next
+                actions.
               </p>
+              <ul class="home-hero__stack" aria-label="MetaPOS Mind core stack">
+                <li>Python</li>
+                <li>MCP</li>
+                <li>JSON Schema</li>
+                <li>Governed context</li>
+              </ul>
             </div>
 
             <dl class="home-hero__console-grid">
               <div>
-                <dt>{String(content.projects.length).padStart(2, "0")}</dt>
-                <dd>Documented project records</dd>
+                <dt>PRIMARY</dt>
+                <dd>MetaPOS Mind developer</dd>
               </div>
               <div>
-                <dt>{String(content.experience.length).padStart(2, "0")}</dt>
-                <dd>Professional experience records</dd>
+                <dt>03</dt>
+                <dd>AI, FinTech and Data Visualization bootcamp domains</dd>
               </div>
               <div>
                 <dt>
@@ -185,15 +194,18 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
       <div class="evidence-band">
         <div class="evidence-band__item">
           <span class="evidence-band__index">01 / CURRENT</span>
-          <p>Current data engineering work at MetaPOS</p>
+          <p>MetaPOS Mind and retail data systems at MetaPOS</p>
         </div>
         <div class="evidence-band__item">
           <span class="evidence-band__index">02 / RANGE</span>
-          <p>Data engineering, analytics and applied machine learning</p>
+          <p>AI systems, data engineering, analytics and applied models</p>
         </div>
         <div class="evidence-band__item">
-          <span class="evidence-band__index">03 / STUDY</span>
-          <p>Engineering Management study at the University of Debrecen</p>
+          <span class="evidence-band__index">03 / AI LEARNING</span>
+          <p>
+            Explore AI, IBM Advanced Data Science and current Engineering
+            Management study
+          </p>
         </div>
         <div class="evidence-band__item">
           <span class="evidence-band__index">04 / VERIFIED</span>
@@ -224,7 +236,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
       <SectionIntro
         id="featured-work-title"
         eyebrow="Selected work"
-        title="Systems, analysis and applied models"
+        title="AI systems, data products and applied models"
         description="Public evidence and client-safe summaries, with scope and status stated clearly."
       />
       <div class="featured-work-grid">
@@ -254,7 +266,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
       <SectionIntro
         id="capabilities-title"
         eyebrow="Capabilities"
-        title="Practical technical work, communicated clearly"
+        title="From governed AI context to reliable data delivery"
         description="Each capability starts with the problem, then connects delivery to public or client-safe evidence."
       />
       <div class="home-capabilities">
@@ -281,7 +293,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
       <SectionIntro
         id="experience-title"
         eyebrow="Experience"
-        title="Delivery across data and learning"
+        title="Delivery across AI, data and learning"
         description="Reverse-chronological records show overlapping remote work directly, without inferring employment type."
       />
       <div class="record-stack">
@@ -375,14 +387,16 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
           />
         </div>
         <div class="home-contact-panel__copy">
-          <p class="contact-panel__eyebrow">Start a conversation</p>
-          <h2 id="contact-close-title">Bring a data problem into focus.</h2>
+          <p class="contact-panel__eyebrow">For recruiters and hiring teams</p>
+          <h2 id="contact-close-title">
+            Considering Bongo for an AI or data systems role?
+          </h2>
           <p>{identity.availability}</p>
         </div>
         <div class="contact-panel__links">
-          <a href={`mailto:${identity.email}`}>Email Bongo</a>
-          {linkedin && <a href={linkedin.url}>LinkedIn profile</a>}
-          <a href={sitePath("documents/")}>Resume and CV</a>
+          <a href={`mailto:${identity.email}`}>Email about a role</a>
+          {linkedin && <a href={linkedin.url}>Review LinkedIn</a>}
+          <a href={sitePath("documents/")}>Review resume and CV</a>
           <a href={sitePath("contact/")}>Contact details</a>
         </div>
       </div>
@@ -639,6 +653,16 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     margin-block-start: var(--space-3);
   }
 
+  .home-hero__ledger-copy .home-hero__flagship-label {
+    margin: 0 0 var(--space-2);
+    color: var(--gold-light);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
   .home-hero__ledger-copy h2 {
     max-inline-size: 18ch;
     color: var(--surface);
@@ -650,6 +674,26 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
     margin-block-start: var(--space-3);
     color: rgb(255 249 238 / 68%);
     font-size: 0.82rem;
+  }
+
+  .home-hero__stack {
+    display: flex;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    list-style: none;
+  }
+
+  .home-hero__stack li {
+    padding: 0.34rem 0.55rem;
+    border: 1px solid rgb(237 201 120 / 24%);
+    border-radius: 999px;
+    color: rgb(255 249 238 / 78%);
+    background: rgb(215 169 76 / 7%);
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.04em;
   }
 
   .home-hero__console-grid {

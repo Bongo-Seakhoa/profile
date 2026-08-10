@@ -129,7 +129,19 @@ const structuredData = JSON.stringify({
         <div class="scene__dust scene__dust--near"></div>
         <div class="scene__dust scene__dust--far"></div>
         <div class="scene__horizon-line"></div>
+        <div class="scene__sky" aria-hidden="true">
+          <span class="scene__cloud scene__cloud--one"></span>
+          <span class="scene__cloud scene__cloud--two"></span>
+          <span class="scene__cloud scene__cloud--three"></span>
+        </div>
+        <div class="scene__light-rays" aria-hidden="true"></div>
+        <div class="scene__weather" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
         <div class="scene__environment" data-environment-fx>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
           <span></span><span></span><span></span><span></span>
           <span></span><span></span><span></span><span></span>
           <span></span><span></span><span></span><span></span>
@@ -141,6 +153,10 @@ const structuredData = JSON.stringify({
         <span class="power-transition__sun"></span>
         <span class="power-transition__sand"></span>
         <span class="power-transition__wake"></span>
+        <span class="power-transition__ring"></span>
+        <span class="power-transition__portal"></span>
+        <span class="power-transition__streaks"></span>
+        <span class="power-transition__contact"></span>
         <span class="power-transition__name" data-power-transition-name
           >Sandfold</span
         >
@@ -370,10 +386,10 @@ const structuredData = JSON.stringify({
           <div class="companion__ground" aria-hidden="true"></div>
           <img
             data-companion-image
-            src={sitePath("assets/immersive/characters/dn-m-afr-01.svg")}
-            alt="Full-body African-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style."
-            width="540"
-            height="1280"
+            src={sitePath("assets/immersive/characters/amani-idle.webp")}
+            alt="Amani, a full-body Anzania expedition guide in layered amber and teal fieldwear."
+            width="640"
+            height="960"
             decoding="async"
           />
           <figcaption>
@@ -465,17 +481,44 @@ const structuredData = JSON.stringify({
             </button>
           </header>
           <div class="map-dialog__body">
-            <div class="map-dialog__art">
-              <img
-                src={sitePath("assets/immersive/maps/anzania-atlas.webp")}
-                alt="Illustrated atlas of the eight fictional locations in Anzania."
-                width="1400"
-                height="1050"
-                loading="lazy"
-              />
-              <span class="map-dialog__current" aria-hidden="true"></span>
+            <div
+              class="map-dialog__art"
+              role="group"
+              aria-label="Interactive route atlas"
+              aria-describedby="map-dialog-route-note"
+            >
+              <div class="map-dialog__terrain" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="map-dialog__route" aria-hidden="true">
+                <span class="map-dialog__route-segment"></span>
+                <span class="map-dialog__route-segment"></span>
+                <span class="map-dialog__route-segment"></span>
+                <span class="map-dialog__route-segment"></span>
+                <span class="map-dialog__route-segment"></span>
+                <span class="map-dialog__route-segment"></span>
+                <span class="map-dialog__route-segment"></span>
+              </div>
+              <div class="map-dialog__atlas-title" aria-hidden="true">
+                <span>Anzania route &middot; 01&ndash;08</span>
+                <strong>The evidence trail</strong>
+              </div>
+              <ol
+                class="map-dialog__locations"
+                data-map-location-list
+                aria-label="Choose one of the eight Anzania waystations"
+              >
+              </ol>
+              <div class="map-dialog__legend" aria-hidden="true">
+                <span><i></i>Current</span>
+                <span><i></i>Passed</span>
+                <span><i></i>Ahead</span>
+              </div>
+              <p class="map-dialog__atlas-note" id="map-dialog-route-note">
+                Select any waystation to travel there. Waystations you have
+                visited are marked as passed.
+              </p>
             </div>
-            <ol class="map-dialog__locations" data-map-location-list></ol>
           </div>
         </div>
       </dialog>
@@ -489,13 +532,14 @@ const structuredData = JSON.stringify({
           <header class="explore-dialog__header">
             <div>
               <p class="dialog-kicker">
-                Fifteen original illustrated companions
+                Six hand-painted companions &middot; four authored action poses
               </p>
               <h2 id="guide-dialog-title">Choose your guide</h2>
               <p>
-                Every guide is a newly authored 2.5D vector character with a
-                distinct role, temperament and expedition silhouette. The full
-                body remains visible throughout the journey.
+                Every guide is a hand-painted 2.5D character with authored idle,
+                presenting, travel and look-back poses, plus a distinct role,
+                temperament and expedition silhouette. The full body remains
+                visible throughout the journey.
               </p>
             </div>
             <button

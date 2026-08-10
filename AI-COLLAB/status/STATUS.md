@@ -1,31 +1,32 @@
 # Profile Upgrade status
 
-**Updated:** 2026-08-08
-**Working branch:** `agent/profile-upgrade-20260808-final`
+**Updated:** 2026-08-10
+**Working branch:** `portfolio-wow-ai-upgrade`
 **Target:** `https://bongo-seakhoa.github.io/profile/`
 
 ## Current product state
 
-| Area | State | Evidence and next gate |
-| --- | --- | --- |
-| Professional Static View | Release candidate complete | Premium systems-cartography shell, route-aware atmosphere, evidence-led homepage, redesigned work and contact routes, command navigator, reading beacon, transitions and no-JavaScript fallback are implemented. |
-| Explore Anzania | Release candidate complete | Eight locations, fifteen full-body companions, four traversal powers, atlas, dialogs and full-body safe-zone runtime are implemented. |
-| Anzania canon | Locked | Anzania is an original fictional portfolio world. It is not Tanzania or any other real location. |
-| Full-body framing | Passed in local browser QA | Complete silhouettes remained contained through tested viewport ratios, look-back, traversal, guide change and portal states. No OTS path exists. |
-| Runtime isolation | Implemented | One progressive runtime is confined to `public/assets/static/`; one immersive runtime is confined to `public/assets/immersive/`. Professional routes may not request immersive runtime assets. |
-| Resume and CV | Preserved | Four A4 documents remain generated through JavaScript, Chromium and `pdf-lib`; Python is not in the production document pipeline. |
-| Asset optimisation | Passed locally | The complete immersive bundle remains below 9 MB; each WebP is below 650 KB; compressed CSS and JavaScript remain within the release contracts. |
-| Automated release coverage | Updated | Unit, Playwright, public-output and budget contracts cover both products, no-JavaScript fallback, command navigation, reduced motion and runtime isolation. |
-| Local browser QA | Passed | Story mode passed the full matrix. The professional redesign passed desktop, intermediate, mobile, no-JavaScript, command navigation, scroll-state and reduced-motion checks without horizontal overflow or runtime errors. |
-| Canonical CI | Publication gate | Node 24.14 and pnpm 11.9 `pnpm qa` must run in GitHub Actions or an equivalent connected build environment. |
-| GitHub Pages publication | Publication gate | Push the release branch, merge to `main`, run Pages and verify live routes, documents and metadata. |
+| Area                       | State                      | Evidence and next gate                                                                                                                                                                                                      |
+| -------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Professional Static View   | Release candidate complete | MetaPOS Mind now leads an evidence-bound AI and data narrative, supported by AI-assisted delivery, bootcamp experience, credentials, direct conversion paths and the complete no-JavaScript professional record.            |
+| Explore Anzania            | Release candidate complete | Eight locations, six regenerated companions with four poses each, four differentiated traversal powers, environmental theatre, an interactive atlas, dialogs and the full-body safe-zone runtime are implemented.           |
+| Anzania canon              | Locked                     | Anzania is an original fictional portfolio world. It is not Tanzania or any other real location.                                                                                                                            |
+| Full-body framing          | Passed in local browser QA | Complete silhouettes remained contained through tested viewport ratios, look-back, traversal, guide change and portal states. No OTS path exists.                                                                           |
+| Runtime isolation          | Implemented                | One progressive runtime is confined to `public/assets/static/`; one immersive runtime is confined to `public/assets/immersive/`. Professional routes may not request immersive runtime assets.                              |
+| Resume and CV              | Preserved                  | Four A4 documents remain generated through JavaScript, Chromium and `pdf-lib`; Python is not in the production document pipeline.                                                                                           |
+| Asset optimisation         | Passed locally             | The complete immersive bundle remains below 9 MB; each WebP is below 650 KB; compressed CSS and JavaScript remain within the release contracts.                                                                             |
+| Automated release coverage | Updated                    | Unit, Playwright, public-output and budget contracts cover both products, no-JavaScript fallback, command navigation, reduced motion and runtime isolation.                                                                 |
+| Local browser QA           | Passed                     | Story mode passed the full matrix. The professional redesign passed desktop, intermediate, mobile, no-JavaScript, command navigation, scroll-state and reduced-motion checks without horizontal overflow or runtime errors. |
+| Canonical CI               | Publication gate           | Node 24.14 and pnpm 11.9 `pnpm qa` must run in GitHub Actions or an equivalent connected build environment.                                                                                                                 |
+| GitHub Pages publication   | Publication gate           | Push the release branch, merge to `main`, run Pages and verify live routes, documents and metadata.                                                                                                                         |
 
 ## Release evidence
 
 ### Explore Anzania
 
 - Eight named narrative locations and 32 responsive outer and inner scene derivatives.
-- Fifteen selectable transparent 540 by 1280 full-body companions, with five masculine, five feminine and five neutral options.
+- Six selectable transparent 640 by 960 full-body companions, each with authored idle, presenting, travel and look-back poses.
+- Location-specific clouds, rays, dust, sand, wind, mist, embers, fireflies and stellar motes respond to journey state and pointer movement.
 - Dune Surfing, Sand Teleportation, Solar Propulsion and Reality Bending transitions.
 - Responsive full-body framing at 390 by 844, 844 by 390, 768 by 1024, 1024 by 650, 1440 by 1000 and 1920 by 1080.
 - Guidance toast containment verified in portrait and low-height landscape without collisions against the companion, chapter panel, top bar, location label or traversal controls.

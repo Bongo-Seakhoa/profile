@@ -2,35 +2,99 @@
   {
     "id": "metapos-app-data-management",
     "slug": "metapos-app-data-management",
-    "title": "MetaPOS App Data Management",
-    "type": "Professional contribution",
+    "title": "MetaPOS Mind",
+    "type": "AI context and governance system",
     "status": "professional",
     "evidenceState": "client-safe-summary",
     "privacyStatus": "client-safe-summary",
-    "summary": "Supported retail point-of-sale data management work aimed at improving transaction flow, inventory visibility, sales reporting and data accuracy.",
-    "role": "Data Engineering Scientist",
-    "constraints": [],
-    "contributions": [],
-    "validation": [],
-    "outcome": null,
-    "limitations": [],
-    "technologies": ["Google Cloud Platform", "Python", "SQL"],
+    "summary": "A custom, MCP-compatible context and governance layer that gives authorized employees and AI assistants permission-aware access to current project state, supporting evidence, work profiles and safe next actions.",
+    "role": "Primary developer, AI context and governance engineering",
+    "constraints": [
+      "Company knowledge, identities and operating rules required strict permission, ownership and confidentiality boundaries.",
+      "This public case study describes the system and approved stack without exposing private records, prompts or implementation detail."
+    ],
+    "contributions": [
+      "Built the schema-first Python system across context assembly, source-metadata routing and deterministic work assurance.",
+      "Designed permission-aware structured retrieval and adaptive context packs, with a read-only MCP-compatible interface for AI-assistant use.",
+      "Implemented identity-bound handoffs, concurrent-change checks, controlled GitHub project reconciliation and permission-scoped operational dashboards."
+    ],
+    "validation": [
+      "A deterministic verification suite covers schemas, routing, access boundaries, handoffs, assurance checks and whole-system acceptance.",
+      "The public record is intentionally limited to owner-approved, client-safe claims."
+    ],
+    "outcome": "Completed as a working internal AI context and control layer after a multi-month primary-development build.",
+    "limitations": [
+      "The private source, company records, identities, rules, prompts and operational metrics are intentionally excluded from the public record.",
+      "The system is described as governed structured context assembly, not vector RAG or an autonomous agent."
+    ],
+    "technologies": [
+      "Python",
+      "MCP",
+      "JSON Schema",
+      "YAML",
+      "PyYAML",
+      "GitHub Projects",
+      "AI-assistant integration"
+    ],
     "publicUrl": "https://metapos.co.za/",
     "relatedExperienceIds": ["metapos-data-engineering-scientist"],
     "featured": true,
     "featuredOrder": 1,
-    "caseStudyDepth": "summary",
+    "caseStudyDepth": "full",
     "public": true,
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
+  },
+  {
+    "id": "anzania-ai-assisted-delivery",
+    "slug": "anzania-ai-assisted-delivery",
+    "title": "Anzania AI-Assisted Delivery System",
+    "type": "Human-governed multi-agent engineering workflow",
+    "status": "public",
+    "evidenceState": "public-repository",
+    "privacyStatus": "public",
+    "summary": "A durable two-agent delivery workflow used to build and independently audit this portfolio: Codex owned implementation, Claude owned verification and Bongo retained product, content and release authority.",
+    "role": "Product owner and release authority",
+    "constraints": [
+      "AI agents could propose and implement work, but content authority and release decisions remained human-owned.",
+      "Independent verification had to remain separate from implementation."
+    ],
+    "contributions": [
+      "Defined clear implementation, audit and owner-authority boundaries.",
+      "Coordinated durable inboxes, handoffs, heartbeats, risk records and decision logs across agents.",
+      "Required reproducible content, accessibility, browser, document and release-quality evidence before publication."
+    ],
+    "validation": [
+      "Public plans, decisions, handoffs, audits and collaboration scripts are committed with the portfolio source.",
+      "Automated unit, browser, accessibility, content and build gates verify the shipped experience."
+    ],
+    "outcome": "Shipped a verified two-experience portfolio release while preserving an inspectable record of how human judgement and AI execution were coordinated.",
+    "limitations": [
+      "Agents operated inside explicit implementation, independent-verification and human release-authority boundaries."
+    ],
+    "technologies": [
+      "Codex",
+      "Claude",
+      "GitHub Actions",
+      "PowerShell",
+      "Astro",
+      "Playwright"
+    ],
+    "publicUrl": "https://github.com/Bongo-Seakhoa/profile",
+    "relatedExperienceIds": [],
+    "featured": true,
+    "featuredOrder": 2,
+    "caseStudyDepth": "full",
+    "public": true,
+    "lastReviewed": "2026-08-10"
   },
   {
     "id": "fxpm-1-4-forex-portfolio-manager",
     "slug": "fxpm-1-4-forex-portfolio-manager",
     "title": "FxPM 1.4 - Forex Portfolio Manager",
     "type": "Full-stack trading platform",
-    "status": "public",
-    "evidenceState": "public-repository",
-    "privacyStatus": "public",
+    "status": "archived",
+    "evidenceState": "client-safe-summary",
+    "privacyStatus": "client-safe-summary",
     "summary": "Optimized forex portfolio management system with a Python backend, JavaScript frontend and integrated analytics dashboard. Manages live signal trading workflows, position tracking and risk controls.",
     "role": null,
     "constraints": [],
@@ -41,11 +105,11 @@
     "technologies": ["Python", "JavaScript", "HTML/CSS", "Trading Systems"],
     "publicUrl": "https://github.com/Bongo-Seakhoa/FxPM-1.4---Obtimized",
     "relatedExperienceIds": [],
-    "featured": true,
-    "featuredOrder": 2,
+    "featured": false,
+    "featuredOrder": null,
     "caseStudyDepth": "summary",
     "public": true,
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   },
   {
     "id": "streamlit-recommender-system",
@@ -65,8 +129,8 @@
     "technologies": ["Python", "SQL", "Streamlit", "AWS"],
     "publicUrl": "https://github.com/JS6-World/unsupervised-predict-streamlit-template",
     "relatedExperienceIds": [],
-    "featured": true,
-    "featuredOrder": 3,
+    "featured": false,
+    "featuredOrder": null,
     "caseStudyDepth": "summary",
     "public": true,
     "lastReviewed": "2026-07-30"
@@ -113,8 +177,8 @@
     "technologies": ["TensorFlow", "Deep Learning", "Computer Vision"],
     "publicUrl": "https://github.com/Bongo-Seakhoa/Visualizing_Filters_CNN",
     "relatedExperienceIds": [],
-    "featured": false,
-    "featuredOrder": null,
+    "featured": true,
+    "featuredOrder": 3,
     "caseStudyDepth": "summary",
     "public": true,
     "lastReviewed": "2026-07-30"
@@ -172,9 +236,9 @@
     "slug": "fxpm-backtester",
     "title": "FxPM Backtester",
     "type": "Quantitative analysis tool",
-    "status": "public",
-    "evidenceState": "public-repository",
-    "privacyStatus": "public",
+    "status": "archived",
+    "evidenceState": "client-safe-summary",
+    "privacyStatus": "client-safe-summary",
     "summary": "Backtesting engine built to validate forex trading strategies against historical data before live deployment in the FxPM portfolio manager.",
     "role": null,
     "constraints": [],
@@ -189,7 +253,7 @@
     "featuredOrder": null,
     "caseStudyDepth": "summary",
     "public": true,
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   },
   {
     "id": "institutional-ls-sr-trading-ea",

@@ -21,10 +21,7 @@ const sortedProjects = [...content.projects].sort((left, right) => {
     (right.featuredOrder ?? Number.MAX_SAFE_INTEGER)
   );
 });
-const leadProject =
-  sortedProjects.find(
-    (project) => project.id === "fxpm-1-4-forex-portfolio-manager",
-  ) ?? sortedProjects[0];
+const leadProject = sortedProjects[0];
 const selectedProjects = sortedProjects.filter(
   (project) => project.featured && project.id !== leadProject?.id,
 );
@@ -49,7 +46,7 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
   <section
     class="page-section work-lead-section"
     aria-labelledby="lead-work-title"
-    data-section-label="Lead system"
+    data-section-label="Flagship system"
   >
     <div class="work-lead-section__atmosphere" aria-hidden="true">
       <AnzaniaPlate
@@ -64,9 +61,9 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
     <Container>
       <SectionIntro
         id="lead-work-title"
-        eyebrow="Lead system"
-        title="A closer look at applied technical work"
-        description="The project record remains the centre of the page. Atmosphere supports the evidence rather than replacing it."
+        eyebrow="Flagship system"
+        title="MetaPOS Mind: AI interaction grounded in governed context"
+        description="The client-safe case study leads with purpose, personal contribution, technology and evidence boundaries; then the public work shows how that practice developed."
       />
 
       <div class="work-lead">
@@ -129,7 +126,7 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
       <SectionIntro
         id="selected-work-title"
         eyebrow="Selected records"
-        title="Professional and public project work"
+        title="AI-assisted delivery and applied model work"
         description="Client-sensitive contributions are intentionally concise. Public repositories link directly to their source evidence."
       />
       <div class="project-archive-grid work-record-grid">

@@ -93,6 +93,21 @@ test.describe("Static View route and accessibility contract", () => {
     });
   }
 
+  test("MetaPOS leads into the strongest related AI evidence", async ({
+    page,
+  }) => {
+    await page.goto("work/metapos-app-data-management/", {
+      waitUntil: "networkidle",
+    });
+
+    const relatedWork = page.getByRole("region", { name: "Related work" });
+    await expect(relatedWork).toContainText(
+      "Anzania AI-Assisted Delivery System",
+    );
+    await expect(relatedWork).toContainText("Visualizing Filters of a CNN");
+    await expect(relatedWork).not.toContainText("FxPM 1.4");
+  });
+
   test("key routes remain complete without JavaScript", async ({ browser }) => {
     const context = await browser.newContext({
       javaScriptEnabled: false,

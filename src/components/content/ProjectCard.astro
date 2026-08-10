@@ -41,14 +41,16 @@ const statusTone =
   <TechnologyList items={project.technologies} />
   <div class="project-card__actions">
     <a href={sitePath(`work/${project.slug}/`)}>Read project summary</a>
-    <a href={project.publicUrl} target="_blank" rel="noreferrer">
-      {
-        project.privacyStatus === "client-safe-summary"
-          ? "Visit organisation"
-          : "View public evidence"
-      }
-      <span class="visually-hidden"> for {project.title}</span>
-    </a>
+    {
+      project.status !== "archived" && (
+        <a href={project.publicUrl} target="_blank" rel="noreferrer">
+          {project.privacyStatus === "client-safe-summary"
+            ? "Visit organisation"
+            : "View public evidence"}
+          <span class="visually-hidden"> for {project.title}</span>
+        </a>
+      )
+    }
   </div>
 </article>
 

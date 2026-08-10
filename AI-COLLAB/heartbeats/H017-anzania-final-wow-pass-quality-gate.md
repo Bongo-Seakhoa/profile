@@ -4,6 +4,8 @@ Date: 2026-08-08
 Branch: `agent/anzania-final-wow-pass`
 Pull request: #6
 
+> Historical gate: the 15-guide SVG roster recorded here was superseded on 2026-08-10 by the six-guide, 24-pose production character system. This heartbeat remains unchanged as evidence of the earlier release state.
+
 ## Release scope
 
 This heartbeat records the final publication gate for the upgraded Explore Anzania experience. The branch contains the original 15-guide layered SVG roster, larger 2.5D companion framing, selectable traversal abilities, deeper eight-location dossiers, biome-aware environmental effects, the expanded ISM 2026 research record and the refined Professional Record presentation.

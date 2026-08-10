@@ -44,11 +44,23 @@ const statusTone =
   project.status === "archived" ? "historical" : project.status;
 const relatedProjects = content.projects
   .filter((entry) => entry.id !== project.id)
-  .filter((entry) =>
-    entry.technologies.some((technology) =>
+  .filter((entry) => entry.status !== "archived")
+  .sort((left, right) => {
+    if (left.featured !== right.featured) return left.featured ? -1 : 1;
+
+    const featuredOrderDifference =
+      (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.featuredOrder ?? Number.MAX_SAFE_INTEGER);
+    if (featuredOrderDifference !== 0) return featuredOrderDifference;
+
+    const leftOverlap = left.technologies.filter((technology) =>
       project.technologies.includes(technology),
-    ),
-  )
+    ).length;
+    const rightOverlap = right.technologies.filter((technology) =>
+      project.technologies.includes(technology),
+    ).length;
+    return rightOverlap - leftOverlap;
+  })
   .slice(0, 2);
 const projectSchema = {
   "@type": "CreativeWork",
@@ -100,13 +112,15 @@ const projectSchema = {
         ]}
       />
     </div>
-    <ActionLink href={project.publicUrl} newTab>
-      {
-        project.privacyStatus === "client-safe-summary"
-          ? "Visit organisation"
-          : "Open public evidence"
-      }
-    </ActionLink>
+    {
+      project.status !== "archived" && (
+        <ActionLink href={project.publicUrl} newTab>
+          {project.privacyStatus === "client-safe-summary"
+            ? "Visit organisation"
+            : "Open public evidence"}
+        </ActionLink>
+      )
+    }
     <ActionLink href="work/" variant="secondary">
       Back to work index
     </ActionLink>
@@ -119,9 +133,29 @@ const projectSchema = {
           <h2 id="on-this-page-title">On this page</h2>
           <ol>
             <li><a href="#record-title">Record scope</a></li>
+            {
+              project.constraints.length > 0 && (
+                <li>
+                  <a href="#operating-constraints">Constraints</a>
+                </li>
+              )
+            }
             <li><a href="#technical-focus">Technical focus</a></li>
+            {
+              (project.validation.length > 0 || project.outcome) && (
+                <li>
+                  <a href="#validation-outcome">Validation and outcome</a>
+                </li>
+              )
+            }
             <li><a href="#evidence-boundary">Evidence boundary</a></li>
-            <li><a href="#related-work">Related work</a></li>
+            {
+              relatedProjects.length > 0 && (
+                <li>
+                  <a href="#related-work">Related work</a>
+                </li>
+              )
+            }
           </ol>
         </aside>
         <article class="case-study">
@@ -140,6 +174,19 @@ const projectSchema = {
             }
           </section>
 
+          {
+            project.constraints.length > 0 && (
+              <section>
+                <h2 id="operating-constraints">Operating constraints</h2>
+                <ul>
+                  {project.constraints.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+
           <section>
             <h2 id="technical-focus">Technical focus</h2>
             <TechnologyList items={project.technologies} />
@@ -155,19 +202,28 @@ const projectSchema = {
                 </>
               )
             }
-            {
-              project.validation.length > 0 && (
-                <>
-                  <h3>Validation</h3>
+          </section>
+
+          {
+            (project.validation.length > 0 || project.outcome) && (
+              <section>
+                <h2 id="validation-outcome">Validation and outcome</h2>
+                {project.validation.length > 0 && (
                   <ul>
                     {project.validation.map((item) => (
                       <li>{item}</li>
                     ))}
                   </ul>
-                </>
-              )
-            }
-          </section>
+                )}
+                {project.outcome && (
+                  <div class="case-study__outcome">
+                    <strong>Outcome</strong>
+                    <p>{project.outcome}</p>
+                  </div>
+                )}
+              </section>
+            )
+          }
 
           <section class="integrity-note">
             <h2 id="evidence-boundary">Evidence boundary</h2>
@@ -190,6 +246,18 @@ const projectSchema = {
                   Evidence, limitations and validation are stated only where the
                   approved source supports them.
                 </p>
+              )
+            }
+            {
+              project.limitations.length > 0 && (
+                <>
+                  <h3>Published limits</h3>
+                  <ul>
+                    {project.limitations.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </>
               )
             }
           </section>
@@ -292,6 +360,27 @@ const projectSchema = {
 
   .case-study__status {
     margin-block-end: var(--space-4);
+  }
+
+  .case-study__outcome {
+    margin-block-start: var(--space-5);
+    padding: var(--space-5);
+    border-inline-start: 0.25rem solid var(--gold);
+    background: color-mix(in srgb, var(--gold) 8%, var(--surface));
+  }
+
+  .case-study__outcome strong {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .case-study__outcome p {
+    margin-block-start: var(--space-2);
+    color: var(--ink);
+    font-weight: 650;
   }
 
   @media (max-width: 48rem) {

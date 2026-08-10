@@ -290,9 +290,9 @@ try {
       `Expected 8 Anzania locations, found ${manifest.locations?.length ?? 0}`,
     );
   }
-  if (manifest.guides?.length !== 15) {
+  if (manifest.guides?.length !== 6) {
     failures.push(
-      `Expected 15 full-body guides, found ${manifest.guides?.length ?? 0}`,
+      `Expected 6 full-body guides, found ${manifest.guides?.length ?? 0}`,
     );
   }
   if (Object.keys(manifest.powers ?? {}).length !== 4) {
@@ -303,7 +303,13 @@ try {
 
   const assetPaths = [
     manifest.atlas?.src,
-    ...manifest.guides.map((guide) => guide.src),
+    ...manifest.guides.flatMap((guide) => [
+      guide.image,
+      guide.poses?.idle,
+      guide.poses?.present,
+      guide.poses?.travel,
+      guide.poses?.lookback,
+    ]),
     ...manifest.locations.flatMap((location) => [
       location.outer?.large,
       location.outer?.small,

@@ -6,7 +6,7 @@
   },
   {
     "id": "data-ml",
-    "label": "Data and machine learning",
+    "label": "Data science and machine learning",
     "items": [
       "Pandas",
       "NumPy",
@@ -14,7 +14,25 @@
       "Scikit-learn",
       "TensorFlow",
       "PyTorch",
+      "Deep learning",
+      "Computer vision",
+      "Model evaluation",
       "Apache Spark"
+    ]
+  },
+  {
+    "id": "ai-systems",
+    "label": "AI systems and interaction",
+    "items": [
+      "Model Context Protocol (MCP)",
+      "Permission-aware context engineering",
+      "JSON Schema",
+      "LangChain",
+      "LangSmith",
+      "OpenAI API",
+      "ChatGPT, Claude, Gemini and Copilot integration",
+      "Human-governed agent workflows",
+      "AI-assisted software delivery"
     ]
   },
   {

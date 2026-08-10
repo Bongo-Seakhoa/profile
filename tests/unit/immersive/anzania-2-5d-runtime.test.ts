@@ -1,6 +1,7 @@
 import { readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 
+import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 
 interface SceneRecord {
@@ -35,6 +36,10 @@ interface GuideRecord {
   readonly specialty: string;
   readonly temperament: string;
   readonly src: string;
+  readonly image: string;
+  readonly poses: Readonly<
+    Record<"idle" | "present" | "travel" | "lookback", string>
+  >;
   readonly alt: string;
 }
 
@@ -58,7 +63,11 @@ interface RuntimeManifest {
     >
   >;
   readonly guides: readonly GuideRecord[];
-  readonly atlas: { readonly src: string; readonly alt: string };
+  readonly atlas: {
+    readonly interactive: boolean;
+    readonly src?: string;
+    readonly alt: string;
+  };
 }
 
 const repositoryRoot = resolve(import.meta.dirname, "..", "..", "..");
@@ -86,6 +95,10 @@ describe("Explore Anzania 2.5D release manifest", () => {
         "Anzania is fictional. It is not Tanzania or any other real location.",
       experience: "Interactive 2.5D guided portfolio journey",
     });
+    expect(manifest.atlas).toEqual({
+      interactive: true,
+      alt: "Interactive route atlas of the eight fictional locations in Anzania.",
+    });
   });
 
   it("ships the complete eight-location narrative and four selectable traversal powers", async () => {
@@ -94,7 +107,7 @@ describe("Explore Anzania 2.5D release manifest", () => {
     expect(manifest.schemaVersion).toBe("3.0.0");
     expect(manifest.locations.map(({ name }) => name)).toEqual([
       "Threshold Dunes",
-      "Stone Pass of Names",
+      "Stone Pass of Context",
       "Garden of Origins",
       "Archive of Echoes",
       "Forge of Resolve",
@@ -144,8 +157,8 @@ describe("Explore Anzania 2.5D release manifest", () => {
   });
 });
 
-describe("original illustrated full-body companion roster", () => {
-  it("provides fifteen distinct guides across three presentations", async () => {
+describe("production multi-pose companion roster", () => {
+  it("provides six distinct guides across three presentations", async () => {
     const manifest = await parseManifest();
     const counts = manifest.guides.reduce(
       (accumulator, guide) => {
@@ -155,11 +168,11 @@ describe("original illustrated full-body companion roster", () => {
       { Masculine: 0, Feminine: 0, Neutral: 0 },
     );
 
-    expect(manifest.guides).toHaveLength(15);
-    expect(counts.Masculine).toBe(5);
-    expect(counts.Feminine).toBe(5);
-    expect(counts.Neutral).toBe(5);
-    expect(new Set(manifest.guides.map(({ id }) => id)).size).toBe(15);
+    expect(manifest.guides).toHaveLength(6);
+    expect(counts.Masculine).toBe(3);
+    expect(counts.Feminine).toBe(2);
+    expect(counts.Neutral).toBe(1);
+    expect(new Set(manifest.guides.map(({ id }) => id)).size).toBe(6);
     expect(
       manifest.guides.every(
         ({ specialty, temperament }) =>
@@ -168,24 +181,39 @@ describe("original illustrated full-body companion roster", () => {
     ).toBe(true);
   });
 
-  it("keeps every runtime guide transparent, portrait-oriented and authored as a layered SVG", async () => {
+  it("ships four transparent 2:3 WebP poses and an idle fallback for every guide", async () => {
     const manifest = await parseManifest();
+    const poseNames = ["idle", "present", "travel", "lookback"] as const;
+    const posePaths = manifest.guides.flatMap((guide) =>
+      poseNames.map((pose) => guide.poses[pose]),
+    );
+
+    expect(new Set(posePaths).size).toBe(manifest.guides.length * 4);
 
     await Promise.all(
       manifest.guides.map(async (guide) => {
-        const path = resolveManifestAsset(guide.src);
-        const [source, metadata] = await Promise.all([
-          readFile(path, "utf8"),
-          stat(path),
-        ]);
+        expect(guide.src).toBe(guide.image);
+        expect(guide.image).toBe(guide.poses.idle);
+        expect(Object.keys(guide.poses)).toEqual(poseNames);
+        expect(guide.alt).toMatch(/full-body/i);
 
-        expect(guide.src).toMatch(/^\.\/characters\/.+\.svg$/);
-        expect(guide.alt).toContain("Full-body");
-        expect(source).toContain('<svg xmlns="http://www.w3.org/2000/svg"');
-        expect(source).toContain('viewBox="0 0 540 1280"');
-        expect(source).toContain("<linearGradient");
-        expect(source).toContain("<filter");
-        expect(metadata.size).toBeGreaterThan(4_000);
+        await Promise.all(
+          poseNames.map(async (pose) => {
+            const asset = guide.poses[pose];
+            const path = resolveManifestAsset(asset);
+            const [file, metadata] = await Promise.all([
+              stat(path),
+              sharp(path).metadata(),
+            ]);
+
+            expect(asset).toMatch(/^\.\/characters\/.+\.webp$/);
+            expect(metadata.format).toBe("webp");
+            expect(metadata.width).toBe(640);
+            expect(metadata.height).toBe(960);
+            expect(metadata.hasAlpha).toBe(true);
+            expect(file.size).toBeGreaterThan(15_000);
+          }),
+        );
       }),
     );
   });
@@ -207,6 +235,16 @@ describe("responsive framing and interaction runtime", () => {
     expect(runtime).toContain("targetRatio");
     expect(runtime).toContain("renderDeepDive");
     expect(runtime).toContain("selectPower");
+    expect(runtime).toContain("setGuidePose");
+    expect(runtime).toContain("guidePoseRequest");
+    expect(runtime).toContain("guide.poses?.[requestedPose]");
+    expect(runtime).toContain("guide.image");
+    expect(runtime).toContain("resetChapterScroll");
+    expect(runtime).toContain("advanceForward");
+    expect(runtime).toContain("button.dataset.visited");
+    expect(runtime).toContain("state.visited.has(mapLocation.id)");
+    expect(runtime).not.toContain("atlasCoordinates");
+    expect(runtime).toContain("const avatarAspect = 640 / 960");
     expect(runtime).toContain("0.14");
     expect(runtime).toContain("0.2");
     expect(runtime).not.toMatch(/over-the-shoulder|\bOTS\b/i);
@@ -223,6 +261,7 @@ describe("responsive framing and interaction runtime", () => {
     expect(v2Css).toContain('.experience[data-biome="forge"]');
     expect(v2Css).toContain(".ability-dock");
     expect(v2Css).toContain(".chapter-panel__inside");
+    expect(v2Css).toContain('button[data-visited="true"]');
   });
 
   it("keeps the immersive runtime isolated from the Static View source tree", async () => {

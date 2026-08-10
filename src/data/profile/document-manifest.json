@@ -51,6 +51,7 @@
             "itemIds": [
               "languages",
               "data-ml",
+              "ai-systems",
               "cloud-delivery",
               "analytics-bi",
               "databases"
@@ -78,9 +79,9 @@
             "label": "Selected projects",
             "itemIds": [
               "metapos-app-data-management",
-              "fxpm-1-4-forex-portfolio-manager",
-              "streamlit-recommender-system",
-              "regression-predict-api"
+              "anzania-ai-assisted-delivery",
+              "visualizing-filters-cnn",
+              "airqo-environmental-data"
             ]
           },
           {
@@ -118,7 +119,7 @@
         ]
       }
     ],
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   },
   {
     "id": "cv",
@@ -172,6 +173,7 @@
             "itemIds": [
               "languages",
               "data-ml",
+              "ai-systems",
               "cloud-delivery",
               "analytics-bi",
               "databases"
@@ -207,13 +209,11 @@
             "label": "Selected projects",
             "itemIds": [
               "metapos-app-data-management",
-              "fxpm-1-4-forex-portfolio-manager",
-              "streamlit-recommender-system",
-              "regression-predict-api",
+              "anzania-ai-assisted-delivery",
               "visualizing-filters-cnn",
               "airqo-environmental-data",
-              "mql5-expert-advisor",
-              "fxpm-backtester"
+              "openai-trader-experiment",
+              "institutional-ls-sr-trading-ea"
             ]
           }
         ]
@@ -278,6 +278,6 @@
         ]
       }
     ],
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   }
 ]

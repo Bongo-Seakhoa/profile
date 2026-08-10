@@ -6,6 +6,8 @@
 **Independent reviewer:** Claude or a second reviewer when available
 **Status:** Adopted and implemented
 
+> Scope update, 2026-08-10: the medium, camera and quality decision remains authoritative. Its 15-companion asset contract is superseded by the six-guide production roster, with four authored action poses per guide.
+
 ## Owner direction
 
 The owner explicitly authorised a high-quality 2.5D or 2D implementation when

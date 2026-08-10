@@ -14,19 +14,19 @@
       "formalName": "The Threshold Dunes",
       "region": "The Western Reach",
       "eyebrow": "The point of entry",
-      "title": "Work that turns ambiguity into usable systems.",
-      "lead": "I turn complex information into reliable data systems, practical analysis and decisions people can act on.",
+      "title": "AI and data systems built for decisions people can trust.",
+      "lead": "I design AI-enabled products, reliable cloud data systems and applied models that turn complex operational knowledge into useful action.",
       "signal": "Now building",
-      "signalValue": "Reliable company intelligence and retail data systems",
+      "signalValue": "MetaPOS Mind, AI interaction and retail data systems",
       "biome": "sand",
       "evidence": [
         {
           "label": "Current focus",
-          "value": "Data engineering, analytics and organizational intelligence at MetaPOS"
+          "value": "MetaPOS Mind plus retail data engineering and analytics at MetaPOS"
         },
         {
           "label": "Working range",
-          "value": "Data systems, decision support, applied machine learning and technical communication"
+          "value": "AI systems, data engineering, decision support, applied models and technical communication"
         },
         {
           "label": "Based in",
@@ -35,26 +35,26 @@
       ],
       "facts": [
         {
-          "value": "4",
-          "label": "core practice areas"
+          "value": "AI",
+          "label": "enabled products"
         },
         {
-          "value": "3",
-          "label": "active professional lanes"
+          "value": "Cloud",
+          "label": "data systems"
         },
         {
-          "value": "1",
-          "label": "connected body of work"
+          "value": "Human",
+          "label": "decision support"
         }
       ],
       "actions": [
         {
-          "label": "View selected work",
-          "path": "work/"
+          "label": "See MetaPOS Mind",
+          "path": "work/metapos-app-data-management/"
         },
         {
-          "label": "Start a conversation",
-          "path": "contact/"
+          "label": "Review resume and CV",
+          "path": "documents/"
         }
       ],
       "outer": {
@@ -71,7 +71,7 @@
       "guideInsight": "Begin with the system, then follow the evidence that makes it real.",
       "deepDive": {
         "kicker": "Inside the waystation",
-        "heading": "A live map of what Bongo is building now.",
+        "heading": "Start with current AI and data systems, then inspect the evidence.",
         "summary": "The portfolio is not a museum of completed work. It is a working interface for an active practice spanning retail data, governed AI context, research validation and technical learning.",
         "pillars": [
           {
@@ -129,50 +129,50 @@
     {
       "id": "stone-pass",
       "number": "02",
-      "name": "Stone Pass of Names",
-      "formalName": "The Stone Pass of Names",
-      "region": "The Canyon of Continuity",
-      "eyebrow": "Identity without mythology",
-      "title": "One person, two surnames, one continuous body of work.",
-      "lead": "Bongo Seakhoa is the default professional name. Bongo Kosa is the alternate and legal name used in some records. The distinction is continuity, not a second persona.",
-      "signal": "Identity record",
-      "signalValue": "Bongo Seakhoa by default; Bongo Kosa where legal continuity matters",
-      "biome": "stone",
+      "name": "Stone Pass of Context",
+      "formalName": "The Stone Pass of Context",
+      "region": "The Canyon of Meaning",
+      "eyebrow": "Flagship AI system",
+      "title": "MetaPOS Mind gives AI assistants governed company context.",
+      "lead": "As primary developer, I built a custom context and governance layer that routes authorized employees and AI assistants to current project state, supporting evidence, work profiles and safe next actions.",
+      "signal": "Flagship build",
+      "signalValue": "MetaPOS Mind · Python · MCP · governed context",
+      "biome": "canyon",
       "evidence": [
         {
-          "label": "Primary public name",
-          "value": "Bongo Seakhoa"
+          "label": "My contribution",
+          "value": "Primary developer across architecture, Python implementation, validation and operating integration"
         },
         {
-          "label": "Alternate and legal name",
-          "value": "Bongo Kosa"
+          "label": "Core stack",
+          "value": "Python, YAML, JSON Schema and a read-only MCP-compatible interface"
         },
         {
-          "label": "Professional principle",
-          "value": "Clarity over performance; evidence over ornament"
+          "label": "Public boundary",
+          "value": "Purpose, role and named technologies shown; internal architecture and metrics withheld"
         }
       ],
       "facts": [
         {
-          "value": "2",
-          "label": "surname variants"
+          "value": "Months",
+          "label": "of focused development"
         },
         {
-          "value": "1",
-          "label": "professional record"
+          "value": "AI",
+          "label": "interaction system"
         },
         {
-          "value": "0",
-          "label": "invented personas"
+          "value": "Governed",
+          "label": "company context"
         }
       ],
       "actions": [
         {
-          "label": "Read the full background",
-          "path": "about/"
+          "label": "Open the MetaPOS Mind case study",
+          "path": "work/metapos-app-data-management/"
         },
         {
-          "label": "Review experience",
+          "label": "See current experience",
           "path": "experience/"
         }
       ],
@@ -185,58 +185,63 @@
         "small": "./scenes/stone-pass-inner-960.webp"
       },
       "power": "reality-bending",
-      "portalAction": "Pass beneath the arch",
-      "portalCaption": "Resolve the inscriptions into a factual record",
-      "guideInsight": "Names can change across documents. The evidence trail should not.",
+      "portalAction": "Enter the context chamber",
+      "portalCaption": "See how knowledge, rules and interaction become one system",
+      "guideInsight": "An AI answer is only as useful as the context, authority and evidence behind it.",
       "deepDive": {
-        "kicker": "Inside the pass",
-        "heading": "Continuity is treated as a data-quality problem.",
-        "summary": "The site keeps both surnames aligned across routes, resume and CV variants, metadata and project records. Visitors should never have to guess whether the names refer to different people.",
+        "kicker": "Inside the context chamber",
+        "heading": "MetaPOS Mind is the clearest proof of Bongo as an AI systems builder.",
+        "summary": "The client-safe record shows the system's purpose, Bongo's primary-development contribution and its real technical shape without exposing private company records, identities, prompts or operating rules.",
         "pillars": [
           {
-            "title": "Default name",
-            "body": "Bongo Seakhoa leads the public portfolio and day-to-day professional presentation."
+            "title": "Permission-aware context",
+            "body": "Assemble only the current state, evidence, work profile and next actions that an authorized employee or assistant is allowed to use."
           },
           {
-            "title": "Legal continuity",
-            "body": "Bongo Kosa is preserved where legal or historical records require the alternate surname."
+            "title": "Assured execution",
+            "body": "Check scope, readiness, evidence and output quality, with identity-bound handoffs and concurrent-change detection around the work."
           },
           {
-            "title": "Single source",
-            "body": "Both variants are produced from the same structured professional record to prevent drift."
+            "title": "Integration without overreach",
+            "body": "Expose read-only MCP context, controlled project reconciliation and permission-scoped dashboards without turning an AI surface into the source of truth."
           }
         ],
         "now": [
           {
-            "status": "Canonical",
-            "title": "Shared document pipeline",
-            "detail": "Resume and CV variants are generated from one JavaScript-backed manifest."
+            "status": "Completed build",
+            "title": "MetaPOS Mind",
+            "detail": "A working internal AI context-and-control layer completed through a multi-month primary-development build."
           },
           {
-            "status": "Documented",
-            "title": "Identity note",
-            "detail": "The relationship between names remains a supporting footnote, not the main portfolio narrative."
+            "status": "Implemented",
+            "title": "Schema-first Python and MCP",
+            "detail": "Governed YAML records, JSON Schema validation and a read-only MCP-compatible assistant interface."
+          },
+          {
+            "status": "Protected",
+            "title": "Client-confidential detail",
+            "detail": "Deployment state, internal architecture, prompts, data and operating metrics remain outside the public claim."
           }
         ],
         "notes": [
           {
-            "question": "Why state this at all?",
-            "answer": "Because transparent continuity removes ambiguity from credentials and professional records."
+            "question": "Why is this more than a chatbot?",
+            "answer": "It assembles permission-scoped context, routes work to governed records and validates scope, evidence and output before action."
           },
           {
-            "question": "Is this a character backstory?",
-            "answer": "No. It is a simple identity clarification attached to one real person and one body of work."
+            "question": "What can a recruiter verify here?",
+            "answer": "The primary-developer role, system purpose and publish-safe stack are documented; private source, company records and operating metrics are deliberately excluded."
           },
           {
-            "question": "Does the alternate name change the professional story?",
-            "answer": "No. It is a record-continuity note. The work, evidence and professional direction remain one continuous body."
+            "question": "What does this demonstrate?",
+            "answer": "AI context architecture, Python systems engineering, permission design, deterministic assurance and judgement inside a real operating environment."
           }
         ],
         "artifact": {
-          "label": "Direct record",
-          "title": "About and professional timeline",
-          "detail": "Read the concise identity note, then continue into the complete experience record.",
-          "path": "about/"
+          "label": "Flagship case study",
+          "title": "MetaPOS Mind",
+          "detail": "Open the client-safe record of purpose, contribution, stack, constraints and evidence boundary.",
+          "path": "work/metapos-app-data-management/"
         }
       }
     },
@@ -247,11 +252,11 @@
       "formalName": "The Garden of Origins",
       "region": "The Watered Terraces",
       "eyebrow": "Learning as a living system",
-      "title": "Scientific roots, systems thinking and continued formal study.",
-      "lead": "A foundation in science grew into data, engineering and decision systems. The path remains deliberately interdisciplinary and grounded in continuous learning.",
+      "title": "Scientific roots grew into AI, data systems and learning leadership.",
+      "lead": "A foundation in science expanded through formal AI and machine-learning training, professional data work, cross-university bootcamp support and continued Engineering Management study.",
       "signal": "Learning system",
       "signalValue": "Formal study, verified credentials and practical experimentation",
-      "biome": "water",
+      "biome": "garden",
       "evidence": [
         {
           "label": "Current study",
@@ -262,8 +267,12 @@
           "value": "Microbiology, biochemistry and environmental systems"
         },
         {
-          "label": "Technical development",
-          "value": "Data science, analytics, cloud engineering and financial engineering"
+          "label": "AI and technical development",
+          "value": "IBM and Explore AI training plus data science, deep learning, cloud engineering and financial engineering"
+        },
+        {
+          "label": "Learning-specialist range",
+          "value": "FinTech, AI and Data Visualization bootcamps across multiple university programmes"
         }
       ],
       "facts": [
@@ -312,8 +321,8 @@
             "body": "Form hypotheses, distinguish observation from inference and stay alert to confounding factors."
           },
           {
-            "title": "Computational practice",
-            "body": "Turn questions into repeatable transformations, models, tests and visible outputs."
+            "title": "AI and computational practice",
+            "body": "Turn questions into repeatable transformations, models, tests and visible outputs, then help others understand how to use them responsibly."
           },
           {
             "title": "Management context",
@@ -330,6 +339,11 @@
             "status": "Ongoing",
             "title": "Cloud and analytics credentials",
             "detail": "Verified learning remains tied to practical workflows rather than collected as decoration."
+          },
+          {
+            "status": "Experience",
+            "title": "2U / edX Learning Specialist",
+            "detail": "Supported FinTech, AI and Data Visualization bootcamps delivered under multiple university programmes."
           }
         ],
         "notes": [
@@ -369,7 +383,7 @@
       "evidence": [
         {
           "label": "Selected systems",
-          "value": "Retail data, portfolio management, recommender systems and organizational AI context"
+          "value": "MetaPOS Mind, AI-assisted delivery, deep-learning interpretation and retail data systems"
         },
         {
           "label": "Evidence standard",
@@ -436,14 +450,14 @@
         ],
         "now": [
           {
-            "status": "Production",
-            "title": "MetaPOS data systems",
-            "detail": "Retail data and reporting work presented through a client-safe professional record."
+            "status": "Client-safe",
+            "title": "MetaPOS Mind",
+            "detail": "A completed multi-month AI-system build with purpose, primary-developer role and publish-safe stack recorded."
           },
           {
             "status": "Public",
-            "title": "FxPM portfolio manager",
-            "detail": "Trading-system architecture, analytics and risk workflows supported by repository evidence."
+            "title": "Anzania AI-assisted delivery",
+            "detail": "A human-governed two-agent engineering workflow with durable handoffs, audits, risk records and automated release gates."
           },
           {
             "status": "Accepted",
@@ -481,14 +495,14 @@
       "region": "The Foundry Citadel",
       "eyebrow": "Systems must survive reality",
       "title": "Reliability is designed through constraints, tests and ownership.",
-      "lead": "Useful technical work is not only a clever model or query. It is the discipline of making data flows dependable, explainable and maintainable under real operating pressure.",
+      "lead": "Useful AI and data work is not only a clever model, prompt or query. It is the discipline of making context, data flows, permissions and decisions dependable under real operating pressure.",
       "signal": "Engineering practice",
       "signalValue": "Validation, observability, documentation and recovery",
       "biome": "forge",
       "evidence": [
         {
           "label": "Engineering emphasis",
-          "value": "Data quality, transformation logic and operational reporting"
+          "value": "Data quality, context sufficiency, permission boundaries and operational reporting"
         },
         {
           "label": "Delivery practice",
@@ -496,7 +510,7 @@
         },
         {
           "label": "Tooling",
-          "value": "Python, SQL, cloud platforms, Docker, Git and browser-native JavaScript"
+          "value": "Python, SQL, GCP, JSON Schema, MCP, Git, Docker and browser-native JavaScript"
         }
       ],
       "facts": [
@@ -556,8 +570,8 @@
         "now": [
           {
             "status": "Active",
-            "title": "Retail data reliability",
-            "detail": "Improving the structure and trustworthiness of product, pricing and operational records."
+            "title": "MetaPOS Mind assurance",
+            "detail": "Testing routing, permission-scoped context, current-versus-target separation, failure handling and human approval boundaries."
           },
           {
             "status": "Research",
@@ -566,8 +580,8 @@
           },
           {
             "status": "Portfolio",
-            "title": "Release-quality automation",
-            "detail": "The site itself uses automated content, accessibility, browser and document quality gates."
+            "title": "Anzania release-quality automation",
+            "detail": "The portfolio uses independent AI audit plus automated content, accessibility, browser, document and performance gates."
           }
         ],
         "notes": [
@@ -600,7 +614,7 @@
       "region": "The Avenue of Practice",
       "eyebrow": "Capability made practical",
       "title": "Choose the problem first. Then choose the tools that earn their place.",
-      "lead": "The bazaar connects technical capability to useful engagements: reliable data foundations, analysis for decisions, applied models and clear technical communication.",
+      "lead": "The bazaar connects capability to useful team outcomes: governed AI interaction, reliable data foundations, analysis for decisions, applied models and clear technical communication.",
       "signal": "Capability map",
       "signalValue": "Problem framing first; tools second; evidence always",
       "biome": "bazaar",
@@ -614,8 +628,8 @@
           "value": "Findings, transparent assumptions and stakeholder-ready recommendations"
         },
         {
-          "label": "Applied machine learning",
-          "value": "Problem framing, evaluation and lightweight delivery"
+          "label": "AI and applied model systems",
+          "value": "Context design, human authority, model experimentation, evaluation and lightweight delivery"
         }
       ],
       "facts": [
@@ -657,7 +671,7 @@
       "deepDive": {
         "kicker": "Inside the market court",
         "heading": "Capability is organized around outcomes, not software logos.",
-        "summary": "Each practice begins with the problem a team faces, then shows what gets delivered, how the work is communicated and where supporting evidence can be inspected.",
+        "summary": "Each practice begins with the problem a team faces, then shows what gets delivered, how human and system authority are separated, and where supporting evidence can be inspected.",
         "pillars": [
           {
             "title": "Data engineering",
@@ -668,8 +682,8 @@
             "body": "Explain what is happening, why it matters and what decision the evidence supports."
           },
           {
-            "title": "Applied ML and communication",
-            "body": "Evaluate models honestly, deliver them lightly and explain them to technical and non-technical audiences."
+            "title": "AI, applied models and communication",
+            "body": "Design governed AI interaction, evaluate models honestly, deliver them appropriately and explain their limits to technical and non-technical audiences."
           }
         ],
         "now": [
@@ -680,8 +694,8 @@
           },
           {
             "status": "Platform",
-            "title": "Google Cloud and containers",
-            "detail": "Cloud data work, deployment foundations and reproducible delivery environments."
+            "title": "Cloud, context and integration",
+            "detail": "Google Cloud, containers, model-neutral interaction contracts, connectors and MCP-compatible interfaces."
           },
           {
             "status": "Interface",
@@ -722,7 +736,7 @@
       "lead": "The observatory holds accepted research, active reproducibility work, public technical experiments and long-range questions. Evidence, interpretation and ambition remain visibly distinct.",
       "signal": "Research live",
       "signalValue": "Accepted ISM 2026 paper plus active validation and reproducibility work",
-      "biome": "astral",
+      "biome": "observatory",
       "evidence": [
         {
           "label": "Accepted paper",
@@ -836,20 +850,20 @@
       "name": "Oasis of Audience",
       "formalName": "The Oasis of Audience",
       "region": "The Lagoon of Exchange",
-      "eyebrow": "The journey becomes a conversation",
-      "title": "Bring a data problem, a research question or a system that needs clarity.",
-      "lead": "The final location is not an ending. It is a direct path to collaboration, documents and the conventional portfolio for visitors who want every detail without the journey.",
-      "signal": "Open channel",
-      "signalValue": "Remote, contract and globally distributed opportunities",
-      "biome": "lagoon",
+      "eyebrow": "The journey becomes a decision",
+      "title": "Considering Bongo for an AI or data systems role?",
+      "lead": "Review the resume, flagship case study and evidence, or start a direct conversation about the role, team context and problem that need support.",
+      "signal": "Hiring conversation",
+      "signalValue": "AI systems · data engineering · analytics · applied models",
+      "biome": "oasis",
       "evidence": [
         {
           "label": "Availability",
           "value": "Remote, contract and globally distributed opportunities"
         },
         {
-          "label": "Best starting point",
-          "value": "A clear problem, current constraints and the decision at stake"
+          "label": "Best recruiter starting point",
+          "value": "The role, team, location arrangement, hiring timeline and problems the team owns"
         },
         {
           "label": "Direct record",
@@ -858,26 +872,26 @@
       ],
       "facts": [
         {
-          "value": "Clear",
-          "label": "problem"
+          "value": "Role",
+          "label": "and team"
         },
         {
-          "value": "Shared",
-          "label": "context"
+          "value": "Evidence",
+          "label": "and fit"
         },
         {
-          "value": "Useful",
-          "label": "next step"
+          "value": "Direct",
+          "label": "next action"
         }
       ],
       "actions": [
         {
-          "label": "Contact Bongo",
-          "path": "contact/"
+          "label": "Review resume and CV",
+          "path": "documents/"
         },
         {
-          "label": "Open resume and CV",
-          "path": "documents/"
+          "label": "Email Bongo about a role",
+          "path": "contact/"
         }
       ],
       "outer": {
@@ -889,25 +903,25 @@
         "small": "./scenes/oasis-audience-inner-960.webp"
       },
       "power": "reality-bending",
-      "portalAction": "Enter the consultation pavilion",
-      "portalCaption": "Turn the journey into a concrete next step",
-      "guideInsight": "The best collaboration begins with the real constraint, not the polished pitch.",
+      "portalAction": "Enter the hiring pavilion",
+      "portalCaption": "Turn the journey into a concrete recruiter next step",
+      "guideInsight": "The strongest hiring conversation connects the role to evidence, judgement and the problems a team actually owns.",
       "deepDive": {
         "kicker": "Inside the pavilion",
-        "heading": "A strong first conversation can be simple.",
-        "summary": "Share the problem, who it affects, what has already been tried, the current constraints and the decision that needs support. That is enough to begin finding the right shape of work.",
+        "heading": "A strong first conversation starts with the role and the problem.",
+        "summary": "Share the role, team context, location arrangement, hiring timeline and the AI or data problems the team needs to solve. The case studies and documents provide the evidence for a focused interview.",
         "pillars": [
           {
-            "title": "Data and analytics",
-            "body": "Untangle unreliable data flows, unclear reporting logic or decisions that need stronger evidence."
+            "title": "AI and data systems",
+            "body": "Build governed AI interactions, reliable data flows, clear context boundaries and operational decision products."
           },
           {
-            "title": "Applied systems",
-            "body": "Review models, automation, AI context or technical workflows that need validation and ownership."
+            "title": "Applied models and analytics",
+            "body": "Frame, evaluate and deliver models or analysis without hiding assumptions, limits or ownership."
           },
           {
-            "title": "Research and learning",
-            "body": "Discuss reproducibility, technical mentoring, academic collaboration or evidence-based communication."
+            "title": "Technical leadership",
+            "body": "Connect engineering, product context, evidence and communication across distributed teams and learners."
           }
         ],
         "now": [
@@ -923,14 +937,14 @@
           },
           {
             "status": "Preferred",
-            "title": "Problem-led introduction",
-            "detail": "A concise explanation of the problem and decision is more useful than a generic opportunity message."
+            "title": "Role-led introduction",
+            "detail": "A concise role, team context and hiring timeline are more useful than a generic networking message."
           }
         ],
         "notes": [
           {
-            "question": "What should the first message include?",
-            "answer": "The problem, the current state, the constraint and what a useful outcome would change."
+            "question": "What should a recruiter include?",
+            "answer": "The role, team, location arrangement, timeline and the most important AI or data problem the hire will own."
           },
           {
             "question": "Where is the conventional portfolio?",
@@ -943,9 +957,9 @@
         ],
         "artifact": {
           "label": "Next step",
-          "title": "Contact and professional documents",
-          "detail": "Open direct contact paths or review the complete resume and CV before reaching out.",
-          "path": "contact/"
+          "title": "Resume, CV and direct contact",
+          "detail": "Review the complete professional record, then start a focused hiring conversation.",
+          "path": "documents/"
         }
       }
     }
@@ -953,31 +967,31 @@
   "powers": {
     "dune-surfing": {
       "name": "Dune Surf",
-      "durationMs": 1050,
+      "durationMs": 1320,
       "className": "is-dune-surfing",
       "glyph": "≈",
-      "description": "Ride a fast sand wake across the horizon."
+      "description": "Carve a wind-driven sand wake across the horizon."
     },
     "sand-teleportation": {
       "name": "Sandfold",
-      "durationMs": 920,
+      "durationMs": 1480,
       "className": "is-sand-teleporting",
       "glyph": "✦",
-      "description": "Dissolve the route into grains and reform at the next waystation."
+      "description": "Dissolve from the feet into a vortex, then reform in the next place."
     },
     "solar-propulsion": {
       "name": "Solar Step",
-      "durationMs": 1120,
+      "durationMs": 1540,
       "className": "is-solar-propelling",
       "glyph": "☼",
-      "description": "Cross the map in a controlled burst of warm light."
+      "description": "Charge, launch through a sunburst and land beyond the horizon."
     },
     "reality-bending": {
       "name": "Reality Fold",
-      "durationMs": 980,
+      "durationMs": 1460,
       "className": "is-reality-bending",
       "glyph": "◇",
-      "description": "Fold the current scene through a mirrored threshold."
+      "description": "Open a hand-anchored lens and fold the next scene through it."
     }
   },
   "guides": [
@@ -986,184 +1000,118 @@
       "name": "Amani",
       "presentation": "Masculine",
       "inspiration": "African-inspired",
-      "src": "./characters/dn-m-afr-01.svg",
-      "alt": "Full-body african-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
+      "src": "./characters/amani-idle.webp",
+      "image": "./characters/amani-idle.webp",
+      "poses": {
+        "idle": "./characters/amani-idle.webp",
+        "present": "./characters/amani-present.webp",
+        "travel": "./characters/amani-travel.webp",
+        "lookback": "./characters/amani-lookback.webp"
+      },
+      "alt": "Amani, a full-body Anzania expedition guide in layered amber and teal fieldwear.",
       "specialty": "Systems pathfinder",
       "temperament": "Measured and resolute",
       "accent": "#d7a94c",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
+      "quote": "I will keep the route clear. You keep asking what the evidence means."
     },
     {
       "id": "dn-m-eas-01",
       "name": "Ren",
       "presentation": "Masculine",
       "inspiration": "East Asian-inspired",
-      "src": "./characters/dn-m-eas-01.svg",
-      "alt": "Full-body east asian-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
+      "src": "./characters/ren-idle.webp",
+      "image": "./characters/ren-idle.webp",
+      "poses": {
+        "idle": "./characters/ren-idle.webp",
+        "present": "./characters/ren-present.webp",
+        "travel": "./characters/ren-travel.webp",
+        "lookback": "./characters/ren-lookback.webp"
+      },
+      "alt": "Ren, a full-body Anzania pattern reader in layered teal expedition clothing.",
       "specialty": "Pattern reader",
       "temperament": "Quiet and exact",
       "accent": "#73a6ad",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-m-sas-01",
-      "name": "Arun",
-      "presentation": "Masculine",
-      "inspiration": "South Asian-inspired",
-      "src": "./characters/dn-m-sas-01.svg",
-      "alt": "Full-body south asian-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Model cartographer",
-      "temperament": "Curious and analytical",
-      "accent": "#d28b55",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
+      "quote": "Patterns become useful when we can explain why they hold and where they fail."
     },
     {
       "id": "dn-m-mena-01",
       "name": "Zayd",
       "presentation": "Masculine",
       "inspiration": "Middle Eastern and North African-inspired",
-      "src": "./characters/dn-m-mena-01.svg",
-      "alt": "Full-body middle eastern and north african-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
+      "src": "./characters/zayd-idle.webp",
+      "image": "./characters/zayd-idle.webp",
+      "poses": {
+        "idle": "./characters/zayd-idle.webp",
+        "present": "./characters/zayd-present.webp",
+        "travel": "./characters/zayd-travel.webp",
+        "lookback": "./characters/zayd-lookback.webp"
+      },
+      "alt": "Zayd, a full-body Anzania instrument keeper in ochre fieldwear.",
       "specialty": "Instrument keeper",
       "temperament": "Patient and observant",
       "accent": "#c5a45e",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-m-eur-01",
-      "name": "Rowan",
-      "presentation": "Masculine",
-      "inspiration": "European-inspired",
-      "src": "./characters/dn-m-eur-01.svg",
-      "alt": "Full-body european-inspired masculine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Route engineer",
-      "temperament": "Practical and direct",
-      "accent": "#6e94aa",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
+      "quote": "A reliable instrument tells you its limits before it tells you its answer."
     },
     {
       "id": "dn-f-afr-01",
       "name": "Zuri",
       "presentation": "Feminine",
       "inspiration": "African-inspired",
-      "src": "./characters/dn-f-afr-01.svg",
-      "alt": "Full-body african-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
+      "src": "./characters/zuri-idle.webp",
+      "image": "./characters/zuri-idle.webp",
+      "poses": {
+        "idle": "./characters/zuri-idle.webp",
+        "present": "./characters/zuri-present.webp",
+        "travel": "./characters/zuri-travel.webp",
+        "lookback": "./characters/zuri-lookback.webp"
+      },
+      "alt": "Zuri, a full-body Anzania evidence guardian in orange, cream and turquoise fieldwear.",
       "specialty": "Evidence guardian",
       "temperament": "Warm and fearless",
       "accent": "#d65d69",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-f-eas-01",
-      "name": "Mei",
-      "presentation": "Feminine",
-      "inspiration": "East Asian-inspired",
-      "src": "./characters/dn-f-eas-01.svg",
-      "alt": "Full-body east asian-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Signal interpreter",
-      "temperament": "Calm and perceptive",
-      "accent": "#70aaa7",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
+      "quote": "A bold claim deserves a clear trail back to the work that earned it."
     },
     {
       "id": "dn-f-sas-01",
       "name": "Priya",
       "presentation": "Feminine",
       "inspiration": "South Asian-inspired",
-      "src": "./characters/dn-f-sas-01.svg",
-      "alt": "Full-body south asian-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
+      "src": "./characters/priya-idle.webp",
+      "image": "./characters/priya-idle.webp",
+      "poses": {
+        "idle": "./characters/priya-idle.webp",
+        "present": "./characters/priya-present.webp",
+        "travel": "./characters/priya-travel.webp",
+        "lookback": "./characters/priya-lookback.webp"
+      },
+      "alt": "Priya, a full-body Anzania research lantern in plum and copper expedition clothing.",
       "specialty": "Research lantern",
       "temperament": "Reflective and inventive",
       "accent": "#c86d99",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-f-mena-01",
-      "name": "Layla",
-      "presentation": "Feminine",
-      "inspiration": "Middle Eastern and North African-inspired",
-      "src": "./characters/dn-f-mena-01.svg",
-      "alt": "Full-body middle eastern and north african-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Atlas historian",
-      "temperament": "Steady and insightful",
-      "accent": "#c5935b",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-f-eur-01",
-      "name": "Elara",
-      "presentation": "Feminine",
-      "inspiration": "European-inspired",
-      "src": "./characters/dn-f-eur-01.svg",
-      "alt": "Full-body european-inspired feminine Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Archive editor",
-      "temperament": "Clear and attentive",
-      "accent": "#809bb1",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-afr-01",
-      "name": "Nia",
-      "presentation": "Neutral",
-      "inspiration": "African-inspired",
-      "src": "./characters/dn-n-afr-01.svg",
-      "alt": "Full-body african-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Constraint scout",
-      "temperament": "Bold and grounded",
-      "accent": "#d5a65b",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-eas-01",
-      "name": "Sora",
-      "presentation": "Neutral",
-      "inspiration": "East Asian-inspired",
-      "src": "./characters/dn-n-eas-01.svg",
-      "alt": "Full-body east asian-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Interface weaver",
-      "temperament": "Playful and precise",
-      "accent": "#74a98d",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-sas-01",
-      "name": "Kavi",
-      "presentation": "Neutral",
-      "inspiration": "South Asian-inspired",
-      "src": "./characters/dn-n-sas-01.svg",
-      "alt": "Full-body south asian-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Experiment guide",
-      "temperament": "Open and methodical",
-      "accent": "#a489ba",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
-    },
-    {
-      "id": "dn-n-mena-01",
-      "name": "Noor",
-      "presentation": "Neutral",
-      "inspiration": "Middle Eastern and North African-inspired",
-      "src": "./characters/dn-n-mena-01.svg",
-      "alt": "Full-body middle eastern and north african-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
-      "specialty": "Horizon reader",
-      "temperament": "Reserved and discerning",
-      "accent": "#b99a67",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
+      "quote": "Research is a lantern, not a prophecy. It helps us see the next responsible step."
     },
     {
       "id": "dn-n-eur-01",
       "name": "Avery",
       "presentation": "Neutral",
       "inspiration": "European-inspired",
-      "src": "./characters/dn-n-eur-01.svg",
-      "alt": "Full-body european-inspired neutral Anzania guide illustrated in a layered 2.5D expedition style.",
+      "src": "./characters/avery-idle.webp",
+      "image": "./characters/avery-idle.webp",
+      "poses": {
+        "idle": "./characters/avery-idle.webp",
+        "present": "./characters/avery-present.webp",
+        "travel": "./characters/avery-travel.webp",
+        "lookback": "./characters/avery-lookback.webp"
+      },
+      "alt": "Avery, a full-body Anzania lens maker in blue-grey expedition clothing.",
       "specialty": "Lens maker",
       "temperament": "Adaptable and candid",
       "accent": "#7d929d",
-      "quote": "Travel lightly, but carry the context that makes each decision legible."
+      "quote": "Change the lens when the question changes, but never blur the underlying facts."
     }
   ],
   "atlas": {
-    "src": "./maps/anzania-atlas.webp",
-    "alt": "Illustrated atlas of the eight fictional locations in Anzania."
+    "interactive": true,
+    "alt": "Interactive route atlas of the eight fictional locations in Anzania."
   }
 }

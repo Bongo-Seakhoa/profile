@@ -3,8 +3,9 @@
 **Product owner:** Bongo Seakhoa  
 **Lead implementation owner:** Codex  
 **Independent review owner:** Claude or another second reviewer when available  
-**Release branch:** `agent/profile-upgrade-20260808-final`  
-**Release date:** 2026-08-08  
+**Release branch:** `portfolio-wow-ai-upgrade`
+
+**Release date:** 2026-08-10
 **Target:** `https://bongo-seakhoa.github.io/profile/`
 
 ## 1. Outcome
@@ -12,7 +13,7 @@
 This release completes the portfolio as two connected products with one evidence base and no quality hierarchy between them:
 
 1. **Professional Static View** is a premium systems-cartography interface for the complete professional record. Information, evidence and conversion actions remain central. Anzania appears as low-opacity atmosphere, route-aware geometry and restrained visual continuity rather than as a page-filling attraction.
-2. **Explore Anzania** is an optional cinematic 2.5D journey through eight illustrated locations, fifteen selectable full-body companions and four authored traversal powers.
+2. **Explore Anzania** is an optional cinematic 2.5D journey through eight illustrated locations, six selectable full-body companions, four authored poses per companion and four traversal powers.
 
 Anzania is an original fictional portfolio world created for Bongo Seakhoa. It is not Tanzania or any other real location.
 
@@ -58,11 +59,11 @@ Only approved responsive derivatives required by the public experiences were cop
 ### Explore Anzania
 
 - One opt-in `/explore/` route with explicit fictional-world copy.
-- Eight narrative locations: Threshold Dunes, Stone Pass of Names, Garden of Origins, Archive of Echoes, Forge of Resolve, Bazaar of Skill, Observatory of Horizons and Oasis of Audience.
+- Eight narrative locations: Threshold Dunes, Stone Pass of Context, Garden of Origins, Archive of Echoes, Forge of Resolve, Bazaar of Skill, Observatory of Horizons and Oasis of Audience.
 - Outer and inner scene plates at 1600 by 900 and 960 by 540.
-- Fifteen selectable transparent full-body companions.
+- Six selectable transparent full-body companions with idle, presenting, travel and look-back poses.
 - Four authored traversal treatments: Dune Surfing, Sand Teleportation, Solar Propulsion and Reality Bending.
-- Atlas, guide and experience-option dialogs.
+- Interactive route atlas, guide and experience-option dialogs.
 - Keyboard, pointer and touch controls.
 - Responsive full-body framing, look-back, presenting, traversal pullback and long-idle edge lean.
 
@@ -99,15 +100,16 @@ Explore Anzania route
         +--> runtime-manifest.json
                 +--> 8 locations
                 +--> 4 powers
-                +--> 15 companions
-                +--> atlas
+                +--> 6 companions
+                +--> 24 authored poses
+                +--> interactive atlas
 ```
 
 The two runtimes are framework-free and isolated. Professional pages may link to `/explore/` but may not request immersive runtime assets. The public-output validator allows exactly one approved Static View module and exactly one approved Explore Anzania module, enforces the `/profile/` base path and rejects canvas or heavy 3D formats.
 
 ## 5. Full-body framing contract
 
-The complete companion is treated as a screen-space rectangle derived from the full 540 by 1280 transparent asset. The controller:
+The complete companion is treated as a screen-space rectangle derived from the full 640 by 960 transparent asset. The controller:
 
 - targets approximately 18 percent viewport height on normal desktop layouts;
 - targets approximately 19 percent on compact layouts;
@@ -126,19 +128,19 @@ The companion normally occupies the lower composition and moves away from active
 
 ## 6. Milestones and ownership
 
-| Milestone | Owner | Acceptance condition | State |
-| --- | --- | --- | --- |
-| Repository and reference audit | Codex | Build, deployment, tools and canon recorded | Complete |
-| 2.5D architecture | Codex | Static and immersive boundaries defined | Complete |
-| Scene derivative production | Codex | 32 responsive scene assets plus atlas | Complete |
-| Companion derivative production | Codex | 15 transparent full-body assets | Complete |
-| Explore route and runtime | Codex | Eight-location journey is functional | Complete |
-| Full-body framing controller | Codex | Safe-zone and animated-state containment implemented | Complete |
-| Professional Static View redesign | Codex | Evidence-led pages, shell, atmosphere and enhancement runtime implemented | Complete |
-| JavaScript document pipeline | Codex | Four browser-native A4 PDFs remain integrated | Complete |
-| Automated release tests | Codex | Unit, Playwright, output and budget contracts added | Complete |
-| Independent visual review | Claude or second reviewer | Both products and all required ratios reviewed independently | External review gate |
-| GitHub Pages publication | Repository owner and CI | Branch merged to `main` and Pages workflow passes | Publication gate |
+| Milestone                         | Owner                     | Acceptance condition                                                      | State                |
+| --------------------------------- | ------------------------- | ------------------------------------------------------------------------- | -------------------- |
+| Repository and reference audit    | Codex                     | Build, deployment, tools and canon recorded                               | Complete             |
+| 2.5D architecture                 | Codex                     | Static and immersive boundaries defined                                   | Complete             |
+| Scene derivative production       | Codex                     | 32 responsive scene assets plus atlas                                     | Complete             |
+| Companion derivative production   | Codex                     | 24 transparent full-body pose assets                                      | Complete             |
+| Explore route and runtime         | Codex                     | Eight-location journey is functional                                      | Complete             |
+| Full-body framing controller      | Codex                     | Safe-zone and animated-state containment implemented                      | Complete             |
+| Professional Static View redesign | Codex                     | Evidence-led pages, shell, atmosphere and enhancement runtime implemented | Complete             |
+| JavaScript document pipeline      | Codex                     | Four browser-native A4 PDFs remain integrated                             | Complete             |
+| Automated release tests           | Codex                     | Unit, Playwright, output and budget contracts added                       | Complete             |
+| Independent visual review         | Claude or second reviewer | Both products and all required ratios reviewed independently              | External review gate |
+| GitHub Pages publication          | Repository owner and CI   | Branch merged to `main` and Pages workflow passes                         | Publication gate     |
 
 Automated tests do not impersonate or replace a second reviewer. They provide repeatable geometry, accessibility and release contracts until one is available.
 
@@ -153,7 +155,7 @@ The release is acceptable only when all of the following are true:
 - Its atmosphere supports rather than displaces professional information.
 - Command navigation, reading state, focus return and reduced motion work across supported breakpoints.
 - Every immersive location has a unique outer and inner scene.
-- All fifteen companions load with transparent full-body assets.
+- All six companions load with four transparent full-body poses.
 - The complete companion remains inside the viewport at tested ratios and states.
 - The companion does not overlap active chapter content.
 - Look-back, traversal and return preserve full-body framing.
@@ -172,8 +174,8 @@ The release is acceptable only when all of the following are true:
 - JSON parsing and schema-shape checks.
 - Eight unique locations and 32 responsive scene paths.
 - Four unique traversal powers.
-- Fifteen unique companion IDs with five companions per presentation group.
-- 540 by 1280 dimensions and alpha channel for each companion.
+- Six unique companion IDs, each with idle, presenting, travel and look-back artwork.
+- 640 by 960 dimensions and alpha channel for each companion pose.
 - Asset existence and minimum byte-size checks.
 - Static atmosphere allowlist and runtime isolation checks.
 
@@ -195,7 +197,7 @@ The release is acceptable only when all of the following are true:
 - Look-back hold and release.
 - Traversal to the next location.
 - Outer-to-inner portal transition.
-- Atlas and fifteen-guide selector.
+- Interactive atlas and six-guide selector.
 - Serious and critical accessibility scan.
 
 ### Release output
