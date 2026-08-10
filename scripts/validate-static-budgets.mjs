@@ -12,6 +12,10 @@ const reportPath = resolve(
 );
 const immersivePrefix = "assets/immersive/";
 const approvedStaticRuntime = "assets/static/static-runtime.js";
+const approvedImmersiveRuntimes = new Set([
+  "assets/immersive/anzania-explorer.js",
+  "assets/immersive/anzania-scene-effects.js",
+]);
 
 const limits = {
   maximumCompressedHtmlPerRoute: 100 * 1024,
@@ -146,10 +150,17 @@ if (
       "above the 16 KB budget",
   );
 }
-if (immersiveJavaScript.count !== 1) {
+if (immersiveJavaScript.count !== approvedImmersiveRuntimes.size) {
   failures.push(
-    `Expected one isolated Explore Anzania JavaScript runtime, found ${immersiveJavaScript.count}`,
+    `Expected ${approvedImmersiveRuntimes.size} isolated Explore Anzania modules, found ${immersiveJavaScript.count}`,
   );
+}
+for (const path of immersiveJavaScriptPaths) {
+  if (!approvedImmersiveRuntimes.has(relativePath(path))) {
+    failures.push(
+      `Explore Anzania includes an unapproved JavaScript module: ${relativePath(path)}`,
+    );
+  }
 }
 
 const heroPath = files.find((path) =>

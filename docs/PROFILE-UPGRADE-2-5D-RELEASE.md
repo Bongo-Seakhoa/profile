@@ -60,7 +60,7 @@ Only approved responsive derivatives required by the public experiences were cop
 
 ### Excluded
 
-- WebGL, canvas, `.glb`, `.gltf`, `.fbx`, `.blend`, shaders and runtime 3D engines.
+- Third-party 3D engines, model formats such as `.glb`, `.gltf`, `.fbx` and `.blend`, and persistent full-scene procedural overlays.
 - Audio that is not rights-cleared.
 - A contact-form backend or private data collection.
 - Publication of source reference boards or raw character concept sheets.
@@ -88,6 +88,10 @@ Explore Anzania route
         +--> Standalone Astro HTML shell
         +--> public/assets/immersive/anzania-explorer.css
         +--> public/assets/immersive/anzania-explorer.js
+        +--> public/assets/immersive/anzania-scene-effects.js
+        |       +--> one traversal-only WebGL canvas
+        |       +--> four restrained scene transitions
+        |       +--> CSS fallback when WebGL is unavailable
         +--> runtime-manifest.json
                 +--> 8 locations
                 +--> 4 powers
@@ -96,7 +100,7 @@ Explore Anzania route
                 +--> interactive atlas
 ```
 
-The two runtimes are framework-free and isolated. Professional pages may link to `/explore/` but may not request immersive runtime assets. The public-output validator allows exactly one approved Static View module and exactly one approved Explore Anzania module, enforces the `/profile/` base path and rejects canvas or heavy 3D formats.
+The runtimes are framework-free and isolated. Professional pages may link to `/explore/` but may not request immersive runtime assets. The public-output validator allows exactly one approved Static View module and exactly two approved Explore Anzania modules, restricts canvas use to the single traversal renderer, enforces the `/profile/` base path and rejects heavy 3D formats.
 
 ## 5. Full-body framing contract
 
@@ -147,8 +151,8 @@ The release is acceptable only when all of the following are true:
 - The complete companion remains inside the viewport at tested ratios and states.
 - The companion does not overlap active chapter content.
 - Look-back, traversal and return preserve full-body framing.
-- Explore Anzania contains exactly one isolated JavaScript runtime.
-- No canvas, WebGL or heavy 3D runtime format ships.
+- Explore Anzania contains exactly two isolated JavaScript modules.
+- One traversal-only WebGL canvas ships with a restrained CSS fallback and no heavy 3D runtime format.
 - Resume and CV production remains JavaScript and Chromium based.
 - GitHub Pages URLs remain base-aware under `/profile/`.
 - Social metadata and sitemap include `/explore/`.
@@ -158,7 +162,7 @@ The release is acceptable only when all of the following are true:
 
 ### Source and manifest
 
-- JavaScript syntax validation for both runtimes and validators.
+- JavaScript syntax validation for the Static View runtime, both immersive modules and validators.
 - JSON parsing and schema-shape checks.
 - Eight unique locations and 32 responsive scene paths.
 - Four unique traversal powers.
@@ -183,7 +187,10 @@ The release is acceptable only when all of the following are true:
 - Full-body framing at 390 by 844, 844 by 390, 768 by 1024, 1024 by 650, 1440 by 1000 and 1920 by 1080.
 - Guidance toast containment in portrait and low-height landscape, with no collision against the companion or active interface safe zones.
 - Look-back hold and release.
-- Traversal to the next location.
+- Four power-specific WebGL crossings against a fixed scene pair at desktop and portrait ratios.
+- A painted CSS fallback when WebGL is unavailable, including explicit foreground timing through the handoff.
+- Active WebGL context-loss recovery into the CSS fallback without a blank scene.
+- View Scene removes the interface, grading layers and traversal canvas for pointer hold, keyboard hold and cancelled-input recovery.
 - Outer-to-inner portal transition.
 - Interactive atlas and twelve-guide selector.
 - Serious and critical accessibility scan.
@@ -193,8 +200,8 @@ The release is acceptable only when all of the following are true:
 - Every professional route contains exactly one approved Static View runtime.
 - Every professional route remains complete with JavaScript disabled.
 - No professional route requests immersive runtime assets.
-- Explore Anzania contains exactly one approved immersive runtime.
-- No canvas or heavy 3D extension is present.
+- Explore Anzania contains exactly two approved immersive modules.
+- Canvas use is restricted to one traversal renderer and no heavy 3D extension is present.
 - All `/profile/` paths remain base-aware.
 - Anzania authorship and narrative-world metadata remain consistent.
 - Runtime framing contracts remain present.
@@ -205,7 +212,7 @@ The release is acceptable only when all of the following are true:
 - 100 KB maximum compressed HTML per route.
 - 90 KB maximum compressed professional CSS.
 - 16 KB maximum compressed Static View JavaScript.
-- 24 KB maximum compressed immersive CSS.
+- 28 KB maximum compressed immersive CSS.
 - 80 KB maximum compressed immersive JavaScript.
 - 650 KB maximum per immersive WebP.
 - 9 MB maximum total immersive bundle.

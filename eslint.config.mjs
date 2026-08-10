@@ -44,6 +44,28 @@ export default defineConfig(
     },
   },
   {
+    files: ["public/assets/immersive/*.js"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        CSS: "readonly",
+        document: "readonly",
+        fetch: "readonly",
+        HTMLCanvasElement: "readonly",
+        HTMLElement: "readonly",
+        HTMLImageElement: "readonly",
+        HTMLInputElement: "readonly",
+        HTMLSelectElement: "readonly",
+        HTMLTextAreaElement: "readonly",
+        Image: "readonly",
+        performance: "readonly",
+        ResizeObserver: "readonly",
+        URL: "readonly",
+        window: "readonly",
+      },
+    },
+  },
+  {
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
       "@typescript-eslint/consistent-type-imports": [

@@ -1,3 +1,5 @@
+import { createSceneEffects } from "./anzania-scene-effects.js";
+
 const manifestUrl = new URL("./runtime-manifest.json", import.meta.url);
 const assetRootUrl = new URL("./", import.meta.url);
 const siteRootUrl = new URL("../../", import.meta.url);
@@ -14,10 +16,7 @@ const selectors = {
   sceneCurrent: "[data-scene-current]",
   sceneForegroundPrevious: "[data-scene-foreground-previous]",
   sceneForeground: "[data-scene-foreground]",
-  environmentFx: "[data-environment-fx]",
-  powerTransition: "[data-power-transition]",
-  powerTransitionName: "[data-power-transition-name]",
-  powerTransitionCaption: "[data-power-transition-caption]",
+  sceneEffects: "[data-scene-effects]",
   progressLabel: "[data-progress-label]",
   progressBar: "[data-progress-bar]",
   locationRailList: "[data-location-rail-list]",
@@ -79,6 +78,50 @@ const elements = Object.fromEntries(
     document.querySelector(selector),
   ]),
 );
+
+const sceneEffects = createSceneEffects(elements.sceneEffects, {
+  onContextLost: () => {
+    elements.experience?.classList.remove("has-scene-effects");
+    if (elements.experience) {
+      elements.experience.dataset.effectRenderer = "css-fallback";
+    }
+  },
+});
+
+const solarAnchors = {
+  "threshold-dunes": {
+    outer: [0.57, 0.32],
+    inner: [0.14, 0.22],
+  },
+  "stone-pass": {
+    outer: [0.62, 0.24],
+    inner: [0.56, 0.2],
+  },
+  "garden-origins": {
+    outer: [0.84, 0.18],
+    inner: [0.75, 0.13],
+  },
+  "archive-echoes": {
+    outer: [0.28, 0.34],
+    inner: [0.64, 0.2],
+  },
+  "forge-resolve": {
+    outer: [0.28, 0.17],
+    inner: [0.2, 0.14],
+  },
+  "bazaar-skill": {
+    outer: [0.54, 0.23],
+    inner: [0.62, 0.2],
+  },
+  "observatory-horizons": {
+    outer: [0.76, 0.21],
+    inner: [0.58, 0.16],
+  },
+  "oasis-audience": {
+    outer: [0.83, 0.25],
+    inner: [0.39, 0.43],
+  },
+};
 
 const storageKeys = {
   guide: "anzania-guide-v2",
@@ -260,6 +303,10 @@ function setInteractionLock(locked) {
 
 function getCurrentLocation() {
   return state.manifest?.locations[state.locationIndex] ?? null;
+}
+
+function getSolarAnchor(location, sceneMode = state.sceneMode) {
+  return solarAnchors[location?.id]?.[sceneMode] ?? [0.58, 0.3];
 }
 
 function getCurrentGuide() {
@@ -766,7 +813,6 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   }
 
   elements.experience.dataset.sceneMode = state.sceneMode;
-  elements.experience.dataset.biome = location.biome;
   elements.experience.dataset.location = location.id;
   elements.chapterPanel.dataset.mode = state.sceneMode;
   if (elements.chapterInside) {
@@ -905,7 +951,9 @@ function transitionScene(nextSource, { immediate = false } = {}) {
   if (immediate || !currentBackground) {
     const background = `url("${nextSource}")`;
     elements.sceneCurrent.style.backgroundImage = background;
+    elements.sceneCurrent.dataset.source = nextSource;
     elements.sceneForeground.style.backgroundImage = background;
+    elements.sceneForeground.dataset.source = nextSource;
     elements.sceneCurrent.style.opacity = "1";
     elements.scenePrevious.style.opacity = "0";
     elements.sceneForeground.style.opacity = "0.76";
@@ -914,8 +962,14 @@ function transitionScene(nextSource, { immediate = false } = {}) {
   }
 
   elements.scenePrevious.style.backgroundImage = currentBackground;
+  elements.scenePrevious.dataset.source =
+    elements.sceneCurrent.dataset.source || nextSource;
   elements.sceneForegroundPrevious.style.backgroundImage =
     elements.sceneForeground.style.backgroundImage || currentBackground;
+  elements.sceneForegroundPrevious.dataset.source =
+    elements.sceneForeground.dataset.source ||
+    elements.sceneCurrent.dataset.source ||
+    nextSource;
   elements.scenePrevious.style.opacity = "1";
   elements.sceneForegroundPrevious.style.opacity = "0.76";
   elements.sceneCurrent.style.opacity = "0";
@@ -924,7 +978,9 @@ function transitionScene(nextSource, { immediate = false } = {}) {
   window.requestAnimationFrame(() => {
     const background = `url("${nextSource}")`;
     elements.sceneCurrent.style.backgroundImage = background;
+    elements.sceneCurrent.dataset.source = nextSource;
     elements.sceneForeground.style.backgroundImage = background;
+    elements.sceneForeground.dataset.source = nextSource;
     window.requestAnimationFrame(() => {
       elements.sceneCurrent.style.opacity = "1";
       elements.scenePrevious.style.opacity = "0";
@@ -945,18 +1001,25 @@ function stageSceneTransition(nextSource) {
   }
 
   const outgoingBackground = elements.sceneCurrent.style.backgroundImage;
+  const outgoingSource = elements.sceneCurrent.dataset.source;
   const outgoingForeground =
     elements.sceneForeground.style.backgroundImage || outgoingBackground;
   const incomingBackground = `url("${nextSource}")`;
 
   elements.experience.classList.add("is-scene-staged");
   elements.scenePrevious.style.backgroundImage = outgoingBackground;
+  if (outgoingSource) elements.scenePrevious.dataset.source = outgoingSource;
   elements.sceneForegroundPrevious.style.backgroundImage = outgoingForeground;
+  if (outgoingSource) {
+    elements.sceneForegroundPrevious.dataset.source = outgoingSource;
+  }
   elements.scenePrevious.style.opacity = "1";
   elements.sceneForegroundPrevious.style.opacity = "0.76";
 
   elements.sceneCurrent.style.backgroundImage = incomingBackground;
+  elements.sceneCurrent.dataset.source = nextSource;
   elements.sceneForeground.style.backgroundImage = incomingBackground;
+  elements.sceneForeground.dataset.source = nextSource;
   elements.sceneCurrent.style.opacity = "0";
   elements.sceneForeground.style.opacity = "0";
   void elements.scenePrevious.offsetWidth;
@@ -984,6 +1047,8 @@ function finishSceneTransition() {
   revealStagedScene();
   elements.scenePrevious?.style.removeProperty("background-image");
   elements.sceneForegroundPrevious?.style.removeProperty("background-image");
+  delete elements.scenePrevious?.dataset.source;
+  delete elements.sceneForegroundPrevious?.dataset.source;
   elements.experience.classList.remove("is-scene-staged");
   delete elements.experience.dataset.transitionPhase;
   delete elements.experience.dataset.travelDirection;
@@ -1284,12 +1349,6 @@ function activatePower(
     0.4,
     0.62,
   );
-  if (elements.powerTransitionName) {
-    elements.powerTransitionName.textContent = power.name;
-  }
-  if (elements.powerTransitionCaption) {
-    elements.powerTransitionCaption.textContent = power.description;
-  }
   elements.experience.dataset.activePower = state.selectedPowerId;
   elements.experience.dataset.travelDirection =
     direction < 0 ? "backward" : "forward";
@@ -1311,12 +1370,64 @@ function activatePower(
   );
   document.documentElement.style.setProperty(
     "--travel-outgoing-x",
-    direction < 0 ? "18vw" : "-18vw",
+    direction < 0 ? "5.5vw" : "-5.5vw",
   );
   document.documentElement.style.setProperty(
     "--travel-incoming-x",
-    direction < 0 ? "-16vw" : "16vw",
+    direction < 0 ? "-5vw" : "5vw",
   );
+}
+
+async function startSceneTransitionEffect({
+  fromSource,
+  toSource,
+  duration,
+  direction,
+  sunAnchor,
+}) {
+  if (
+    !state.motionEnabled ||
+    !sceneEffects?.available ||
+    !fromSource ||
+    !toSource
+  ) {
+    elements.experience?.classList.remove("has-scene-effects");
+    if (elements.experience) {
+      elements.experience.dataset.effectRenderer = "css-fallback";
+    }
+    return false;
+  }
+
+  try {
+    await sceneEffects.start({
+      fromSource,
+      toSource,
+      powerId: state.selectedPowerId,
+      duration,
+      direction,
+      sunAnchor,
+    });
+    elements.experience?.classList.add("has-scene-effects");
+    if (elements.experience) {
+      elements.experience.dataset.effectRenderer = "webgl";
+    }
+    return true;
+  } catch {
+    sceneEffects.stop();
+    elements.experience?.classList.remove("has-scene-effects");
+    if (elements.experience) {
+      elements.experience.dataset.effectRenderer = "css-fallback";
+    }
+    return false;
+  }
+}
+
+function stopSceneTransitionEffect() {
+  sceneEffects?.stop();
+  elements.experience?.classList.remove("has-scene-effects");
+  if (elements.experience) {
+    delete elements.experience.dataset.effectRenderer;
+  }
 }
 
 async function travelTo(
@@ -1333,6 +1444,7 @@ async function travelTo(
   const handoffAt = clamp(power.handoffAt ?? 0.52, 0.4, 0.62);
   const direction = clampedIndex < state.locationIndex ? -1 : 1;
 
+  clearTransitionPreview();
   setLookBack(false);
   setSceneView(false);
   setPresenting(false, 0, { updateGuidePose: false });
@@ -1345,8 +1457,16 @@ async function travelTo(
   recalculateFraming();
   announce(`${power.name}. Travelling to ${nextLocation.formalName}.`);
 
+  const outgoingSource = elements.sceneCurrent?.dataset.source;
   const nextSource = chooseSceneSource(nextLocation.outer);
   await loadImage(nextSource);
+  await startSceneTransitionEffect({
+    fromSource: outgoingSource,
+    toSource: nextSource,
+    duration,
+    direction,
+    sunAnchor: getSolarAnchor(nextLocation, "outer"),
+  });
   stageSceneTransition(nextSource);
   activatePower(power, { duration, handoffAt, direction });
   elements.experience.dataset.transitionPhase = "departure";
@@ -1360,6 +1480,7 @@ async function travelTo(
   await wait(Math.max(16, duration * (1 - handoffAt)));
 
   elements.experience.classList.remove("is-traversing", power.className);
+  stopSceneTransitionEffect();
   finishSceneTransition();
   state.isTraversing = false;
   setInteractionLock(false);
@@ -1370,6 +1491,7 @@ async function travelTo(
 
   if (focusChapter) elements.chapterPanel?.focus({ preventScroll: true });
   preloadAdjacentScenes();
+  warmSceneTransition();
 }
 
 async function togglePortal() {
@@ -1382,6 +1504,7 @@ async function togglePortal() {
   const handoffAt = clamp(power.handoffAt ?? 0.52, 0.4, 0.62);
   const nextMode = state.sceneMode === "outer" ? "inner" : "outer";
   const direction = nextMode === "inner" ? 1 : -1;
+  clearTransitionPreview();
   setLookBack(false);
   setSceneView(false);
   setPresenting(false, 0, { updateGuidePose: false });
@@ -1391,8 +1514,16 @@ async function togglePortal() {
   setInteractionLock(true);
   recalculateFraming();
 
+  const outgoingSource = elements.sceneCurrent?.dataset.source;
   const nextSource = chooseSceneSource(location[nextMode]);
   await loadImage(nextSource);
+  await startSceneTransitionEffect({
+    fromSource: outgoingSource,
+    toSource: nextSource,
+    duration,
+    direction,
+    sunAnchor: getSolarAnchor(location, nextMode),
+  });
   stageSceneTransition(nextSource);
   activatePower(power, { duration, handoffAt, direction });
   elements.experience.dataset.transitionPhase = "departure";
@@ -1410,6 +1541,7 @@ async function togglePortal() {
   await wait(Math.max(16, duration * (1 - handoffAt)));
 
   elements.experience.classList.remove("is-traversing", power.className);
+  stopSceneTransitionEffect();
   finishSceneTransition();
   state.isTraversing = false;
   setInteractionLock(false);
@@ -1423,6 +1555,7 @@ async function togglePortal() {
       : `Returned to the outer approach of ${location.formalName}.`,
   );
   setPresenting(true, 860);
+  warmSceneTransition();
 }
 
 function selectGuide(guideId) {
@@ -1457,6 +1590,7 @@ function selectPower(powerId, { announceSelection = true } = {}) {
     );
     announce(`${power.name} selected as the traversal ability.`);
   }
+  warmSceneTransition();
 }
 
 function selectInsideTab(tabId, { focus = false } = {}) {
@@ -1501,6 +1635,63 @@ function closeOpenDialog() {
   if (!openDialogElement) return false;
   closeDialog(openDialogElement);
   return true;
+}
+
+async function previewTransition({
+  powerId = state.selectedPowerId,
+  fromIndex = 0,
+  toIndex = 1,
+  progress = 0.5,
+  sceneMode = "outer",
+} = {}) {
+  const fromLocation = state.manifest?.locations[fromIndex];
+  const toLocation = state.manifest?.locations[toIndex];
+  const power = state.manifest?.powers[powerId];
+  if (!sceneEffects?.available || !fromLocation || !toLocation || !power) {
+    return { available: false };
+  }
+
+  const fromSource = chooseSceneSource(fromLocation[sceneMode]);
+  const toSource = chooseSceneSource(toLocation[sceneMode]);
+  await Promise.all([loadImage(fromSource), loadImage(toSource)]);
+  const frame = await sceneEffects.preview({
+    fromSource,
+    toSource,
+    powerId,
+    duration: power.durationMs,
+    direction: toIndex < fromIndex ? -1 : 1,
+    progress,
+    sunAnchor: getSolarAnchor(toLocation, sceneMode),
+  });
+  elements.experience?.classList.add(
+    "has-scene-effects",
+    "is-transition-preview",
+  );
+  if (elements.experience) {
+    elements.experience.dataset.effectRenderer = "webgl-preview";
+    elements.experience.dataset.previewPower = powerId;
+  }
+  return {
+    available: true,
+    powerId,
+    fromId: fromLocation.id,
+    toId: toLocation.id,
+    progress,
+    sceneMode,
+    ...frame,
+  };
+}
+
+function clearTransitionPreview() {
+  sceneEffects?.stop();
+  elements.experience?.classList.remove(
+    "has-scene-effects",
+    "is-transition-preview",
+  );
+  if (elements.experience) {
+    delete elements.experience.dataset.effectRenderer;
+    delete elements.experience.dataset.previewPower;
+  }
 }
 
 function setLookBack(active) {
@@ -1658,6 +1849,32 @@ function preloadAdjacentScenes() {
       ];
     });
   for (const src of [...new Set(candidates)]) void loadImage(src);
+}
+
+function warmSceneTransition() {
+  if (!state.motionEnabled || !state.manifest || !sceneEffects?.available) {
+    return;
+  }
+  const currentLocation = getCurrentLocation();
+  if (!currentLocation) return;
+  const finalIndex = state.manifest.locations.length - 1;
+  const nextLocation =
+    state.locationIndex < finalIndex
+      ? state.manifest.locations[state.locationIndex + 1]
+      : currentLocation;
+  const nextMode =
+    state.locationIndex < finalIndex
+      ? "outer"
+      : state.sceneMode === "outer"
+        ? "inner"
+        : "outer";
+  void sceneEffects
+    .preloadTransition({
+      fromSource: chooseSceneSource(currentLocation[state.sceneMode]),
+      toSource: chooseSceneSource(nextLocation[nextMode]),
+      powerId: state.selectedPowerId,
+    })
+    .catch(() => undefined);
 }
 
 function beginJourney() {
@@ -2024,6 +2241,7 @@ async function initialise() {
 
     bindEvents();
     preloadAdjacentScenes();
+    warmSceneTransition();
     setLoadingProgress(100, "The crossing is ready.");
     await wait(state.motionEnabled ? 340 : 20);
 
@@ -2072,6 +2290,8 @@ window.__ANZANIA_DEBUG__ = {
   setGuidePose,
   setSceneView,
   selectPower,
+  previewTransition,
+  clearTransitionPreview,
 };
 
 void initialise();
