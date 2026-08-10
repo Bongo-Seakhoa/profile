@@ -336,6 +336,8 @@ const manifest = {
       mimeType: derivative.mimeType,
       width: derivative.width,
       height: derivative.height,
+      bytes: derivative.bytes,
+      sha256: derivative.sha256,
       path: derivative.path,
     })),
   })),

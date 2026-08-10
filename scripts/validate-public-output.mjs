@@ -176,6 +176,9 @@ for (const path of htmlFiles) {
       "Anzania is a fictional place.",
       "Continue in Static View",
       'data-guide-contract="full-body companion"',
+      "data-view-scene-button",
+      'aria-keyshortcuts="V"',
+      'aria-keyshortcuts="L"',
     ];
     for (const fragment of requiredFragments) {
       if (!html.includes(fragment)) {
@@ -396,6 +399,11 @@ try {
     "recalculateFraming",
     "is-looking-back",
     "is-traversing",
+    "is-viewing-scene",
+    "stageSceneTransition",
+    'dataset.transitionPhase = "departure"',
+    'dataset.transitionPhase = "arrival"',
+    "pointercancel",
     "0.14",
     "0.2",
     "ResizeObserver",

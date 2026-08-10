@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -33,6 +34,8 @@ interface ManifestDerivative {
   readonly mimeType: string;
   readonly width: number;
   readonly height: number;
+  readonly bytes: number;
+  readonly sha256: string;
   readonly path: string;
 }
 
@@ -202,6 +205,11 @@ describe("generated Anzania derivatives", () => {
         const buffer = await readFile(path);
         const metadata = await sharp(buffer, { failOn: "error" }).metadata();
 
+        expect(buffer.byteLength, derivative.path).toBe(derivative.bytes);
+        expect(
+          createHash("sha256").update(buffer).digest("hex"),
+          derivative.path,
+        ).toBe(derivative.sha256);
         expect(metadata.width, derivative.path).toBe(derivative.width);
         expect(metadata.height, derivative.path).toBe(derivative.height);
         expect(metadata.format, derivative.path).toBe(

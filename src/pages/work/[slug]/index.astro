@@ -107,21 +107,24 @@ const recordMetadata = [
 const relatedProjects = content.projects
   .filter((entry) => entry.id !== project?.id)
   .filter((entry) => entry.status !== "archived")
+  .filter((entry) =>
+    entry.technologies.some((technology) =>
+      record.technologies.includes(technology),
+    ),
+  )
   .sort((left, right) => {
-    if (left.featured !== right.featured) return left.featured ? -1 : 1;
-
-    const featuredOrderDifference =
-      (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
-      (right.featuredOrder ?? Number.MAX_SAFE_INTEGER);
-    if (featuredOrderDifference !== 0) return featuredOrderDifference;
-
     const leftOverlap = left.technologies.filter((technology) =>
       record.technologies.includes(technology),
     ).length;
     const rightOverlap = right.technologies.filter((technology) =>
       record.technologies.includes(technology),
     ).length;
-    return rightOverlap - leftOverlap;
+    if (leftOverlap !== rightOverlap) return rightOverlap - leftOverlap;
+    if (left.featured !== right.featured) return left.featured ? -1 : 1;
+    return (
+      (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.featuredOrder ?? Number.MAX_SAFE_INTEGER)
+    );
   })
   .slice(0, 2);
 const canonicalUrl = new URL(route.path, settings.siteUrl).href;

@@ -307,6 +307,10 @@ test.describe("Explore Anzania release experience", () => {
       "data-experience-state",
       "traversing",
     );
+    await page.keyboard.press("m");
+    await page.keyboard.press("g");
+    await expect(page.locator("[data-map-dialog]")).not.toBeVisible();
+    await expect(page.locator("[data-guide-dialog]")).not.toBeVisible();
     expectCompleteFullBody(await framingMetrics(page));
     await expect(page.locator("[data-location-name]")).toHaveText(
       "Stone Pass of Context",
@@ -316,6 +320,266 @@ test.describe("Explore Anzania release experience", () => {
       "exploring",
     );
     expectCompleteFullBody(await framingMetrics(page));
+  });
+
+  test("gives every traversal ability a distinct full-scene departure and arrival", async ({
+    page,
+  }) => {
+    test.setTimeout(120_000);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await beginJourney(page);
+
+    const abilities = [
+      {
+        id: "dune-surfing",
+        className: "is-dune-surfing",
+        duration: "2100ms",
+        departure: "ability-dune-departure",
+        arrival: "ability-dune-arrival",
+        overlay: "ability-dune-wind-field",
+      },
+      {
+        id: "sand-teleportation",
+        className: "is-sand-teleporting",
+        duration: "2350ms",
+        departure: "ability-sand-departure",
+        arrival: "ability-sand-arrival",
+        overlay: "ability-sand-curtain",
+      },
+      {
+        id: "solar-propulsion",
+        className: "is-solar-propelling",
+        duration: "2250ms",
+        departure: "ability-solar-departure",
+        arrival: "ability-solar-arrival",
+        overlay: "ability-solar-world-bloom",
+      },
+      {
+        id: "reality-bending",
+        className: "is-reality-bending",
+        duration: "2400ms",
+        departure: "ability-reality-departure",
+        arrival: "ability-reality-arrival",
+        overlay: "ability-reality-world-fold",
+      },
+    ] as const;
+    const signatures = new Set<string>();
+
+    for (const ability of abilities) {
+      await page.locator(`[data-power-id="${ability.id}"]`).click();
+      const outgoingBackground = await page
+        .locator("[data-scene-current]")
+        .evaluate((element) => (element as HTMLElement).style.backgroundImage);
+
+      // Record phase mutations in the page before starting travel. This cannot
+      // miss the departure phase if a slow CI worker resumes Playwright only
+      // after the experience has already advanced to arrival.
+      await page.evaluate(() => {
+        type TransitionTraceEntry = {
+          phase: "departure" | "arrival";
+          className: string;
+          duration: string;
+          overlayWidth: number;
+          overlayHeight: number;
+          previousAnimation: string;
+          currentAnimation: string;
+          overlayAnimation: string;
+          previousBackground: string;
+          currentBackground: string;
+          currentOpacity: string;
+        };
+        type TraceWindow = typeof window & {
+          __anzaniaTransitionTrace?: TransitionTraceEntry[];
+          __anzaniaTransitionObserver?: MutationObserver;
+        };
+
+        const traceWindow = window as TraceWindow;
+        const experience =
+          document.querySelector<HTMLElement>("[data-experience]");
+        const overlay = document.querySelector<HTMLElement>(
+          "[data-power-transition]",
+        );
+        const previous = document.querySelector<HTMLElement>(
+          "[data-scene-previous]",
+        );
+        const current = document.querySelector<HTMLElement>(
+          "[data-scene-current]",
+        );
+        if (!experience || !overlay || !previous || !current) {
+          throw new Error(
+            "Transition recorder could not find the scene layers.",
+          );
+        }
+
+        traceWindow.__anzaniaTransitionObserver?.disconnect();
+        traceWindow.__anzaniaTransitionTrace = [];
+
+        const recordPhase = () => {
+          const phase = experience.dataset.transitionPhase;
+          if (phase !== "departure" && phase !== "arrival") return;
+          if (
+            traceWindow.__anzaniaTransitionTrace?.some(
+              (entry) => entry.phase === phase,
+            )
+          ) {
+            return;
+          }
+
+          const rect = overlay.getBoundingClientRect();
+          traceWindow.__anzaniaTransitionTrace?.push({
+            phase,
+            className: experience.className,
+            duration: getComputedStyle(document.documentElement)
+              .getPropertyValue("--ability-duration")
+              .trim(),
+            overlayWidth: rect.width,
+            overlayHeight: rect.height,
+            previousAnimation: getComputedStyle(previous).animationName,
+            currentAnimation: getComputedStyle(current).animationName,
+            overlayAnimation: getComputedStyle(overlay, "::before")
+              .animationName,
+            previousBackground: previous.style.backgroundImage,
+            currentBackground: current.style.backgroundImage,
+            currentOpacity: getComputedStyle(current).opacity,
+          });
+        };
+
+        const observer = new MutationObserver(recordPhase);
+        observer.observe(experience, {
+          attributes: true,
+          attributeFilter: ["data-transition-phase", "class"],
+        });
+        traceWindow.__anzaniaTransitionObserver = observer;
+      });
+
+      await page.locator("[data-next-location]").click();
+      const experience = page.locator("[data-experience]");
+      await expect
+        .poll(
+          () =>
+            page.evaluate(() => {
+              const traceWindow = window as typeof window & {
+                __anzaniaTransitionTrace?: Array<{ phase: string }>;
+              };
+              return Boolean(
+                traceWindow.__anzaniaTransitionTrace?.some(
+                  (entry) => entry.phase === "departure",
+                ),
+              );
+            }),
+          { timeout: 10_000 },
+        )
+        .toBe(true);
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-experience-state",
+        "exploring",
+        { timeout: 12_000 },
+      );
+      await expect(experience).not.toHaveAttribute("data-transition-phase");
+
+      const trace = await page.evaluate(() => {
+        type TransitionTraceEntry = {
+          phase: "departure" | "arrival";
+          className: string;
+          duration: string;
+          overlayWidth: number;
+          overlayHeight: number;
+          previousAnimation: string;
+          currentAnimation: string;
+          overlayAnimation: string;
+          previousBackground: string;
+          currentBackground: string;
+          currentOpacity: string;
+        };
+        const traceWindow = window as typeof window & {
+          __anzaniaTransitionTrace?: TransitionTraceEntry[];
+          __anzaniaTransitionObserver?: MutationObserver;
+        };
+        traceWindow.__anzaniaTransitionObserver?.disconnect();
+        return traceWindow.__anzaniaTransitionTrace ?? [];
+      });
+
+      expect(trace.map((entry) => entry.phase)).toEqual([
+        "departure",
+        "arrival",
+      ]);
+      const departure = trace[0];
+      const arrival = trace[1];
+      if (!departure || !arrival) {
+        throw new Error(`Missing transition phases for ${ability.id}`);
+      }
+      expect(departure.className).toContain(ability.className);
+      expect(departure.duration).toBe(ability.duration);
+      expect(departure.overlayWidth).toBeGreaterThanOrEqual(1439);
+      expect(departure.overlayHeight).toBeGreaterThanOrEqual(899);
+      expect(departure.previousAnimation).toContain(ability.departure);
+      expect(departure.overlayAnimation).toContain(ability.overlay);
+      expect(departure.previousBackground).toBe(outgoingBackground);
+      expect(departure.currentBackground).not.toBe(outgoingBackground);
+      expect(Number(departure.currentOpacity)).toBeLessThanOrEqual(0.05);
+      expect(arrival.className).toContain(ability.className);
+      expect(arrival.currentAnimation).toContain(ability.arrival);
+      signatures.add(
+        `${departure.previousAnimation}:${departure.overlayAnimation}:${arrival.currentAnimation}`,
+      );
+    }
+
+    expect(signatures.size).toBe(abilities.length);
+  });
+
+  test("reveals the unobstructed scene while held and explains both hold controls", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await beginJourney(page);
+
+    const experience = page.locator("[data-experience]");
+    const sceneButton = page.locator("[data-view-scene-button]");
+    const sceneStatus = page.locator("[data-scene-view-status]");
+    const lookBackButton = page.locator("[data-look-back-button]");
+
+    await expect(sceneButton).toHaveAttribute("aria-keyshortcuts", "V");
+    await expect(lookBackButton).toHaveAttribute("aria-keyshortcuts", "L");
+    await expect(lookBackButton).toContainText("Hold button or L");
+
+    await sceneButton.hover();
+    await page.mouse.down();
+    await expect(experience).toHaveClass(/is-viewing-scene/);
+    await expect(sceneButton).toHaveAttribute("aria-pressed", "true");
+    await expect(sceneStatus).toHaveAttribute("aria-hidden", "false");
+    await expect
+      .poll(() =>
+        page
+          .locator("[data-chapter-panel]")
+          .evaluate((element) => getComputedStyle(element).opacity),
+      )
+      .toBe("0");
+    await expect
+      .poll(() =>
+        page
+          .locator("[data-environment-fx]")
+          .evaluate((element) => getComputedStyle(element).opacity),
+      )
+      .toBe("1");
+    await page.mouse.up();
+    await expect(experience).not.toHaveClass(/is-viewing-scene/);
+    await expect(sceneButton).toHaveAttribute("aria-pressed", "false");
+
+    await page.keyboard.down("v");
+    await expect(experience).toHaveClass(/is-viewing-scene/);
+    await page.keyboard.up("v");
+    await expect(experience).not.toHaveClass(/is-viewing-scene/);
+
+    await page.evaluate(() => {
+      (
+        window as typeof window & {
+          __ANZANIA_DEBUG__: { setSceneView: (active: boolean) => void };
+        }
+      ).__ANZANIA_DEBUG__.setSceneView(true);
+    });
+    await expect(experience).toHaveClass(/is-viewing-scene/);
+    await sceneButton.dispatchEvent("pointercancel", { pointerId: 19 });
+    await expect(experience).not.toHaveClass(/is-viewing-scene/);
   });
 
   test("opens the atlas, selects an original guide and reveals a deep location record", async ({
@@ -348,17 +612,31 @@ test.describe("Explore Anzania release experience", () => {
     await expect(
       page.locator('[data-guide-id="dn-m-pac-01"] img'),
     ).toHaveAttribute("loading", "lazy");
-    const finalGuide = page.locator('[data-guide-id="dn-m-pac-01"]');
+    const finalGuide = page.locator('[data-guide-id="dn-n-sea-01"]');
     await finalGuide.evaluate((element) =>
       element.scrollIntoView({ block: "nearest" }),
     );
     await finalGuide.focus();
     await expect(finalGuide).toBeFocused();
+    const companionRemainsPainted = page.evaluate(async () => {
+      const image = document.querySelector<HTMLImageElement>(
+        "[data-companion-image]",
+      );
+      if (!image) return false;
+      for (let frame = 0; frame < 90; frame += 1) {
+        if (!image.complete || image.naturalWidth <= 0) return false;
+        await new Promise<void>((resolve) =>
+          window.requestAnimationFrame(() => resolve()),
+        );
+      }
+      return true;
+    });
     await page.keyboard.press("Enter");
-    await expect(page.locator("[data-companion-name]")).toHaveText("Manu");
+    await expect(page.locator("[data-companion-name]")).toHaveText("Sol");
     await expect(page.locator("[data-guide-specialty]")).toHaveText(
-      "Horizon planner",
+      "Signal interpreter",
     );
+    expect(await companionRemainsPainted).toBe(true);
     expectCompleteFullBody(await framingMetrics(page));
 
     await page.locator("[data-portal-button]").click();

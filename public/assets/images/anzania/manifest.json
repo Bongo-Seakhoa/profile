@@ -22,6 +22,8 @@
           "mimeType": "image/avif",
           "width": 480,
           "height": 270,
+          "bytes": 18137,
+          "sha256": "e727e2075c8d42c4f6e6a9ef8731d6808fd52dce3aaae918aaf248e1d03f2ca5",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-480.avif"
         },
         {
@@ -29,6 +31,8 @@
           "mimeType": "image/webp",
           "width": 480,
           "height": 270,
+          "bytes": 19678,
+          "sha256": "f6f9334a349fe5301374ecd2d9dc0cb440fb262109462db0a1342283aa98d6d7",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-480.webp"
         },
         {
@@ -36,6 +40,8 @@
           "mimeType": "image/jpeg",
           "width": 480,
           "height": 270,
+          "bytes": 31447,
+          "sha256": "8f9523c2e10fb661d5cfe872ca977403635eff4427c0bc16715fa90536eb9e41",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-480.jpg"
         },
         {
@@ -43,6 +49,8 @@
           "mimeType": "image/avif",
           "width": 768,
           "height": 432,
+          "bytes": 39869,
+          "sha256": "4bfc689230e22ed000d0836393ed16a048dee84cd6aa774e52d654ffc4a29ebd",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-768.avif"
         },
         {
@@ -50,6 +58,8 @@
           "mimeType": "image/webp",
           "width": 768,
           "height": 432,
+          "bytes": 41600,
+          "sha256": "cbe3ef959a45704cf411671164d74e9ce631c957e24f4313377cca1e5d61ffed",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-768.webp"
         },
         {
@@ -57,6 +67,8 @@
           "mimeType": "image/jpeg",
           "width": 768,
           "height": 432,
+          "bytes": 71434,
+          "sha256": "60d288bb62adbe1b3fd7d77d966d699d84c25380d69185d86d026235ad81992d",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-768.jpg"
         },
         {
@@ -64,6 +76,8 @@
           "mimeType": "image/avif",
           "width": 1200,
           "height": 675,
+          "bytes": 79579,
+          "sha256": "d19fbfedbf96adcfb7ca02a580a3e63d3f4d724eba8e541e66cf0bf5e23274c7",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-1200.avif"
         },
         {
@@ -71,6 +85,8 @@
           "mimeType": "image/webp",
           "width": 1200,
           "height": 675,
+          "bytes": 85870,
+          "sha256": "763349cf59de6446efe1deab4e23c41735d06b7349503c3e93a67eb1430591ad",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-1200.webp"
         },
         {
@@ -78,6 +94,8 @@
           "mimeType": "image/jpeg",
           "width": 1200,
           "height": 675,
+          "bytes": 152647,
+          "sha256": "d9896c565a09db36c21dbd88fb4ec6da70b3cc07eaac7f5c252486018343b6ba",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-1200.jpg"
         },
         {
@@ -85,6 +103,8 @@
           "mimeType": "image/avif",
           "width": 1672,
           "height": 941,
+          "bytes": 323688,
+          "sha256": "4091aad040cf516a9ea9c456569a029f7bb0301183882a625638ba8acf713265",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-1672.avif"
         },
         {
@@ -92,6 +112,8 @@
           "mimeType": "image/webp",
           "width": 1672,
           "height": 941,
+          "bytes": 130310,
+          "sha256": "013fcdc0f3298404a8fcccceaa06accb911cfa65fa4155ba28a2a74c3e7af583",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-1672.webp"
         },
         {
@@ -99,6 +121,8 @@
           "mimeType": "image/jpeg",
           "width": 1672,
           "height": 941,
+          "bytes": 254582,
+          "sha256": "3230b6d6f12453ad06843ca4775fd791103a85902a50bac7721b899df920d9e5",
           "path": "assets/images/anzania/anzania-threshold-dunes-outer-v01/anzania-threshold-dunes-outer-v01-1672.jpg"
         }
       ]
@@ -123,6 +147,8 @@
           "mimeType": "image/avif",
           "width": 480,
           "height": 270,
+          "bytes": 26833,
+          "sha256": "58a7242324d2871b216b5644cac78bada1113dad2362a7a02561217a97be5c14",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-480.avif"
         },
         {
@@ -130,6 +156,8 @@
           "mimeType": "image/webp",
           "width": 480,
           "height": 270,
+          "bytes": 33072,
+          "sha256": "f61d7e3baaca0f393bbe3326afa4aa268802802838a712d985a952bbbfb45840",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-480.webp"
         },
         {
@@ -137,6 +165,8 @@
           "mimeType": "image/jpeg",
           "width": 480,
           "height": 270,
+          "bytes": 45028,
+          "sha256": "6797959ee955a394ccadc8f07403689386e6e913b227cb1c8cea34e57b5786cf",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-480.jpg"
         },
         {
@@ -144,6 +174,8 @@
           "mimeType": "image/avif",
           "width": 768,
           "height": 432,
+          "bytes": 65015,
+          "sha256": "8a7ac1d12cbe8e755d5c894e114b3886a985c1e5262ef7e72c515f5ef67883e8",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-768.avif"
         },
         {
@@ -151,6 +183,8 @@
           "mimeType": "image/webp",
           "width": 768,
           "height": 432,
+          "bytes": 79812,
+          "sha256": "f3df697067145dc59dad4a496cc5bf29b4b2b0c6d90f3fe51d3b8f9dcf38cf3a",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-768.webp"
         },
         {
@@ -158,6 +192,8 @@
           "mimeType": "image/jpeg",
           "width": 768,
           "height": 432,
+          "bytes": 108972,
+          "sha256": "653a2188a51d2af0f98542fa1bb66f5af34fc88af7d72a916ab54ce5976cc1e0",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-768.jpg"
         },
         {
@@ -165,6 +201,8 @@
           "mimeType": "image/avif",
           "width": 1200,
           "height": 675,
+          "bytes": 141997,
+          "sha256": "64a685b57109c259b813b4cbfaca127ca6135426a97b1c0ea73892dd17d91771",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-1200.avif"
         },
         {
@@ -172,6 +210,8 @@
           "mimeType": "image/webp",
           "width": 1200,
           "height": 675,
+          "bytes": 176236,
+          "sha256": "c2db287a9306d40e97a082fb582aa7c630fc74ca4d0b003a1a0efd542a592731",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-1200.webp"
         },
         {
@@ -179,6 +219,8 @@
           "mimeType": "image/jpeg",
           "width": 1200,
           "height": 675,
+          "bytes": 250307,
+          "sha256": "300f76deb1f3c9437423ef6283ee1e0035fb784ac164b35b0684a7df032bcfa3",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-1200.jpg"
         },
         {
@@ -186,6 +228,8 @@
           "mimeType": "image/avif",
           "width": 1672,
           "height": 941,
+          "bytes": 229989,
+          "sha256": "f1b1af22a89db441fb956c73aff446d9a85d27b27cdb2783d85418284aee173d",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-1672.avif"
         },
         {
@@ -193,6 +237,8 @@
           "mimeType": "image/webp",
           "width": 1672,
           "height": 941,
+          "bytes": 288844,
+          "sha256": "fb7cee159a80a382e9718aab7b906fa7b5b2067ac28089e17ac6fa143af3f5a7",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-1672.webp"
         },
         {
@@ -200,6 +246,8 @@
           "mimeType": "image/jpeg",
           "width": 1672,
           "height": 941,
+          "bytes": 433247,
+          "sha256": "98e4757a0585ef1693617037139d5213c6a5c188153e0b8c95974c40760ab497",
           "path": "assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-1672.jpg"
         }
       ]
@@ -224,6 +272,8 @@
           "mimeType": "image/avif",
           "width": 480,
           "height": 270,
+          "bytes": 19551,
+          "sha256": "2c12ca251e12fa9b13ae80812a4e63bbcee6977e2a744cb74f72d532d2312682",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-480.avif"
         },
         {
@@ -231,6 +281,8 @@
           "mimeType": "image/webp",
           "width": 480,
           "height": 270,
+          "bytes": 21102,
+          "sha256": "914ba926b62c52f453af914d68868fffbad7a7aad14d9665ffbdfe973ddd9912",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-480.webp"
         },
         {
@@ -238,6 +290,8 @@
           "mimeType": "image/jpeg",
           "width": 480,
           "height": 270,
+          "bytes": 34009,
+          "sha256": "b7cf1c50b6f2ba313353377712c98e0a7052c3b57596db749d51be484efedbb4",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-480.jpg"
         },
         {
@@ -245,6 +299,8 @@
           "mimeType": "image/avif",
           "width": 768,
           "height": 432,
+          "bytes": 44999,
+          "sha256": "7ca0c2b1733f2da0ba0e927debfa9e42db397bc257d9507ba0fd61c1e892e751",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-768.avif"
         },
         {
@@ -252,6 +308,8 @@
           "mimeType": "image/webp",
           "width": 768,
           "height": 432,
+          "bytes": 47578,
+          "sha256": "de40c76ec3ea9d415f24dfb57d3ab0b450d2bf9fec096b1d77f242180f490f25",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-768.webp"
         },
         {
@@ -259,6 +317,8 @@
           "mimeType": "image/jpeg",
           "width": 768,
           "height": 432,
+          "bytes": 79360,
+          "sha256": "0bb57f1fe22b140fe359e63886c455c412cd80fb1dcfc9c0767092e56b0cde46",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-768.jpg"
         },
         {
@@ -266,6 +326,8 @@
           "mimeType": "image/avif",
           "width": 1200,
           "height": 675,
+          "bytes": 96918,
+          "sha256": "3b6b56826af74f8115859f38fde30d5d3745f97f2485fdd992e223b399ec211b",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-1200.avif"
         },
         {
@@ -273,6 +335,8 @@
           "mimeType": "image/webp",
           "width": 1200,
           "height": 675,
+          "bytes": 104562,
+          "sha256": "1420119da8579301e4c26e8843e5bc2906e61ee5736747f47f819aedcef4b6af",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-1200.webp"
         },
         {
@@ -280,6 +344,8 @@
           "mimeType": "image/jpeg",
           "width": 1200,
           "height": 675,
+          "bytes": 177834,
+          "sha256": "3dcfbd455bab88209c67e12e4ae33e625f543b35195eaa7db207f1060aca0c91",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-1200.jpg"
         },
         {
@@ -287,6 +353,8 @@
           "mimeType": "image/avif",
           "width": 1672,
           "height": 941,
+          "bytes": 156243,
+          "sha256": "a7539d41fd69ae1a76138df2436cfb1f1daf48ca49ecb8a06b97f8667461595c",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-1672.avif"
         },
         {
@@ -294,6 +362,8 @@
           "mimeType": "image/webp",
           "width": 1672,
           "height": 941,
+          "bytes": 171794,
+          "sha256": "331a90ea7e745d03f50799266fd8ad76ec9f28f8a18f7f3fdb1945d9db7cf44d",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-1672.webp"
         },
         {
@@ -301,6 +371,8 @@
           "mimeType": "image/jpeg",
           "width": 1672,
           "height": 941,
+          "bytes": 307740,
+          "sha256": "551421fb8f0f58465fd50602edcb5768e054dde820819b206026623f2cc547d7",
           "path": "assets/images/anzania/anzania-oasis-audience-inner-v01/anzania-oasis-audience-inner-v01-1672.jpg"
         }
       ]

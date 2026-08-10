@@ -966,28 +966,32 @@
   "powers": {
     "dune-surfing": {
       "name": "Dune Surf",
-      "durationMs": 1320,
+      "durationMs": 2100,
+      "handoffAt": 0.52,
       "className": "is-dune-surfing",
       "glyph": "≈",
       "description": "Carve a wind-driven sand wake across the horizon."
     },
     "sand-teleportation": {
       "name": "Sandfold",
-      "durationMs": 1480,
+      "durationMs": 2350,
+      "handoffAt": 0.52,
       "className": "is-sand-teleporting",
       "glyph": "✦",
       "description": "Dissolve from the feet into a vortex, then reform in the next place."
     },
     "solar-propulsion": {
       "name": "Solar Step",
-      "durationMs": 1540,
+      "durationMs": 2250,
+      "handoffAt": 0.5,
       "className": "is-solar-propelling",
       "glyph": "☼",
       "description": "Charge, launch through a sunburst and land beyond the horizon."
     },
     "reality-bending": {
       "name": "Reality Fold",
-      "durationMs": 1460,
+      "durationMs": 2400,
+      "handoffAt": 0.54,
       "className": "is-reality-bending",
       "glyph": "◇",
       "description": "Open a hand-anchored lens and fold the next scene through it."
