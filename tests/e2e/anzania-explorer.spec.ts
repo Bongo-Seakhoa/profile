@@ -29,21 +29,30 @@ async function waitForTwoPaintFrames(page: Page) {
   );
 }
 
-function pairwiseMeanDifferences(frames: readonly Buffer[]) {
-  const differences: number[] = [];
+function pairwiseDifferenceProfiles(frames: readonly Buffer[]) {
+  const differences: Array<{
+    rootMeanSquare: number;
+    changedChannelRatio: number;
+  }> = [];
   for (let left = 0; left < frames.length; left += 1) {
     for (let right = left + 1; right < frames.length; right += 1) {
       const leftFrame = frames[left];
       const rightFrame = frames[right];
       if (!leftFrame || !rightFrame) continue;
-      let difference = 0;
+      let squaredDifference = 0;
+      let changedChannels = 0;
       for (let channel = 0; channel < leftFrame.length; channel += 1) {
         const leftValue = leftFrame[channel];
         const rightValue = rightFrame[channel];
         if (leftValue === undefined || rightValue === undefined) continue;
-        difference += Math.abs(leftValue - rightValue);
+        const delta = Math.abs(leftValue - rightValue);
+        squaredDifference += delta * delta;
+        if (delta >= 2) changedChannels += 1;
       }
-      differences.push(difference / leftFrame.length);
+      differences.push({
+        rootMeanSquare: Math.sqrt(squaredDifference / leftFrame.length),
+        changedChannelRatio: changedChannels / leftFrame.length,
+      });
     }
   }
   return differences;
@@ -335,13 +344,11 @@ test.describe("Explore Anzania release experience", () => {
     );
 
     await page.locator("[data-next-location]").click();
-    await expect(page.locator("[data-experience]")).toHaveClass(
-      /is-solar-propelling/,
-    );
-    await expect(page.locator("html")).toHaveAttribute(
-      "data-experience-state",
-      "traversing",
-    );
+    await expect(
+      page.locator(
+        'html[data-experience-state="traversing"] [data-experience].is-traversing.is-solar-propelling',
+      ),
+    ).toHaveCount(1, { timeout: 10_000 });
     await page.keyboard.press("m");
     await page.keyboard.press("g");
     await expect(page.locator("[data-map-dialog]")).not.toBeVisible();
@@ -399,6 +406,7 @@ test.describe("Explore Anzania release experience", () => {
       },
     ] as const;
     const signatures = new Set<string>();
+    const midpointSignatures = new Set<string>();
     const startSignatures = new Set<string>();
     const endSignatures = new Set<string>();
     const frameSamples: Buffer[] = [];
@@ -571,7 +579,12 @@ test.describe("Explore Anzania release experience", () => {
               fromIndex: number;
               toIndex: number;
               progress: number;
-            }) => Promise<{ available: boolean }>;
+            }) => Promise<{
+              available: boolean;
+              signature: string;
+              opaquePixels: number;
+              pixelCount: number;
+            }>;
           };
         };
         return debugWindow.__ANZANIA_DEBUG__.previewTransition({
@@ -583,6 +596,8 @@ test.describe("Explore Anzania release experience", () => {
       }, ability.id);
 
       expect(preview.available).toBe(true);
+      expect(preview.opaquePixels).toBeGreaterThan(preview.pixelCount * 0.99);
+      midpointSignatures.add(preview.signature);
       await expect(sceneCanvas).toHaveCSS("opacity", "1");
       await waitForTwoPaintFrames(page);
       const frame = await sceneCanvas.screenshot({
@@ -651,10 +666,20 @@ test.describe("Explore Anzania release experience", () => {
     }
 
     expect(signatures.size).toBe(abilities.length);
+    expect(midpointSignatures.size).toBe(abilities.length);
     expect(startSignatures.size).toBe(1);
     expect(endSignatures.size).toBe(1);
-    const frameDifferences = pairwiseMeanDifferences(frameSamples);
-    expect(Math.min(...frameDifferences)).toBeGreaterThan(1);
+    const frameDifferences = pairwiseDifferenceProfiles(frameSamples);
+    expect(
+      Math.min(...frameDifferences.map(({ rootMeanSquare }) => rootMeanSquare)),
+    ).toBeGreaterThan(3);
+    expect(
+      Math.min(
+        ...frameDifferences.map(
+          ({ changedChannelRatio }) => changedChannelRatio,
+        ),
+      ),
+    ).toBeGreaterThan(0.05);
     expect(pageErrors).toEqual([]);
   });
 
