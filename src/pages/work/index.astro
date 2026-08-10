@@ -1,5 +1,6 @@
 ---
 import ContentStyles from "../../components/content/ContentStyles.astro";
+import MethodologyCard from "../../components/content/MethodologyCard.astro";
 import ProjectCard from "../../components/content/ProjectCard.astro";
 import AnzaniaPlate from "../../components/media/AnzaniaPlate.astro";
 import Container from "../../components/primitives/Container.astro";
@@ -21,14 +22,14 @@ const sortedProjects = [...content.projects].sort((left, right) => {
     (right.featuredOrder ?? Number.MAX_SAFE_INTEGER)
   );
 });
-const leadProject =
-  sortedProjects.find(
-    (project) => project.id === "fxpm-1-4-forex-portfolio-manager",
-  ) ?? sortedProjects[0];
+const leadProject = sortedProjects[0];
 const selectedProjects = sortedProjects.filter(
   (project) => project.featured && project.id !== leadProject?.id,
 );
 const archiveProjects = sortedProjects.filter((project) => !project.featured);
+const methodologies = [...content.methodologies].sort((left, right) =>
+  left.title.localeCompare(right.title, "en"),
+);
 ---
 
 <BaseLayout
@@ -41,15 +42,15 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
   <ContentStyles />
   <PageMasthead
     slot="masthead"
-    eyebrow="Evidence-led portfolio"
+    eyebrow="Selected engineering work"
     title={route.title}
-    lede="Professional contributions, public repositories and technical experiments. Each record states its evidence and privacy boundary."
+    lede="Flagship AI systems, applied technical projects and a documented delivery methodology, with direct links to code and context."
   />
 
   <section
     class="page-section work-lead-section"
     aria-labelledby="lead-work-title"
-    data-section-label="Lead system"
+    data-section-label="Flagship system"
   >
     <div class="work-lead-section__atmosphere" aria-hidden="true">
       <AnzaniaPlate
@@ -64,9 +65,9 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
     <Container>
       <SectionIntro
         id="lead-work-title"
-        eyebrow="Lead system"
-        title="A closer look at applied technical work"
-        description="The project record remains the centre of the page. Atmosphere supports the evidence rather than replacing it."
+        eyebrow="Flagship system"
+        title="MetaPOS Mind: AI interaction grounded in governed context"
+        description="MetaPOS Mind leads the portfolio because it brings together AI system design, data engineering and operational governance."
       />
 
       <div class="work-lead">
@@ -79,8 +80,8 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
         >
           <div class="work-protocol__header">
             <div>
-              <p>Record protocol</p>
-              <h2 id="work-protocol-title">How to read the portfolio</h2>
+              <p>Portfolio at a glance</p>
+              <h2 id="work-protocol-title">What Bongo brings</h2>
             </div>
             <svg class="signal-glyph" viewBox="0 0 64 64" aria-hidden="true">
               <circle cx="32" cy="32" r="23"></circle>
@@ -92,26 +93,21 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
 
           <dl>
             <div>
-              <dt>Scope</dt>
-              <dd>Each record separates stated contribution from inference.</dd>
+              <dt>Flagship</dt>
+              <dd>MetaPOS Mind, a governed AI context system.</dd>
             </div>
             <div>
-              <dt>Evidence</dt>
-              <dd>
-                Public repositories and websites remain the source authority.
-              </dd>
+              <dt>Strengths</dt>
+              <dd>AI systems, data engineering and analytics.</dd>
             </div>
             <div>
-              <dt>Privacy</dt>
-              <dd>
-                Client-sensitive work is presented as a concise, safe summary.
-              </dd>
+              <dt>Delivery</dt>
+              <dd>Python, SQL, cloud platforms, MCP and applied models.</dd>
             </div>
             <div>
-              <dt>Status</dt>
+              <dt>Approach</dt>
               <dd>
-                Professional work, public projects and experiments are labelled
-                directly.
+                Human ownership, careful validation and clear communication.
               </dd>
             </div>
           </dl>
@@ -129,8 +125,8 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
       <SectionIntro
         id="selected-work-title"
         eyebrow="Selected records"
-        title="Professional and public project work"
-        description="Client-sensitive contributions are intentionally concise. Public repositories link directly to their source evidence."
+        title="Applied AI and data work"
+        description="Public repositories show the code behind selected projects; professional work is summarized with client confidentiality intact."
       />
       <div class="project-archive-grid work-record-grid">
         {
@@ -142,8 +138,32 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
     </Container>
   </section>
 
+  {
+    methodologies.length > 0 && (
+      <section
+        class="page-section"
+        aria-labelledby="methodology-title"
+        data-section-label="Delivery methodology"
+      >
+        <Container>
+          <SectionIntro
+            id="methodology-title"
+            eyebrow="Delivery methodology"
+            title="How human ownership stays central in AI-assisted delivery"
+            description="A transparent method for combining human direction with AI implementation, independent verification, durable handoffs and repeatable quality gates."
+          />
+          <div class="project-archive-grid work-record-grid">
+            {methodologies.map((methodology) => (
+              <MethodologyCard methodology={methodology} variant="standard" />
+            ))}
+          </div>
+        </Container>
+      </section>
+    )
+  }
+
   <section
-    class="page-section"
+    class="page-section page-section--surface"
     aria-labelledby="archive-title"
     data-section-label="Project archive"
   >
@@ -152,7 +172,7 @@ const archiveProjects = sortedProjects.filter((project) => !project.featured);
         id="archive-title"
         eyebrow="Project archive"
         title="Additional systems and experiments"
-        description="These records are useful evidence of range. Their labels distinguish public work, experiments and archived material."
+        description="Earlier work across recommendation, APIs, environmental data and algorithmic trading shows technical range."
       />
       <div
         class="project-archive-grid work-record-grid work-record-grid--archive"

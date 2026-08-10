@@ -7,7 +7,7 @@
 
 ## Repository
 
-- Path: `C:\Users\Bongo\OneDrive\Desktop\Projects\Me- Profile`.
+- Path: the portfolio repository root.
 - Branch: `main`.
 - HEAD: `df410d5` (`Upgrade resume and CV document suite`).
 - Origin: `https://github.com/Bongo-Seakhoa/profile.git`.
@@ -96,7 +96,7 @@ build: { format: "directory" }
 
 ## Reference library
 
-- Path: `C:\Users\Bongo\OneDrive\Desktop\Projects\Profile Upgrade\Reference & inspiration material`.
+- Path: the owner's private reference library.
 - 39 files totalling approximately 256 MiB.
 - 27 PNGs, 2 PDFs, 2 ZIPs, 3 Markdown files, 2 workbooks, 2 JSON files and 1 CSV.
 - No loose Blender, GLB, FBX, video, audio, texture or font file.

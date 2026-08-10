@@ -75,17 +75,6 @@ const elements = Object.fromEntries(
   ]),
 );
 
-const atlasCoordinates = {
-  "threshold-dunes": [17, 68],
-  "stone-pass": [29, 49],
-  "garden-origins": [42, 66],
-  "archive-echoes": [52, 42],
-  "forge-resolve": [64, 59],
-  "bazaar-skill": [73, 40],
-  "observatory-horizons": [84, 24],
-  "oasis-audience": [88, 72],
-};
-
 const storageKeys = {
   guide: "anzania-guide-v2",
   power: "anzania-power-v2",
@@ -104,13 +93,26 @@ const state = {
   isTraversing: false,
   isLookingBack: false,
   hasBegun: false,
+  guidePose: "idle",
+  guidePoseGuideId: null,
+  guidePoseSource: null,
+  guidePoseRequest: 0,
   visited: new Set(),
   lastFrame: null,
   toastTimer: 0,
   presentTimer: 0,
   idleTimer: 0,
   reframeTimer: 0,
+  chapterScrollFrame: 0,
   parallaxFrame: 0,
+};
+
+const guidePoseNames = new Set(["idle", "present", "travel", "lookback"]);
+const guidePoseDescriptions = {
+  idle: "Standing at ease.",
+  present: "Presenting the current evidence with an open hand.",
+  travel: "Moving forward through the crossing.",
+  lookback: "Looking back over their shoulder.",
 };
 
 const wait = (duration) =>
@@ -159,8 +161,15 @@ function loadImage(src) {
       7_500,
     );
     image.decoding = "async";
-    image.onload = () => {
+    image.onload = async () => {
       window.clearTimeout(timeout);
+      if (typeof image.decode === "function") {
+        try {
+          await image.decode();
+        } catch {
+          // A completed load is still safe to cache when decode is unavailable.
+        }
+      }
       resolve({ src, loaded: true, timedOut: false });
     };
     image.onerror = () => {
@@ -206,13 +215,23 @@ function showToast(message, duration = 2_600) {
   }, duration);
 }
 
-function setPresenting(active = true, duration = 900) {
+function setPresenting(
+  active = true,
+  duration = 900,
+  { updateGuidePose = true, settlePose = "idle" } = {},
+) {
   window.clearTimeout(state.presentTimer);
   elements.experience?.classList.toggle("is-presenting", active);
+  if (active && updateGuidePose) void setGuidePose("present");
   if (active) {
     state.presentTimer = window.setTimeout(() => {
       elements.experience?.classList.remove("is-presenting");
+      if (updateGuidePose && !state.isTraversing && !state.isLookingBack) {
+        void setGuidePose(settlePose);
+      }
     }, duration);
+  } else if (updateGuidePose && !state.isTraversing && !state.isLookingBack) {
+    void setGuidePose(settlePose);
   }
 }
 
@@ -244,6 +263,155 @@ function getCurrentGuide() {
     state.manifest?.guides[0] ??
     null
   );
+}
+
+function normaliseGuidePose(pose) {
+  return guidePoseNames.has(pose) ? pose : "idle";
+}
+
+function getGuidePoseCandidates(guide, pose) {
+  if (!guide) return [];
+  const requestedPose = normaliseGuidePose(pose);
+  const candidates = [];
+  const seen = new Set();
+  const addCandidate = (source, sourcePose) => {
+    if (typeof source !== "string" || !source.trim() || seen.has(source)) {
+      return;
+    }
+    seen.add(source);
+    candidates.push({ source, sourcePose });
+  };
+
+  addCandidate(guide.poses?.[requestedPose], requestedPose);
+  if (requestedPose !== "idle") addCandidate(guide.poses?.idle, "idle");
+  addCandidate(guide.image, "idle");
+  // `src` is the pre-pose manifest contract and remains supported.
+  addCandidate(guide.src, "idle");
+  return candidates;
+}
+
+function getGuidePoseSource(guide, pose = "idle") {
+  return getGuidePoseCandidates(guide, pose)[0]?.source ?? null;
+}
+
+function getGuidePreloadSources(guide) {
+  if (!guide) return [];
+  return ["idle", "present", "travel", "lookback"]
+    .flatMap((pose) => getGuidePoseCandidates(guide, pose))
+    .map(({ source }) => resolveAsset(source))
+    .filter((source, index, sources) => sources.indexOf(source) === index);
+}
+
+function getGuidePoseAlt(guide, pose) {
+  const requestedPose = normaliseGuidePose(pose);
+  const authoredAlt = guide?.poseAlts?.[requestedPose];
+  if (typeof authoredAlt === "string" && authoredAlt.trim()) {
+    return authoredAlt;
+  }
+
+  const baseAlt =
+    typeof guide?.alt === "string" && guide.alt.trim()
+      ? guide.alt.trim()
+      : `${guide?.name ?? "Anzania guide"}, full-body companion.`;
+  const sentence = /[.!?]$/.test(baseAlt) ? baseAlt : `${baseAlt}.`;
+  return `${sentence} ${guidePoseDescriptions[requestedPose]}`;
+}
+
+async function setGuidePose(pose, { guide = getCurrentGuide() } = {}) {
+  const requestedPose = normaliseGuidePose(pose);
+  state.guidePose = requestedPose;
+  const requestId = ++state.guidePoseRequest;
+  const guideId = guide?.id ?? null;
+  const candidates = getGuidePoseCandidates(guide, requestedPose);
+
+  if (!guide || !elements.companionImage || candidates.length === 0) {
+    if (requestId === state.guidePoseRequest) {
+      elements.companion?.removeAttribute("data-guide-pose-pending");
+      elements.companion?.setAttribute("aria-busy", "false");
+    }
+    return false;
+  }
+
+  elements.companion?.setAttribute("aria-busy", "true");
+  elements.companion?.setAttribute("data-guide-pose-pending", requestedPose);
+
+  const commit = (source, sourcePose) => {
+    if (
+      requestId !== state.guidePoseRequest ||
+      getCurrentGuide()?.id !== guideId
+    ) {
+      return false;
+    }
+
+    elements.companionImage.src = source;
+    elements.companionImage.alt = getGuidePoseAlt(guide, requestedPose);
+    elements.companionImage.dataset.guidePose = requestedPose;
+    elements.companionImage.toggleAttribute(
+      "data-guide-pose-fallback",
+      sourcePose !== requestedPose,
+    );
+    if (elements.companion) {
+      elements.companion.dataset.guidePose = requestedPose;
+      elements.companion.removeAttribute("data-guide-pose-pending");
+      elements.companion.setAttribute("aria-busy", "false");
+    }
+    if (elements.experience) {
+      elements.experience.dataset.guidePose = requestedPose;
+    }
+    state.guidePoseGuideId = guideId;
+    state.guidePoseSource = source;
+    return true;
+  };
+
+  for (const candidate of candidates) {
+    const source = resolveAsset(candidate.source);
+    if (
+      state.guidePoseGuideId === guideId &&
+      state.guidePoseSource === source
+    ) {
+      return commit(source, candidate.sourcePose);
+    }
+
+    const result = await loadImage(source);
+    if (
+      requestId !== state.guidePoseRequest ||
+      getCurrentGuide()?.id !== guideId
+    ) {
+      return false;
+    }
+    if (result.loaded) return commit(source, candidate.sourcePose);
+  }
+
+  if (requestId === state.guidePoseRequest) {
+    elements.companion?.removeAttribute("data-guide-pose-pending");
+    elements.companion?.setAttribute("aria-busy", "false");
+  }
+  return false;
+}
+
+function preloadGuidePoses(guide = getCurrentGuide()) {
+  for (const source of getGuidePreloadSources(guide)) void loadImage(source);
+}
+
+function getSettledGuidePose() {
+  if (state.isLookingBack) return "lookback";
+  if (state.isTraversing) return "travel";
+  if (elements.experience?.classList.contains("is-presenting")) {
+    return "present";
+  }
+  return "idle";
+}
+
+function resetChapterScroll() {
+  if (!elements.chapterPanel) return;
+  elements.chapterPanel.scrollTop = 0;
+  if (state.chapterScrollFrame) {
+    window.cancelAnimationFrame(state.chapterScrollFrame);
+  }
+  state.chapterScrollFrame = window.requestAnimationFrame(() => {
+    state.chapterScrollFrame = 0;
+    if (elements.chapterPanel) elements.chapterPanel.scrollTop = 0;
+  });
 }
 
 function getCurrentPower() {
@@ -281,6 +449,7 @@ function renderNavigation() {
             <button
               type="button"
               data-map-location-index="${index}"
+              data-visited="${state.visited.has(location.id) || index === state.locationIndex ? "true" : "false"}"
               ${index === state.locationIndex ? 'aria-current="step"' : ""}
             >
               <span>${escapeHtml(location.number)}</span>
@@ -326,8 +495,10 @@ function renderGuides() {
   if (!state.manifest || !elements.guideGrid) return;
 
   elements.guideGrid.innerHTML = state.manifest.guides
-    .map(
-      (guide) => `
+    .map((guide) => {
+      const source = getGuidePoseSource(guide, "idle");
+      if (!source) return "";
+      return `
         <button
           class="guide-card"
           type="button"
@@ -338,24 +509,26 @@ function renderGuides() {
         >
           <span class="guide-card__figure">
             <span class="guide-card__halo" aria-hidden="true"></span>
-            <img src="${resolveAsset(guide.src)}" alt="" width="540" height="1280" loading="lazy" decoding="async" />
+            <img src="${resolveAsset(source)}" alt="" width="640" height="960" loading="lazy" decoding="async" />
           </span>
           <strong>${escapeHtml(guide.name)}</strong>
           <small>${escapeHtml(guide.specialty)}</small>
           <span class="guide-card__origin">${escapeHtml(guide.presentation)} · ${escapeHtml(guide.inspiration)}</span>
-        </button>`,
-    )
+        </button>`;
+    })
     .join("");
 }
 
 function warmGuideCards() {
-  elements.guideGrid?.querySelectorAll("img").forEach((image) => {
-    image.loading = "eager";
-    image.fetchPriority = "low";
-    if (!image.complete && typeof image.decode === "function") {
-      image.decode().catch(() => undefined);
-    }
-  });
+  const selectedImage = elements.guideGrid?.querySelector(
+    `[data-guide-id="${state.selectedGuideId}"] img`,
+  );
+  if (!(selectedImage instanceof HTMLImageElement)) return;
+  selectedImage.loading = "eager";
+  selectedImage.fetchPriority = "low";
+  if (!selectedImage.complete && typeof selectedImage.decode === "function") {
+    selectedImage.decode().catch(() => undefined);
+  }
 }
 
 function renderGuide() {
@@ -363,10 +536,7 @@ function renderGuide() {
   const location = getCurrentLocation();
   if (!guide) return;
 
-  if (elements.companionImage) {
-    elements.companionImage.src = resolveAsset(guide.src);
-    elements.companionImage.alt = guide.alt;
-  }
+  void setGuidePose(state.guidePose, { guide });
   if (elements.companionName) elements.companionName.textContent = guide.name;
   if (elements.guideSpecialty) {
     elements.guideSpecialty.textContent = guide.specialty;
@@ -375,7 +545,7 @@ function renderGuide() {
     elements.guideTemperament.textContent = guide.temperament;
   }
   if (elements.guideInsight) {
-    elements.guideInsight.textContent = location?.guideInsight ?? guide.quote;
+    elements.guideInsight.textContent = guide.quote ?? location?.guideInsight;
   }
 
   document.documentElement.style.setProperty(
@@ -398,7 +568,8 @@ function tabDefinitions(location) {
       id: "now",
       label: "Now",
       eyebrow: "Live work",
-      description: "Current work, accepted research and systems in development.",
+      description:
+        "Current work, accepted research and systems in development.",
       render: () => `
         <div class="inside-now-grid">
           ${location.deepDive.now
@@ -417,7 +588,8 @@ function tabDefinitions(location) {
       id: "logic",
       label: "Design logic",
       eyebrow: "How the work is shaped",
-      description: "The principles used to move from ambiguity to something dependable.",
+      description:
+        "The principles used to move from ambiguity to something dependable.",
       render: () => `
         <div class="inside-pillar-grid">
           ${location.deepDive.pillars
@@ -436,7 +608,8 @@ function tabDefinitions(location) {
       id: "field-notes",
       label: "Field notes",
       eyebrow: "Questions worth carrying",
-      description: "Concise answers that reveal the operating judgement behind the record.",
+      description:
+        "Concise answers that reveal the operating judgement behind the record.",
       render: () => `
         <div class="inside-notes">
           ${location.deepDive.notes
@@ -471,7 +644,8 @@ function renderDeepDive() {
   if (!tabs.some((tab) => tab.id === state.activeInsideTab)) {
     state.activeInsideTab = tabs[0].id;
   }
-  const active = tabs.find((tab) => tab.id === state.activeInsideTab) ?? tabs[0];
+  const active =
+    tabs.find((tab) => tab.id === state.activeInsideTab) ?? tabs[0];
 
   if (elements.chapterTabs) {
     elements.chapterTabs.innerHTML = tabs
@@ -514,9 +688,64 @@ function renderDeepDive() {
   }
 }
 
-function renderLocation({ announceChange = false } = {}) {
+function canOpenFinalLocationEndState() {
+  if (!state.manifest || !elements.portalButton) return false;
+  const location = getCurrentLocation();
+  return Boolean(
+    location &&
+    state.locationIndex === state.manifest.locations.length - 1 &&
+    state.sceneMode === "outer" &&
+    location.deepDive,
+  );
+}
+
+function renderForwardNavigation() {
+  if (!state.manifest || !elements.nextLocation) return;
+  const location = getCurrentLocation();
+  const atFinalLocation =
+    state.locationIndex === state.manifest.locations.length - 1;
+  const opensEndState = canOpenFinalLocationEndState();
+  elements.nextLocation.toggleAttribute(
+    "disabled",
+    state.isTraversing || (atFinalLocation && !opensEndState),
+  );
+
+  const label = elements.nextLocation.querySelector(
+    ".traversal-controls__copy",
+  );
+  if (atFinalLocation && opensEndState) {
+    const action = location?.portalAction ?? "Enter this place";
+    if (label) label.textContent = action;
+    elements.nextLocation.setAttribute("aria-label", action);
+  } else {
+    if (label) label.textContent = "Next crossing";
+    elements.nextLocation.setAttribute("aria-label", "Travel to next location");
+  }
+}
+
+function renderTraversalNavigation() {
+  elements.previousLocation?.toggleAttribute(
+    "disabled",
+    state.locationIndex === 0 || state.isTraversing,
+  );
+  renderForwardNavigation();
+}
+
+function advanceForward() {
+  if (!state.manifest || state.isTraversing) return;
+  if (state.locationIndex < state.manifest.locations.length - 1) {
+    void travelTo(state.locationIndex + 1);
+    return;
+  }
+  if (canOpenFinalLocationEndState()) void togglePortal();
+}
+
+function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   const location = getCurrentLocation();
   if (!location || !state.manifest) return;
+
+  state.visited.add(location.id);
+  safeStorageSet(storageKeys.visited, JSON.stringify([...state.visited]));
 
   if (state.hasBegun && !state.isTraversing) {
     document.documentElement.dataset.experienceState = "exploring";
@@ -540,13 +769,17 @@ function renderLocation({ announceChange = false } = {}) {
       ((state.locationIndex + 1) / state.manifest.locations.length) * 100
     }%`;
   }
-  if (elements.locationNumber) elements.locationNumber.textContent = location.number;
-  if (elements.locationRegion) elements.locationRegion.textContent = location.region;
+  if (elements.locationNumber)
+    elements.locationNumber.textContent = location.number;
+  if (elements.locationRegion)
+    elements.locationRegion.textContent = location.region;
   if (elements.locationName) elements.locationName.textContent = location.name;
-  if (elements.chapterEyebrow) elements.chapterEyebrow.textContent = location.eyebrow;
+  if (elements.chapterEyebrow)
+    elements.chapterEyebrow.textContent = location.eyebrow;
   if (elements.chapterTitle) elements.chapterTitle.textContent = location.title;
   if (elements.chapterLead) elements.chapterLead.textContent = location.lead;
-  if (elements.chapterSignal) elements.chapterSignal.textContent = location.signal;
+  if (elements.chapterSignal)
+    elements.chapterSignal.textContent = location.signal;
   if (elements.chapterSignalValue) {
     elements.chapterSignalValue.textContent = location.signalValue;
   }
@@ -607,15 +840,7 @@ function renderLocation({ announceChange = false } = {}) {
   renderDeepDive();
   renderGuide();
 
-  elements.previousLocation?.toggleAttribute(
-    "disabled",
-    state.locationIndex === 0 || state.isTraversing,
-  );
-  elements.nextLocation?.toggleAttribute(
-    "disabled",
-    state.locationIndex === state.manifest.locations.length - 1 ||
-      state.isTraversing,
-  );
+  renderTraversalNavigation();
 
   elements.locationRailList
     ?.querySelectorAll("[data-location-index]")
@@ -630,19 +855,16 @@ function renderLocation({ announceChange = false } = {}) {
   elements.mapLocationList
     ?.querySelectorAll("[data-map-location-index]")
     .forEach((button) => {
-      if (Number(button.dataset.mapLocationIndex) === state.locationIndex) {
+      const locationIndex = Number(button.dataset.mapLocationIndex);
+      const mapLocation = state.manifest?.locations[locationIndex];
+      button.dataset.visited =
+        mapLocation && state.visited.has(mapLocation.id) ? "true" : "false";
+      if (locationIndex === state.locationIndex) {
         button.setAttribute("aria-current", "step");
       } else {
         button.removeAttribute("aria-current");
       }
     });
-
-  const [atlasX, atlasY] = atlasCoordinates[location.id] ?? [50, 50];
-  elements.mapDialog?.style.setProperty("--atlas-x", `${atlasX}%`);
-  elements.mapDialog?.style.setProperty("--atlas-y", `${atlasY}%`);
-
-  state.visited.add(location.id);
-  safeStorageSet(storageKeys.visited, JSON.stringify([...state.visited]));
 
   try {
     window.history.replaceState(null, "", `#${location.id}`);
@@ -650,6 +872,7 @@ function renderLocation({ announceChange = false } = {}) {
     // Hash state is progressive enhancement only.
   }
 
+  if (resetScroll) resetChapterScroll();
   window.requestAnimationFrame(() => recalculateFraming());
   if (announceChange) announce(`${location.formalName}. ${location.title}`);
 }
@@ -765,7 +988,7 @@ function calculateFraming() {
   const safeTop = getCssPixelValue("--safe-top", compact ? 12 : 22);
   const safeBottom = getCssPixelValue("--safe-bottom", 18);
   const captionAllowance = compact ? 48 : viewport.width <= 1180 ? 52 : 70;
-  const avatarAspect = 540 / 1280;
+  const avatarAspect = 640 / 960;
   const range = frameRange(viewport);
   let targetRatio = range.target;
   if (state.sceneMode === "inner") targetRatio *= 0.94;
@@ -881,8 +1104,7 @@ function calculateFraming() {
             sum + intersectionArea(collisionCandidate, obstacle),
           0,
         );
-        const preferredX =
-          viewport.width * (compact && portrait ? 0.76 : 0.3);
+        const preferredX = viewport.width * (compact && portrait ? 0.76 : 0.3);
         const distancePenalty =
           Math.abs(left + avatarWidth / 2 - preferredX) * 0.42 +
           Math.abs(top - preferredTop) * 0.35;
@@ -987,20 +1209,19 @@ async function travelTo(
   { focusChapter = false, announceChange = true } = {},
 ) {
   if (!state.manifest || state.isTraversing) return;
-  const clampedIndex = clamp(
-    nextIndex,
-    0,
-    state.manifest.locations.length - 1,
-  );
+  const clampedIndex = clamp(nextIndex, 0, state.manifest.locations.length - 1);
   if (clampedIndex === state.locationIndex) return;
 
   const nextLocation = state.manifest.locations[clampedIndex];
   const power = getCurrentPower();
   const duration = state.motionEnabled ? power.durationMs : 40;
 
+  setLookBack(false);
+  setPresenting(false, 0, { updateGuidePose: false });
   state.isTraversing = true;
   state.sceneMode = "outer";
   state.activeInsideTab = "now";
+  void setGuidePose("travel");
   activatePower(power);
   elements.experience.classList.add("is-traversing", power.className);
   document.documentElement.dataset.experienceState = "traversing";
@@ -1014,14 +1235,14 @@ async function travelTo(
 
   state.locationIndex = clampedIndex;
   renderScene();
-  renderLocation({ announceChange: false });
+  renderLocation({ announceChange: false, resetScroll: true });
   await wait(Math.max(16, duration * 0.58));
 
   elements.experience.classList.remove("is-traversing", power.className);
   state.isTraversing = false;
   setInteractionLock(false);
   document.documentElement.dataset.experienceState = "exploring";
-  renderLocation({ announceChange });
+  renderLocation({ announceChange, resetScroll: true });
   setPresenting(true, 780);
   recalculateFraming();
 
@@ -1036,7 +1257,10 @@ async function togglePortal() {
   if (!location || !power) return;
 
   const duration = state.motionEnabled ? power.durationMs : 40;
+  setLookBack(false);
+  setPresenting(false, 0, { updateGuidePose: false });
   state.isTraversing = true;
+  void setGuidePose("travel");
   activatePower(power);
   elements.experience.classList.add("is-traversing", power.className);
   document.documentElement.dataset.experienceState = "transitioning";
@@ -1047,12 +1271,14 @@ async function togglePortal() {
   state.sceneMode = state.sceneMode === "outer" ? "inner" : "outer";
   if (state.sceneMode === "inner") state.activeInsideTab = "now";
   renderScene();
-  renderLocation({ announceChange: false });
+  renderLocation({ announceChange: false, resetScroll: true });
   await wait(Math.max(16, duration * 0.57));
 
   elements.experience.classList.remove("is-traversing", power.className);
   state.isTraversing = false;
   setInteractionLock(false);
+  renderTraversalNavigation();
+  resetChapterScroll();
   document.documentElement.dataset.experienceState = "exploring";
   recalculateFraming({ immediate: true });
   announce(
@@ -1069,11 +1295,14 @@ function selectGuide(guideId) {
     (candidate) => candidate.id === guideId,
   );
   if (!guide) return;
+  setLookBack(false);
   state.selectedGuideId = guide.id;
+  state.guidePose = "idle";
   safeStorageSet(storageKeys.guide, guide.id);
   renderGuide();
+  preloadGuidePoses(guide);
   closeDialog(elements.guideDialog);
-  setPresenting(true, 900);
+  setPresenting(true, 900, { updateGuidePose: false });
   recalculateFraming();
   showToast(`${guide.name}, ${guide.specialty}, will travel beside you.`);
   announce(`${guide.name} selected as your Anzania guide.`);
@@ -1087,7 +1316,9 @@ function selectPower(powerId, { announceSelection = true } = {}) {
   const power = getCurrentPower();
   activatePower(power);
   if (announceSelection) {
-    showToast(`${power.name} selected. Your next crossing will use this ability.`);
+    showToast(
+      `${power.name} selected. Your next crossing will use this ability.`,
+    );
     announce(`${power.name} selected as the traversal ability.`);
   }
 }
@@ -1137,25 +1368,28 @@ function closeOpenDialog() {
 
 function setLookBack(active) {
   if (!state.hasBegun || state.isTraversing) return;
-  state.isLookingBack = active;
-  elements.experience.classList.toggle("is-looking-back", active);
-  elements.lookBackButton?.setAttribute("aria-pressed", String(active));
-  if (active) {
+  const nextState = Boolean(active);
+  if (state.isLookingBack === nextState) return;
+  state.isLookingBack = nextState;
+  elements.experience.classList.toggle("is-looking-back", nextState);
+  elements.lookBackButton?.setAttribute("aria-pressed", String(nextState));
+  if (nextState) {
+    void setGuidePose("lookback");
     resetIdleTimer();
     announce("Looking back across the current approach.");
+  } else {
+    void setGuidePose(getSettledGuidePose());
   }
 }
 
 function applyMotionPreference(enabled, { persist = true } = {}) {
   state.motionEnabled = Boolean(enabled);
   elements.experience.dataset.motion = state.motionEnabled ? "on" : "off";
-  if (elements.motionToggle) elements.motionToggle.checked = state.motionEnabled;
+  if (elements.motionToggle)
+    elements.motionToggle.checked = state.motionEnabled;
   if (!state.motionEnabled) resetParallax();
   if (persist) {
-    safeStorageSet(
-      storageKeys.motion,
-      state.motionEnabled ? "on" : "off",
-    );
+    safeStorageSet(storageKeys.motion, state.motionEnabled ? "on" : "off");
   }
 }
 
@@ -1245,9 +1479,7 @@ function preloadAdjacentScenes() {
     state.locationIndex + 1,
     state.locationIndex - 1,
   ]
-    .filter(
-      (index) => index >= 0 && index < state.manifest.locations.length,
-    )
+    .filter((index) => index >= 0 && index < state.manifest.locations.length)
     .flatMap((index) => {
       const location = state.manifest.locations[index];
       return [
@@ -1263,9 +1495,10 @@ function beginJourney() {
   elements.arrivalGate.hidden = true;
   elements.explorer.hidden = false;
   document.documentElement.dataset.experienceState = "exploring";
-  renderLocation({ announceChange: true });
+  renderLocation({ announceChange: true, resetScroll: true });
   renderGuide();
   renderAbilities();
+  setPresenting(true, 1_100);
   window.requestAnimationFrame(() => {
     recalculateFraming({ immediate: true });
     elements.chapterPanel?.focus({ preventScroll: true });
@@ -1327,9 +1560,7 @@ function bindEvents() {
   elements.previousLocation?.addEventListener("click", () =>
     travelTo(state.locationIndex - 1),
   );
-  elements.nextLocation?.addEventListener("click", () =>
-    travelTo(state.locationIndex + 1),
-  );
+  elements.nextLocation?.addEventListener("click", advanceForward);
   elements.portalButton?.addEventListener("click", togglePortal);
 
   elements.locationRailList?.addEventListener("click", (event) => {
@@ -1364,13 +1595,14 @@ function bindEvents() {
   });
 
   elements.chapterTabs?.addEventListener("keydown", (event) => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
     const location = getCurrentLocation();
     if (!location) return;
     const ids = tabDefinitions(location).map((tab) => tab.id);
     const current = ids.indexOf(state.activeInsideTab);
     let next = current;
-    if (event.key === "ArrowLeft") next = (current - 1 + ids.length) % ids.length;
+    if (event.key === "ArrowLeft")
+      next = (current - 1 + ids.length) % ids.length;
     if (event.key === "ArrowRight") next = (current + 1) % ids.length;
     if (event.key === "Home") next = 0;
     if (event.key === "End") next = ids.length - 1;
@@ -1390,7 +1622,9 @@ function bindEvents() {
   );
 
   document.querySelectorAll("[data-close-dialog]").forEach((button) => {
-    button.addEventListener("click", () => closeDialog(button.closest("dialog")));
+    button.addEventListener("click", () =>
+      closeDialog(button.closest("dialog")),
+    );
   });
   document.querySelectorAll("dialog").forEach((dialog) => {
     dialog.addEventListener("click", (event) => {
@@ -1465,7 +1699,7 @@ function bindEvents() {
       travelTo(state.locationIndex - 1);
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
-      travelTo(state.locationIndex + 1);
+      advanceForward();
     } else if (event.key === "Enter") {
       event.preventDefault();
       togglePortal();
@@ -1540,9 +1774,8 @@ async function initialise() {
     const preloadSources = [
       chooseSceneSource(firstLocation.outer),
       chooseSceneSource(firstLocation.inner),
-      resolveAsset(firstGuide.src),
-      resolveAsset(state.manifest.atlas.src),
-    ];
+      ...getGuidePreloadSources(firstGuide),
+    ].filter((source, index, sources) => sources.indexOf(source) === index);
 
     setLoadingProgress(58, "Gathering the first horizon…");
     const preloadResults = await Promise.all(preloadSources.map(loadImage));
@@ -1565,9 +1798,7 @@ async function initialise() {
     elements.loadingGate.hidden = true;
     elements.arrivalGate.hidden = false;
     document.documentElement.dataset.experienceState = "arrival";
-    announce(
-      "Explore Anzania is ready. Anzania is an original fictional portfolio world.",
-    );
+    announce("Explore Anzania is ready.");
   } catch (error) {
     console.error("Explore Anzania could not initialise", error);
     setLoadingProgress(100, "The immersive atlas could not be opened.");
@@ -1592,6 +1823,7 @@ window.__ANZANIA_DEBUG__ = {
     locationId: getCurrentLocation()?.id ?? null,
     sceneMode: state.sceneMode,
     guideId: state.selectedGuideId,
+    guidePose: state.guidePose,
     powerId: state.selectedPowerId,
     activeInsideTab: state.activeInsideTab,
     isTraversing: state.isTraversing,
@@ -1602,6 +1834,7 @@ window.__ANZANIA_DEBUG__ = {
   recalculateFraming,
   travelTo,
   togglePortal,
+  setGuidePose,
   selectPower,
 };
 

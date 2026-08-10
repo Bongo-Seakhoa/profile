@@ -51,6 +51,7 @@
             "itemIds": [
               "languages",
               "data-ml",
+              "ai-systems",
               "cloud-delivery",
               "analytics-bi",
               "databases"
@@ -63,8 +64,7 @@
             "itemIds": [
               "metapos-data-engineering-scientist",
               "2u-edx-learning-specialist",
-              "blossom-superagent-mentor",
-              "1eight-data-analyst-consultant"
+              "blossom-superagent-mentor"
             ]
           }
         ]
@@ -78,9 +78,9 @@
             "label": "Selected projects",
             "itemIds": [
               "metapos-app-data-management",
-              "fxpm-1-4-forex-portfolio-manager",
-              "streamlit-recommender-system",
-              "regression-predict-api"
+              "visualizing-filters-cnn",
+              "airqo-environmental-data",
+              "openai-trader-experiment"
             ]
           },
           {
@@ -109,16 +109,16 @@
             "itemIds": [
               "google-associate-cloud-engineer",
               "google-cloud-digital-leader",
+              "aws-educate-machine-learning-foundations",
               "datacamp-professional-data-scientist",
               "ibm-advanced-data-science",
-              "worldquant-applied-data-science-lab",
-              "ibm-data-science-professional-certificate"
+              "worldquant-applied-data-science-lab"
             ]
           }
         ]
       }
     ],
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   },
   {
     "id": "cv",
@@ -172,6 +172,7 @@
             "itemIds": [
               "languages",
               "data-ml",
+              "ai-systems",
               "cloud-delivery",
               "analytics-bi",
               "databases"
@@ -183,8 +184,7 @@
             "label": "Experience",
             "itemIds": [
               "metapos-data-engineering-scientist",
-              "2u-edx-learning-specialist",
-              "blossom-superagent-mentor"
+              "2u-edx-learning-specialist"
             ]
           }
         ]
@@ -197,6 +197,7 @@
             "kind": "experience",
             "label": "Experience continued",
             "itemIds": [
+              "blossom-superagent-mentor",
               "1eight-data-analyst-consultant",
               "turing-freelance-data-scientist"
             ]
@@ -207,13 +208,10 @@
             "label": "Selected projects",
             "itemIds": [
               "metapos-app-data-management",
-              "fxpm-1-4-forex-portfolio-manager",
-              "streamlit-recommender-system",
-              "regression-predict-api",
               "visualizing-filters-cnn",
               "airqo-environmental-data",
-              "mql5-expert-advisor",
-              "fxpm-backtester"
+              "openai-trader-experiment",
+              "institutional-ls-sr-trading-ea"
             ]
           }
         ]
@@ -247,9 +245,12 @@
             "itemIds": [
               "google-associate-cloud-engineer",
               "google-cloud-digital-leader",
+              "aws-educate-machine-learning-foundations",
               "datacamp-professional-data-scientist",
               "ibm-advanced-data-science",
               "worldquant-applied-data-science-lab",
+              "worldquant-applied-data-science-two",
+              "worldquant-applied-data-science-one",
               "ibm-data-science-professional-certificate",
               "google-data-analytics-professional-certificate",
               "ibm-cybersecurity-analyst",
@@ -278,6 +279,6 @@
         ]
       }
     ],
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   }
 ]

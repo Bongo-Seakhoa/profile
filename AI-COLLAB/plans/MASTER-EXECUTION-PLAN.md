@@ -5,8 +5,8 @@
 **Product owner:** Bongo Seakhoa
 **Plan date:** 2026-07-30
 **Plan status:** Approved for staged execution by the lead, pending continuous Claude review
-**Working repository:** `C:\Users\Bongo\OneDrive\Desktop\Projects\Me- Profile`
-**Reference library:** `C:\Users\Bongo\OneDrive\Desktop\Projects\Profile Upgrade\Reference & inspiration material`
+**Working repository:** portfolio repository root
+**Reference library:** owner's private reference library
 
 ## 1. Outcome
 

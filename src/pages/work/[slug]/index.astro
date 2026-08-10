@@ -10,11 +10,12 @@ import PageMasthead from "../../../components/primitives/PageMasthead.astro";
 import SectionIntro from "../../../components/primitives/SectionIntro.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { loadProfileContent } from "../../../lib/content/load-content";
+import type { Methodology, Project } from "../../../lib/content/schemas";
 
 export async function getStaticPaths() {
   const content = await loadProfileContent();
 
-  return content.projects.map((project) => {
+  const projectPaths = content.projects.map((project) => {
     const route = content.routes.find(
       (entry) =>
         entry.entityRef?.collection === "project" &&
@@ -24,42 +25,138 @@ export async function getStaticPaths() {
 
     return {
       params: { slug: project.slug },
-      props: { content, project, route },
+      props: { content, record: project, recordKind: "project", route },
     };
   });
+
+  const methodologyPaths = content.methodologies.map((methodology) => {
+    const route = content.routes.find(
+      (entry) =>
+        entry.entityRef?.collection === "methodology" &&
+        entry.entityRef.id === methodology.id,
+    );
+    if (!route) {
+      throw new Error(`Methodology route missing for ${methodology.id}`);
+    }
+
+    return {
+      params: { slug: methodology.slug },
+      props: {
+        content,
+        record: methodology,
+        recordKind: "methodology",
+        route,
+      },
+    };
+  });
+
+  return [...projectPaths, ...methodologyPaths];
 }
 
-const { content, project, route } = Astro.props;
+const { content, record, recordKind, route } = Astro.props as {
+  content: Awaited<ReturnType<typeof loadProfileContent>>;
+  record: Project | Methodology;
+  recordKind: "project" | "methodology";
+  route: Awaited<ReturnType<typeof loadProfileContent>>["routes"][number];
+};
 const settings = content.siteSettings[0];
 if (!settings) throw new Error("Site settings are missing.");
-const statusLabel =
-  project.status === "professional"
-    ? "Client-safe summary"
-    : project.status === "experiment"
+const isMethodology = recordKind === "methodology";
+const project = isMethodology ? null : (record as Project);
+const methodology = isMethodology ? (record as Methodology) : null;
+const statusLabel = isMethodology
+  ? "Delivery methodology"
+  : project?.status === "professional"
+    ? "Professional system"
+    : project?.status === "experiment"
       ? "Experiment"
-      : project.status === "archived"
-        ? "Archived"
+      : project?.status === "archived"
+        ? "Archived project"
         : "Public project";
-const statusTone =
-  project.status === "archived" ? "historical" : project.status;
+const statusTone = isMethodology
+  ? "public"
+  : project?.status === "archived"
+    ? "historical"
+    : (project?.status ?? "public");
+const recordHost = new URL(record.publicUrl).hostname.toLocaleLowerCase("en");
+const sourceLabel = isMethodology
+  ? "Public repository"
+  : project?.status === "archived"
+    ? "Portfolio record"
+    : recordHost === "github.com"
+      ? "GitHub repository"
+      : "Company website";
+const externalLinkLabel =
+  recordHost === "github.com" ? "View repository" : "Visit organisation";
+const ownership = isMethodology ? methodology?.ownership : project?.role;
+const practices = isMethodology
+  ? (methodology?.practices ?? [])
+  : (project?.contributions ?? []);
+const recordMetadata = [
+  { term: "Status", value: statusLabel },
+  { term: "Source", value: sourceLabel },
+  ...(ownership
+    ? [
+        {
+          term: isMethodology ? "Method ownership" : "Role",
+          value: ownership,
+        },
+      ]
+    : []),
+];
 const relatedProjects = content.projects
-  .filter((entry) => entry.id !== project.id)
-  .filter((entry) =>
-    entry.technologies.some((technology) =>
-      project.technologies.includes(technology),
-    ),
-  )
+  .filter((entry) => entry.id !== project?.id)
+  .filter((entry) => entry.status !== "archived")
+  .sort((left, right) => {
+    if (left.featured !== right.featured) return left.featured ? -1 : 1;
+
+    const featuredOrderDifference =
+      (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.featuredOrder ?? Number.MAX_SAFE_INTEGER);
+    if (featuredOrderDifference !== 0) return featuredOrderDifference;
+
+    const leftOverlap = left.technologies.filter((technology) =>
+      record.technologies.includes(technology),
+    ).length;
+    const rightOverlap = right.technologies.filter((technology) =>
+      record.technologies.includes(technology),
+    ).length;
+    return rightOverlap - leftOverlap;
+  })
   .slice(0, 2);
-const projectSchema = {
-  "@type": "CreativeWork",
-  name: project.title,
-  description: project.summary,
-  url: project.publicUrl,
-  creator: {
-    "@id": `${settings.siteUrl}#person`,
-  },
-  keywords: project.technologies,
-};
+const canonicalUrl = new URL(route.path, settings.siteUrl).href;
+const workSchema = isMethodology
+  ? {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#methodology`,
+      name: record.title,
+      description: record.summary,
+      url: canonicalUrl,
+      sameAs: record.publicUrl,
+      author: {
+        "@id": `${settings.siteUrl}#person`,
+      },
+      tool: record.technologies.map((name) => ({
+        "@type": "HowToTool",
+        name,
+      })),
+      step: practices.map((text, index) => ({
+        "@type": "HowToStep",
+        position: index + 1,
+        name: `Practice ${index + 1}`,
+        text,
+      })),
+    }
+  : {
+      "@type": "CreativeWork",
+      name: record.title,
+      description: record.summary,
+      url: record.publicUrl,
+      creator: {
+        "@id": `${settings.siteUrl}#person`,
+      },
+      keywords: record.technologies,
+    };
 ---
 
 <BaseLayout
@@ -67,46 +164,32 @@ const projectSchema = {
   description={route.description}
   canonicalPath={route.path}
   activeRouteId="work"
-  updatedDate={project.lastReviewed}
+  updatedDate={record.lastReviewed}
   ogType="article"
-  structuredData={projectSchema}
+  structuredData={workSchema}
   breadcrumbs={[
     { label: "Overview", path: "" },
     { label: "Work", path: "work/" },
-    { label: project.title },
+    { label: record.title },
   ]}
 >
   <ContentStyles />
   <PageMasthead
     slot="masthead"
-    eyebrow={project.type}
-    title={project.title}
-    lede={project.summary}
+    eyebrow={record.type}
+    title={record.title}
+    lede={record.summary}
   >
     <div slot="metadata">
-      <MetadataList
-        items={[
-          { term: "Status", value: statusLabel },
-          {
-            term: "Evidence",
-            value:
-              project.evidenceState === "public-repository"
-                ? "Public repository"
-                : project.evidenceState === "public-website"
-                  ? "Public website"
-                  : "Client-safe summary",
-          },
-          { term: "Role", value: project.role ?? "Not separately stated" },
-        ]}
-      />
+      <MetadataList items={recordMetadata} />
     </div>
-    <ActionLink href={project.publicUrl} newTab>
-      {
-        project.privacyStatus === "client-safe-summary"
-          ? "Visit organisation"
-          : "Open public evidence"
-      }
-    </ActionLink>
+    {
+      project?.status !== "archived" && (
+        <ActionLink href={record.publicUrl} newTab>
+          {externalLinkLabel}
+        </ActionLink>
+      )
+    }
     <ActionLink href="work/" variant="secondary">
       Back to work index
     </ActionLink>
@@ -118,10 +201,38 @@ const projectSchema = {
         <aside aria-labelledby="on-this-page-title">
           <h2 id="on-this-page-title">On this page</h2>
           <ol>
-            <li><a href="#record-title">Record scope</a></li>
-            <li><a href="#technical-focus">Technical focus</a></li>
-            <li><a href="#evidence-boundary">Evidence boundary</a></li>
-            <li><a href="#related-work">Related work</a></li>
+            <li>
+              <a href="#record-title">
+                {isMethodology ? "Method overview" : "Project overview"}
+              </a>
+            </li>
+            {
+              record.constraints.length > 0 && (
+                <li>
+                  <a href="#operating-constraints">Context</a>
+                </li>
+              )
+            }
+            <li>
+              <a href="#technical-focus">
+                {isMethodology ? "Delivery stack" : "Technology stack"}
+              </a>
+            </li>
+            {
+              (record.validation.length > 0 || record.outcome) && (
+                <li>
+                  <a href="#validation-outcome">Validation and outcome</a>
+                </li>
+              )
+            }
+            <li><a href="#public-scope">Public scope</a></li>
+            {
+              relatedProjects.length > 0 && (
+                <li>
+                  <a href="#related-work">Related work</a>
+                </li>
+              )
+            }
           </ol>
         </aside>
         <article class="case-study">
@@ -129,38 +240,51 @@ const projectSchema = {
             <div class="case-study__status">
               <StatusBadge label={statusLabel} tone={statusTone} />
             </div>
-            <h2 id="record-title">Record scope</h2>
-            <p>{project.summary}</p>
+            <h2 id="record-title">
+              {isMethodology ? "Method overview" : "Project overview"}
+            </h2>
+            <p>{record.summary}</p>
             {
-              project.role && (
+              ownership && (
                 <p>
-                  <strong>Recorded role:</strong> {project.role}
+                  <strong>
+                    {isMethodology ? "Method ownership:" : "Role:"}
+                  </strong>{" "}
+                  {ownership}
                 </p>
               )
             }
           </section>
+
+          {
+            record.constraints.length > 0 && (
+              <section>
+                <h2 id="operating-constraints">Context and constraints</h2>
+                <ul>
+                  {record.constraints.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
 
           <section>
-            <h2 id="technical-focus">Technical focus</h2>
-            <TechnologyList items={project.technologies} />
+            <h2 id="technical-focus">
+              {isMethodology ? "Delivery stack" : "Technology stack"}
+            </h2>
+            <TechnologyList
+              items={record.technologies}
+              label={isMethodology ? "Delivery stack" : "Technology stack"}
+            />
             {
-              project.contributions.length > 0 && (
+              practices.length > 0 && (
                 <>
-                  <h3>Contributions</h3>
+                  <h3>
+                    {isMethodology ? "Method in practice" : "Contributions"}
+                  </h3>
                   <ul>
-                    {project.contributions.map((item) => (
-                      <li>{item}</li>
-                    ))}
-                  </ul>
-                </>
-              )
-            }
-            {
-              project.validation.length > 0 && (
-                <>
-                  <h3>Validation</h3>
-                  <ul>
-                    {project.validation.map((item) => (
+                    {practices.map((item) => (
                       <li>{item}</li>
                     ))}
                   </ul>
@@ -169,27 +293,64 @@ const projectSchema = {
             }
           </section>
 
+          {
+            (record.validation.length > 0 || record.outcome) && (
+              <section>
+                <h2 id="validation-outcome">Validation and outcome</h2>
+                {record.validation.length > 0 && (
+                  <ul>
+                    {record.validation.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                )}
+                {record.outcome && (
+                  <div class="case-study__outcome">
+                    <strong>Outcome</strong>
+                    <p>{record.outcome}</p>
+                  </div>
+                )}
+              </section>
+            )
+          }
+
           <section class="integrity-note">
-            <h2 id="evidence-boundary">Evidence boundary</h2>
+            <h2 id="public-scope">Public scope</h2>
             {
-              project.privacyStatus === "client-safe-summary" ? (
+              isMethodology ? (
                 <p>
-                  This page intentionally limits client-sensitive detail. It
-                  records the public purpose, role and technology context
-                  without claiming confidential implementation or outcomes.
+                  The method, its delivery practices and the available
+                  validation trail are documented in the public repository
+                  linked above.
                 </p>
-              ) : project.caseStudyDepth === "summary" ? (
+              ) : project?.privacyStatus === "client-safe-summary" ? (
                 <p>
-                  This is a concise portfolio record linked to public evidence.
-                  It does not add outcomes, performance claims or individual
-                  contribution details that the approved source does not
-                  establish.
+                  Client confidentiality limits the implementation detail shared
+                  here. This overview focuses on the system's purpose, Bongo's
+                  role and the technologies used.
+                </p>
+              ) : project?.caseStudyDepth === "summary" ? (
+                <p>
+                  This focused overview is paired with the public repository,
+                  where the code and project context can be reviewed directly.
                 </p>
               ) : (
                 <p>
-                  Evidence, limitations and validation are stated only where the
-                  approved source supports them.
+                  The project source and available validation are linked above
+                  for direct review.
                 </p>
+              )
+            }
+            {
+              record.limitations.length > 0 && (
+                <>
+                  <h3>Constraints and limits</h3>
+                  <ul>
+                    {record.limitations.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </>
               )
             }
           </section>
@@ -292,6 +453,27 @@ const projectSchema = {
 
   .case-study__status {
     margin-block-end: var(--space-4);
+  }
+
+  .case-study__outcome {
+    margin-block-start: var(--space-5);
+    padding: var(--space-5);
+    border-inline-start: 0.25rem solid var(--gold);
+    background: color-mix(in srgb, var(--gold) 8%, var(--surface));
+  }
+
+  .case-study__outcome strong {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .case-study__outcome p {
+    margin-block-start: var(--space-2);
+    color: var(--ink);
+    font-weight: 650;
   }
 
   @media (max-width: 48rem) {

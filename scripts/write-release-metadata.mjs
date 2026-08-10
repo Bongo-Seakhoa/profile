@@ -44,9 +44,6 @@ function readGitValue(...arguments_) {
 
 const revision =
   process.env.RELEASE_SHA?.trim() || readGitValue("rev-parse", "HEAD");
-const releaseRef =
-  process.env.RELEASE_REF?.trim() ||
-  readGitValue("rev-parse", "--abbrev-ref", "HEAD");
 const builtAt =
   process.env.RELEASE_TIMESTAMP?.trim() || new Date().toISOString();
 
@@ -55,15 +52,9 @@ const metadata = {
   artifact: "static-view",
   version: packageManifest.version,
   revision: revision || "unknown",
-  ref: releaseRef || "unknown",
-  buildId: process.env.RELEASE_BUILD_ID?.trim() || "local",
   builtAt,
   siteUrl: siteSettings.siteUrl,
   basePath: siteSettings.basePath,
-  runtime: {
-    node: process.version,
-    packageManager: packageManifest.packageManager,
-  },
 };
 
 await mkdir(distDirectory, { recursive: true });

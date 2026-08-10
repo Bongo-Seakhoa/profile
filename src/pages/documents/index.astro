@@ -19,7 +19,7 @@ const cards = content.documentManifest.flatMap((document) =>
     description:
       document.id === "resume"
         ? "A concise professional summary with selected experience, projects, education and credentials."
-        : "A fuller professional record with complete experience, selected projects, education and credential history.",
+        : "A fuller professional profile with complete experience, selected projects, education and credential history.",
     previewPath: variant.previewPath,
     pdfPath: variant.pdfPath,
     pageCount: document.pageCount,
@@ -42,7 +42,7 @@ const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
     slot="masthead"
     eyebrow="Professional documents"
     title={route.title}
-    lede="Polished A4 documents generated from the same approved content as this site. Every preview has a direct PDF download."
+    lede="Choose a concise two-page resume or a fuller three-page CV, each available under both professional name variants."
   />
 
   <section class="page-section" aria-labelledby="primary-documents-title">
@@ -79,7 +79,7 @@ const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
         id="alternate-documents-title"
         eyebrow="Alternate public name"
         title="Bongo Kosa document variants"
-        description="These variants contain the same professional content. Only the approved display name changes."
+        description="These versions present the same career history under Bongo Kosa, an alternate professional and legal name."
       />
       <div class="documents-grid">
         {
@@ -99,15 +99,14 @@ const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
 
   <section
     class="page-section page-section--muted"
-    aria-labelledby="document-quality-title"
+    aria-labelledby="document-access-title"
   >
     <Container size="content">
       <div class="integrity-note">
-        <h2 id="document-quality-title">Document quality</h2>
+        <h2 id="document-access-title">Ready to review</h2>
         <p>
-          The build verifies A4 dimensions, exact page counts, local fonts,
-          overflow, section placement, metadata and direct download paths.
-          Public documents do not include a telephone number.
+          Every document opens as a browser-readable preview and a direct A4 PDF
+          download, making it easy to review online or share with a hiring team.
         </p>
       </div>
     </Container>

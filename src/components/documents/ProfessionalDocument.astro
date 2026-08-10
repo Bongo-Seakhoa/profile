@@ -426,9 +426,7 @@ const currentYear = new Date().getUTCFullYear();
 
               <footer class="document-footer">
                 <p>{identity.email}</p>
-                <p>
-                  Verified source content · reviewed {document.lastReviewed}
-                </p>
+                <p>Profile updated {document.lastReviewed}</p>
                 <p>{currentYear}</p>
               </footer>
             </div>
@@ -894,6 +892,7 @@ const currentYear = new Date().getUTCFullYear();
     min-height: 6mm;
     margin-top: 3mm;
     padding-top: 1.8mm;
+    flex-shrink: 0;
     align-items: end;
     justify-content: space-between;
     gap: 3mm;

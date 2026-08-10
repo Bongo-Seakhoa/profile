@@ -9,8 +9,13 @@ export interface Props {
 }
 
 const { capability, index } = Astro.props;
-const evidenceHref = (collection: "experience" | "project", id: string) =>
-  collection === "project" ? sitePath(`work/${id}/`) : sitePath("experience/");
+const evidenceHref = (
+  collection: "experience" | "project" | "methodology",
+  id: string,
+) =>
+  collection === "experience"
+    ? sitePath("experience/")
+    : sitePath(`work/${id}/`);
 ---
 
 <article
@@ -28,7 +33,7 @@ const evidenceHref = (collection: "experience" | "project", id: string) =>
   </div>
   <div class="capability-record__main">
     <header>
-      <p>Capability / evidence-linked</p>
+      <p>Delivery capability</p>
       <h2>{capability.title}</h2>
       <span>{capability.problem}</span>
     </header>
@@ -40,7 +45,7 @@ const evidenceHref = (collection: "experience" | "project", id: string) =>
         </ul>
       </section>
       <section aria-labelledby={`${capability.id}-evidence`}>
-        <h3 id={`${capability.id}-evidence`}>Selected evidence</h3>
+        <h3 id={`${capability.id}-evidence`}>Selected work</h3>
         <ul>
           {
             capability.evidence.map((evidence) => (

@@ -12,19 +12,24 @@ export interface Props {
 const { project, variant = "standard" } = Astro.props;
 const statusLabel =
   project.status === "professional"
-    ? "Client-safe summary"
+    ? "Professional system"
     : project.status === "experiment"
       ? "Experiment"
       : project.status === "archived"
-        ? "Archived"
+        ? "Archived project"
         : "Public project";
 const statusTone =
   project.status === "archived" ? "historical" : project.status;
+const externalLinkLabel =
+  new URL(project.publicUrl).hostname.toLocaleLowerCase("en") === "github.com"
+    ? "View repository"
+    : "Visit organisation";
 ---
 
 <article
   class:list={["project-card", `project-card--${variant}`]}
   data-project-status={project.status}
+  data-record-kind="project"
   data-signal-card
 >
   <div class="project-card__meta">
@@ -36,19 +41,19 @@ const statusTone =
       <a href={sitePath(`work/${project.slug}/`)}>{project.title}</a>
     </h3>
     {project.role && <p class="project-card__role">Role: {project.role}</p>}
-    <p>{project.summary}</p>
+    <p class="project-card__summary">{project.summary}</p>
   </div>
-  <TechnologyList items={project.technologies} />
+  <TechnologyList items={project.technologies} label="Technology stack" />
   <div class="project-card__actions">
-    <a href={sitePath(`work/${project.slug}/`)}>Read project summary</a>
-    <a href={project.publicUrl} target="_blank" rel="noreferrer">
-      {
-        project.privacyStatus === "client-safe-summary"
-          ? "Visit organisation"
-          : "View public evidence"
-      }
-      <span class="visually-hidden"> for {project.title}</span>
-    </a>
+    <a href={sitePath(`work/${project.slug}/`)}> View case study </a>
+    {
+      project.status !== "archived" && (
+        <a href={project.publicUrl} target="_blank" rel="noreferrer">
+          {externalLinkLabel}
+          <span class="visually-hidden"> for {project.title}</span>
+        </a>
+      )
+    }
   </div>
 </article>
 

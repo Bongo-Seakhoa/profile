@@ -62,11 +62,7 @@ Action:   requested action
 
 ## Reference material
 
-The read-only source library is:
-
-```text
-C:\Users\Bongo\OneDrive\Desktop\Projects\Profile Upgrade\Reference & inspiration material
-```
+The read-only source library remains private and outside this repository.
 
 Authority follows the most recent owner instruction for the subject. Key
 documents include:

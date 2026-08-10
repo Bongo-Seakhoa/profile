@@ -1,12 +1,10 @@
 # Profile Upgrade handoff
 
-**Updated:** 2026-08-08
-**Lead lane:** Codex
-**Review lane:** Claude or another independent reviewer when available
+**Updated:** 2026-08-10
 
 ## Current release branch
 
-- Working branch: `agent/profile-upgrade-20260808-final`
+- Working branch: `portfolio-wow-ai-upgrade`
 - Story-mode implementation commit: `b5ebe6b`
 - Professional Static View implementation commit: `bde74a4`
 - Command-navigation refinement commit: `7b212ef`
@@ -24,6 +22,8 @@
 ### Professional Static View
 
 - Astro 6 and TypeScript evidence-led professional record.
+- MetaPOS Mind leads as Bongo Seakhoa's primary-developer flagship, with an evidence-bound description of its permission-aware MCP-compatible context and governance system.
+- FinTech, AI and Data Visualization bootcamp support and broader AI-tooling skills are stated explicitly without attributing unverified frameworks to MetaPOS Mind.
 - Premium cream, ink, gold, rust and teal systems-cartography design language.
 - Route-aware Anzania atmosphere that remains visually subordinate to information.
 - Editorial homepage with systems console, evidence ledger and direct conversion paths.
@@ -37,9 +37,10 @@
 ### Explore Anzania
 
 - Eight outer and inner narrative locations.
-- Fifteen transparent full-body companions.
+- Twelve regenerated transparent full-body companions with four action-specific poses each, for 48 production pose assets.
 - Dune Surfing, Sand Teleportation, Solar Propulsion and Reality Bending.
-- Atlas, guide selector, experience options and Static View exits.
+- Location-specific atmospheric motion, pointer-responsive sun rays and differentiated ability choreography.
+- Interactive route atlas, guide selector, experience options and Static View exits.
 - Distant full-body framing controller with responsive safe zones and animated-state containment.
 - No OTS path and no authored camera crop.
 
@@ -52,7 +53,7 @@
 
 ## Authoritative design rules
 
-- Anzania is fictional and must never be presented as Tanzania or another real location.
+- Anzania remains an original fictional portfolio world created for Bongo Seakhoa.
 - The professional record remains central in Static View. Location imagery may support composition as atmosphere, but must not become the main content object.
 - Static View and Explore Anzania are equal-quality products with different interaction goals.
 - The complete companion bounds, including headwear, hands, scarves, pouches, garment tails and footwear, remain inside the visible frame whenever authored on screen.

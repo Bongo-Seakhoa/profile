@@ -61,6 +61,23 @@ async function rejectEmDashes(path) {
   }
 }
 
+async function rejectInternalPaths(path) {
+  if (!textExtensions.has(extname(path).toLowerCase())) return;
+  const text = await readFile(path, "utf8");
+  const patterns = [
+    { pattern: /[A-Za-z]:\\Users\\/g, label: "an absolute user path" },
+    { pattern: /AI-COLLAB/g, label: "an internal collaboration path" },
+    { pattern: /\.watch-state/g, label: "an internal watch-state path" },
+  ];
+
+  for (const { pattern, label } of patterns) {
+    for (const match of text.matchAll(pattern)) {
+      const { line, column } = findLineColumn(text, match.index ?? 0);
+      failures.push(`${displayPath(path)}:${line}:${column} contains ${label}`);
+    }
+  }
+}
+
 for (const sourceRoot of sourceRoots) {
   try {
     for (const path of await walk(sourceRoot)) await rejectEmDashes(path);
@@ -70,7 +87,10 @@ for (const sourceRoot of sourceRoots) {
 }
 
 const distFiles = await walk(distDirectory);
-for (const path of distFiles) await rejectEmDashes(path);
+for (const path of distFiles) {
+  await rejectEmDashes(path);
+  await rejectInternalPaths(path);
+}
 
 const immersivePrefix = "assets/immersive/";
 const staticPrefix = "assets/static/";
@@ -153,7 +173,7 @@ for (const path of htmlFiles) {
     const requiredFragments = [
       "/profile/assets/immersive/anzania-explorer.css",
       "/profile/assets/immersive/anzania-explorer.js",
-      "An original fictional world",
+      "Anzania is a fictional place.",
       "Continue in Static View",
       'data-guide-contract="full-body companion"',
     ];
@@ -193,9 +213,9 @@ for (const path of htmlFiles) {
     if (!html.includes('data-view="static"')) {
       failures.push(`${displayPath(path)} is missing the Static View contract`);
     }
-    if (!html.includes("ANZANIA / FICTIONAL WORLD")) {
+    if (!html.includes("ANZANIA / SCENIC EXPERIENCE")) {
       failures.push(
-        `${displayPath(path)} is missing the canonical fictional-world marker`,
+        `${displayPath(path)} is missing the scenic-experience marker`,
       );
     }
   }
@@ -277,22 +297,17 @@ try {
   if (manifest.world?.name !== "Anzania") {
     failures.push("The immersive manifest does not identify Anzania correctly");
   }
-  if (
-    manifest.world?.disclaimer !==
-    "Anzania is fictional. It is not Tanzania or any other real location."
-  ) {
-    failures.push(
-      "The immersive manifest is missing the canonical fictional-world disclaimer",
-    );
+  if (manifest.world?.disclaimer) {
+    failures.push("The immersive manifest duplicates the Anzania definition");
   }
   if (manifest.locations?.length !== 8) {
     failures.push(
       `Expected 8 Anzania locations, found ${manifest.locations?.length ?? 0}`,
     );
   }
-  if (manifest.guides?.length !== 15) {
+  if (manifest.guides?.length !== 12) {
     failures.push(
-      `Expected 15 full-body guides, found ${manifest.guides?.length ?? 0}`,
+      `Expected 12 full-body guides, found ${manifest.guides?.length ?? 0}`,
     );
   }
   if (Object.keys(manifest.powers ?? {}).length !== 4) {
@@ -303,7 +318,13 @@ try {
 
   const assetPaths = [
     manifest.atlas?.src,
-    ...manifest.guides.map((guide) => guide.src),
+    ...manifest.guides.flatMap((guide) => [
+      guide.image,
+      guide.poses?.idle,
+      guide.poses?.present,
+      guide.poses?.travel,
+      guide.poses?.lookback,
+    ]),
     ...manifest.locations.flatMap((location) => [
       location.outer?.large,
       location.outer?.small,
@@ -311,6 +332,37 @@ try {
       location.inner?.small,
     ]),
   ].filter(Boolean);
+
+  const companionPaths = [
+    ...new Set(
+      manifest.guides.flatMap((guide) => [
+        guide.poses?.idle,
+        guide.poses?.present,
+        guide.poses?.travel,
+        guide.poses?.lookback,
+      ]),
+    ),
+  ].filter(Boolean);
+  let companionBytes = 0;
+  for (const assetPath of companionPaths) {
+    const relativeAsset = assetPath.replace(/^\.\//, "");
+    try {
+      const metadata = await stat(
+        resolve(distDirectory, "assets", "immersive", relativeAsset),
+      );
+      companionBytes += metadata.size;
+      if (metadata.size > 110_000) {
+        failures.push(
+          `Companion pose exceeds 110 KB: ${relativeAsset} (${metadata.size} bytes)`,
+        );
+      }
+    } catch {
+      failures.push(`Companion pose is missing: ${relativeAsset}`);
+    }
+  }
+  if (companionBytes > 4 * 1024 * 1024) {
+    failures.push(`Companion roster exceeds 4 MiB: ${companionBytes} bytes`);
+  }
 
   for (const assetPath of assetPaths) {
     const relativeAsset = assetPath.replace(/^\.\//, "");

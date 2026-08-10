@@ -15,12 +15,19 @@
         "id": "metapos-data-engineering-scientist"
       },
       {
-        "label": "MetaPOS app data-management project summary",
+        "label": "MetaPOS Mind context and governance system",
         "collection": "project",
         "id": "metapos-app-data-management"
       }
     ],
-    "tools": ["Python", "SQL", "Google Cloud Platform", "Docker", "Git"],
+    "tools": [
+      "Python",
+      "SQL",
+      "Data warehousing",
+      "Google Cloud Platform",
+      "Docker",
+      "Git"
+    ],
     "featuredOrder": 1,
     "public": true,
     "lastReviewed": "2026-07-30"
@@ -53,23 +60,23 @@
   },
   {
     "id": "applied-machine-learning",
-    "title": "Applied machine learning",
-    "problem": "A model is useful only when its data, validation and delivery path are understood.",
+    "title": "AI and applied model systems",
+    "problem": "AI-enabled workflows and models are useful only when their data, context, validation, human authority and delivery paths are understood.",
     "delivers": [
-      "Problem framing and data preparation",
-      "Model experimentation and evaluation",
-      "Lightweight APIs and interactive demonstrations"
+      "Governed AI interaction and company-context systems",
+      "Human-governed AI-assisted engineering workflows",
+      "Model experimentation, evaluation and lightweight delivery"
     ],
     "evidence": [
       {
-        "label": "Public recommender-system project",
+        "label": "MetaPOS Mind AI context system",
         "collection": "project",
-        "id": "streamlit-recommender-system"
+        "id": "metapos-app-data-management"
       },
       {
-        "label": "Public regression-API project",
-        "collection": "project",
-        "id": "regression-predict-api"
+        "label": "Human-governed AI delivery methodology",
+        "collection": "methodology",
+        "id": "human-governed-ai-delivery-method"
       },
       {
         "label": "CNN filter visualisation",
@@ -77,22 +84,27 @@
         "id": "visualizing-filters-cnn"
       },
       {
-        "label": "Environmental-data analysis",
+        "label": "Early OpenAI trading experiment",
         "collection": "project",
-        "id": "airqo-environmental-data"
+        "id": "openai-trader-experiment"
       }
     ],
     "tools": [
+      "MCP",
+      "JSON Schema",
+      "Permission-aware context assembly",
+      "Human-governed agent workflows",
       "Scikit-learn",
       "TensorFlow",
       "PyTorch",
+      "Statistical inference",
+      "Data mining",
       "Pandas",
-      "Flask",
-      "Streamlit"
+      "Flask"
     ],
     "featuredOrder": 3,
     "public": true,
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   },
   {
     "id": "technical-mentoring",

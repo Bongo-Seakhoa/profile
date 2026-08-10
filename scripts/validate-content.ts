@@ -31,7 +31,7 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `Validated ${content.projects.length} projects, ${content.credentials.length} credentials, ${content.routes.length} routes and ${content.documentManifest.length} document plans.`,
+    `Validated ${content.projects.length} projects, ${content.methodologies.length} methodologies, ${content.credentials.length} credentials, ${content.routes.length} routes and ${content.documentManifest.length} document plans.`,
   );
   console.log(
     `Derived ${result.overlaps.length} experience overlap(s) from published month ranges; contract types remain evidence-bound.`,

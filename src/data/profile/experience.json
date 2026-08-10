@@ -9,20 +9,31 @@
     "dateStart": "2023-09",
     "dateEnd": null,
     "current": true,
-    "summary": "Contributes to data engineering work that improves data reliability, operational reporting and decision support within a retail point-of-sale environment.",
+    "summary": "Builds retail data and governed AI-context systems that improve reliability, operational understanding and decision support within a point-of-sale environment.",
     "highlights": [
       "Works with Python, SQL and data modelling to support data pipelines and analytics workflows.",
       "Improves accuracy and efficiency in transaction, inventory and sales-related data processes.",
-      "Collaborates across functions to strengthen data-driven operational decisions."
+      "Primary developer of MetaPOS Mind, a custom MCP-compatible context and governance layer for authorized employees and AI assistants.",
+      "Built its schema-first Python workflows across permission-aware context assembly, work assurance, multi-user handoffs, project reconciliation, read-only dashboards and deterministic validation.",
+      "Collaborates across functions to connect product, business, delivery and data context while preserving client-confidential boundaries."
     ],
-    "tools": ["Python", "SQL", "Google Cloud Platform", "Data modelling"],
+    "tools": [
+      "Python",
+      "SQL",
+      "Google Cloud Platform",
+      "Data modelling",
+      "MCP",
+      "JSON Schema",
+      "YAML",
+      "AI-assistant integration"
+    ],
     "evidenceLinks": ["https://metapos.co.za/"],
     "evidenceState": "client-safe-summary",
     "privacyStatus": "client-safe-summary",
     "featured": true,
     "featuredOrder": 1,
     "public": true,
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   },
   {
     "id": "blossom-superagent-mentor",
@@ -58,20 +69,28 @@
     "dateStart": "2023-10",
     "dateEnd": "2025-06",
     "current": false,
-    "summary": "Supported boot camp learners through technical tutoring, platform guidance, homework assessment and empathetic remote education delivery.",
+    "summary": "Supported learners across FinTech, AI and Data Visualization bootcamps delivered through multiple university partners under the 2U / edX umbrella.",
     "highlights": [
-      "Tutored students in Git, GitHub, FinTech, Python and machine learning topics.",
+      "Tutored learners across FinTech, AI and Data Visualization programmes, including Git, GitHub, Python and machine-learning topics.",
       "Answered learner questions on the AskBCS platform and graded work against structured rubrics.",
       "Helped sustain a supportive learning environment built on clarity, encouragement and technical precision."
     ],
-    "tools": ["Git", "GitHub", "Python", "Machine learning", "Assessment"],
+    "tools": [
+      "Git",
+      "GitHub",
+      "Python",
+      "Machine learning",
+      "AI bootcamp support",
+      "Data visualization",
+      "Assessment"
+    ],
     "evidenceLinks": [],
     "evidenceState": "owner-supplied-profile",
     "privacyStatus": "public",
     "featured": true,
     "featuredOrder": 2,
     "public": true,
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   },
   {
     "id": "turing-freelance-data-scientist",

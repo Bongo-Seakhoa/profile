@@ -56,14 +56,12 @@ function pointsToMillimetres(points) {
 }
 
 async function attachMetadata(pdfBytes, { displayName, label }) {
-  const pdf = await PDFDocument.load(pdfBytes);
+  const pdf = await PDFDocument.load(pdfBytes, { updateMetadata: false });
   pdf.setTitle(`${displayName} | ${label}`);
   pdf.setAuthor(displayName);
   pdf.setSubject(`${label} for ${displayName}`);
-  pdf.setCreator(
-    "Bongo Seakhoa portfolio | Chromium browser-native document pipeline",
-  );
-  pdf.setProducer("Chromium and pdf-lib");
+  pdf.setCreator("Bongo Seakhoa Portfolio");
+  pdf.setProducer("Bongo Seakhoa Portfolio");
   pdf.setKeywords([displayName, "data scientist", "data engineer", label]);
   pdf.setCreationDate(new Date());
   pdf.setModificationDate(new Date());
@@ -160,8 +158,6 @@ const browser = await chromium.launch({
 const server = await startDocumentServer({ root: distDirectory });
 const buildReport = {
   schemaVersion: "1.0.0",
-  generatedAt: new Date().toISOString(),
-  renderer: executablePath ? "Google Chrome" : "Playwright Chromium",
   documents: [],
 };
 
@@ -261,8 +257,6 @@ try {
         pageCount: pages.length,
         paper: documentManifest.paper,
         outputPath: variant.pdfPath,
-        previewPath: variant.previewPath,
-        previewFiles,
         dimensions,
       });
       await page.close();
@@ -273,7 +267,7 @@ try {
   await mkdir(dirname(reportPath), { recursive: true });
   await writeFile(reportPath, `${JSON.stringify(buildReport, null, 2)}\n`);
   console.log(
-    `Built ${buildReport.documents.length} browser-native documents for ${identity.primaryName}.`,
+    `Built ${buildReport.documents.length} professional documents for ${identity.primaryName}.`,
   );
 } finally {
   await browser.close();

@@ -19,6 +19,7 @@
   html[data-view="static"][data-route="credentials"],
   html[data-view="static"][data-route="documents"],
   html[data-view="static"][data-route^="project-"],
+  html[data-view="static"][data-route^="methodology-"],
   html[data-view="static"][data-route^="resume-"],
   html[data-view="static"][data-route^="cv-"] {
     --route-scene: url("/profile/assets/images/anzania/anzania-archive-echoes-outer-v01/anzania-archive-echoes-outer-v01-768.webp");

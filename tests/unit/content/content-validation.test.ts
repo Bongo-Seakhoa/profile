@@ -85,12 +85,71 @@ describe("profile content contract", () => {
   it("rejects em dashes in public copy", () => {
     const content = copyContent();
     content.identity[0]!.valueStatement =
-      "Clear systems — practical decisions.";
+      "Clear systems \u2014 practical decisions.";
 
     const codes = validateProfileContent(content).errors.map(
       ({ code }) => code,
     );
     expect(codes).toContain("PUBLIC_EM_DASH");
+  });
+
+  it("keeps every project summary recruiter-ready with a visible stack", () => {
+    expect(canonical.projects).toHaveLength(10);
+    for (const project of canonical.projects) {
+      expect(project.summary.length, project.id).toBeGreaterThanOrEqual(80);
+      expect(project.summary.length, project.id).toBeLessThanOrEqual(220);
+      expect(project.technologies.length, project.id).toBeGreaterThan(0);
+      expect(project.summary, project.id).not.toMatch(
+        /public portfolio summary|approved source|owner-approved|production claims|not separately stated/i,
+      );
+    }
+  });
+
+  it("models the delivery method as methodology, never as a project or document item", () => {
+    expect(canonical.methodologies).toHaveLength(1);
+    expect(
+      canonical.projects.some(
+        ({ id }) => id === "human-governed-ai-delivery-method",
+      ),
+    ).toBe(false);
+    expect(
+      canonical.projects.every(({ type }) => !/methodolog/i.test(type)),
+    ).toBe(true);
+
+    const methodology = canonical.methodologies[0]!;
+    expect(methodology).toMatchObject({
+      id: "human-governed-ai-delivery-method",
+      type: "Delivery methodology",
+      technologies: expect.arrayContaining(["Astro", "Playwright"]),
+    });
+
+    const route = canonical.routes.find(
+      ({ path }) => path === "work/human-governed-ai-delivery-method/",
+    );
+    expect(route).toMatchObject({
+      id: "methodology-human-governed-ai-delivery-method",
+      kind: "methodology",
+      entityRef: {
+        collection: "methodology",
+        id: methodology.id,
+      },
+    });
+
+    const documentItemIds = canonical.documentManifest.flatMap((document) =>
+      document.pages.flatMap((page) =>
+        page.sections.flatMap(({ itemIds }) => itemIds),
+      ),
+    );
+    expect(documentItemIds).not.toContain(methodology.id);
+
+    expect(
+      canonical.capabilities.flatMap(({ evidence }) => evidence),
+    ).toContainEqual(
+      expect.objectContaining({
+        collection: "methodology",
+        id: methodology.id,
+      }),
+    );
   });
 
   it("rejects em dashes in public content", () => {
@@ -126,6 +185,19 @@ describe("profile content contract", () => {
       ({ code }) => code,
     );
     expect(codes).toContain("PROJECT_ROUTE_DRIFT");
+  });
+
+  it("rejects methodology route drift independently of project routes", () => {
+    const content = copyContent();
+    content.routes = content.routes.filter(
+      ({ id }) => id !== "methodology-human-governed-ai-delivery-method",
+    );
+
+    const codes = validateProfileContent(content).errors.map(
+      ({ code }) => code,
+    );
+    expect(codes).toContain("METHODOLOGY_ROUTE_DRIFT");
+    expect(codes).not.toContain("PROJECT_ROUTE_DRIFT");
   });
 
   it("rejects incomplete all-policy document selections", () => {

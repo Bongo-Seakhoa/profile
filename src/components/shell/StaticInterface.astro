@@ -39,6 +39,7 @@ const oasisRoutes = new Set(["contact", "about", "education", "bongo-kosa"]);
 const sceneId: PublishedAnzaniaPlateId =
   archiveRoutes.has(activeRouteId) ||
   activeRouteId.startsWith("project-") ||
+  activeRouteId.startsWith("methodology-") ||
   activeRouteId.startsWith("resume-") ||
   activeRouteId.startsWith("cv-")
     ? "archive-echoes-outer"
@@ -106,8 +107,8 @@ const sceneId: PublishedAnzaniaPlateId =
   </svg>
 
   <div class="static-atmosphere__coordinates">
-    <span>ANZANIA / FICTIONAL WORLD</span>
-    <span>PROFESSIONAL RECORD</span>
+    <span>ANZANIA / SCENIC EXPERIENCE</span>
+    <span>PROFESSIONAL PORTFOLIO</span>
   </div>
 </div>
 
@@ -144,7 +145,7 @@ const sceneId: PublishedAnzaniaPlateId =
   <div class="static-command-dialog__frame">
     <header class="static-command-dialog__header">
       <div>
-        <p>Professional record index</p>
+        <p>Portfolio index</p>
         <h2 id="static-command-title">Navigate {primaryName}</h2>
       </div>
       <form method="dialog">

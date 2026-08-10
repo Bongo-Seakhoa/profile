@@ -2,6 +2,9 @@ import { z } from "zod";
 
 import type { LocomotionPresentation } from "../animation";
 
+// Archival source-handoff canon retained for provenance and future expansion.
+// The current browser journey publishes a separate twelve-guide, 48-pose roster.
+
 export const CHARACTER_PRESENTATIONS = [
   "Male",
   "Female",

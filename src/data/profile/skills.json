@@ -6,7 +6,7 @@
   },
   {
     "id": "data-ml",
-    "label": "Data and machine learning",
+    "label": "Data science and machine learning",
     "items": [
       "Pandas",
       "NumPy",
@@ -14,15 +14,44 @@
       "Scikit-learn",
       "TensorFlow",
       "PyTorch",
+      "Deep learning",
+      "Computer vision",
+      "Model evaluation",
+      "Statistical inference",
+      "Hypothesis testing",
+      "Data mining",
+      "Data wrangling",
+      "Anomaly detection",
+      "Time-series analysis",
+      "Natural language processing",
+      "Machine learning pipelines",
       "Apache Spark"
     ]
   },
   {
+    "id": "ai-systems",
+    "label": "AI systems and interaction",
+    "items": [
+      "Model Context Protocol (MCP)",
+      "Permission-aware context engineering",
+      "JSON Schema",
+      "LangChain",
+      "LangSmith",
+      "OpenAI API",
+      "ChatGPT, Claude, Gemini and Copilot integration",
+      "Human-governed agent workflows",
+      "AI-assisted software delivery"
+    ]
+  },
+  {
     "id": "cloud-delivery",
-    "label": "Cloud and delivery",
+    "label": "Cloud, security and delivery",
     "items": [
       "Google Cloud Platform",
       "AWS",
+      "Cybersecurity fundamentals",
+      "Network security",
+      "Risk management",
       "Docker",
       "Git",
       "GitHub",
@@ -44,7 +73,7 @@
   },
   {
     "id": "databases",
-    "label": "Databases",
+    "label": "Databases and warehousing",
     "items": [
       "PostgreSQL",
       "MySQL",
@@ -52,7 +81,8 @@
       "SQLite",
       "Oracle",
       "Microsoft SQL Server",
-      "Amazon RDS"
+      "Amazon RDS",
+      "Data warehousing"
     ]
   }
 ]

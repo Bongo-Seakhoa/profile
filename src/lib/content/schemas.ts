@@ -66,7 +66,7 @@ export const identitySchema = z.object({
 
 export const contentReferenceSchema = z.object({
   label: z.string().min(1),
-  collection: z.enum(["experience", "project"]),
+  collection: z.enum(["experience", "project", "methodology"]),
   id: recordIdSchema,
 });
 
@@ -257,7 +257,13 @@ export const projectSchema = z
     id: recordIdSchema,
     slug: recordIdSchema,
     title: z.string().min(1),
-    type: z.string().min(1),
+    type: z
+      .string()
+      .min(1)
+      .refine(
+        (value) => !/methodolog/i.test(value),
+        "Methodologies belong in the methodology collection",
+      ),
     status: z.enum(["public", "professional", "experiment", "archived"]),
     evidenceState: z.enum([
       "public-repository",
@@ -291,10 +297,37 @@ export const projectSchema = z
     }
   });
 
-export const routeEntityReferenceSchema = z.object({
-  collection: z.enum(["project"]),
+export const methodologySchema = z.object({
   id: recordIdSchema,
+  slug: recordIdSchema,
+  title: z.string().min(1),
+  type: z.literal("Delivery methodology"),
+  status: z.literal("public"),
+  evidenceState: z.literal("public-repository"),
+  privacyStatus: z.literal("public"),
+  summary: z.string().min(1),
+  ownership: z.string().min(1),
+  constraints: z.array(z.string().min(1)).min(1),
+  practices: z.array(z.string().min(1)).min(1),
+  validation: z.array(z.string().min(1)).min(1),
+  outcome: z.string().min(1),
+  limitations: z.array(z.string().min(1)),
+  technologies: z.array(z.string().min(1)).min(1),
+  publicUrl: httpsUrlSchema,
+  public: z.literal(true),
+  lastReviewed: reviewedDateSchema,
 });
+
+export const routeEntityReferenceSchema = z.discriminatedUnion("collection", [
+  z.object({
+    collection: z.literal("project"),
+    id: recordIdSchema,
+  }),
+  z.object({
+    collection: z.literal("methodology"),
+    id: recordIdSchema,
+  }),
+]);
 
 export const routeSchema = z.object({
   id: recordIdSchema,
@@ -308,7 +341,14 @@ export const routeSchema = z.object({
       (value) => value === "" || value === "404.html" || value.endsWith("/"),
       "Non-root route paths must end with a slash (except 404.html)",
     ),
-  kind: z.enum(["page", "project", "document", "continuity", "system"]),
+  kind: z.enum([
+    "page",
+    "project",
+    "methodology",
+    "document",
+    "continuity",
+    "system",
+  ]),
   label: z.string().min(1),
   title: z.string().min(1),
   description: z.string().min(1),
@@ -402,7 +442,8 @@ export const profileCollectionSchemas = {
   experience: z.array(experienceSchema),
   education: z.array(educationSchema),
   credentials: z.array(credentialSchema),
-  projects: z.array(projectSchema),
+  projects: z.array(projectSchema).length(10),
+  methodologies: z.array(methodologySchema).min(1),
   routes: z.array(routeSchema),
   siteSettings: z.array(siteSettingsSchema).length(1),
   documentManifest: z.array(documentManifestSchema).length(2),
@@ -415,6 +456,7 @@ export type Experience = z.infer<typeof experienceSchema>;
 export type Education = z.infer<typeof educationSchema>;
 export type Credential = z.infer<typeof credentialSchema>;
 export type Project = z.infer<typeof projectSchema>;
+export type Methodology = z.infer<typeof methodologySchema>;
 export type RouteRecord = z.infer<typeof routeSchema>;
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 export type DocumentManifest = z.infer<typeof documentManifestSchema>;
@@ -427,6 +469,7 @@ export interface ProfileContent {
   education: Education[];
   credentials: Credential[];
   projects: Project[];
+  methodologies: Methodology[];
   routes: RouteRecord[];
   siteSettings: SiteSettings[];
   documentManifest: DocumentManifest[];

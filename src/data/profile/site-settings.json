@@ -4,8 +4,8 @@
     "siteName": "Bongo Seakhoa | Bongo Kosa",
     "siteUrl": "https://bongo-seakhoa.github.io/profile/",
     "basePath": "/profile",
-    "defaultTitle": "Bongo Seakhoa | Data Scientist and Data Engineer",
-    "defaultDescription": "Professional portfolio for Bongo Seakhoa, also known as Bongo Kosa, covering data engineering, analytics, applied machine learning and technical mentoring.",
+    "defaultTitle": "Bongo Seakhoa | AI and Data Systems Engineer",
+    "defaultDescription": "Professional portfolio for Bongo Seakhoa, also known as Bongo Kosa, covering AI-enabled products, data systems, analytics, applied machine learning and technical mentoring.",
     "locale": "en",
     "themeColor": "#12261F",
     "publicContactLinkIds": ["email", "linkedin", "github"],
@@ -20,6 +20,6 @@
       "linkedInReconciliation": "pending-owner-export",
       "unsupportedClaims": "reject"
     },
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-08-10"
   }
 ]

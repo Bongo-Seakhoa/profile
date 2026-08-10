@@ -28,6 +28,10 @@ const projectRoutes = [
   "work/openai-trader-experiment/",
 ] as const;
 
+const methodologyRoutes = ["work/human-governed-ai-delivery-method/"] as const;
+
+const workRoutes = [...projectRoutes, ...methodologyRoutes] as const;
+
 const documentRoutes = [
   "documents/resume/bongo-seakhoa/",
   "documents/resume/bongo-kosa/",
@@ -43,7 +47,7 @@ const pdfRoutes = [
 ] as const;
 
 test.describe("Static View route and accessibility contract", () => {
-  for (const route of [...coreRoutes, ...projectRoutes]) {
+  for (const route of [...coreRoutes, ...workRoutes]) {
     test(`${route || "overview"} renders semantic, static content`, async ({
       page,
     }) => {
@@ -85,6 +89,26 @@ test.describe("Static View route and accessibility contract", () => {
       expect(consoleErrors).toEqual([]);
       expect(pageErrors).toEqual([]);
 
+      if (projectRoutes.includes(route as (typeof projectRoutes)[number])) {
+        await expect(
+          page.getByRole("heading", { name: "Technology stack", exact: true }),
+        ).toHaveCount(1);
+        expect(
+          await page.locator(".technology-list li").count(),
+        ).toBeGreaterThan(0);
+      }
+
+      if (
+        methodologyRoutes.includes(route as (typeof methodologyRoutes)[number])
+      ) {
+        await expect(
+          page.getByRole("heading", { name: "Delivery stack", exact: true }),
+        ).toHaveCount(1);
+        expect(
+          await page.locator(".technology-list li").count(),
+        ).toBeGreaterThan(0);
+      }
+
       const accessibility = await new AxeBuilder({ page }).analyze();
       const seriousOrCritical = accessibility.violations.filter((violation) =>
         ["serious", "critical"].includes(violation.impact ?? ""),
@@ -92,6 +116,83 @@ test.describe("Static View route and accessibility contract", () => {
       expect(seriousOrCritical).toEqual([]);
     });
   }
+
+  test("work index gives every project a summary and clearly separates the methodology", async ({
+    page,
+  }) => {
+    await page.goto("work/", { waitUntil: "networkidle" });
+
+    const cards = page.locator(".project-card");
+    await expect(cards).toHaveCount(workRoutes.length);
+
+    for (const card of await page
+      .locator('.project-card[data-record-kind="project"]')
+      .all()) {
+      await expect(card.locator(".project-card__summary")).toHaveCount(1);
+      await expect(
+        card.getByText("Technology stack", { exact: true }),
+      ).toHaveCount(1);
+      expect(await card.locator(".technology-list li").count()).toBeGreaterThan(
+        0,
+      );
+    }
+
+    const methodologyCard = page.locator(
+      '.project-card[data-record-kind="methodology"]',
+    );
+    await expect(methodologyCard).toHaveCount(methodologyRoutes.length);
+    await expect(methodologyCard.locator(".project-card__summary")).toHaveCount(
+      1,
+    );
+    await expect(
+      methodologyCard.getByText("Delivery stack", { exact: true }),
+    ).toHaveCount(1);
+    expect(
+      await methodologyCard.locator(".technology-list li").count(),
+    ).toBeGreaterThan(0);
+  });
+
+  test("MetaPOS leads into the strongest related AI evidence", async ({
+    page,
+  }) => {
+    await page.goto("work/metapos-app-data-management/", {
+      waitUntil: "networkidle",
+    });
+
+    const relatedWork = page.getByRole("region", { name: "Related work" });
+    await expect(relatedWork).toContainText("Visualizing Filters of a CNN");
+    await expect(relatedWork).not.toContainText(
+      "Human-Governed AI Delivery Method",
+    );
+    await expect(relatedWork).not.toContainText("FxPM 1.4");
+  });
+
+  test("methodology publishes HowTo metadata and methodology social naming", async ({
+    page,
+  }) => {
+    await page.goto("work/human-governed-ai-delivery-method/", {
+      waitUntil: "networkidle",
+    });
+
+    const jsonLd = JSON.parse(
+      (await page
+        .locator('script[type="application/ld+json"]')
+        .textContent()) ?? "{}",
+    ) as { "@graph"?: Array<Record<string, unknown>> };
+    const methodology = jsonLd["@graph"]?.find(
+      (entry) => entry.name === "Human-Governed AI Delivery Method",
+    );
+
+    expect(methodology).toMatchObject({
+      "@type": "HowTo",
+      name: "Human-Governed AI Delivery Method",
+    });
+    expect(JSON.stringify(methodology)).not.toContain("CreativeWork");
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      "content",
+      /\/assets\/social\/methodology-human-governed-ai-delivery-method\.jpg$/,
+    );
+  });
 
   test("key routes remain complete without JavaScript", async ({ browser }) => {
     const context = await browser.newContext({

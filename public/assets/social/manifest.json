@@ -1,250 +1,201 @@
 {
   "schemaVersion": "1.0.0",
-  "generator": "scripts/build-social-cards.mjs",
-  "font": "IBM Plex Sans Variable",
   "cards": [
     {
       "routeId": "home",
       "routePath": "",
       "path": "assets/social/home.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 64623,
-      "sha256": "c1d61a4582c2d85aaa05c91193430e93419be7263901cafbc3ec93a11b93ceea"
+      "height": 630
     },
     {
       "routeId": "explore",
       "routePath": "explore/",
       "path": "assets/social/explore.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 76694,
-      "sha256": "589e3211550ec415f5b192ad0e2c527c78ff7d8a923edc22c1cee1265229ea5c"
+      "height": 630
     },
     {
       "routeId": "work",
       "routePath": "work/",
       "path": "assets/social/work.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 43964,
-      "sha256": "1419d17e4c8a18aea7276e58dfb360678c2382ec9131342950f0a40fdc12db46"
+      "height": 630
     },
     {
       "routeId": "capabilities",
       "routePath": "capabilities/",
       "path": "assets/social/capabilities.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 47410,
-      "sha256": "c7bec8410e9ffd7cbb0f4628191e8db7885e0017038b583515a124fac54697a4"
+      "height": 630
     },
     {
       "routeId": "experience",
       "routePath": "experience/",
       "path": "assets/social/experience.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 49034,
-      "sha256": "dc5c4012d1b0a54380ecce28c960c8ab08bcf45ff10fbad8e31a7632019c01d5"
+      "height": 630
     },
     {
       "routeId": "research",
       "routePath": "research/",
       "path": "assets/social/research.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 50709,
-      "sha256": "487936a9baefdf430aa2c98cba58592e76f7ce162f83565cb89fcd9d5204aecd"
+      "height": 630
     },
     {
       "routeId": "education",
       "routePath": "education/",
       "path": "assets/social/education.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 40965,
-      "sha256": "a4c3164faa6c241697e5f6030689832196e62cf1d3ff809280e90f236ace89f9"
+      "height": 630
     },
     {
       "routeId": "credentials",
       "routePath": "credentials/",
       "path": "assets/social/credentials.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 55509,
-      "sha256": "8ccb0480177903e0c46dde48feddde9da2bc7a32c4e1bac292eb932a6ad0fa16"
+      "height": 630
     },
     {
       "routeId": "about",
       "routePath": "about/",
       "path": "assets/social/about.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 47484,
-      "sha256": "912f588f68bb9a26a55381108e2e65193d4513433329abef9153c6ee185cd6fc"
+      "height": 630
     },
     {
       "routeId": "documents",
       "routePath": "documents/",
       "path": "assets/social/documents.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 49468,
-      "sha256": "dd670300640d38e7490d5e34529cf9dfc11d51c6b33ed13a7bcb621e1591e1ba"
+      "height": 630
     },
     {
       "routeId": "contact",
       "routePath": "contact/",
       "path": "assets/social/contact.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 48265,
-      "sha256": "a2e8804cd65981e564f9e7b4b45d4ff33f7613e90b45752f4b8891e23acf87f4"
+      "height": 630
     },
     {
       "routeId": "project-metapos-app-data-management",
       "routePath": "work/metapos-app-data-management/",
       "path": "assets/social/project-metapos-app-data-management.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 53434,
-      "sha256": "2a9f685b26c27129a2fc24088d619cdae8fcaf52d8d0bc51ec54b98b778db318"
+      "height": 630
+    },
+    {
+      "routeId": "methodology-human-governed-ai-delivery-method",
+      "routePath": "work/human-governed-ai-delivery-method/",
+      "path": "assets/social/methodology-human-governed-ai-delivery-method.jpg",
+      "width": 1200,
+      "height": 630
     },
     {
       "routeId": "project-fxpm-1-4-forex-portfolio-manager",
       "routePath": "work/fxpm-1-4-forex-portfolio-manager/",
       "path": "assets/social/project-fxpm-1-4-forex-portfolio-manager.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 53910,
-      "sha256": "8b60b99ea399f2f15b5458b361ef842021c9b3f4fe312312b62bb562a3fb234b"
+      "height": 630
     },
     {
       "routeId": "project-streamlit-recommender-system",
       "routePath": "work/streamlit-recommender-system/",
       "path": "assets/social/project-streamlit-recommender-system.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 60128,
-      "sha256": "c83dbc86167ddbfac1c2eaabc04395476d914eb11014830e845a90a2fe3d956e"
+      "height": 630
     },
     {
       "routeId": "project-regression-predict-api",
       "routePath": "work/regression-predict-api/",
       "path": "assets/social/project-regression-predict-api.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 47020,
-      "sha256": "3dbcc85d7f1a46786cde62c6cbd6abee700f1d93294b588b83174b779e55516a"
+      "height": 630
     },
     {
       "routeId": "project-visualizing-filters-cnn",
       "routePath": "work/visualizing-filters-cnn/",
       "path": "assets/social/project-visualizing-filters-cnn.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 51614,
-      "sha256": "aafa9b8edc4ffa7e7af9ec59b3a27bb05ac2098d7b8de06e11a95811b198cadb"
+      "height": 630
     },
     {
       "routeId": "project-airqo-environmental-data",
       "routePath": "work/airqo-environmental-data/",
       "path": "assets/social/project-airqo-environmental-data.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 57151,
-      "sha256": "3dad395ea989ce9d5c212e55aa7ad3079db10c85d6bf420ae553480dc4ab82c6"
+      "height": 630
     },
     {
       "routeId": "project-mql5-expert-advisor",
       "routePath": "work/mql5-expert-advisor/",
       "path": "assets/social/project-mql5-expert-advisor.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 48136,
-      "sha256": "f0c4aaf53c5d05474cb78ec3e1a13bfb39382515e99e2f1a1bacbcf6ec969903"
+      "height": 630
     },
     {
       "routeId": "project-fxpm-backtester",
       "routePath": "work/fxpm-backtester/",
       "path": "assets/social/project-fxpm-backtester.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 46050,
-      "sha256": "c380892f4e4d006f52a42dd0464fc45d3d27a39855bfab15eb1c2f830b215794"
+      "height": 630
     },
     {
       "routeId": "project-institutional-ls-sr-trading-ea",
       "routePath": "work/institutional-ls-sr-trading-ea/",
       "path": "assets/social/project-institutional-ls-sr-trading-ea.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 54025,
-      "sha256": "cfdfc10606af4e4512a3853c7912ee87351345f74d3a71b0e8530e5be8f0fba5"
+      "height": 630
     },
     {
       "routeId": "project-openai-trader-experiment",
       "routePath": "work/openai-trader-experiment/",
       "path": "assets/social/project-openai-trader-experiment.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 47966,
-      "sha256": "de42fcc74515a37a5b00ed42c68d88442c8769f934bdc3228eef6c7567472edc"
+      "height": 630
     },
     {
       "routeId": "resume-bongo-seakhoa",
       "routePath": "documents/resume/bongo-seakhoa/",
       "path": "assets/social/resume-bongo-seakhoa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 49655,
-      "sha256": "b5eb30f136ca6d687aefd79037c1f7fcc6febe746e570f48daa500854c40e1b1"
+      "height": 630
     },
     {
       "routeId": "resume-bongo-kosa",
       "routePath": "documents/resume/bongo-kosa/",
       "path": "assets/social/resume-bongo-kosa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 52398,
-      "sha256": "c971224f8d5ee616fef8cb01861e7a16c0a90a894c88b9c8cab432d469045891"
+      "height": 630
     },
     {
       "routeId": "cv-bongo-seakhoa",
       "routePath": "documents/cv/bongo-seakhoa/",
       "path": "assets/social/cv-bongo-seakhoa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 46190,
-      "sha256": "d5f7a9dd3c2b1be8dab70c1c299a0ccb983be5843fe2561843e70eef18e48839"
+      "height": 630
     },
     {
       "routeId": "cv-bongo-kosa",
       "routePath": "documents/cv/bongo-kosa/",
       "path": "assets/social/cv-bongo-kosa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 50484,
-      "sha256": "b33f586050083e6323125df4759635ec7d8422b0d4d8c707ff57edf348e34670"
+      "height": 630
     },
     {
       "routeId": "bongo-kosa",
       "routePath": "bongo-kosa/",
       "path": "assets/social/bongo-kosa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 55945,
-      "sha256": "3f4ce1e50223fbc8c2a91f10d67bc65ee733619e735301042e2fc52bc272fef7"
+      "height": 630
     },
     {
       "routeId": "not-found",
       "routePath": "404.html",
       "path": "assets/social/not-found.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 40243,
-      "sha256": "32cee30c3868d202e477b2554b430f451a5e6392bef0f7cb1ed0196b05bcaf7c"
+      "height": 630
     }
   ]
 }
