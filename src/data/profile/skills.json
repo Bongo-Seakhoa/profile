@@ -17,6 +17,14 @@
       "Deep learning",
       "Computer vision",
       "Model evaluation",
+      "Statistical inference",
+      "Hypothesis testing",
+      "Data mining",
+      "Data wrangling",
+      "Anomaly detection",
+      "Time-series analysis",
+      "Natural language processing",
+      "Machine learning pipelines",
       "Apache Spark"
     ]
   },
@@ -37,10 +45,13 @@
   },
   {
     "id": "cloud-delivery",
-    "label": "Cloud and delivery",
+    "label": "Cloud, security and delivery",
     "items": [
       "Google Cloud Platform",
       "AWS",
+      "Cybersecurity fundamentals",
+      "Network security",
+      "Risk management",
       "Docker",
       "Git",
       "GitHub",
@@ -62,7 +73,7 @@
   },
   {
     "id": "databases",
-    "label": "Databases",
+    "label": "Databases and warehousing",
     "items": [
       "PostgreSQL",
       "MySQL",
@@ -70,7 +81,8 @@
       "SQLite",
       "Oracle",
       "Microsoft SQL Server",
-      "Amazon RDS"
+      "Amazon RDS",
+      "Data warehousing"
     ]
   }
 ]

@@ -8,9 +8,9 @@
 
 | Area                       | State                      | Evidence and next gate                                                                                                                                                                                                      |
 | -------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Professional Static View   | Release candidate complete | MetaPOS Mind now leads an evidence-bound AI and data narrative, supported by AI-assisted delivery, bootcamp experience, credentials, direct conversion paths and the complete no-JavaScript professional record.            |
-| Explore Anzania            | Release candidate complete | Eight locations, six regenerated companions with four poses each, four differentiated traversal powers, environmental theatre, an interactive atlas, dialogs and the full-body safe-zone runtime are implemented.           |
-| Anzania canon              | Locked                     | Anzania is an original fictional portfolio world. It is not Tanzania or any other real location.                                                                                                                            |
+| Professional Static View   | Release candidate complete | MetaPOS Mind now leads the AI and data narrative, supported by a human-governed delivery methodology, bootcamp experience, credentials, direct conversion paths and the complete no-JavaScript professional record.          |
+| Explore Anzania            | Release candidate complete | Eight locations, twelve regenerated companions with four poses each, four differentiated traversal powers, environmental theatre, an interactive atlas, dialogs and the full-body safe-zone runtime are implemented.        |
+| Anzania canon              | Locked                     | Anzania is an original fictional portfolio world created for Bongo Seakhoa.                                                                                                                                                |
 | Full-body framing          | Passed in local browser QA | Complete silhouettes remained contained through tested viewport ratios, look-back, traversal, guide change and portal states. No OTS path exists.                                                                           |
 | Runtime isolation          | Implemented                | One progressive runtime is confined to `public/assets/static/`; one immersive runtime is confined to `public/assets/immersive/`. Professional routes may not request immersive runtime assets.                              |
 | Resume and CV              | Preserved                  | Four A4 documents remain generated through JavaScript, Chromium and `pdf-lib`; Python is not in the production document pipeline.                                                                                           |
@@ -25,7 +25,7 @@
 ### Explore Anzania
 
 - Eight named narrative locations and 32 responsive outer and inner scene derivatives.
-- Six selectable transparent 640 by 960 full-body companions, each with authored idle, presenting, travel and look-back poses.
+- Twelve selectable transparent 640 by 960 full-body companions, each with authored idle, presenting, travel and look-back poses.
 - Location-specific clouds, rays, dust, sand, wind, mist, embers, fireflies and stellar motes respond to journey state and pointer movement.
 - Dune Surfing, Sand Teleportation, Solar Propulsion and Reality Bending transitions.
 - Responsive full-body framing at 390 by 844, 844 by 390, 768 by 1024, 1024 by 650, 1440 by 1000 and 1920 by 1080.
@@ -55,7 +55,3 @@
 1. Push the release branch and run the canonical Node 24 `pnpm qa` workflow.
 2. Merge to `main` after the hosted gate passes.
 3. Verify the live homepage, Explore Anzania, sitemap, social metadata, `version.json` and all four PDF downloads.
-
-## Coordination
-
-Claude's earlier review history remains retained. No current Claude heartbeat or new response is present, so the lead continues under the written collaboration protocol without blocking completion. Automated evidence does not impersonate a second reviewer.

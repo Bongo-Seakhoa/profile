@@ -2,8 +2,7 @@
   "schemaVersion": "3.0.0",
   "world": {
     "name": "Anzania",
-    "definition": "An original fictional portfolio world created for Bongo Seakhoa.",
-    "disclaimer": "Anzania is fictional. It is not Tanzania or any other real location.",
+    "definition": "A cinematic portfolio journey through eight narrative locations.",
     "experience": "Interactive 2.5D guided portfolio journey"
   },
   "locations": [
@@ -80,7 +79,7 @@
           },
           {
             "title": "Protect the evidence chain",
-            "body": "Keep claims connected to code, documents, measurements and clearly labelled client-safe records."
+            "body": "Connect each conclusion to code, documents, measurements and supporting records that make the reasoning easy to follow."
           },
           {
             "title": "Design for ownership",
@@ -148,8 +147,8 @@
           "value": "Python, YAML, JSON Schema and a read-only MCP-compatible interface"
         },
         {
-          "label": "Public boundary",
-          "value": "Purpose, role and named technologies shown; internal architecture and metrics withheld"
+          "label": "Operating scope",
+          "value": "Permission-aware context assembly, source routing, handoffs, dashboards and deterministic validation"
         }
       ],
       "facts": [
@@ -191,7 +190,7 @@
       "deepDive": {
         "kicker": "Inside the context chamber",
         "heading": "MetaPOS Mind is the clearest proof of Bongo as an AI systems builder.",
-        "summary": "The client-safe record shows the system's purpose, Bongo's primary-development contribution and its real technical shape without exposing private company records, identities, prompts or operating rules.",
+        "summary": "The case study shows the system's purpose, Bongo's primary-development contribution and its technical shape through architecture, workflow and validation.",
         "pillars": [
           {
             "title": "Permission-aware context",
@@ -219,8 +218,8 @@
           },
           {
             "status": "Protected",
-            "title": "Client-confidential detail",
-            "detail": "Deployment state, internal architecture, prompts, data and operating metrics remain outside the public claim."
+            "title": "Professional context",
+            "detail": "Company data and operating metrics remain private; the case study focuses on architecture, contribution and technology."
           }
         ],
         "notes": [
@@ -230,7 +229,7 @@
           },
           {
             "question": "What can a recruiter verify here?",
-            "answer": "The primary-developer role, system purpose and publish-safe stack are documented; private source, company records and operating metrics are deliberately excluded."
+            "answer": "The primary-developer role, system purpose, architecture and technology stack are documented in the case study."
           },
           {
             "question": "What does this demonstrate?",
@@ -240,7 +239,7 @@
         "artifact": {
           "label": "Flagship case study",
           "title": "MetaPOS Mind",
-          "detail": "Open the client-safe record of purpose, contribution, stack, constraints and evidence boundary.",
+          "detail": "Open the case study for purpose, contribution, stack, constraints and outcome.",
           "path": "work/metapos-app-data-management/"
         }
       }
@@ -255,7 +254,7 @@
       "title": "Scientific roots grew into AI, data systems and learning leadership.",
       "lead": "A foundation in science expanded through formal AI and machine-learning training, professional data work, cross-university bootcamp support and continued Engineering Management study.",
       "signal": "Learning system",
-      "signalValue": "Formal study, verified credentials and practical experimentation",
+      "signalValue": "Formal study, professional credentials and practical experimentation",
       "biome": "garden",
       "evidence": [
         {
@@ -338,7 +337,7 @@
           {
             "status": "Ongoing",
             "title": "Cloud and analytics credentials",
-            "detail": "Verified learning remains tied to practical workflows rather than collected as decoration."
+            "detail": "Learning becomes useful when it strengthens practical workflows and real decisions."
           },
           {
             "status": "Experience",
@@ -362,8 +361,8 @@
         ],
         "artifact": {
           "label": "Learning record",
-          "title": "Education and verified credentials",
-          "detail": "Inspect formal study, training and active credentials with dates and verification paths.",
+          "title": "Education and credentials",
+          "detail": "Explore formal study, professional training and current credentials.",
           "path": "education/"
         }
       }
@@ -376,18 +375,18 @@
       "region": "The Citadel of Evidence",
       "eyebrow": "Proof before proclamation",
       "title": "Every claim should resolve into a project, role or verifiable artefact.",
-      "lead": "The archive is where reputation is tested. Public projects and client-safe summaries state scope, evidence and status directly rather than inflating experiments into outcomes.",
+      "lead": "The archive is where reputation is tested. Projects state scope, contribution, status and the available evidence without inflating experiments into outcomes.",
       "signal": "Evidence index",
-      "signalValue": "Public repositories, client-safe summaries and explicit status labels",
+      "signalValue": "Public repositories, professional case studies and explicit status labels",
       "biome": "archive",
       "evidence": [
         {
           "label": "Selected systems",
-          "value": "MetaPOS Mind, AI-assisted delivery, deep-learning interpretation and retail data systems"
+          "value": "MetaPOS Mind, a human-governed AI delivery method, deep-learning interpretation and retail data systems"
         },
         {
           "label": "Evidence standard",
-          "value": "Public code or clearly labelled client-safe summaries"
+          "value": "Public code and focused professional case studies"
         },
         {
           "label": "Research posture",
@@ -401,7 +400,7 @@
         },
         {
           "value": "Scoped",
-          "label": "client-safe records"
+          "label": "professional records"
         },
         {
           "value": "Labelled",
@@ -433,15 +432,15 @@
       "deepDive": {
         "kicker": "Inside the archive",
         "heading": "The portfolio separates delivery, experimentation and research status.",
-        "summary": "A project can still be valuable without being production software or a publication. Clear status language makes the work more credible, not less impressive.",
+        "summary": "Experiments and early projects can still be valuable. Clear status language makes the work easier to understand and compare.",
         "pillars": [
           {
             "title": "Public project",
             "body": "Source code or a public artifact supports the description and technology claims."
           },
           {
-            "title": "Client-safe contribution",
-            "body": "The role and problem are explained without exposing private systems or invented metrics."
+            "title": "Professional contribution",
+            "body": "The role, problem, contribution and technical shape are explained with useful context."
           },
           {
             "title": "Research record",
@@ -450,14 +449,14 @@
         ],
         "now": [
           {
-            "status": "Client-safe",
+            "status": "Professional case study",
             "title": "MetaPOS Mind",
-            "detail": "A completed multi-month AI-system build with purpose, primary-developer role and publish-safe stack recorded."
+            "detail": "A completed multi-month AI-system build with purpose, primary-developer role and technical stack recorded."
           },
           {
             "status": "Public",
-            "title": "Anzania AI-assisted delivery",
-            "detail": "A human-governed two-agent engineering workflow with durable handoffs, audits, risk records and automated release gates."
+            "title": "Human-governed AI delivery method",
+            "detail": "A reusable project method with durable handoffs, independent verification, risk records and automated release gates."
           },
           {
             "status": "Accepted",
@@ -468,7 +467,7 @@
         "notes": [
           {
             "question": "Why not attach a metric to everything?",
-            "answer": "A metric without the approved source, scope and comparison point creates false certainty."
+            "answer": "A metric without its source, scope and comparison point creates false certainty."
           },
           {
             "question": "What makes a strong portfolio claim?",
@@ -495,7 +494,7 @@
       "region": "The Foundry Citadel",
       "eyebrow": "Systems must survive reality",
       "title": "Reliability is designed through constraints, tests and ownership.",
-      "lead": "Useful AI and data work is not only a clever model, prompt or query. It is the discipline of making context, data flows, permissions and decisions dependable under real operating pressure.",
+      "lead": "Useful AI and data work is not only a clever model or query. It is the discipline of making context, data flows, permissions and decisions dependable under real operating pressure.",
       "signal": "Engineering practice",
       "signalValue": "Validation, observability, documentation and recovery",
       "biome": "forge",
@@ -579,9 +578,9 @@
             "detail": "Testing how validation gates affect decisions across changing market regimes."
           },
           {
-            "status": "Portfolio",
-            "title": "Anzania release-quality automation",
-            "detail": "The portfolio uses independent AI audit plus automated content, accessibility, browser, document and performance gates."
+            "status": "Method",
+            "title": "Independent release assurance",
+            "detail": "Automated content, accessibility, browser, document and performance checks support a human release decision."
           }
         ],
         "notes": [
@@ -933,7 +932,7 @@
           {
             "status": "Direct",
             "title": "Resume and CV",
-            "detail": "Browser-native documents and downloadable PDF variants remain one action away."
+            "detail": "Resume and CV downloads remain one action away."
           },
           {
             "status": "Preferred",
@@ -1108,10 +1107,124 @@
       "temperament": "Adaptable and candid",
       "accent": "#7d929d",
       "quote": "Change the lens when the question changes, but never blur the underlying facts."
+    },
+    {
+      "id": "dn-f-afr-02",
+      "name": "Nia",
+      "presentation": "Feminine",
+      "inspiration": "African diaspora-inspired",
+      "src": "./characters/nia-idle.webp",
+      "image": "./characters/nia-idle.webp",
+      "poses": {
+        "idle": "./characters/nia-idle.webp",
+        "present": "./characters/nia-present.webp",
+        "travel": "./characters/nia-travel.webp",
+        "lookback": "./characters/nia-lookback.webp"
+      },
+      "alt": "Nia, an older full-body Anzania continuity steward in midnight blue and amber expedition clothing.",
+      "specialty": "Continuity steward",
+      "temperament": "Grounded and incisive",
+      "accent": "#d39a45",
+      "quote": "Continuity is the discipline of carrying the right context into the next decision."
+    },
+    {
+      "id": "dn-f-lat-01",
+      "name": "Lucía",
+      "presentation": "Feminine",
+      "inspiration": "Latin American-inspired",
+      "src": "./characters/lucia-idle.webp",
+      "image": "./characters/lucia-idle.webp",
+      "poses": {
+        "idle": "./characters/lucia-idle.webp",
+        "present": "./characters/lucia-present.webp",
+        "travel": "./characters/lucia-travel.webp",
+        "lookback": "./characters/lucia-lookback.webp"
+      },
+      "alt": "Lucía, a full-body Anzania audience translator in burgundy and terracotta expedition clothing.",
+      "specialty": "Audience translator",
+      "temperament": "Lively and perceptive",
+      "accent": "#c85f4a",
+      "quote": "If the audience cannot use the insight, the work is not finished."
+    },
+    {
+      "id": "dn-m-lat-01",
+      "name": "Mateo",
+      "presentation": "Masculine",
+      "inspiration": "Latin American-inspired",
+      "src": "./characters/mateo-idle.webp",
+      "image": "./characters/mateo-idle.webp",
+      "poses": {
+        "idle": "./characters/mateo-idle.webp",
+        "present": "./characters/mateo-present.webp",
+        "travel": "./characters/mateo-travel.webp",
+        "lookback": "./characters/mateo-lookback.webp"
+      },
+      "alt": "Mateo, a full-body Anzania delivery tactician with a left below-knee prosthesis and cobalt expedition clothing.",
+      "specialty": "Delivery tactician",
+      "temperament": "Practical and decisive",
+      "accent": "#4f86b8",
+      "quote": "A plan earns trust when it survives constraints, handoffs and the next deadline."
+    },
+    {
+      "id": "dn-f-eas-02",
+      "name": "Hana",
+      "presentation": "Feminine",
+      "inspiration": "East Asian-inspired",
+      "src": "./characters/hana-idle.webp",
+      "image": "./characters/hana-idle.webp",
+      "poses": {
+        "idle": "./characters/hana-idle.webp",
+        "present": "./characters/hana-present.webp",
+        "travel": "./characters/hana-travel.webp",
+        "lookback": "./characters/hana-lookback.webp"
+      },
+      "alt": "Hana, an older full-body Anzania context editor with an assistive mobility staff and indigo expedition clothing.",
+      "specialty": "Context editor",
+      "temperament": "Deliberate and discerning",
+      "accent": "#9b5f73",
+      "quote": "Remove what distracts, preserve what matters, and let structure make the work easier to understand."
+    },
+    {
+      "id": "dn-n-sea-01",
+      "name": "Sol",
+      "presentation": "Neutral",
+      "inspiration": "Southeast Asian-inspired",
+      "src": "./characters/sol-idle.webp",
+      "image": "./characters/sol-idle.webp",
+      "poses": {
+        "idle": "./characters/sol-idle.webp",
+        "present": "./characters/sol-present.webp",
+        "travel": "./characters/sol-travel.webp",
+        "lookback": "./characters/sol-lookback.webp"
+      },
+      "alt": "Sol, a full-body Anzania signal interpreter with a right-ear hearing device and violet expedition clothing.",
+      "specialty": "Signal interpreter",
+      "temperament": "Alert and collaborative",
+      "accent": "#8d70b4",
+      "quote": "Strong decisions separate signal from noise and check what the pattern leaves out."
+    },
+    {
+      "id": "dn-m-pac-01",
+      "name": "Manu",
+      "presentation": "Masculine",
+      "inspiration": "Pasifika-inspired",
+      "src": "./characters/manu-idle.webp",
+      "image": "./characters/manu-idle.webp",
+      "poses": {
+        "idle": "./characters/manu-idle.webp",
+        "present": "./characters/manu-present.webp",
+        "travel": "./characters/manu-travel.webp",
+        "lookback": "./characters/manu-lookback.webp"
+      },
+      "alt": "Manu, a large-built full-body Anzania horizon planner in ocean blue expedition clothing.",
+      "specialty": "Horizon planner",
+      "temperament": "Steady and expansive",
+      "accent": "#527d93",
+      "quote": "The horizon matters, but so do the people who must carry the system there."
     }
   ],
   "atlas": {
     "interactive": true,
-    "alt": "Interactive route atlas of the eight fictional locations in Anzania."
+    "alt": "Interactive route atlas of Anzania's eight narrative locations."
   }
 }

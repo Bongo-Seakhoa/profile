@@ -50,7 +50,7 @@ const currentResearch = [
     status: "Research design",
     title: "Regime-aware historical evaluation",
     summary:
-      "Refine the separation between simulation, historical evidence and production claims while preserving an explicit audit trail for every conclusion.",
+      "Compare simulation with historical results across distinct market regimes, keeping methods and conclusions traceable.",
   },
 ];
 ---
@@ -66,7 +66,7 @@ const currentResearch = [
     slot="masthead"
     eyebrow="Inquiry, validation and experimentation"
     title={route.title}
-    lede="Accepted research, active validation work, public notebooks and technical experiments. Each record states what has been tested, what remains open and what the evidence can support."
+    lede="Accepted research, current validation work and technical experiments focused on transparent methods and careful interpretation."
   />
 
   <section
@@ -91,9 +91,9 @@ const currentResearch = [
           </h2>
           <p class="accepted-paper__summary">
             The study examines how validation gates shape the behaviour and
-            historical evaluation of a regime-adaptive decision system. It keeps
-            simulation, historical evidence and operational claims distinct so
-            that the result remains useful without overstating certainty.
+            historical evaluation of a regime-adaptive decision system. It
+            separates simulated and historical results so the method and
+            conclusions are easier to assess.
           </p>
           <div class="accepted-paper__methods" aria-label="Research design">
             <div>
@@ -114,16 +114,13 @@ const currentResearch = [
             </div>
             <div>
               <span>03</span>
-              <strong>Claim discipline</strong>
-              <p>
-                Clear boundaries between experiment, evidence and production
-                readiness.
-              </p>
+              <strong>Interpretation</strong>
+              <p>Simulation and historical findings are reported separately.</p>
             </div>
           </div>
           <p class="accepted-paper__note">
-            Acceptance is reported directly. Publication details and final
-            proceedings links will be added when they become publicly available.
+            The paper has been accepted for ISM 2026. Proceedings details will
+            be added when they become available.
           </p>
         </div>
       </article>
@@ -165,10 +162,10 @@ const currentResearch = [
     <Container>
       <div class="research-legend">
         <div>
-          <h2 id="status-legend-title">Status legend</h2>
+          <h2 id="status-legend-title">Project status</h2>
           <p>
-            Labels describe the record type. They do not turn experiments into
-            publications or private work into public evidence.
+            Public projects link to code or notebooks; experiments are shared as
+            early technical explorations.
           </p>
         </div>
         <div>
@@ -205,7 +202,7 @@ const currentResearch = [
         id="experiments-title"
         eyebrow="Experiments"
         title="Exploratory technical work"
-        description="These records explore an idea or integration. They are not production claims."
+        description="Early explorations of technical ideas and integrations, shared with their current status and source code."
       />
       <div class="project-archive-grid">
         {

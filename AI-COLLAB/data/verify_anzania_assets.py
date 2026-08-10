@@ -9,13 +9,18 @@ Anzania_Worldbuilding_Addendum_v1.0.md section 5.
 
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
 from PIL import Image
 
-REF = Path(r"C:\Users\Bongo\OneDrive\Desktop\Projects\Profile Upgrade\Reference & inspiration material")
-OUT = Path(r"C:\Users\Bongo\OneDrive\Desktop\Projects\Me- Profile\AI-COLLAB\data\anzania-asset-registry-verified.json")
+REFERENCE_ROOT = os.environ.get("ANZANIA_REFERENCE_ROOT")
+if not REFERENCE_ROOT:
+    raise SystemExit("Set ANZANIA_REFERENCE_ROOT to the private reference library.")
+
+REF = Path(REFERENCE_ROOT)
+OUT = Path(__file__).with_name("anzania-asset-registry-verified.json")
 
 P = "ChatGPT Image Jul 30, 2026, {}.png".format
 

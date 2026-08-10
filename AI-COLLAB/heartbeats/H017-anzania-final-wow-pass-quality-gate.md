@@ -1,10 +1,10 @@
-# H017 — Explore Anzania final wow pass quality gate
+# H017 - Explore Anzania final wow pass quality gate
 
 Date: 2026-08-08
 Branch: `agent/anzania-final-wow-pass`
 Pull request: #6
 
-> Historical gate: the 15-guide SVG roster recorded here was superseded on 2026-08-10 by the six-guide, 24-pose production character system. This heartbeat remains unchanged as evidence of the earlier release state.
+> Historical gate: the 15-guide SVG roster described below was superseded first by a six-guide, 24-pose system and then by the current twelve-guide, 48-pose production roster. The body remains historical evidence of that earlier release state.
 
 ## Release scope
 

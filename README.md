@@ -5,9 +5,9 @@ Production portfolio for [bongo-seakhoa.github.io/profile](https://bongo-seakhoa
 The portfolio contains two deliberately separated, equal-quality experiences:
 
 - **Professional Static View** is the complete evidence-led professional record. It uses a restrained systems-cartography language, route-aware Anzania atmosphere, progressive section reveals, a reading beacon and an accessible command navigator. Every route remains fully useful when JavaScript is disabled.
-- **Explore Anzania** is an optional cinematic 2.5D journey through eight illustrated locations with six selectable full-body companions, four authored poses per companion and four traversal powers.
+- **Explore Anzania** is an optional cinematic 2.5D journey through eight illustrated locations with twelve selectable full-body companions, four authored poses per companion and four traversal powers.
 
-Anzania is an original fictional portfolio world created for Bongo Seakhoa. It is not Tanzania or any other real location.
+Anzania is a cinematic portfolio world created for Bongo Seakhoa.
 
 ## Production architecture
 
@@ -39,7 +39,7 @@ Anzania is an original fictional portfolio world created for Bongo Seakhoa. It i
 - `public/assets/static/`
   The single progressive-enhancement runtime used by professional routes.
 - `public/assets/immersive/`
-  The isolated 2.5D runtime, eight outer and eight inner scene pairs, interactive route atlas and 24 transparent full-body companion pose assets.
+  The isolated 2.5D runtime, eight outer and eight inner scene pairs, interactive route atlas and 48 transparent full-body companion pose assets.
 - `public/assets/images/anzania/`
   Approved responsive Anzania artwork derivatives used as professional atmospheric support.
 - `scripts/build-documents.mjs`
@@ -91,7 +91,7 @@ The full gate covers:
 
 - content and route integrity;
 - formatting, linting and TypeScript;
-- complete eight-location, six-guide, 24-pose and four-power immersive manifests;
+- complete eight-location, twelve-guide, 48-pose and four-power immersive manifests;
 - full-body companion dimensions, transparency and responsive framing;
 - professional Static View enhancement and no-JavaScript fallback contracts;
 - accessible command navigation, reduced motion, forced colours and print output;
@@ -125,6 +125,6 @@ The previous production state is preserved by the `legacy-pages-baseline-2026073
 - Keep the Static View runtime isolated under `public/assets/static/`.
 - Keep the immersive runtime isolated under `public/assets/immersive/`.
 - Keep the entire full-body companion visible whenever the companion is authored to be on screen.
-- Keep Anzania explicitly fictional in metadata and visitor-facing copy.
+- Keep Anzania authorship and narrative framing consistent in metadata and visitor-facing copy.
 
 See `AI-COLLAB/plans/MASTER-EXECUTION-PLAN.md`, `AI-COLLAB/status/STATUS.md` and `docs/PROFILE-UPGRADE-2-5D-RELEASE.md` for the execution record and release criteria.

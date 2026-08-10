@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { URL } from "node:url";
@@ -149,10 +150,16 @@ for (const route of expectedPublicPages) {
     continue;
   }
 
-  if (cardHashes.has(socialCard.sha256)) {
+  const socialCardBytes = await readFile(
+    resolve(distDirectory, socialCard.path),
+  );
+  const socialCardHash = createHash("sha256")
+    .update(socialCardBytes)
+    .digest("hex");
+  if (cardHashes.has(socialCardHash)) {
     errors.push(`${route.id} social card duplicates another route image`);
   }
-  cardHashes.add(socialCard.sha256);
+  cardHashes.add(socialCardHash);
 
   if (socialCard.width !== 1200 || socialCard.height !== 630) {
     errors.push(`${route.id} social card is not 1200x630`);

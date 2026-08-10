@@ -2,17 +2,14 @@
 
 **Date:** 2026-08-08
 **Owner:** Bongo Seakhoa
-**Implementer:** Codex
-**Independent reviewer:** Claude or a second reviewer when available
 **Status:** Adopted and implemented
 
-> Scope update, 2026-08-10: the medium, camera and quality decision remains authoritative. Its 15-companion asset contract is superseded by the six-guide production roster, with four authored action poses per guide.
+> Scope update, 2026-08-10: the medium, camera and quality decision remains authoritative. Its 15-companion asset contract is superseded by the twelve-guide, 48-pose production roster.
 
-## Owner direction
+## Quality constraint
 
-The owner explicitly authorised a high-quality 2.5D or 2D implementation when
-full 3D would prevent completion, provided the finished portfolio remains
-exceptional, polished and complete.
+The selected medium must support an exceptional, polished and complete
+portfolio experience without making runtime 3D a condition of quality.
 
 ## Decision
 
@@ -26,9 +23,9 @@ accessibility, fallback, performance or testing requirements.
 
 ## Production contract
 
-- Anzania remains an original fictional portfolio world. It is not Tanzania or
-  any other real location.
-- The route contains eight outer and inner location scenes, fifteen selectable
+- Anzania remains an original fictional portfolio world created for Bongo
+  Seakhoa.
+- The route contains eight outer and inner location scenes, twelve selectable
   companions and four authored traversal treatments.
 - The avatar remains a distant full-body companion rather than the dominant
   subject.

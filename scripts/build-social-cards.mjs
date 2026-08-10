@@ -1,5 +1,4 @@
 import { Buffer } from "node:buffer";
-import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
@@ -89,8 +88,9 @@ function textLines(lines, { x, y, lineHeight, className }) {
 
 function routeLabelFor(route) {
   if (route.id === "home") return "PROFESSIONAL PORTFOLIO";
-  if (route.id === "explore") return "ORIGINAL FICTIONAL WORLD";
+  if (route.id === "explore") return "CINEMATIC PORTFOLIO JOURNEY";
   if (route.kind === "project") return "SELECTED WORK";
+  if (route.kind === "methodology") return "DELIVERY METHODOLOGY";
   if (route.kind === "document") return "PROFESSIONAL DOCUMENT";
   if (route.kind === "continuity") return "IDENTITY CONTINUITY";
   if (route.kind === "system") return "PAGE RECOVERY";
@@ -168,8 +168,6 @@ for (const [index, route] of cards.entries()) {
     path: `assets/social/${route.id}.jpg`,
     width: WIDTH,
     height: HEIGHT,
-    bytes: buffer.length,
-    sha256: createHash("sha256").update(buffer).digest("hex"),
   });
 }
 
@@ -180,8 +178,6 @@ await writeFile(
   `${JSON.stringify(
     {
       schemaVersion: "1.0.0",
-      generator: "scripts/build-social-cards.mjs",
-      font: "IBM Plex Sans Variable",
       cards: manifest,
     },
     null,

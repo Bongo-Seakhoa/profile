@@ -3611,7 +3611,12 @@
   }
 
   .guide-dialog__grid {
-    grid-template-columns: repeat(3, minmax(160px, 1fr));
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+  }
+
+  .guide-card__figure {
+    height: min(30vh, 285px);
+    min-height: 200px;
   }
 }
 
@@ -3664,6 +3669,10 @@
 
   .ability-dock__copy strong {
     font-size: 0.54rem;
+  }
+
+  .guide-dialog__grid {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
   }
 }
 

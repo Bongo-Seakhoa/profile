@@ -41,6 +41,12 @@
         "description": "Public course and certificate profile"
       },
       {
+        "id": "credly",
+        "label": "Credly",
+        "url": "https://www.credly.com/users/bongo-kosa",
+        "description": "Public certification and badge wallet"
+      },
+      {
         "id": "email",
         "label": "Email",
         "url": "mailto:bongokosa@gmail.com",

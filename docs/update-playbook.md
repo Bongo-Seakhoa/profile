@@ -1,6 +1,6 @@
 # Update Playbook
 
-This repository is designed for repeatable, prompt-driven maintenance.
+This repository is designed for repeatable, structured maintenance.
 
 ## Source of Truth
 
@@ -65,9 +65,9 @@ Generated document outputs include:
 - Use specific Coursera verification URLs such as `coursera.org/account/accomplishments/verify/CODE` rather than generic profile links.
 - Keep the surname-specific resume and CV variants aligned from the same shared content source. The visible surname is the intended difference between them.
 
-## Prompt Templates
+## Reusable Update Briefs
 
-Use prompts like these for future maintenance:
+Use concise briefs like these for future maintenance:
 
 ### Add a New Certification
 

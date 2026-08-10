@@ -520,13 +520,15 @@ function renderGuides() {
 }
 
 function warmGuideCards() {
-  elements.guideGrid?.querySelectorAll("img").forEach((image) => {
-    image.loading = "eager";
-    image.fetchPriority = "low";
-    if (!image.complete && typeof image.decode === "function") {
-      image.decode().catch(() => undefined);
-    }
-  });
+  const selectedImage = elements.guideGrid?.querySelector(
+    `[data-guide-id="${state.selectedGuideId}"] img`,
+  );
+  if (!(selectedImage instanceof HTMLImageElement)) return;
+  selectedImage.loading = "eager";
+  selectedImage.fetchPriority = "low";
+  if (!selectedImage.complete && typeof selectedImage.decode === "function") {
+    selectedImage.decode().catch(() => undefined);
+  }
 }
 
 function renderGuide() {
@@ -543,7 +545,7 @@ function renderGuide() {
     elements.guideTemperament.textContent = guide.temperament;
   }
   if (elements.guideInsight) {
-    elements.guideInsight.textContent = location?.guideInsight ?? guide.quote;
+    elements.guideInsight.textContent = guide.quote ?? location?.guideInsight;
   }
 
   document.documentElement.style.setProperty(
@@ -1796,9 +1798,7 @@ async function initialise() {
     elements.loadingGate.hidden = true;
     elements.arrivalGate.hidden = false;
     document.documentElement.dataset.experienceState = "arrival";
-    announce(
-      "Explore Anzania is ready. Anzania is an original fictional portfolio world.",
-    );
+    announce("Explore Anzania is ready.");
   } catch (error) {
     console.error("Explore Anzania could not initialise", error);
     setLoadingProgress(100, "The immersive atlas could not be opened.");

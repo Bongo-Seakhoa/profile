@@ -84,20 +84,19 @@ const resolveManifestAsset = (path: string): string =>
   resolve(immersiveRoot, path.replace(/^\.\//, ""));
 
 describe("Explore Anzania 2.5D release manifest", () => {
-  it("defines Anzania only as an original fictional portfolio world", async () => {
+  it("defines Anzania as a cinematic portfolio journey", async () => {
     const manifest = await parseManifest();
 
     expect(manifest.world).toEqual({
       name: "Anzania",
       definition:
-        "An original fictional portfolio world created for Bongo Seakhoa.",
-      disclaimer:
-        "Anzania is fictional. It is not Tanzania or any other real location.",
+        "A cinematic portfolio journey through eight narrative locations.",
       experience: "Interactive 2.5D guided portfolio journey",
     });
+    expect(manifest.world).not.toHaveProperty("disclaimer");
     expect(manifest.atlas).toEqual({
       interactive: true,
-      alt: "Interactive route atlas of the eight fictional locations in Anzania.",
+      alt: "Interactive route atlas of Anzania's eight narrative locations.",
     });
   });
 
@@ -158,7 +157,7 @@ describe("Explore Anzania 2.5D release manifest", () => {
 });
 
 describe("production multi-pose companion roster", () => {
-  it("provides six distinct guides across three presentations", async () => {
+  it("provides twelve distinct guides across three presentations", async () => {
     const manifest = await parseManifest();
     const counts = manifest.guides.reduce(
       (accumulator, guide) => {
@@ -168,11 +167,11 @@ describe("production multi-pose companion roster", () => {
       { Masculine: 0, Feminine: 0, Neutral: 0 },
     );
 
-    expect(manifest.guides).toHaveLength(6);
-    expect(counts.Masculine).toBe(3);
-    expect(counts.Feminine).toBe(2);
-    expect(counts.Neutral).toBe(1);
-    expect(new Set(manifest.guides.map(({ id }) => id)).size).toBe(6);
+    expect(manifest.guides).toHaveLength(12);
+    expect(counts.Masculine).toBe(5);
+    expect(counts.Feminine).toBe(5);
+    expect(counts.Neutral).toBe(2);
+    expect(new Set(manifest.guides.map(({ id }) => id)).size).toBe(12);
     expect(
       manifest.guides.every(
         ({ specialty, temperament }) =>
@@ -212,10 +211,20 @@ describe("production multi-pose companion roster", () => {
             expect(metadata.height).toBe(960);
             expect(metadata.hasAlpha).toBe(true);
             expect(file.size).toBeGreaterThan(15_000);
+            expect(file.size).toBeLessThanOrEqual(110_000);
           }),
         );
       }),
     );
+
+    const totalPoseBytes = (
+      await Promise.all(
+        posePaths.map(
+          async (asset) => (await stat(resolveManifestAsset(asset))).size,
+        ),
+      )
+    ).reduce((total, size) => total + size, 0);
+    expect(totalPoseBytes).toBeLessThanOrEqual(4 * 1024 * 1024);
   });
 });
 

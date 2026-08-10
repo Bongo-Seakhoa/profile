@@ -1,259 +1,201 @@
 {
   "schemaVersion": "1.0.0",
-  "generator": "scripts/build-social-cards.mjs",
-  "font": "IBM Plex Sans Variable",
   "cards": [
     {
       "routeId": "home",
       "routePath": "",
       "path": "assets/social/home.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 65589,
-      "sha256": "338cba92f1393b29fa15cb5d370e366a7dbc46964ff1db539014f5f0dd683d70"
+      "height": 630
     },
     {
       "routeId": "explore",
       "routePath": "explore/",
       "path": "assets/social/explore.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 71048,
-      "sha256": "f0dfbc2067ca86bf1d9d133df03da930341f0013b4d6919e451a89fbda186ee5"
+      "height": 630
     },
     {
       "routeId": "work",
       "routePath": "work/",
       "path": "assets/social/work.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 49268,
-      "sha256": "9ccabe30d60cf200472f48a63010477074905e1b8ebe1ecde7455005084f3fe9"
+      "height": 630
     },
     {
       "routeId": "capabilities",
       "routePath": "capabilities/",
       "path": "assets/social/capabilities.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 49091,
-      "sha256": "9ab387786a72ad354f6b92dfa84c8c872557116e50dfe0e34db551bcfe4cce1f"
+      "height": 630
     },
     {
       "routeId": "experience",
       "routePath": "experience/",
       "path": "assets/social/experience.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 46390,
-      "sha256": "defe9a681d6fded4138b6ec6e0e37c68a86136dd340b9bce0411ead7e889cccd"
+      "height": 630
     },
     {
       "routeId": "research",
       "routePath": "research/",
       "path": "assets/social/research.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 52761,
-      "sha256": "2ecadfff231d4f62df4a5c366327a0bc7e2f90e79f2d4a62adc8e7d3827a1e38"
+      "height": 630
     },
     {
       "routeId": "education",
       "routePath": "education/",
       "path": "assets/social/education.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 41571,
-      "sha256": "82e8c1b7cde9050378d3a3909a132ca2a5076e9cfdf2e8932b1678ff38393c64"
+      "height": 630
     },
     {
       "routeId": "credentials",
       "routePath": "credentials/",
       "path": "assets/social/credentials.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 52856,
-      "sha256": "9bc8ff810663fe0b3b668ecde9c5a72e529b7e4624195f0f0b5df65ed8e2c499"
+      "height": 630
     },
     {
       "routeId": "about",
       "routePath": "about/",
       "path": "assets/social/about.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 49748,
-      "sha256": "a34928bc589d4ea98cdf523aacc0070275739fb0c265da01572fa5863ef8d3f2"
+      "height": 630
     },
     {
       "routeId": "documents",
       "routePath": "documents/",
       "path": "assets/social/documents.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 49830,
-      "sha256": "05b68f64aaf89652e6acb4046f7fe8886347bc8bf24eaa34c40380a7233cb216"
+      "height": 630
     },
     {
       "routeId": "contact",
       "routePath": "contact/",
       "path": "assets/social/contact.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 45784,
-      "sha256": "8bdde705ab215cd8741570bb2fbead860f6856db938ded1ced97057ceffa16e6"
+      "height": 630
     },
     {
       "routeId": "project-metapos-app-data-management",
       "routePath": "work/metapos-app-data-management/",
       "path": "assets/social/project-metapos-app-data-management.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 60106,
-      "sha256": "91d860b237ceac615dbe3c3422b649135ced307e71789a1a8167e933a9cdc331"
+      "height": 630
     },
     {
-      "routeId": "project-anzania-ai-assisted-delivery",
-      "routePath": "work/anzania-ai-assisted-delivery/",
-      "path": "assets/social/project-anzania-ai-assisted-delivery.jpg",
+      "routeId": "methodology-human-governed-ai-delivery-method",
+      "routePath": "work/human-governed-ai-delivery-method/",
+      "path": "assets/social/methodology-human-governed-ai-delivery-method.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 60969,
-      "sha256": "b40451394ae16ac0a7b62a940afdb16b4b05ef84fe177778773884ec6d9412e2"
+      "height": 630
     },
     {
       "routeId": "project-fxpm-1-4-forex-portfolio-manager",
       "routePath": "work/fxpm-1-4-forex-portfolio-manager/",
       "path": "assets/social/project-fxpm-1-4-forex-portfolio-manager.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 52225,
-      "sha256": "3d46ab351847e48bc09143ace12e430b5f68f5bee63ce3e069cc406eb559407e"
+      "height": 630
     },
     {
       "routeId": "project-streamlit-recommender-system",
       "routePath": "work/streamlit-recommender-system/",
       "path": "assets/social/project-streamlit-recommender-system.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 59359,
-      "sha256": "2054c037b09024472e3b2be3d458e6b350e0e9117a1216270d6e2f6108e7277f"
+      "height": 630
     },
     {
       "routeId": "project-regression-predict-api",
       "routePath": "work/regression-predict-api/",
       "path": "assets/social/project-regression-predict-api.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 48931,
-      "sha256": "abc3548a9b4de4288cb8f98ed89936003a86de7090a70361e6aa5ec3e39b8be9"
+      "height": 630
     },
     {
       "routeId": "project-visualizing-filters-cnn",
       "routePath": "work/visualizing-filters-cnn/",
       "path": "assets/social/project-visualizing-filters-cnn.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 50120,
-      "sha256": "6f934dd6ebcc519e8d9f95d42cb8b3816f7983623e061b1df0594eb1b5e745f3"
+      "height": 630
     },
     {
       "routeId": "project-airqo-environmental-data",
       "routePath": "work/airqo-environmental-data/",
       "path": "assets/social/project-airqo-environmental-data.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 57057,
-      "sha256": "522665a8c047945e90b52771603f05fac5477219fa3a4bd2d9b8b31510dad0fd"
+      "height": 630
     },
     {
       "routeId": "project-mql5-expert-advisor",
       "routePath": "work/mql5-expert-advisor/",
       "path": "assets/social/project-mql5-expert-advisor.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 50250,
-      "sha256": "99774197d794daf3dc6e0a39c4de6661ddb02785fcb71263e78e14a094f89201"
+      "height": 630
     },
     {
       "routeId": "project-fxpm-backtester",
       "routePath": "work/fxpm-backtester/",
       "path": "assets/social/project-fxpm-backtester.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 44297,
-      "sha256": "e019f483f996916b5b7da593937875aca3978371aa85e31e581b76e5a00e460d"
+      "height": 630
     },
     {
       "routeId": "project-institutional-ls-sr-trading-ea",
       "routePath": "work/institutional-ls-sr-trading-ea/",
       "path": "assets/social/project-institutional-ls-sr-trading-ea.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 53223,
-      "sha256": "25dd788e26d80c6cf88f2f957079e0b7bcdf5284754405dbec99b265f9b4c906"
+      "height": 630
     },
     {
       "routeId": "project-openai-trader-experiment",
       "routePath": "work/openai-trader-experiment/",
       "path": "assets/social/project-openai-trader-experiment.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 50163,
-      "sha256": "71dd343dbe68a46d706649b905ff17cbd459e91df4392d8d81fd2f35699636af"
+      "height": 630
     },
     {
       "routeId": "resume-bongo-seakhoa",
       "routePath": "documents/resume/bongo-seakhoa/",
       "path": "assets/social/resume-bongo-seakhoa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 47605,
-      "sha256": "1fb2dd6f81798ba144371ea7664525f12223cb3f83f7b14c5852f03968bf43c1"
+      "height": 630
     },
     {
       "routeId": "resume-bongo-kosa",
       "routePath": "documents/resume/bongo-kosa/",
       "path": "assets/social/resume-bongo-kosa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 52081,
-      "sha256": "8e9fec8fb76e78e06eea4e32d43fd9567f5086df750ea0cafa3ecf39f578d227"
+      "height": 630
     },
     {
       "routeId": "cv-bongo-seakhoa",
       "routePath": "documents/cv/bongo-seakhoa/",
       "path": "assets/social/cv-bongo-seakhoa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 49034,
-      "sha256": "e577cbb36881a7bb7bae4d4d8b86b371fbe1ce5f32654df5321a574bfc93cce5"
+      "height": 630
     },
     {
       "routeId": "cv-bongo-kosa",
       "routePath": "documents/cv/bongo-kosa/",
       "path": "assets/social/cv-bongo-kosa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 48153,
-      "sha256": "3135406d63347f54fc5476c9a2d2d90d6bcc3a75df3fe38f98eebfb0c8086297"
+      "height": 630
     },
     {
       "routeId": "bongo-kosa",
       "routePath": "bongo-kosa/",
       "path": "assets/social/bongo-kosa.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 54999,
-      "sha256": "796478a98f0cdf1ab6f61fdcc4a209738e31db0076a66ed7dc77f7bf3baba916"
+      "height": 630
     },
     {
       "routeId": "not-found",
       "routePath": "404.html",
       "path": "assets/social/not-found.jpg",
       "width": 1200,
-      "height": 630,
-      "bytes": 42205,
-      "sha256": "c750df9a5866db7b1edb6f4cdc154de5c687c19ce0c9073443477ba1178bc833"
+      "height": 630
     }
   ]
 }

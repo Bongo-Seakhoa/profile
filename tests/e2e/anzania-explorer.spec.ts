@@ -5,7 +5,7 @@ async function beginJourney(page: Page) {
   await page.goto("explore/", { waitUntil: "networkidle" });
   await expect(page.locator("[data-arrival-gate]")).toBeVisible();
   await expect(
-    page.getByText("An original fictional world", { exact: false }),
+    page.getByText("Anzania is a fictional place.", { exact: true }),
   ).toBeVisible();
   await page.locator("[data-begin-journey]").click();
   await expect(page.locator("[data-explorer]")).toBeVisible();
@@ -217,8 +217,9 @@ test.describe("Explore Anzania release experience", () => {
     expect(response?.status()).toBe(200);
     await expect(page.locator("h1")).toHaveText("ANZANIA");
     await expect(
-      page.getByText("Its places are narrative spaces, not real geography."),
+      page.getByText("Anzania is a fictional place.", { exact: true }),
     ).toBeVisible();
+    await expect(page.locator("body")).not.toContainText("Tanzania");
     await expect(
       page.getByRole("link", { name: "Continue in Static View" }),
     ).toHaveAttribute("href", "/profile/");
@@ -299,12 +300,12 @@ test.describe("Explore Anzania release experience", () => {
     );
 
     await page.locator("[data-next-location]").click();
+    await expect(page.locator("[data-experience]")).toHaveClass(
+      /is-solar-propelling/,
+    );
     await expect(page.locator("html")).toHaveAttribute(
       "data-experience-state",
       "traversing",
-    );
-    await expect(page.locator("[data-experience]")).toHaveClass(
-      /is-solar-propelling/,
     );
     expectCompleteFullBody(await framingMetrics(page));
     await expect(page.locator("[data-location-name]")).toHaveText(
@@ -329,25 +330,34 @@ test.describe("Explore Anzania release experience", () => {
 
     await page.locator("[data-guide-button]").click();
     await expect(page.locator("[data-guide-dialog]")).toBeVisible();
-    await expect(page.locator("[data-guide-id]")).toHaveCount(6);
+    await expect(page.locator("[data-guide-id]")).toHaveCount(12);
+    const selectedGuideImage = page.locator(
+      '[data-guide-id][aria-pressed="true"] img',
+    );
+    await expect(selectedGuideImage).toHaveAttribute("loading", "eager");
     await expect
       .poll(() =>
-        page
-          .locator("[data-guide-id] img")
-          .evaluateAll((images) =>
-            images.every(
-              (image) =>
-                image instanceof HTMLImageElement &&
-                image.complete &&
-                image.naturalWidth > 0,
-            ),
-          ),
+        selectedGuideImage.evaluate(
+          (image) =>
+            image instanceof HTMLImageElement &&
+            image.complete &&
+            image.naturalWidth > 0,
+        ),
       )
       .toBe(true);
-    await page.locator('[data-guide-id="dn-f-afr-01"]').click();
-    await expect(page.locator("[data-companion-name]")).toHaveText("Zuri");
+    await expect(
+      page.locator('[data-guide-id="dn-m-pac-01"] img'),
+    ).toHaveAttribute("loading", "lazy");
+    const finalGuide = page.locator('[data-guide-id="dn-m-pac-01"]');
+    await finalGuide.evaluate((element) =>
+      element.scrollIntoView({ block: "nearest" }),
+    );
+    await finalGuide.focus();
+    await expect(finalGuide).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("[data-companion-name]")).toHaveText("Manu");
     await expect(page.locator("[data-guide-specialty]")).toHaveText(
-      "Evidence guardian",
+      "Horizon planner",
     );
     expectCompleteFullBody(await framingMetrics(page));
 

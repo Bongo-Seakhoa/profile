@@ -103,6 +103,7 @@ function checkRecordIdentifiers(
     "education",
     "credentials",
     "projects",
+    "methodologies",
     "routes",
     "siteSettings",
     "documentManifest",
@@ -118,6 +119,16 @@ function checkRecordIdentifiers(
   }
 
   checkUniqueValues(issues, topLevelIds, "DUPLICATE_ID", "Record ID");
+
+  if (content.projects.length !== 10) {
+    addIssue(
+      issues,
+      "PROJECT_COUNT_DRIFT",
+      "error",
+      "projects",
+      `The public project collection must contain exactly 10 projects; found ${content.projects.length}`,
+    );
+  }
 
   const credentialIds = [
     ...content.credentials.map((credential, index) => ({
@@ -249,11 +260,16 @@ function checkReferences(
 ): void {
   const experienceIds = new Set(content.experience.map(({ id }) => id));
   const projectIds = new Set(content.projects.map(({ id }) => id));
+  const methodologyIds = new Set(content.methodologies.map(({ id }) => id));
+  const referencedIds = {
+    experience: experienceIds,
+    project: projectIds,
+    methodology: methodologyIds,
+  } as const;
 
   for (const [capabilityIndex, capability] of content.capabilities.entries()) {
     for (const [referenceIndex, reference] of capability.evidence.entries()) {
-      const ids =
-        reference.collection === "experience" ? experienceIds : projectIds;
+      const ids = referencedIds[reference.collection];
       if (!ids.has(reference.id)) {
         addIssue(
           issues,
@@ -422,6 +438,21 @@ function checkEvidenceStates(
     }
   }
 
+  for (const [index, methodology] of content.methodologies.entries()) {
+    if (
+      new URL(methodology.publicUrl).hostname.toLocaleLowerCase("en") !==
+      "github.com"
+    ) {
+      addIssue(
+        issues,
+        "REPOSITORY_EVIDENCE_MISMATCH",
+        "error",
+        `methodologies[${index}].publicUrl`,
+        `${methodology.id} is marked public-repository but does not link to GitHub`,
+      );
+    }
+  }
+
   for (const [index, credential] of content.credentials.entries()) {
     if (credential.evidenceState !== "public-verification-link") {
       addIssue(
@@ -472,6 +503,7 @@ function checkRoutes(
 ): void {
   const routesById = routeIndex(content.routes);
   const projectIds = new Set(content.projects.map(({ id }) => id));
+  const methodologyIds = new Set(content.methodologies.map(({ id }) => id));
   const rootRoutes = content.routes.filter(({ path }) => path === "");
 
   if (rootRoutes.length !== 1 || rootRoutes[0]?.id !== "home") {
@@ -509,7 +541,9 @@ function checkRoutes(
     }
 
     if (
-      (route.kind === "page" || route.kind === "project") &&
+      (route.kind === "page" ||
+        route.kind === "project" ||
+        route.kind === "methodology") &&
       route.canonicalRouteId === null
     ) {
       if (route.immersiveDestinationId === null) {
@@ -524,7 +558,10 @@ function checkRoutes(
     }
 
     if (route.kind === "project") {
-      if (route.entityRef === null || !projectIds.has(route.entityRef.id)) {
+      if (
+        route.entityRef?.collection !== "project" ||
+        !projectIds.has(route.entityRef.id)
+      ) {
         addIssue(
           issues,
           "BROKEN_PROJECT_ROUTE",
@@ -546,13 +583,42 @@ function checkRoutes(
           );
         }
       }
+    } else if (route.kind === "methodology") {
+      if (
+        route.entityRef?.collection !== "methodology" ||
+        !methodologyIds.has(route.entityRef.id)
+      ) {
+        addIssue(
+          issues,
+          "BROKEN_METHODOLOGY_ROUTE",
+          "error",
+          `routes[${index}].entityRef`,
+          `${route.id} does not reference a real methodology`,
+        );
+      } else {
+        const methodology = content.methodologies.find(
+          ({ id }) => id === route.entityRef?.id,
+        );
+        if (
+          methodology !== undefined &&
+          route.path !== `work/${methodology.slug}/`
+        ) {
+          addIssue(
+            issues,
+            "METHODOLOGY_ROUTE_SLUG_DRIFT",
+            "error",
+            `routes[${index}].path`,
+            `${route.id} path does not match methodology slug ${methodology.slug}`,
+          );
+        }
+      }
     } else if (route.entityRef !== null) {
       addIssue(
         issues,
         "UNEXPECTED_ROUTE_ENTITY",
         "error",
         `routes[${index}].entityRef`,
-        `${route.id} is not a project route but has a project reference`,
+        `${route.id} is not a work-detail route but has an entity reference`,
       );
     }
   }
@@ -601,6 +667,24 @@ function checkRoutes(
         "error",
         "routes",
         `${project.id} must have exactly one project route; found ${matchingRoutes.length}`,
+      );
+    }
+  }
+
+  for (const methodology of content.methodologies) {
+    const matchingRoutes = content.routes.filter(
+      (route) =>
+        route.kind === "methodology" &&
+        route.entityRef?.collection === "methodology" &&
+        route.entityRef.id === methodology.id,
+    );
+    if (matchingRoutes.length !== 1) {
+      addIssue(
+        issues,
+        "METHODOLOGY_ROUTE_DRIFT",
+        "error",
+        "routes",
+        `${methodology.id} must have exactly one methodology route; found ${matchingRoutes.length}`,
       );
     }
   }

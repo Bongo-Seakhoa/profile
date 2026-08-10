@@ -306,7 +306,6 @@ for (const id of PUBLISHED_ANZANIA_PLATE_IDS) {
     sceneId: record.sceneId,
     role: record.role,
     source: {
-      filename: record.sourceFilename,
       sha256: record.sourceSha256,
       width: record.sourceWidth,
       height: record.sourceHeight,
@@ -324,26 +323,22 @@ for (const id of PUBLISHED_ANZANIA_PLATE_IDS) {
 const manifest = {
   schemaVersion: 1,
   collection: "Anzania static-view location plates",
-  policy: {
-    allowlistSource: "AI-COLLAB/data/anzania-asset-registry-verified.json",
-    sourceMastersCopied: false,
-    metadataStripped: true,
-    resizing: "aspect-preserving, no crop, no upscale",
-    publishedAssetIds: PUBLISHED_ANZANIA_PLATE_IDS,
-    excludedAssetTypes: [
-      "support_atlas",
-      "support_reference_board",
-      "character_concept_sheet",
-      "superseded_concept",
-    ],
-  },
-  tooling: {
-    script: "scripts/build-static-art.mjs",
-    node: process.version,
-    sharp: sharp.versions.sharp,
-    libvips: sharp.versions.vips,
-  },
-  assets: manifestAssets,
+  assets: manifestAssets.map((asset) => ({
+    assetId: asset.assetId,
+    runtimeAlias: asset.runtimeAlias,
+    sceneId: asset.sceneId,
+    role: asset.role,
+    focalDesktop: asset.focalDesktop,
+    focalMobile: asset.focalMobile,
+    alt: asset.alt,
+    derivatives: asset.derivatives.map((derivative) => ({
+      format: derivative.format,
+      mimeType: derivative.mimeType,
+      width: derivative.width,
+      height: derivative.height,
+      path: derivative.path,
+    })),
+  })),
 };
 
 await writeFile(

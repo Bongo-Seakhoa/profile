@@ -52,14 +52,14 @@ enter a public commit while character-reference rights confirmation is pending.
 - A Blender overlay must check 184 cm height, 23 cm head, 50 cm shoulders and
   every other canonical measurement.
 
-## Prompt record
+## Visual brief record
 
-The first prompt requested exactly three equally scaled full-body views,
+The first brief requested exactly three equally scaled full-body views,
 orthographic projection, a 28-degree neutral A-pose, the complete numeric and
 written character constraints, neutral PBR lighting, no crop, no weapon and no
 design invention.
 
-The second prompt was a targeted edit that changed only the tassel count and
+The second brief was a targeted edit that changed only the tassel count and
 footwear. It required exactly one blue tassel on the anatomical right side and
 open-toe wrapped leather sandal-boots while preserving identity, pose, garments,
 materials, framing and lighting.

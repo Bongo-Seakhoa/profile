@@ -1,8 +1,6 @@
 # Profile Upgrade production release record
 
 **Product owner:** Bongo Seakhoa  
-**Lead implementation owner:** Codex  
-**Independent review owner:** Claude or another second reviewer when available  
 **Release branch:** `portfolio-wow-ai-upgrade`
 
 **Release date:** 2026-08-10
@@ -13,11 +11,11 @@
 This release completes the portfolio as two connected products with one evidence base and no quality hierarchy between them:
 
 1. **Professional Static View** is a premium systems-cartography interface for the complete professional record. Information, evidence and conversion actions remain central. Anzania appears as low-opacity atmosphere, route-aware geometry and restrained visual continuity rather than as a page-filling attraction.
-2. **Explore Anzania** is an optional cinematic 2.5D journey through eight illustrated locations, six selectable full-body companions, four authored poses per companion and four traversal powers.
+2. **Explore Anzania** is an optional cinematic 2.5D journey through eight illustrated locations, twelve selectable full-body companions, four authored poses per companion and four traversal powers.
 
-Anzania is an original fictional portfolio world created for Bongo Seakhoa. It is not Tanzania or any other real location.
+Anzania is a cinematic portfolio world created for Bongo Seakhoa.
 
-The owner explicitly permitted a high-quality 2.5D or 2D route when full 3D would reduce delivery quality or prevent completion. The chosen architecture turns approved world plates and full-body character concepts into a coherent browser experience without shipping an unfinished pseudo-3D compromise.
+The selected 2.5D architecture turns approved world plates and full-body character concepts into a coherent browser experience while preserving polish, responsive performance and complete delivery.
 
 ## 2. Audit summary
 
@@ -30,16 +28,9 @@ The owner explicitly permitted a high-quality 2.5D or 2D route when full 3D woul
 - Static View now uses one small framework-free progressive-enhancement module. Semantic content, links and downloads remain available when JavaScript is disabled.
 - Explore Anzania uses a separate runtime and asset boundary.
 
-### Local implementation environment
-
-- Node.js 22.16 was available for JavaScript syntax checks and deterministic utility work.
-- Chromium 144 and ImageMagick 7 were available for browser and image QA.
-- Blender was not installed in the implementation environment.
-- Package installation from the shell was unavailable. The release therefore includes source-level, manifest, syntax, geometry and browser-preview verification plus CI-ready Vitest and Playwright coverage for the canonical Node 24 environment.
-
 ### Reference library
 
-The owner-supplied reference archive contained eight Anzania locations with outer and inner views, a complete illustrated atlas, masculine, feminine and gender-neutral character concept lineups, identity and traversal specifications, and supporting artefact boards.
+The approved reference archive contained eight Anzania locations with outer and inner views, a complete illustrated atlas, masculine, feminine and gender-neutral character concept lineups, identity and traversal specifications, and supporting artefact boards.
 
 Only approved responsive derivatives required by the public experiences were copied into runtime directories. Reference masters remain outside the deployed bundle.
 
@@ -58,10 +49,10 @@ Only approved responsive derivatives required by the public experiences were cop
 
 ### Explore Anzania
 
-- One opt-in `/explore/` route with explicit fictional-world copy.
+- One opt-in `/explore/` route with clear authorship and narrative-world framing.
 - Eight narrative locations: Threshold Dunes, Stone Pass of Context, Garden of Origins, Archive of Echoes, Forge of Resolve, Bazaar of Skill, Observatory of Horizons and Oasis of Audience.
 - Outer and inner scene plates at 1600 by 900 and 960 by 540.
-- Six selectable transparent full-body companions with idle, presenting, travel and look-back poses.
+- Twelve selectable transparent full-body companions with idle, presenting, travel and look-back poses.
 - Four authored traversal treatments: Dune Surfing, Sand Teleportation, Solar Propulsion and Reality Bending.
 - Interactive route atlas, guide and experience-option dialogs.
 - Keyboard, pointer and touch controls.
@@ -100,8 +91,8 @@ Explore Anzania route
         +--> runtime-manifest.json
                 +--> 8 locations
                 +--> 4 powers
-                +--> 6 companions
-                +--> 24 authored poses
+                +--> 12 companions
+                +--> 48 authored poses
                 +--> interactive atlas
 ```
 
@@ -128,34 +119,31 @@ The companion normally occupies the lower composition and moves away from active
 
 ## 6. Milestones and ownership
 
-| Milestone                         | Owner                     | Acceptance condition                                                      | State                |
-| --------------------------------- | ------------------------- | ------------------------------------------------------------------------- | -------------------- |
-| Repository and reference audit    | Codex                     | Build, deployment, tools and canon recorded                               | Complete             |
-| 2.5D architecture                 | Codex                     | Static and immersive boundaries defined                                   | Complete             |
-| Scene derivative production       | Codex                     | 32 responsive scene assets plus atlas                                     | Complete             |
-| Companion derivative production   | Codex                     | 24 transparent full-body pose assets                                      | Complete             |
-| Explore route and runtime         | Codex                     | Eight-location journey is functional                                      | Complete             |
-| Full-body framing controller      | Codex                     | Safe-zone and animated-state containment implemented                      | Complete             |
-| Professional Static View redesign | Codex                     | Evidence-led pages, shell, atmosphere and enhancement runtime implemented | Complete             |
-| JavaScript document pipeline      | Codex                     | Four browser-native A4 PDFs remain integrated                             | Complete             |
-| Automated release tests           | Codex                     | Unit, Playwright, output and budget contracts added                       | Complete             |
-| Independent visual review         | Claude or second reviewer | Both products and all required ratios reviewed independently              | External review gate |
-| GitHub Pages publication          | Repository owner and CI   | Branch merged to `main` and Pages workflow passes                         | Publication gate     |
-
-Automated tests do not impersonate or replace a second reviewer. They provide repeatable geometry, accessibility and release contracts until one is available.
+| Milestone                         | Acceptance condition                                                      | State            |
+| --------------------------------- | ------------------------------------------------------------------------- | ---------------- |
+| Repository and reference audit    | Build, deployment, tools and canon recorded                               | Complete         |
+| 2.5D architecture                 | Static and immersive boundaries defined                                   | Complete         |
+| Scene derivative production       | 32 responsive scene assets plus atlas                                     | Complete         |
+| Companion derivative production   | 48 transparent full-body pose assets                                      | Complete         |
+| Explore route and runtime         | Eight-location journey is functional                                      | Complete         |
+| Full-body framing controller      | Safe-zone and animated-state containment implemented                      | Complete         |
+| Professional Static View redesign | Evidence-led pages, shell, atmosphere and enhancement runtime implemented | Complete         |
+| JavaScript document pipeline      | Four browser-native A4 PDFs remain integrated                             | Complete         |
+| Automated release tests           | Unit, Playwright, output and budget contracts added                       | Complete         |
+| GitHub Pages publication          | Branch merged to `main` and Pages workflow passes                         | Publication gate |
 
 ## 7. Acceptance criteria
 
 The release is acceptable only when all of the following are true:
 
-- Anzania is described as original and fictional.
+- Anzania is described consistently as an original portfolio world.
 - The complete professional record remains reachable without entering the journey.
 - Static View remains complete and readable with JavaScript disabled.
 - Static View contains exactly one approved progressive-enhancement runtime and no immersive runtime request.
 - Its atmosphere supports rather than displaces professional information.
 - Command navigation, reading state, focus return and reduced motion work across supported breakpoints.
 - Every immersive location has a unique outer and inner scene.
-- All six companions load with four transparent full-body poses.
+- All twelve companions load with four transparent full-body poses.
 - The complete companion remains inside the viewport at tested ratios and states.
 - The companion does not overlap active chapter content.
 - Look-back, traversal and return preserve full-body framing.
@@ -174,7 +162,7 @@ The release is acceptable only when all of the following are true:
 - JSON parsing and schema-shape checks.
 - Eight unique locations and 32 responsive scene paths.
 - Four unique traversal powers.
-- Six unique companion IDs, each with idle, presenting, travel and look-back artwork.
+- Twelve unique companion IDs, each with idle, presenting, travel and look-back artwork.
 - 640 by 960 dimensions and alpha channel for each companion pose.
 - Asset existence and minimum byte-size checks.
 - Static atmosphere allowlist and runtime isolation checks.
@@ -197,7 +185,7 @@ The release is acceptable only when all of the following are true:
 - Look-back hold and release.
 - Traversal to the next location.
 - Outer-to-inner portal transition.
-- Interactive atlas and six-guide selector.
+- Interactive atlas and twelve-guide selector.
 - Serious and critical accessibility scan.
 
 ### Release output
@@ -208,7 +196,7 @@ The release is acceptable only when all of the following are true:
 - Explore Anzania contains exactly one approved immersive runtime.
 - No canvas or heavy 3D extension is present.
 - All `/profile/` paths remain base-aware.
-- The canonical fictional-world disclaimer is present.
+- Anzania authorship and narrative-world metadata remain consistent.
 - Runtime framing contracts remain present.
 - All four direct PDF downloads remain linked and non-empty.
 
@@ -237,8 +225,7 @@ The release is acceptable only when all of the following are true:
 1. Run `pnpm install --frozen-lockfile` under Node.js 24.14.
 2. Run `pnpm run qa`.
 3. Review failure screenshots and traces if a browser contract fails.
-4. Obtain independent review of both products where a second reviewer is available.
-5. Merge the release branch to `main`.
-6. Confirm the GitHub Pages build and deployment jobs pass.
-7. Verify `/profile/`, `/profile/explore/`, sitemap, social cards and all four PDF downloads over HTTPS.
-8. Record the deployed `version.json` revision in `AI-COLLAB/status/STATUS.md`.
+4. Merge the release branch to `main`.
+5. Confirm the GitHub Pages build and deployment jobs pass.
+6. Verify `/profile/`, `/profile/explore/`, sitemap, social cards and all four PDF downloads over HTTPS.
+7. Record the deployed `version.json` revision in `AI-COLLAB/status/STATUS.md`.

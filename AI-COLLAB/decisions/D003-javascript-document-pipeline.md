@@ -10,9 +10,8 @@
 
 The resume and CV are dynamic, high-value assets. Quality takes priority over render speed. The owner explicitly rejected reliance on Python for document construction because the current output reads as an HTML-to-PDF conversion, has weak page composition and can orphan section headings.
 
-The supplied reference methodology is:
-
-`C:\Users\Bongo\OneDrive\Desktop\MetaPOS\Consulting\Clients\Nielsen Sports\SIYA Report Export Upgrade`
+The supplied reference methodology came from a private production reporting
+workflow and is not redistributed in this repository.
 
 ## Evidence from the Nielsen Sports method
 

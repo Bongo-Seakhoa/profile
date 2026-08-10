@@ -1,0 +1,41 @@
+[
+  {
+    "id": "human-governed-ai-delivery-method",
+    "slug": "human-governed-ai-delivery-method",
+    "title": "Human-Governed AI Delivery Method",
+    "type": "Delivery methodology",
+    "status": "public",
+    "evidenceState": "public-repository",
+    "privacyStatus": "public",
+    "summary": "A reusable delivery methodology combining human-owned product direction with AI-assisted implementation, independent verification, durable handoffs and automated quality gates.",
+    "ownership": "Method owner, product director and release authority",
+    "constraints": [
+      "Product direction, content decisions and release approval had to remain human-owned throughout AI-assisted implementation.",
+      "Implementation and verification needed distinct roles, durable context and explicit acceptance gates."
+    ],
+    "practices": [
+      "Define separate implementation and verification roles with explicit ownership, handoffs and review gates.",
+      "Apply the method across Astro delivery, interactive 2.5D storytelling, accessibility, content and document production.",
+      "Set repeatable acceptance criteria for content quality, responsive behaviour, accessibility and browser reliability."
+    ],
+    "validation": [
+      "The public repository contains durable delivery records, decisions, handoffs, risks and automated quality checks.",
+      "Unit, browser, accessibility, content and build tests cover the resulting portfolio release."
+    ],
+    "outcome": "Used to deliver and verify the professional Static View and Explore Anzania as one release with a public audit trail and repeatable quality checks.",
+    "limitations": [
+      "This methodology is demonstrated through the portfolio release; it is not a standalone software product or client engagement."
+    ],
+    "technologies": [
+      "Codex",
+      "Claude",
+      "GitHub Actions",
+      "PowerShell",
+      "Astro",
+      "Playwright"
+    ],
+    "publicUrl": "https://github.com/Bongo-Seakhoa/profile",
+    "public": true,
+    "lastReviewed": "2026-08-10"
+  }
+]

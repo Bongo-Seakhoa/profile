@@ -15,12 +15,19 @@
         "id": "metapos-data-engineering-scientist"
       },
       {
-        "label": "MetaPOS Mind client-safe system record",
+        "label": "MetaPOS Mind context and governance system",
         "collection": "project",
         "id": "metapos-app-data-management"
       }
     ],
-    "tools": ["Python", "SQL", "Google Cloud Platform", "Docker", "Git"],
+    "tools": [
+      "Python",
+      "SQL",
+      "Data warehousing",
+      "Google Cloud Platform",
+      "Docker",
+      "Git"
+    ],
     "featuredOrder": 1,
     "public": true,
     "lastReviewed": "2026-07-30"
@@ -62,14 +69,14 @@
     ],
     "evidence": [
       {
-        "label": "MetaPOS Mind client-safe AI-system record",
+        "label": "MetaPOS Mind AI context system",
         "collection": "project",
         "id": "metapos-app-data-management"
       },
       {
-        "label": "Public Anzania AI-assisted delivery case study",
-        "collection": "project",
-        "id": "anzania-ai-assisted-delivery"
+        "label": "Human-governed AI delivery methodology",
+        "collection": "methodology",
+        "id": "human-governed-ai-delivery-method"
       },
       {
         "label": "CNN filter visualisation",
@@ -77,7 +84,7 @@
         "id": "visualizing-filters-cnn"
       },
       {
-        "label": "Early public OpenAI trading experiment",
+        "label": "Early OpenAI trading experiment",
         "collection": "project",
         "id": "openai-trader-experiment"
       }
@@ -90,6 +97,8 @@
       "Scikit-learn",
       "TensorFlow",
       "PyTorch",
+      "Statistical inference",
+      "Data mining",
       "Pandas",
       "Flask"
     ],
