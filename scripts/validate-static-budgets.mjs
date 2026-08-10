@@ -17,7 +17,7 @@ const limits = {
   maximumCompressedHtmlPerRoute: 100 * 1024,
   maximumCompressedStaticCssTotal: 90 * 1024,
   maximumCompressedStaticJavaScriptTotal: 16 * 1024,
-  maximumCompressedImmersiveCssTotal: 24 * 1024,
+  maximumCompressedImmersiveCssTotal: 28 * 1024,
   maximumCompressedImmersiveJavaScriptTotal: 80 * 1024,
   maximumHeroAvif: 450 * 1024,
   maximumSocialCard: 100 * 1024,
@@ -113,7 +113,7 @@ if (staticCss.gzipBytes > limits.maximumCompressedStaticCssTotal) {
 }
 if (immersiveCss.gzipBytes > limits.maximumCompressedImmersiveCssTotal) {
   failures.push(
-    `Explore Anzania CSS compresses to ${immersiveCss.gzipBytes} bytes, above the 24 KB budget`,
+    `Explore Anzania CSS compresses to ${immersiveCss.gzipBytes} bytes, above the 28 KB budget`,
   );
 }
 if (

@@ -118,12 +118,19 @@ const structuredData = JSON.stringify({
         </div>
         <div class="scene__image scene__image--current" data-scene-current>
         </div>
-        <div class="scene__foreground" data-scene-foreground></div>
+        <div
+          class="scene__foreground scene__foreground--previous"
+          data-scene-foreground-previous
+        >
+        </div>
+        <div
+          class="scene__foreground scene__foreground--current"
+          data-scene-foreground
+        >
+        </div>
         <div class="scene__veil"></div>
         <div class="scene__vignette"></div>
         <div class="scene__grain"></div>
-        <div class="scene__dust scene__dust--near"></div>
-        <div class="scene__dust scene__dust--far"></div>
         <div class="scene__horizon-line"></div>
         <div class="scene__sky" aria-hidden="true">
           <span class="scene__cloud scene__cloud--one"></span>
@@ -155,6 +162,9 @@ const structuredData = JSON.stringify({
         <span class="power-transition__contact"></span>
         <span class="power-transition__name" data-power-transition-name
           >Sandfold</span
+        >
+        <span class="power-transition__caption" data-power-transition-caption
+          >Dissolve into a vortex, then reform beyond the horizon.</span
         >
       </div>
 
@@ -207,8 +217,8 @@ const structuredData = JSON.stringify({
             </a>
           </div>
           <p class="arrival-gate__note">
-            Keyboard: left and right travel · Enter opens a location · hold L to
-            look back
+            Keyboard: left and right travel · Enter opens a location · hold V to
+            view the scene · hold L to look back
           </p>
         </div>
       </section>
@@ -253,6 +263,17 @@ const structuredData = JSON.stringify({
             >
               <span aria-hidden="true">◉</span>
               <span>Guide</span>
+            </button>
+            <button
+              class="tool-button tool-button--scene"
+              data-view-scene-button
+              type="button"
+              aria-label="Press and hold to view the current scene"
+              aria-keyshortcuts="V"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">◫</span>
+              <span data-view-scene-label>View scene</span>
             </button>
             <button
               class="tool-button"
@@ -411,11 +432,21 @@ const structuredData = JSON.stringify({
         </section>
 
         <div class="look-control">
-          <button data-look-back-button type="button" aria-pressed="false">
+          <button
+            data-look-back-button
+            type="button"
+            aria-label="Press and hold this button, or hold L, to look back"
+            aria-keyshortcuts="L"
+            aria-pressed="false"
+          >
             <span class="look-control__icon" aria-hidden="true">↶</span>
-            <span>Hold to look back</span>
+            <span>Hold button or L to look back</span>
           </button>
         </div>
+
+        <p class="scene-view-status" data-scene-view-status aria-hidden="true">
+          Viewing the scene <span aria-hidden="true">·</span> Release to return
+        </p>
 
         <div class="traversal-controls" aria-label="Travel between locations">
           <button
@@ -588,7 +619,7 @@ const structuredData = JSON.stringify({
                 <strong>Keyboard controls</strong>
                 <small>
                   Left / right travel · Enter opens a place · M atlas · G guide
-                  · hold L look back · Esc close
+                  · hold V view scene · hold L look back · Esc close
                 </small>
               </span>
             </div>

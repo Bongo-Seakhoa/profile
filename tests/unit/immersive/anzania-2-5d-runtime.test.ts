@@ -58,6 +58,7 @@ interface RuntimeManifest {
       {
         readonly name: string;
         readonly durationMs: number;
+        readonly handoffAt: number;
         readonly className: string;
       }
     >
@@ -119,6 +120,36 @@ describe("Explore Anzania 2.5D release manifest", () => {
       "sand-teleportation",
       "solar-propulsion",
       "reality-bending",
+    ]);
+    expect(
+      Object.values(manifest.powers).map(
+        ({ durationMs, handoffAt, className }) => ({
+          durationMs,
+          handoffAt,
+          className,
+        }),
+      ),
+    ).toEqual([
+      {
+        durationMs: 2100,
+        handoffAt: 0.52,
+        className: "is-dune-surfing",
+      },
+      {
+        durationMs: 2350,
+        handoffAt: 0.52,
+        className: "is-sand-teleporting",
+      },
+      {
+        durationMs: 2250,
+        handoffAt: 0.5,
+        className: "is-solar-propelling",
+      },
+      {
+        durationMs: 2400,
+        handoffAt: 0.54,
+        className: "is-reality-bending",
+      },
     ]);
     expect(
       manifest.locations.every(({ power }) => power in manifest.powers),
@@ -244,6 +275,12 @@ describe("responsive framing and interaction runtime", () => {
     expect(runtime).toContain("targetRatio");
     expect(runtime).toContain("renderDeepDive");
     expect(runtime).toContain("selectPower");
+    expect(runtime).toContain("stageSceneTransition");
+    expect(runtime).toContain("revealStagedScene");
+    expect(runtime).toContain('dataset.transitionPhase = "departure"');
+    expect(runtime).toContain('dataset.transitionPhase = "arrival"');
+    expect(runtime).toContain("setSceneView");
+    expect(runtime).toContain("isViewingScene");
     expect(runtime).toContain("setGuidePose");
     expect(runtime).toContain("guidePoseRequest");
     expect(runtime).toContain("guide.poses?.[requestedPose]");
@@ -268,6 +305,23 @@ describe("responsive framing and interaction runtime", () => {
     expect(v2Css).toContain(".scene__environment");
     expect(v2Css).toContain('.experience[data-biome="garden"]');
     expect(v2Css).toContain('.experience[data-biome="forge"]');
+    for (const locationId of [
+      "threshold-dunes",
+      "stone-pass",
+      "garden-origins",
+      "archive-echoes",
+      "forge-resolve",
+      "bazaar-skill",
+      "observatory-horizons",
+      "oasis-audience",
+    ]) {
+      expect(v2Css).toContain(`[data-location="${locationId}"]`);
+    }
+    expect(v2Css).toContain(".experience.is-viewing-scene");
+    expect(v2Css).toContain("ability-dune-departure");
+    expect(v2Css).toContain("ability-sand-arrival");
+    expect(v2Css).toContain("ability-solar-world-bloom");
+    expect(v2Css).toContain("ability-reality-world-fold");
     expect(v2Css).toContain(".ability-dock");
     expect(v2Css).toContain(".chapter-panel__inside");
     expect(v2Css).toContain('button[data-visited="true"]');

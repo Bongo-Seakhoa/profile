@@ -152,19 +152,36 @@ test.describe("Static View route and accessibility contract", () => {
     ).toBeGreaterThan(0);
   });
 
-  test("MetaPOS leads into the strongest related AI evidence", async ({
-    page,
-  }) => {
+  test("related work requires real technology overlap", async ({ page }) => {
     await page.goto("work/metapos-app-data-management/", {
       waitUntil: "networkidle",
     });
 
-    const relatedWork = page.getByRole("region", { name: "Related work" });
-    await expect(relatedWork).toContainText("Visualizing Filters of a CNN");
-    await expect(relatedWork).not.toContainText(
-      "Human-Governed AI Delivery Method",
+    let relatedWork = page.getByRole("region", { name: "Related work" });
+    await expect(relatedWork).toContainText(
+      "Streamlit-Based Recommender System",
     );
+    await expect(relatedWork).toContainText("Regression Predict API");
+    await expect(relatedWork).not.toContainText("Visualizing Filters of a CNN");
     await expect(relatedWork).not.toContainText("FxPM 1.4");
+
+    await page.goto("work/institutional-ls-sr-trading-ea/", {
+      waitUntil: "networkidle",
+    });
+    relatedWork = page.getByRole("region", { name: "Related work" });
+    await expect(relatedWork).toContainText("MQL5 Expert Advisor");
+    await expect(relatedWork).not.toContainText("MetaPOS Mind");
+    await expect(relatedWork).not.toContainText("Visualizing Filters of a CNN");
+
+    for (const route of [
+      "work/visualizing-filters-cnn/",
+      "work/human-governed-ai-delivery-method/",
+    ]) {
+      await page.goto(route, { waitUntil: "networkidle" });
+      await expect(
+        page.getByRole("region", { name: "Related work" }),
+      ).toHaveCount(0);
+    }
   });
 
   test("methodology publishes HowTo metadata and methodology social naming", async ({

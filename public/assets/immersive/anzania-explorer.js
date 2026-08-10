@@ -12,10 +12,12 @@ const selectors = {
   explorer: "[data-explorer]",
   scenePrevious: "[data-scene-previous]",
   sceneCurrent: "[data-scene-current]",
+  sceneForegroundPrevious: "[data-scene-foreground-previous]",
   sceneForeground: "[data-scene-foreground]",
   environmentFx: "[data-environment-fx]",
   powerTransition: "[data-power-transition]",
   powerTransitionName: "[data-power-transition-name]",
+  powerTransitionCaption: "[data-power-transition-caption]",
   progressLabel: "[data-progress-label]",
   progressBar: "[data-progress-bar]",
   locationRailList: "[data-location-rail-list]",
@@ -58,6 +60,9 @@ const selectors = {
   selectedAbilityName: "[data-selected-ability-name]",
   mapButton: "[data-map-button]",
   guideButton: "[data-guide-button]",
+  viewSceneButton: "[data-view-scene-button]",
+  viewSceneLabel: "[data-view-scene-label]",
+  viewSceneStatus: "[data-scene-view-status]",
   optionsButton: "[data-options-button]",
   mapDialog: "[data-map-dialog]",
   guideDialog: "[data-guide-dialog]",
@@ -92,6 +97,7 @@ const state = {
   motionEnabled: true,
   isTraversing: false,
   isLookingBack: false,
+  isViewingScene: false,
   hasBegun: false,
   guidePose: "idle",
   guidePoseGuideId: null,
@@ -242,6 +248,7 @@ function setInteractionLock(locked) {
     elements.portalButton,
     elements.mapButton,
     elements.guideButton,
+    elements.viewSceneButton,
     elements.optionsButton,
   ]) {
     control?.toggleAttribute("disabled", locked);
@@ -529,6 +536,13 @@ function warmGuideCards() {
   if (!selectedImage.complete && typeof selectedImage.decode === "function") {
     selectedImage.decode().catch(() => undefined);
   }
+}
+
+function warmGuideSelection(guideId) {
+  const guide = state.manifest?.guides.find(
+    (candidate) => candidate.id === guideId,
+  );
+  if (guide) preloadGuidePoses(guide);
 }
 
 function renderGuide() {
@@ -881,6 +895,7 @@ function transitionScene(nextSource, { immediate = false } = {}) {
   if (
     !elements.sceneCurrent ||
     !elements.scenePrevious ||
+    !elements.sceneForegroundPrevious ||
     !elements.sceneForeground
   ) {
     return;
@@ -893,12 +908,18 @@ function transitionScene(nextSource, { immediate = false } = {}) {
     elements.sceneForeground.style.backgroundImage = background;
     elements.sceneCurrent.style.opacity = "1";
     elements.scenePrevious.style.opacity = "0";
+    elements.sceneForeground.style.opacity = "0.76";
+    elements.sceneForegroundPrevious.style.opacity = "0";
     return;
   }
 
   elements.scenePrevious.style.backgroundImage = currentBackground;
+  elements.sceneForegroundPrevious.style.backgroundImage =
+    elements.sceneForeground.style.backgroundImage || currentBackground;
   elements.scenePrevious.style.opacity = "1";
+  elements.sceneForegroundPrevious.style.opacity = "0.76";
   elements.sceneCurrent.style.opacity = "0";
+  elements.sceneForeground.style.opacity = "0";
 
   window.requestAnimationFrame(() => {
     const background = `url("${nextSource}")`;
@@ -907,8 +928,65 @@ function transitionScene(nextSource, { immediate = false } = {}) {
     window.requestAnimationFrame(() => {
       elements.sceneCurrent.style.opacity = "1";
       elements.scenePrevious.style.opacity = "0";
+      elements.sceneForeground.style.opacity = "0.76";
+      elements.sceneForegroundPrevious.style.opacity = "0";
     });
   });
+}
+
+function stageSceneTransition(nextSource) {
+  if (
+    !elements.sceneCurrent ||
+    !elements.scenePrevious ||
+    !elements.sceneForegroundPrevious ||
+    !elements.sceneForeground
+  ) {
+    return false;
+  }
+
+  const outgoingBackground = elements.sceneCurrent.style.backgroundImage;
+  const outgoingForeground =
+    elements.sceneForeground.style.backgroundImage || outgoingBackground;
+  const incomingBackground = `url("${nextSource}")`;
+
+  elements.experience.classList.add("is-scene-staged");
+  elements.scenePrevious.style.backgroundImage = outgoingBackground;
+  elements.sceneForegroundPrevious.style.backgroundImage = outgoingForeground;
+  elements.scenePrevious.style.opacity = "1";
+  elements.sceneForegroundPrevious.style.opacity = "0.76";
+
+  elements.sceneCurrent.style.backgroundImage = incomingBackground;
+  elements.sceneForeground.style.backgroundImage = incomingBackground;
+  elements.sceneCurrent.style.opacity = "0";
+  elements.sceneForeground.style.opacity = "0";
+  void elements.scenePrevious.offsetWidth;
+  return true;
+}
+
+function revealStagedScene() {
+  if (
+    !elements.sceneCurrent ||
+    !elements.scenePrevious ||
+    !elements.sceneForegroundPrevious ||
+    !elements.sceneForeground
+  ) {
+    return;
+  }
+
+  elements.sceneCurrent.style.opacity = "1";
+  elements.sceneForeground.style.opacity = "0.76";
+  elements.scenePrevious.style.opacity = "0";
+  elements.sceneForegroundPrevious.style.opacity = "0";
+}
+
+function finishSceneTransition() {
+  if (!elements.experience) return;
+  revealStagedScene();
+  elements.scenePrevious?.style.removeProperty("background-image");
+  elements.sceneForegroundPrevious?.style.removeProperty("background-image");
+  elements.experience.classList.remove("is-scene-staged");
+  delete elements.experience.dataset.transitionPhase;
+  delete elements.experience.dataset.travelDirection;
 }
 
 function renderScene(options = {}) {
@@ -1196,12 +1274,49 @@ function recalculateFraming({ immediate = false } = {}) {
   return frame;
 }
 
-function activatePower(power) {
+function activatePower(
+  power,
+  { duration = power?.durationMs ?? 2_200, handoffAt, direction = 1 } = {},
+) {
   if (!power) return;
+  const transitionHandoff = clamp(
+    handoffAt ?? power.handoffAt ?? 0.52,
+    0.4,
+    0.62,
+  );
   if (elements.powerTransitionName) {
     elements.powerTransitionName.textContent = power.name;
   }
+  if (elements.powerTransitionCaption) {
+    elements.powerTransitionCaption.textContent = power.description;
+  }
   elements.experience.dataset.activePower = state.selectedPowerId;
+  elements.experience.dataset.travelDirection =
+    direction < 0 ? "backward" : "forward";
+  document.documentElement.style.setProperty(
+    "--ability-duration",
+    `${Math.round(duration)}ms`,
+  );
+  document.documentElement.style.setProperty(
+    "--ability-departure-duration",
+    `${Math.round(duration * transitionHandoff)}ms`,
+  );
+  document.documentElement.style.setProperty(
+    "--ability-arrival-duration",
+    `${Math.round(duration * (1 - transitionHandoff))}ms`,
+  );
+  document.documentElement.style.setProperty(
+    "--travel-direction",
+    direction < 0 ? "-1" : "1",
+  );
+  document.documentElement.style.setProperty(
+    "--travel-outgoing-x",
+    direction < 0 ? "18vw" : "-18vw",
+  );
+  document.documentElement.style.setProperty(
+    "--travel-incoming-x",
+    direction < 0 ? "-16vw" : "16vw",
+  );
 }
 
 async function travelTo(
@@ -1215,30 +1330,37 @@ async function travelTo(
   const nextLocation = state.manifest.locations[clampedIndex];
   const power = getCurrentPower();
   const duration = state.motionEnabled ? power.durationMs : 40;
+  const handoffAt = clamp(power.handoffAt ?? 0.52, 0.4, 0.62);
+  const direction = clampedIndex < state.locationIndex ? -1 : 1;
 
   setLookBack(false);
+  setSceneView(false);
   setPresenting(false, 0, { updateGuidePose: false });
   state.isTraversing = true;
   state.sceneMode = "outer";
   state.activeInsideTab = "now";
   void setGuidePose("travel");
-  activatePower(power);
-  elements.experience.classList.add("is-traversing", power.className);
   document.documentElement.dataset.experienceState = "traversing";
   setInteractionLock(true);
   recalculateFraming();
   announce(`${power.name}. Travelling to ${nextLocation.formalName}.`);
 
   const nextSource = chooseSceneSource(nextLocation.outer);
-  void loadImage(nextSource);
-  await wait(Math.max(16, duration * 0.42));
+  await loadImage(nextSource);
+  stageSceneTransition(nextSource);
+  activatePower(power, { duration, handoffAt, direction });
+  elements.experience.dataset.transitionPhase = "departure";
+  elements.experience.classList.add("is-traversing", power.className);
+  await wait(Math.max(16, duration * handoffAt));
 
   state.locationIndex = clampedIndex;
-  renderScene();
+  elements.experience.dataset.transitionPhase = "arrival";
+  revealStagedScene();
   renderLocation({ announceChange: false, resetScroll: true });
-  await wait(Math.max(16, duration * 0.58));
+  await wait(Math.max(16, duration * (1 - handoffAt)));
 
   elements.experience.classList.remove("is-traversing", power.className);
+  finishSceneTransition();
   state.isTraversing = false;
   setInteractionLock(false);
   document.documentElement.dataset.experienceState = "exploring";
@@ -1257,24 +1379,38 @@ async function togglePortal() {
   if (!location || !power) return;
 
   const duration = state.motionEnabled ? power.durationMs : 40;
+  const handoffAt = clamp(power.handoffAt ?? 0.52, 0.4, 0.62);
+  const nextMode = state.sceneMode === "outer" ? "inner" : "outer";
+  const direction = nextMode === "inner" ? 1 : -1;
   setLookBack(false);
+  setSceneView(false);
   setPresenting(false, 0, { updateGuidePose: false });
   state.isTraversing = true;
   void setGuidePose("travel");
-  activatePower(power);
-  elements.experience.classList.add("is-traversing", power.className);
   document.documentElement.dataset.experienceState = "transitioning";
   setInteractionLock(true);
   recalculateFraming();
 
-  await wait(Math.max(16, duration * 0.43));
-  state.sceneMode = state.sceneMode === "outer" ? "inner" : "outer";
+  const nextSource = chooseSceneSource(location[nextMode]);
+  await loadImage(nextSource);
+  stageSceneTransition(nextSource);
+  activatePower(power, { duration, handoffAt, direction });
+  elements.experience.dataset.transitionPhase = "departure";
+  elements.experience.classList.add("is-traversing", power.className);
+  announce(
+    `${power.name}. ${nextMode === "inner" ? "Entering" : "Leaving"} ${location.formalName}.`,
+  );
+
+  await wait(Math.max(16, duration * handoffAt));
+  state.sceneMode = nextMode;
   if (state.sceneMode === "inner") state.activeInsideTab = "now";
-  renderScene();
+  elements.experience.dataset.transitionPhase = "arrival";
+  revealStagedScene();
   renderLocation({ announceChange: false, resetScroll: true });
-  await wait(Math.max(16, duration * 0.57));
+  await wait(Math.max(16, duration * (1 - handoffAt)));
 
   elements.experience.classList.remove("is-traversing", power.className);
+  finishSceneTransition();
   state.isTraversing = false;
   setInteractionLock(false);
   renderTraversalNavigation();
@@ -1340,6 +1476,7 @@ function selectInsideTab(tabId, { focus = false } = {}) {
 
 function openDialog(dialog) {
   if (!dialog) return;
+  setSceneView(false);
   resetIdleTimer();
   if (typeof dialog.showModal === "function") {
     if (!dialog.open) dialog.showModal();
@@ -1379,6 +1516,39 @@ function setLookBack(active) {
     announce("Looking back across the current approach.");
   } else {
     void setGuidePose(getSettledGuidePose());
+  }
+}
+
+function setSceneView(active) {
+  const nextState = Boolean(active);
+  if (
+    nextState &&
+    (!state.hasBegun ||
+      state.isTraversing ||
+      document.querySelector("dialog[open]"))
+  ) {
+    return;
+  }
+  if (state.isViewingScene === nextState) return;
+
+  state.isViewingScene = nextState;
+  elements.experience?.classList.toggle("is-viewing-scene", nextState);
+  elements.viewSceneButton?.setAttribute("aria-pressed", String(nextState));
+  elements.viewSceneButton?.setAttribute(
+    "aria-label",
+    nextState
+      ? "Release to return to the portfolio story"
+      : "Press and hold to view the current scene",
+  );
+  if (elements.viewSceneLabel) {
+    elements.viewSceneLabel.textContent = nextState ? "Release" : "View scene";
+  }
+  elements.viewSceneStatus?.setAttribute("aria-hidden", String(!nextState));
+
+  if (nextState) {
+    setLookBack(false);
+    resetIdleTimer();
+    announce("Viewing the current scene. Release to return to the story.");
   }
 }
 
@@ -1581,6 +1751,12 @@ function bindEvents() {
     if (!button) return;
     selectGuide(button.dataset.guideId);
   });
+  for (const eventName of ["pointerover", "focusin"]) {
+    elements.guideGrid?.addEventListener(eventName, (event) => {
+      const button = event.target.closest("[data-guide-id]");
+      if (button) warmGuideSelection(button.dataset.guideId);
+    });
+  }
 
   elements.abilityList?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-power-id]");
@@ -1671,7 +1847,49 @@ function bindEvents() {
     event.preventDefault(),
   );
 
+  const startSceneView = (event) => {
+    if (event.button != null && event.button !== 0) return;
+    event.preventDefault();
+    if (event.pointerId != null) {
+      elements.viewSceneButton?.setPointerCapture?.(event.pointerId);
+    }
+    setSceneView(true);
+  };
+  const endSceneView = (event) => {
+    if (
+      event?.pointerId != null &&
+      elements.viewSceneButton?.hasPointerCapture?.(event.pointerId)
+    ) {
+      elements.viewSceneButton.releasePointerCapture(event.pointerId);
+    }
+    setSceneView(false);
+  };
+  elements.viewSceneButton?.addEventListener("pointerdown", startSceneView);
+  elements.viewSceneButton?.addEventListener("pointerup", endSceneView);
+  elements.viewSceneButton?.addEventListener("pointercancel", endSceneView);
+  elements.viewSceneButton?.addEventListener("lostpointercapture", () =>
+    setSceneView(false),
+  );
+  elements.viewSceneButton?.addEventListener("contextmenu", (event) =>
+    event.preventDefault(),
+  );
+  elements.viewSceneButton?.addEventListener("click", (event) =>
+    event.preventDefault(),
+  );
+  elements.viewSceneButton?.addEventListener("keydown", (event) => {
+    if (![" ", "Enter"].includes(event.key) || event.repeat) return;
+    event.preventDefault();
+    setSceneView(true);
+  });
+  elements.viewSceneButton?.addEventListener("keyup", (event) => {
+    if (![" ", "Enter"].includes(event.key)) return;
+    event.preventDefault();
+    setSceneView(false);
+  });
+  elements.viewSceneButton?.addEventListener("blur", () => setSceneView(false));
+
   window.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented) return;
     if (
       event.target instanceof HTMLInputElement ||
       event.target instanceof HTMLTextAreaElement ||
@@ -1693,6 +1911,7 @@ function bindEvents() {
       return;
     }
     if (document.querySelector("dialog[open]")) return;
+    if (state.isTraversing) return;
 
     if (event.key === "ArrowLeft") {
       event.preventDefault();
@@ -1710,6 +1929,9 @@ function bindEvents() {
       event.preventDefault();
       warmGuideCards();
       openDialog(elements.guideDialog);
+    } else if (event.key.toLowerCase() === "v" && !event.repeat) {
+      event.preventDefault();
+      setSceneView(true);
     } else if (event.key.toLowerCase() === "l" && !event.repeat) {
       event.preventDefault();
       setLookBack(true);
@@ -1718,6 +1940,18 @@ function bindEvents() {
 
   window.addEventListener("keyup", (event) => {
     if (event.key.toLowerCase() === "l") setLookBack(false);
+    if (event.key.toLowerCase() === "v") setSceneView(false);
+  });
+
+  window.addEventListener("blur", () => {
+    setLookBack(false);
+    setSceneView(false);
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      setLookBack(false);
+      setSceneView(false);
+    }
   });
 
   window.addEventListener(
@@ -1732,7 +1966,7 @@ function bindEvents() {
   window.addEventListener("pointerdown", resetIdleTimer, { passive: true });
   window.addEventListener("touchstart", resetIdleTimer, { passive: true });
   window.addEventListener("resize", () => {
-    renderScene({ immediate: true });
+    if (!state.isTraversing) renderScene({ immediate: true });
     recalculateFraming({ immediate: true });
   });
   window.addEventListener("orientationchange", () => {
@@ -1828,6 +2062,7 @@ window.__ANZANIA_DEBUG__ = {
     activeInsideTab: state.activeInsideTab,
     isTraversing: state.isTraversing,
     isLookingBack: state.isLookingBack,
+    isViewingScene: state.isViewingScene,
     hasBegun: state.hasBegun,
     frame: state.lastFrame,
   }),
@@ -1835,6 +2070,7 @@ window.__ANZANIA_DEBUG__ = {
   travelTo,
   togglePortal,
   setGuidePose,
+  setSceneView,
   selectPower,
 };
 
