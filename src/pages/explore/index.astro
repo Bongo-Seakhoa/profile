@@ -110,7 +110,6 @@ const structuredData = JSON.stringify({
       id="experience"
       data-experience
       data-scene-mode="outer"
-      data-biome="sand"
       data-active-power="sand-teleportation"
     >
       <div class="scene" aria-hidden="true">
@@ -128,44 +127,14 @@ const structuredData = JSON.stringify({
           data-scene-foreground
         >
         </div>
+        <canvas
+          class="scene__effects-canvas"
+          data-scene-effects
+          aria-hidden="true"></canvas>
         <div class="scene__veil"></div>
         <div class="scene__vignette"></div>
         <div class="scene__grain"></div>
         <div class="scene__horizon-line"></div>
-        <div class="scene__sky" aria-hidden="true">
-          <span class="scene__cloud scene__cloud--one"></span>
-          <span class="scene__cloud scene__cloud--two"></span>
-          <span class="scene__cloud scene__cloud--three"></span>
-        </div>
-        <div class="scene__light-rays" aria-hidden="true"></div>
-        <div class="scene__weather" aria-hidden="true">
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-        </div>
-        <div class="scene__environment" data-environment-fx>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-        </div>
-        <div class="scene__cursor-field"></div>
-      </div>
-
-      <div class="power-transition" data-power-transition aria-hidden="true">
-        <span class="power-transition__sun"></span>
-        <span class="power-transition__sand"></span>
-        <span class="power-transition__wake"></span>
-        <span class="power-transition__ring"></span>
-        <span class="power-transition__portal"></span>
-        <span class="power-transition__streaks"></span>
-        <span class="power-transition__contact"></span>
-        <span class="power-transition__name" data-power-transition-name
-          >Sandfold</span
-        >
-        <span class="power-transition__caption" data-power-transition-caption
-          >Dissolve into a vortex, then reform beyond the horizon.</span
-        >
       </div>
 
       <div
@@ -599,10 +568,10 @@ const structuredData = JSON.stringify({
           <div class="options-list">
             <label class="option-row">
               <span>
-                <strong>Atmospheric motion</strong>
+                <strong>Cinematic motion</strong>
                 <small>
-                  Pointer-responsive sand, water, fire, parallax and authored
-                  traversal effects.
+                  Scene parallax, companion movement and four authored
+                  crossings.
                 </small>
               </span>
               <input data-motion-toggle type="checkbox" checked />

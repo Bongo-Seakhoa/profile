@@ -7,6 +7,8 @@ const results = await eslint.lintFiles([
   "src",
   "tests",
   "scripts",
+  "public/assets/immersive/anzania-explorer.js",
+  "public/assets/immersive/anzania-scene-effects.js",
   "astro.config.ts",
   "*.config.mjs",
 ]);

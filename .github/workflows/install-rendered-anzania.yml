@@ -42,6 +42,7 @@ jobs:
           unzip -o /tmp/anzania-ui-upgrade-payload.zip -d .
           rm -f .github/workflows/install-rendered-anzania.yml
           node --check public/assets/immersive/anzania-explorer.js
+          node --check public/assets/immersive/anzania-scene-effects.js
           node --check scripts/validate-public-output.mjs
           test "$(find public/assets/immersive/characters/rendered -type f -name '*.webp' | wc -l)" -eq 15
 

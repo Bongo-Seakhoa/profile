@@ -75,6 +75,7 @@ const repositoryRoot = resolve(import.meta.dirname, "..", "..", "..");
 const immersiveRoot = resolve(repositoryRoot, "public", "assets", "immersive");
 const manifestPath = resolve(immersiveRoot, "runtime-manifest.json");
 const runtimePath = resolve(immersiveRoot, "anzania-explorer.js");
+const sceneEffectsPath = resolve(immersiveRoot, "anzania-scene-effects.js");
 const baseCssPath = resolve(immersiveRoot, "anzania-explorer.css");
 const v2CssPath = resolve(immersiveRoot, "anzania-explorer-v2.css");
 
@@ -185,6 +186,23 @@ describe("Explore Anzania 2.5D release manifest", () => {
       }),
     );
   });
+
+  it("ships the aspect-correct Dune Surf dust plate", async () => {
+    const dustPath = resolve(
+      immersiveRoot,
+      "effects",
+      "dune-surf-dust-v01.webp",
+    );
+    const [file, metadata] = await Promise.all([
+      stat(dustPath),
+      sharp(dustPath).metadata(),
+    ]);
+
+    expect(metadata.format).toBe("webp");
+    expect(metadata.width).toBe(1600);
+    expect(metadata.height).toBe(900);
+    expect(file.size).toBe(29_516);
+  });
 });
 
 describe("production multi-pose companion roster", () => {
@@ -260,9 +278,10 @@ describe("production multi-pose companion roster", () => {
 });
 
 describe("responsive framing and interaction runtime", () => {
-  it("implements larger safe-zone framing, deep records and biome effects without OTS framing", async () => {
-    const [runtime, baseCss, v2Css] = await Promise.all([
+  it("implements safe-zone framing and scene-first traversal effects without OTS framing", async () => {
+    const [runtime, sceneEffects, baseCss, v2Css] = await Promise.all([
       readFile(runtimePath, "utf8"),
+      readFile(sceneEffectsPath, "utf8"),
       readFile(baseCssPath, "utf8"),
       readFile(v2CssPath, "utf8"),
     ]);
@@ -281,6 +300,13 @@ describe("responsive framing and interaction runtime", () => {
     expect(runtime).toContain('dataset.transitionPhase = "arrival"');
     expect(runtime).toContain("setSceneView");
     expect(runtime).toContain("isViewingScene");
+    expect(runtime).toContain("createSceneEffects");
+    expect(runtime).toContain("startSceneTransitionEffect");
+    expect(runtime).toContain("warmSceneTransition");
+    expect(runtime).toContain("preloadTransition");
+    expect(runtime).toContain("previewTransition");
+    expect(runtime).toContain("clearTransitionPreview");
+    expect(runtime).not.toContain("powerTransitionName");
     expect(runtime).toContain("setGuidePose");
     expect(runtime).toContain("guidePoseRequest");
     expect(runtime).toContain("guide.poses?.[requestedPose]");
@@ -291,8 +317,6 @@ describe("responsive framing and interaction runtime", () => {
     expect(runtime).toContain("state.visited.has(mapLocation.id)");
     expect(runtime).not.toContain("atlasCoordinates");
     expect(runtime).toContain("const avatarAspect = 640 / 960");
-    expect(runtime).toContain("0.14");
-    expect(runtime).toContain("0.2");
     expect(runtime).not.toMatch(/over-the-shoulder|\bOTS\b/i);
 
     expect(baseCss).toContain("--avatar-height");
@@ -301,30 +325,48 @@ describe("responsive framing and interaction runtime", () => {
     expect(baseCss).toContain(".experience.is-looking-back .companion img");
     expect(baseCss).toContain(".experience.is-traversing .companion");
     expect(baseCss).toContain("@media (prefers-reduced-motion: reduce)");
+    expect(baseCss).not.toContain(".power-transition");
 
-    expect(v2Css).toContain(".scene__environment");
-    expect(v2Css).toContain('.experience[data-biome="garden"]');
-    expect(v2Css).toContain('.experience[data-biome="forge"]');
-    for (const locationId of [
-      "threshold-dunes",
-      "stone-pass",
-      "garden-origins",
-      "archive-echoes",
-      "forge-resolve",
-      "bazaar-skill",
-      "observatory-horizons",
-      "oasis-audience",
-    ]) {
-      expect(v2Css).toContain(`[data-location="${locationId}"]`);
-    }
+    expect(v2Css).toContain(".scene__effects-canvas");
     expect(v2Css).toContain(".experience.is-viewing-scene");
-    expect(v2Css).toContain("ability-dune-departure");
-    expect(v2Css).toContain("ability-sand-arrival");
-    expect(v2Css).toContain("ability-solar-world-bloom");
-    expect(v2Css).toContain("ability-reality-world-fold");
+    expect(v2Css).toContain("cinematic-dune-out");
+    expect(v2Css).toContain("cinematic-sandfold-in");
+    expect(v2Css).toContain("cinematic-solar-out");
+    expect(v2Css).toContain("cinematic-fold-in");
+    expect(v2Css).toContain(".experience.is-scene-staged");
+    expect(v2Css).toContain("cinematic-foreground-out");
+    expect(v2Css).toContain("cinematic-foreground-in");
+    expect(v2Css).not.toMatch(
+      /\.scene__(?:sky|light-rays|weather|environment|cursor-field)/,
+    );
+    expect(v2Css).not.toContain("power-transition__name");
+    expect(v2Css).not.toContain("ability-solar-world-bloom");
     expect(v2Css).toContain(".ability-dock");
     expect(v2Css).toContain(".chapter-panel__inside");
     expect(v2Css).toContain('button[data-visited="true"]');
+
+    expect(sceneEffects).toContain('canvas.getContext("webgl"');
+    expect(sceneEffects).toContain("vec3 dune_surf");
+    expect(sceneEffects).toContain("vec3 sandfold");
+    expect(sceneEffects).toContain("vec3 solar_step");
+    expect(sceneEffects).toContain("vec3 reality_fold");
+    expect(sceneEffects).toContain('"dune-surfing": 0');
+    expect(sceneEffects).toContain('"sand-teleportation": 1');
+    expect(sceneEffects).toContain('"solar-propulsion": 2');
+    expect(sceneEffects).toContain('"reality-bending": 3');
+    expect(sceneEffects).toContain("dune-surf-dust-v01.webp");
+    expect(sceneEffects).toContain("u_dust_size");
+    expect(sceneEffects).toContain("mix(-0.18, 1.18, progress)");
+    expect(sceneEffects).toContain("abs(threshold - field)");
+    expect(sceneEffects).toContain("edge_peak");
+    expect(sceneEffects).toContain("raw_progress <= 0.0001");
+    expect(sceneEffects).toContain("raw_progress >= 0.9999");
+    expect(sceneEffects).toContain(
+      'canvas.addEventListener("webglcontextlost"',
+    );
+    expect(sceneEffects).toContain("textureCache.delete(source)");
+    expect(sceneEffects).toContain("captureFrameSignature");
+    expect(sceneEffects).toContain("preloadTransition");
   });
 
   it("keeps the immersive runtime isolated from the Static View source tree", async () => {
@@ -334,8 +376,10 @@ describe("responsive framing and interaction runtime", () => {
       'new URL("./runtime-manifest.json", import.meta.url)',
     );
     expect(runtime).toContain('new URL("../../", import.meta.url)');
+    expect(runtime).toContain(
+      'import { createSceneEffects } from "./anzania-scene-effects.js"',
+    );
     expect(runtime).not.toContain("document.write");
     expect(runtime).not.toContain("eval(");
-    expect(runtime).not.toContain("canvas");
   });
 });

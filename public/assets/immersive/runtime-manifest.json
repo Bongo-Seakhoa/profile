@@ -970,7 +970,7 @@
       "handoffAt": 0.52,
       "className": "is-dune-surfing",
       "glyph": "≈",
-      "description": "Carve a wind-driven sand wake across the horizon."
+      "description": "Ride a low, wind-shaped dust wake across the horizon."
     },
     "sand-teleportation": {
       "name": "Sandfold",
@@ -978,7 +978,7 @@
       "handoffAt": 0.52,
       "className": "is-sand-teleporting",
       "glyph": "✦",
-      "description": "Dissolve from the feet into a vortex, then reform in the next place."
+      "description": "Dissolve through a veil of sand, then reform beyond it."
     },
     "solar-propulsion": {
       "name": "Solar Step",
@@ -986,7 +986,7 @@
       "handoffAt": 0.5,
       "className": "is-solar-propelling",
       "glyph": "☼",
-      "description": "Charge, launch through a sunburst and land beyond the horizon."
+      "description": "Cross on a brief bloom of light and settle into the next scene."
     },
     "reality-bending": {
       "name": "Reality Fold",
@@ -994,7 +994,7 @@
       "handoffAt": 0.54,
       "className": "is-reality-bending",
       "glyph": "◇",
-      "description": "Open a hand-anchored lens and fold the next scene through it."
+      "description": "Fold the scene along a quiet seam and open it on the other side."
     }
   },
   "guides": [

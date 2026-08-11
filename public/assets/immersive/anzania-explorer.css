@@ -1054,20 +1054,6 @@ input:focus-visible {
   box-shadow: 0 0 8px var(--gold);
 }
 
-.power-transition {
-  position: absolute;
-  z-index: 30;
-  inset: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 160ms ease;
-}
-
-.experience.is-traversing .power-transition {
-  opacity: 1;
-}
-
 .explore-dialog {
   width: min(1180px, calc(100vw - 44px));
   max-width: none;

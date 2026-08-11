@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readdir, readFile, stat } from "node:fs/promises";
 import { extname, join, relative, resolve } from "node:path";
 
@@ -152,8 +153,18 @@ for (const path of htmlFiles) {
   const isDocumentPreview =
     /^documents\/(?:resume|cv)\/[^/]+\/index\.html$/.test(publicPath);
 
-  if (/<canvas(?:\s|>)/i.test(html)) {
-    failures.push(`${displayPath(path)} contains a canvas`);
+  const canvasTags = html.match(/<canvas\b[^>]*>/gi) ?? [];
+  if (isExploreRoute) {
+    if (
+      canvasTags.length !== 1 ||
+      !canvasTags[0]?.includes("data-scene-effects")
+    ) {
+      failures.push(
+        "explore/index.html must contain exactly one traversal-effects canvas",
+      );
+    }
+  } else if (canvasTags.length > 0) {
+    failures.push(`${displayPath(path)} contains an unapproved canvas`);
   }
   if (/href=(?:"|')tel:/i.test(html)) {
     failures.push(`${displayPath(path)} exposes a public telephone link`);
@@ -177,6 +188,7 @@ for (const path of htmlFiles) {
       "Continue in Static View",
       'data-guide-contract="full-body companion"',
       "data-view-scene-button",
+      "data-scene-effects",
       'aria-keyshortcuts="V"',
       'aria-keyshortcuts="L"',
     ];
@@ -401,11 +413,11 @@ try {
     "is-traversing",
     "is-viewing-scene",
     "stageSceneTransition",
+    "createSceneEffects",
+    "previewTransition",
     'dataset.transitionPhase = "departure"',
     'dataset.transitionPhase = "arrival"',
     "pointercancel",
-    "0.14",
-    "0.2",
     "ResizeObserver",
     "prefers-reduced-motion",
   ];
@@ -423,6 +435,57 @@ try {
   }
 } catch {
   failures.push("The Explore Anzania runtime is missing");
+}
+
+const sceneEffectsPath = resolve(
+  distDirectory,
+  "assets",
+  "immersive",
+  "anzania-scene-effects.js",
+);
+try {
+  const effectsRuntime = await readFile(sceneEffectsPath, "utf8");
+  for (const contract of [
+    'canvas.getContext("webgl"',
+    "vec3 dune_surf",
+    "vec3 sandfold",
+    "vec3 solar_step",
+    "vec3 reality_fold",
+    "dune-surf-dust-v01.webp",
+  ]) {
+    if (!effectsRuntime.includes(contract)) {
+      failures.push(
+        `The Anzania scene-effects module is missing contract: ${contract}`,
+      );
+    }
+  }
+} catch {
+  failures.push("The Explore Anzania scene-effects module is missing");
+}
+
+const duneDustPath = resolve(
+  distDirectory,
+  "assets",
+  "immersive",
+  "effects",
+  "dune-surf-dust-v01.webp",
+);
+try {
+  const dustBytes = await readFile(duneDustPath);
+  const dustHash = createHash("sha256").update(dustBytes).digest("hex");
+  if (dustBytes.length !== 29_516) {
+    failures.push(
+      `Dune Surf dust texture has unexpected size: ${dustBytes.length} bytes`,
+    );
+  }
+  if (
+    dustHash !==
+    "938864d35467b2c117c5510df7554dc3bc00ceae771bb6d891b779efb9d82d0f"
+  ) {
+    failures.push(`Dune Surf dust texture has unexpected SHA-256: ${dustHash}`);
+  }
+} catch {
+  failures.push("The Dune Surf dust texture is missing");
 }
 
 const expectedDocuments = [

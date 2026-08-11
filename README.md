@@ -99,8 +99,8 @@ The full gate covers:
 - A4 page counts, overflow, section boundaries, fonts, metadata and PDF links;
 - desktop, mobile, no-JavaScript and accessibility browser tests;
 - GitHub Pages base paths, sitemap, robots, icons and release metadata;
-- exactly one approved Static View runtime and one separately isolated immersive runtime; and
-- absence of public em dash characters, canvas, heavy 3D formats and unapproved runtime assets.
+- exactly one approved Static View runtime and two separately isolated immersive modules; and
+- absence of public em dash characters, unapproved canvas use, heavy 3D formats and unapproved runtime assets.
 
 Generated PDFs are written to:
 
