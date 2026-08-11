@@ -343,14 +343,62 @@ test.describe("Explore Anzania release experience", () => {
       "Solar Step",
     );
 
-    await page.locator("[data-next-location]").click();
-    await expect(
-      page.locator(
-        'html[data-experience-state="traversing"] [data-experience].is-traversing.is-solar-propelling',
-      ),
-    ).toHaveCount(1, { timeout: 10_000 });
-    await page.keyboard.press("m");
-    await page.keyboard.press("g");
+    const shortcutsDispatched = await page.evaluate(
+      () =>
+        new Promise<boolean>((resolve, reject) => {
+          const experience =
+            document.querySelector<HTMLElement>("[data-experience]");
+          const nextButton = document.querySelector<HTMLButtonElement>(
+            "[data-next-location]",
+          );
+          if (!experience || !nextButton) {
+            reject(new Error("Traversal shortcut probe could not start."));
+            return;
+          }
+
+          const timeout = window.setTimeout(() => {
+            observer.disconnect();
+            reject(new Error("Traversal shortcut probe timed out."));
+          }, 10_000);
+
+          const observeTraversal = () => {
+            if (
+              document.documentElement.dataset.experienceState !==
+                "traversing" ||
+              !experience.classList.contains("is-traversing") ||
+              !experience.classList.contains("is-solar-propelling")
+            ) {
+              return;
+            }
+
+            for (const key of ["m", "g"]) {
+              window.dispatchEvent(
+                new KeyboardEvent("keydown", {
+                  key,
+                  code: `Key${key.toUpperCase()}`,
+                  bubbles: true,
+                }),
+              );
+            }
+            window.clearTimeout(timeout);
+            observer.disconnect();
+            resolve(true);
+          };
+
+          const observer = new MutationObserver(observeTraversal);
+          observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-experience-state"],
+          });
+          observer.observe(experience, {
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+          observeTraversal();
+          nextButton.click();
+        }),
+    );
+    expect(shortcutsDispatched).toBe(true);
     await expect(page.locator("[data-map-dialog]")).not.toBeVisible();
     await expect(page.locator("[data-guide-dialog]")).not.toBeVisible();
     expectCompleteFullBody(await framingMetrics(page));
