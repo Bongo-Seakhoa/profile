@@ -103,6 +103,22 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+      - name: Upload release review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-release-review
+          path: |
+            dist
+            AI-COLLAB/.watch-state/document-previews
+            AI-COLLAB/.watch-state/lighthouse
+            AI-COLLAB/.watch-state/static-budget.json
+            test-results
+            playwright-e2e.log
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Configure GitHub Pages
         if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
         uses: actions/configure-pages@v6
@@ -126,6 +142,21 @@ jobs:
     needs: build
     if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
     steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
       - name: Deploy GitHub Pages artifact
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Verify published revision and professional record
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: node scripts/verify-live-deployment.mjs
+      - name: Retain live verification receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-live-verification
+          path: artifacts/live-verification.json
+          retention-days: 30

@@ -1,0 +1,49 @@
+name: Apply reviewed portfolio V2.1 changes
+
+on:
+  push:
+    branches:
+      - agent/portfolio-v2-1-professional-record
+    paths:
+      - .github/workflows/portfolio-v21-apply.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: agent/portfolio-v2-1-professional-record
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+          run_install: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Apply reviewed source changes
+        run: |
+          node .github/portfolio-v21-data.mjs
+          node .github/portfolio-v21-code.mjs
+          rm .github/portfolio-v21-data.mjs .github/portfolio-v21-code.mjs .github/workflows/portfolio-review-snapshot.yml .github/workflows/portfolio-v21-apply.yml
+          git add -A
+          git diff --name-only --diff-filter=ACM -z ec486082c2d7ee23b9e6cf1cc2f7db4b16828950 | xargs -0 pnpm exec prettier --write --ignore-unknown
+          node scripts/check-professional-record.mjs --record --reviewed-on=2026-09-08
+          pnpm exec prettier --write docs/professional-record-review.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: reconcile professional record and portfolio V2.1 surfaces"
+          git push origin HEAD:agent/portfolio-v2-1-professional-record
+      - run: git archive --format=tar HEAD -o /tmp/portfolio-v21-source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-v21-source
+          path: /tmp/portfolio-v21-source.tar
+          retention-days: 3
