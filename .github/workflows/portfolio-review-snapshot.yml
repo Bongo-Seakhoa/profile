@@ -1,0 +1,24 @@
+name: Portfolio review snapshot
+
+on:
+  push:
+    branches:
+      - agent/portfolio-v2-1-professional-record
+    paths:
+      - .github/workflows/portfolio-review-snapshot.yml
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Archive tracked public source for review
+        run: git archive --format=tar HEAD -o /tmp/portfolio-source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-review-source
+          path: /tmp/portfolio-source.tar
+          retention-days: 1
