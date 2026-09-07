@@ -18,7 +18,7 @@ function copyContent(): ProfileContent {
 describe("profile content contract", () => {
   it("accepts the canonical migration with owner-review warnings only", () => {
     const result = validateProfileContent(canonical, {
-      now: new Date("2026-07-31T00:00:00.000Z"),
+      now: new Date("2026-09-08T00:00:00.000Z"),
     });
 
     expect(result.errors).toEqual([]);
@@ -94,7 +94,7 @@ describe("profile content contract", () => {
   });
 
   it("keeps every project summary recruiter-ready with a visible stack", () => {
-    expect(canonical.projects).toHaveLength(10);
+    expect(canonical.projects.length).toBeGreaterThanOrEqual(12);
     for (const project of canonical.projects) {
       expect(project.summary.length, project.id).toBeGreaterThanOrEqual(80);
       expect(project.summary.length, project.id).toBeLessThanOrEqual(220);
@@ -203,9 +203,9 @@ describe("profile content contract", () => {
   it("rejects incomplete all-policy document selections", () => {
     const content = copyContent();
     const cv = content.documentManifest.find(({ id }) => id === "cv")!;
-    const credentialSection = cv.pages[2]!.sections.find(
-      ({ id }) => id === "cv-additional-learning",
-    )!;
+    const credentialSection = cv.pages
+      .flatMap((page) => page.sections)
+      .find(({ id }) => id === "cv-additional-learning")!;
     credentialSection.itemIds = credentialSection.itemIds.filter(
       (id) => id !== "data-analysis-r-programming",
     );

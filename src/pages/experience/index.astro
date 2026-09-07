@@ -13,7 +13,7 @@ const route = content.routes.find((entry) => entry.id === "experience");
 if (!route) throw new Error("Experience route content is missing.");
 
 const experience = [...content.experience].sort((left, right) =>
-  right.dateStart.localeCompare(left.dateStart),
+  (right.dateStart ?? "").localeCompare(left.dateStart ?? ""),
 );
 ---
 

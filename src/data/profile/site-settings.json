@@ -5,21 +5,21 @@
     "siteUrl": "https://bongo-seakhoa.github.io/profile/",
     "basePath": "/profile",
     "defaultTitle": "Bongo Seakhoa | AI and Data Systems Engineer",
-    "defaultDescription": "Professional portfolio for Bongo Seakhoa, also known as Bongo Kosa, covering AI-enabled products, data systems, analytics, applied machine learning and technical mentoring.",
+    "defaultDescription": "I build governed AI systems and data pipelines that make decisions traceable, testable and accountable to people.",
     "locale": "en",
     "themeColor": "#12261F",
     "publicContactLinkIds": ["email", "linkedin", "github"],
     "documents": {
       "resumePages": 2,
-      "cvPages": 3,
+      "cvPages": 4,
       "paper": "A4",
       "publicPhone": false
     },
     "sourcePolicy": {
-      "primarySource": "content/profile.json",
+      "primarySource": "src/data/profile/",
       "linkedInReconciliation": "pending-owner-export",
       "unsupportedClaims": "reject"
     },
-    "lastReviewed": "2026-08-10"
+    "lastReviewed": "2026-09-08"
   }
 ]

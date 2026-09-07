@@ -19,11 +19,16 @@ const OPEN_END = "9999-12";
 export function deriveExperienceOverlaps(
   experience: readonly Experience[],
 ): ExperienceOverlap[] {
-  const ordered = [...experience].sort(
-    (left, right) =>
-      left.dateStart.localeCompare(right.dateStart) ||
-      left.id.localeCompare(right.id),
-  );
+  const ordered = experience
+    .filter(
+      (record): record is Experience & { dateStart: string } =>
+        record.dateStart !== null,
+    )
+    .sort(
+      (left, right) =>
+        left.dateStart.localeCompare(right.dateStart) ||
+        left.id.localeCompare(right.id),
+    );
   const overlaps: ExperienceOverlap[] = [];
 
   for (let leftIndex = 0; leftIndex < ordered.length; leftIndex += 1) {

@@ -1,5 +1,6 @@
 ---
 import CapabilityRecord from "../../components/content/CapabilityRecord.astro";
+import { sitePath } from "../../lib/urls";
 import ContentStyles from "../../components/content/ContentStyles.astro";
 import ActionLink from "../../components/primitives/ActionLink.astro";
 import Container from "../../components/primitives/Container.astro";
@@ -48,6 +49,39 @@ const capabilities = [...content.capabilities].sort(
     </Container>
   </section>
 
+  <section class="page-section" aria-labelledby="engineering-focus-title">
+    <Container size="content">
+      <h2 id="engineering-focus-title">
+        Engineering focus and supporting experience
+      </h2>
+      {
+        content.skills.map((group) => (
+          <article class="integrity-note" data-record-id={group.id}>
+            <>
+              <h3>{group.label}</h3>
+              <p>{group.items.join(" · ")}</p>
+            </>
+            <p>
+              Evidence:{" "}
+              {group.evidenceProjectIds.map((id, index) => {
+                const project = content.projects.find(
+                  (entry) => entry.id === id,
+                )!;
+                return (
+                  <>
+                    {index > 0 && " · "}
+                    <a href={sitePath("work/" + project.slug + "/")}>
+                      {project.title}
+                    </a>
+                  </>
+                );
+              })}
+            </p>
+          </article>
+        ))
+      }
+    </Container>
+  </section>
   <section
     class="page-section page-section--surface"
     aria-labelledby="working-approach-title"

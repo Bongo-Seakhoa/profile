@@ -1,6 +1,6 @@
 {
   "name": "bongo-seakhoa-profile",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "description": "Bongo Seakhoa's production static portfolio and browser-native document pipeline.",
@@ -12,10 +12,10 @@
   "scripts": {
     "dev": "astro dev",
     "preview": "astro preview",
-    "validate:content": "tsx scripts/validate-content.ts",
+    "validate:content": "node scripts/check-professional-record.mjs && tsx scripts/validate-content.ts",
     "build:release-assets": "node scripts/build-release-assets.mjs",
     "build:social-cards": "node scripts/build-social-cards.mjs",
-    "build:site": "pnpm run build:release-assets && pnpm run build:social-cards && astro build",
+    "build:site": "pnpm run build:release-assets && pnpm run build:social-cards && astro build && node scripts/build-professional-surfaces.mjs",
     "build:documents": "node scripts/build-documents.mjs",
     "verify:documents": "node scripts/verify-documents.mjs",
     "build:metadata": "node scripts/write-release-metadata.mjs",
@@ -34,7 +34,8 @@
     "test:immersive": "vitest run tests/unit/immersive",
     "test:e2e": "playwright test",
     "test": "pnpm run test:unit && pnpm run build && pnpm run test:e2e",
-    "qa": "pnpm run format:check && pnpm run lint && pnpm run check && pnpm run test && pnpm run verify:lighthouse"
+    "qa": "pnpm run format:check && pnpm run lint && pnpm run check && pnpm run test && pnpm run verify:lighthouse",
+    "review:record": "node scripts/check-professional-record.mjs --record"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.3",

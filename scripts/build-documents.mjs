@@ -62,7 +62,13 @@ async function attachMetadata(pdfBytes, { displayName, label }) {
   pdf.setSubject(`${label} for ${displayName}`);
   pdf.setCreator("Bongo Seakhoa Portfolio");
   pdf.setProducer("Bongo Seakhoa Portfolio");
-  pdf.setKeywords([displayName, "data scientist", "data engineer", label]);
+  pdf.setKeywords([
+    displayName,
+    identity.headline,
+    "governed AI",
+    "data engineering",
+    label,
+  ]);
   pdf.setCreationDate(new Date());
   pdf.setModificationDate(new Date());
   return pdf.save({ useObjectStreams: false });
@@ -111,6 +117,10 @@ async function validateRenderedPages(page, expectedPageCount) {
       }
 
       const canvasBox = canvas.getBoundingClientRect();
+      const footer = canvas.querySelector(".document-footer");
+      const contentBottom = footer
+        ? footer.getBoundingClientRect().top - millimetresToPixels(2)
+        : canvasBox.bottom;
       const sections = [...canvas.querySelectorAll("[data-document-section]")];
 
       for (const section of sections) {
@@ -118,6 +128,12 @@ async function validateRenderedPages(page, expectedPageCount) {
         if (sectionBox.bottom > canvasBox.bottom + 0.5) {
           findings.push(
             `Section ${section.getAttribute("data-document-section")} crosses page ${pageIndex + 1}`,
+          );
+        }
+
+        if (sectionBox.bottom > contentBottom + 0.5) {
+          findings.push(
+            `Section ${section.getAttribute("data-document-section")} enters the reserved footer area on page ${pageIndex + 1}`,
           );
         }
 

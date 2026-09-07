@@ -42,7 +42,12 @@
     "featuredOrder": 1,
     "caseStudyDepth": "full",
     "public": true,
-    "lastReviewed": "2026-08-10"
+    "lastReviewed": "2026-09-08",
+    "problem": "Company knowledge spread across documents, delivery records and conversations was difficult to turn into current, permission-safe working context.",
+    "scale": "Company-context assembly, identity-aware access, delivery handoffs and deterministic work assurance in one internal system.",
+    "evidenceNotes": [
+      "Client-safe summary of implementation and validation design. Internal company records and operating metrics are not published."
+    ]
   },
   {
     "id": "fxpm-1-4-forex-portfolio-manager",
@@ -58,9 +63,11 @@
     "contributions": [],
     "validation": [],
     "outcome": null,
-    "limitations": [],
+    "limitations": [
+      "Historical work; see the current FXPM validation and execution case study for the later development system."
+    ],
     "technologies": ["Python", "JavaScript", "HTML/CSS", "Trading Systems"],
-    "publicUrl": "https://github.com/Bongo-Seakhoa/FxPM-1.4---Obtimized",
+    "publicUrl": null,
     "relatedExperienceIds": [],
     "featured": false,
     "featuredOrder": null,
@@ -134,8 +141,8 @@
     "technologies": ["TensorFlow", "Deep Learning", "Computer Vision"],
     "publicUrl": "https://github.com/Bongo-Seakhoa/Visualizing_Filters_CNN",
     "relatedExperienceIds": [],
-    "featured": true,
-    "featuredOrder": 3,
+    "featured": false,
+    "featuredOrder": null,
     "caseStudyDepth": "summary",
     "public": true,
     "lastReviewed": "2026-07-30"
@@ -202,9 +209,11 @@
     "contributions": [],
     "validation": [],
     "outcome": null,
-    "limitations": [],
+    "limitations": [
+      "Historical work; see the current FXPM validation and execution case study for the later development system."
+    ],
     "technologies": ["Python", "Data Analysis", "Backtesting"],
-    "publicUrl": "https://github.com/Bongo-Seakhoa/FxPM-backtester",
+    "publicUrl": null,
     "relatedExperienceIds": [],
     "featured": false,
     "featuredOrder": null,
@@ -259,5 +268,104 @@
     "caseStudyDepth": "archive",
     "public": true,
     "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "omnimind",
+    "slug": "omnimind",
+    "title": "OmniMind",
+    "type": "Governed AI systems",
+    "status": "professional",
+    "evidenceState": "client-safe-summary",
+    "privacyStatus": "client-safe-summary",
+    "summary": "A local AI-work control plane that compiles bounded, task-specific context and coordinates evidence, provider handoffs and human-approved capabilities without duplicating project data.",
+    "role": "System design and AI-assisted implementation",
+    "problem": "AI coding sessions can waste context, confuse plans with current state and lose decisions between providers. Smaller prompts alone do not establish correctness.",
+    "scale": "Lazy project discovery, structural indexing, line-range retrieval, bounded context compilation, shared coordination and scoped capability routing.",
+    "constraints": [
+      "Source files remain authoritative; the system is not an autonomous agent or a second project database.",
+      "Credentials stay in provider or operating-system stores, outside retrieved context and metrics."
+    ],
+    "contributions": [
+      "Designed task-specific context routing with explicit evidence gaps and a hard context budget.",
+      "Integrated project-scoped coordination, evidence gates and capability routing across AI providers.",
+      "Separated context-size estimates from answer quality, provider billing and unsupported adoption claims."
+    ],
+    "validation": [
+      "The reviewed implementation records bounded context receipts and rejects credential-shaped material from retrieval.",
+      "An initial calibration pack was rejected after rendered-browser review found missing task-critical evidence. The revised pack was assessed against source rather than accepted for size alone."
+    ],
+    "outcome": "A 28 August 2026 local calibration selected 3,600 estimated tokens from an 8,502-token project estimate in 2.199 seconds, reporting a 57.66% context-size reduction.",
+    "evidenceNotes": [
+      "One task-specific local calibration, documented in the project metrics record. Counts are deterministic estimates, not provider billing.",
+      "Implementation and calibration documentation reviewed on 8 September 2026. Private source is not presented as a public repository."
+    ],
+    "limitations": [
+      "The calibration does not establish improved answer quality, complete evidence coverage or lower API cost.",
+      "Machine-specific timing and one task cannot establish general performance. Independent cross-provider review must be recorded separately from self-review."
+    ],
+    "technologies": [
+      "Python",
+      "MCP",
+      "Context engineering",
+      "Evidence gates",
+      "Capability routing"
+    ],
+    "publicUrl": null,
+    "relatedExperienceIds": [],
+    "featured": true,
+    "featuredOrder": 2,
+    "caseStudyDepth": "full",
+    "public": true,
+    "lastReviewed": "2026-09-08"
+  },
+  {
+    "id": "fxpm-validation-system",
+    "slug": "fxpm-validation-system",
+    "title": "FXPM: validation and execution",
+    "type": "Decision-system engineering",
+    "status": "professional",
+    "evidenceState": "client-safe-summary",
+    "privacyStatus": "client-safe-summary",
+    "summary": "A production-focused trading research system combining regime-aware strategy selection, stateful optimisation, statistical validation and broker-aware execution controls.",
+    "role": "System design, validation research and AI-assisted engineering",
+    "problem": "A promising historical strategy is not sufficient evidence for reliable live execution. Selection, transaction costs, changing regimes and broker constraints must be evaluated together.",
+    "scale": "The reviewed development baseline spans a 50-strategy pool and four market regimes, with persisted optimisation state, execution checks and a companion dashboard.",
+    "constraints": [
+      "Research outputs must remain separate from evidence of funded live performance.",
+      "Execution depends on broker contract metadata, available market data and explicit readiness decisions."
+    ],
+    "contributions": [
+      "Developed regime-aware candidate selection and persisted optimisation state rather than treating each run as a disconnected experiment.",
+      "Connected winner evidence, no-trade outcomes and fail-closed readiness checks to the execution path.",
+      "Investigated validation-gate design, dependence, selection effects and evidence sufficiency as part of continuing research."
+    ],
+    "validation": [
+      "The development implementation distinguishes tradeable winners from paper-only, blocked and no-trade states.",
+      "Execution checks cover broker preflight, position sizing, spread quality and margin protection.",
+      "Research examines simulation and historical evaluation separately, including the limits of observed results."
+    ],
+    "outcome": "An integrated development and research system that makes validation and execution constraints explicit. Current work focuses on the strength of selection evidence and reliable live behaviour.",
+    "evidenceNotes": [
+      "Source-reviewed development architecture and client-safe research summary, 8 September 2026.",
+      "The linked research record reports acceptance at ISM 2026, not a published proceedings citation or audited trading result."
+    ],
+    "limitations": [
+      "No profitability, return, win-rate or production-readiness claim is made here.",
+      "Historical performance and implemented safeguards do not guarantee future results. Strategy selection and calibration remain active research."
+    ],
+    "technologies": [
+      "Python",
+      "Numba",
+      "Optuna",
+      "MetaTrader 5",
+      "Statistical validation"
+    ],
+    "publicUrl": null,
+    "relatedExperienceIds": [],
+    "featured": true,
+    "featuredOrder": 3,
+    "caseStudyDepth": "full",
+    "public": true,
+    "lastReviewed": "2026-09-08"
   }
 ]

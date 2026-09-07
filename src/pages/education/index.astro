@@ -1,4 +1,5 @@
 ---
+import { formatRecordDates } from "../../lib/content/format-record-dates";
 import ContentStyles from "../../components/content/ContentStyles.astro";
 import CredentialRecord from "../../components/content/CredentialRecord.astro";
 import ActionLink from "../../components/primitives/ActionLink.astro";
@@ -24,20 +25,6 @@ const currentCredentials = content.credentials
       (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
       (right.featuredOrder ?? Number.MAX_SAFE_INTEGER),
   );
-const monthFormatter = new Intl.DateTimeFormat("en-GB", {
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
-const formatMonth = (value: string) => {
-  const [yearPart, monthPart] = value.split("-");
-  const year = Number(yearPart);
-  const month = Number(monthPart);
-  if (!Number.isInteger(year) || !Number.isInteger(month)) {
-    throw new TypeError(`Invalid education date: ${value}`);
-  }
-  return monthFormatter.format(new Date(Date.UTC(year, month - 1, 1)));
-};
 ---
 
 <BaseLayout
@@ -51,7 +38,7 @@ const formatMonth = (value: string) => {
     slot="masthead"
     eyebrow="Formal study"
     title={route.title}
-    lede="Current undergraduate study, completed data and AI training, and active professional cloud credentials."
+    lede="Current Engineering Management study, a completed science degree, data and AI training, and verified professional credentials."
   >
     <ActionLink href="credentials/">All credentials</ActionLink>
     <ActionLink href="documents/" variant="secondary">
@@ -84,10 +71,12 @@ const formatMonth = (value: string) => {
                 <div>
                   <dt>Dates</dt>
                   <dd>
-                    {formatMonth(record.dateStart)} to{" "}
-                    {record.current
-                      ? "Present"
-                      : formatMonth(record.dateEnd ?? record.dateStart)}
+                    {formatRecordDates(
+                      record.dateStart,
+                      record.dateEnd,
+                      record.current,
+                      record.dateNote,
+                    )}
                   </dd>
                 </div>
                 <div>

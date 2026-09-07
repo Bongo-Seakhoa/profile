@@ -86,6 +86,7 @@ export const skillGroupSchema = z.object({
   id: recordIdSchema,
   label: z.string().min(1),
   items: z.array(z.string().min(1)).min(1),
+  evidenceProjectIds: z.array(recordIdSchema).min(1),
 });
 
 export const experienceSchema = z
@@ -100,7 +101,8 @@ export const experienceSchema = z
     contractType: z.literal("unknown"),
     location: z.string().min(1),
     remote: z.boolean(),
-    dateStart: isoMonthSchema,
+    dateStart: isoMonthSchema.nullable(),
+    dateNote: z.string().min(1).optional(),
     dateEnd: isoMonthSchema.nullable(),
     current: z.boolean(),
     summary: z.string().min(1),
@@ -115,6 +117,17 @@ export const experienceSchema = z
     lastReviewed: reviewedDateSchema,
   })
   .superRefine((entry, context) => {
+    if (
+      entry.dateStart === null &&
+      (entry.current || entry.dateEnd !== null || !entry.dateNote)
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["dateStart"],
+        message:
+          "Undated records must be completed, have no end date and explain the missing dates",
+      });
+    }
     if (entry.current && entry.dateEnd !== null) {
       context.addIssue({
         code: "custom",
@@ -122,14 +135,22 @@ export const experienceSchema = z
         message: "Current experience must not have an end date",
       });
     }
-    if (!entry.current && entry.dateEnd === null) {
+    if (
+      !entry.current &&
+      entry.dateEnd === null &&
+      !(entry.dateStart === null && entry.dateNote)
+    ) {
       context.addIssue({
         code: "custom",
         path: ["dateEnd"],
         message: "Completed experience requires an end date",
       });
     }
-    if (entry.dateEnd !== null && entry.dateEnd < entry.dateStart) {
+    if (
+      entry.dateStart !== null &&
+      entry.dateEnd !== null &&
+      entry.dateEnd < entry.dateStart
+    ) {
       context.addIssue({
         code: "custom",
         path: ["dateEnd"],
@@ -150,7 +171,8 @@ export const educationSchema = z
     id: recordIdSchema,
     institution: z.string().min(1),
     qualification: z.string().min(1),
-    dateStart: isoMonthSchema,
+    dateStart: isoMonthSchema.nullable(),
+    dateNote: z.string().min(1).optional(),
     dateEnd: isoMonthSchema.nullable(),
     current: z.boolean(),
     location: z.string().min(1),
@@ -163,6 +185,17 @@ export const educationSchema = z
     lastReviewed: reviewedDateSchema,
   })
   .superRefine((entry, context) => {
+    if (
+      entry.dateStart === null &&
+      (entry.current || entry.dateEnd !== null || !entry.dateNote)
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["dateStart"],
+        message:
+          "Undated records must be completed, have no end date and explain the missing dates",
+      });
+    }
     if (entry.current && entry.dateEnd !== null) {
       context.addIssue({
         code: "custom",
@@ -170,14 +203,22 @@ export const educationSchema = z
         message: "Current education must not have an end date",
       });
     }
-    if (!entry.current && entry.dateEnd === null) {
+    if (
+      !entry.current &&
+      entry.dateEnd === null &&
+      !(entry.dateStart === null && entry.dateNote)
+    ) {
       context.addIssue({
         code: "custom",
         path: ["dateEnd"],
         message: "Completed education requires an end date",
       });
     }
-    if (entry.dateEnd !== null && entry.dateEnd < entry.dateStart) {
+    if (
+      entry.dateStart !== null &&
+      entry.dateEnd !== null &&
+      entry.dateEnd < entry.dateStart
+    ) {
       context.addIssue({
         code: "custom",
         path: ["dateEnd"],
@@ -279,7 +320,10 @@ export const projectSchema = z
     outcome: z.string().min(1).nullable(),
     limitations: z.array(z.string().min(1)),
     technologies: z.array(z.string().min(1)).min(1),
-    publicUrl: httpsUrlSchema,
+    publicUrl: httpsUrlSchema.nullable(),
+    problem: z.string().min(1).optional(),
+    scale: z.string().min(1).optional(),
+    evidenceNotes: z.array(z.string().min(1)).default([]),
     relatedExperienceIds: z.array(recordIdSchema),
     featured: z.boolean(),
     featuredOrder: z.number().int().positive().nullable(),
@@ -296,6 +340,20 @@ export const projectSchema = z
       });
     }
   });
+
+export const researchSchema = z.object({
+  id: recordIdSchema,
+  title: z.string().min(1),
+  venue: z.string().min(1),
+  status: z.literal("accepted"),
+  statusLabel: z.string().min(1),
+  role: z.string().min(1),
+  summary: z.string().min(1),
+  citationNote: z.string().min(1),
+  publicUrl: httpsUrlSchema.nullable(),
+  relatedProjectIds: z.array(recordIdSchema).min(1),
+  lastReviewed: reviewedDateSchema,
+});
 
 export const methodologySchema = z.object({
   id: recordIdSchema,
@@ -362,6 +420,7 @@ export const routeSchema = z.object({
 });
 
 export const documentSectionKindSchema = z.enum([
+  "research",
   "identity",
   "profile",
   "skills",
@@ -399,6 +458,7 @@ export const documentManifestSchema = z.object({
   publicPhone: z.literal(false),
   variants: z.array(documentVariantSchema).length(2),
   selectionPolicy: z.object({
+    research: z.enum(["all", "selected", "none"]),
     skills: z.enum(["all", "selected", "none"]),
     experience: z.enum(["all", "selected", "none"]),
     projects: z.enum(["all", "selected", "none"]),
@@ -423,12 +483,12 @@ export const siteSettingsSchema = z.object({
   publicContactLinkIds: z.array(recordIdSchema).min(1),
   documents: z.object({
     resumePages: z.literal(2),
-    cvPages: z.literal(3),
+    cvPages: z.literal(4),
     paper: z.literal("A4"),
     publicPhone: z.literal(false),
   }),
   sourcePolicy: z.object({
-    primarySource: z.literal("content/profile.json"),
+    primarySource: z.literal("src/data/profile/"),
     linkedInReconciliation: z.literal("pending-owner-export"),
     unsupportedClaims: z.literal("reject"),
   }),
@@ -442,7 +502,8 @@ export const profileCollectionSchemas = {
   experience: z.array(experienceSchema),
   education: z.array(educationSchema),
   credentials: z.array(credentialSchema),
-  projects: z.array(projectSchema).length(10),
+  projects: z.array(projectSchema).min(1),
+  research: z.array(researchSchema).min(1),
   methodologies: z.array(methodologySchema).min(1),
   routes: z.array(routeSchema),
   siteSettings: z.array(siteSettingsSchema).length(1),
@@ -455,6 +516,7 @@ export type SkillGroup = z.infer<typeof skillGroupSchema>;
 export type Experience = z.infer<typeof experienceSchema>;
 export type Education = z.infer<typeof educationSchema>;
 export type Credential = z.infer<typeof credentialSchema>;
+export type Research = z.infer<typeof researchSchema>;
 export type Project = z.infer<typeof projectSchema>;
 export type Methodology = z.infer<typeof methodologySchema>;
 export type RouteRecord = z.infer<typeof routeSchema>;
@@ -469,6 +531,7 @@ export interface ProfileContent {
   education: Education[];
   credentials: Credential[];
   projects: Project[];
+  research: Research[];
   methodologies: Methodology[];
   routes: RouteRecord[];
   siteSettings: SiteSettings[];

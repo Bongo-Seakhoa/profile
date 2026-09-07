@@ -43,12 +43,12 @@
     "location": "Greater Accra Region, Ghana",
     "remote": true,
     "dateStart": "2024-11",
-    "dateEnd": null,
-    "current": true,
-    "summary": "Mentors emerging talent pursuing paid freelance work and stronger market readiness.",
+    "dateEnd": "2025-06",
+    "current": false,
+    "summary": "Mentored emerging talent pursuing paid freelance work and stronger market readiness.",
     "highlights": [
-      "Guides mentees toward paid freelancing opportunities and stronger positioning.",
-      "Supports professional confidence, direction and practical momentum."
+      "Guided mentees in freelance readiness, client communication and professional positioning.",
+      "Supported confidence, practical next steps and consistent progress toward paid opportunities."
     ],
     "tools": ["Mentoring", "Career guidance", "Technical communication"],
     "evidenceLinks": [],
@@ -57,7 +57,7 @@
     "featured": true,
     "featuredOrder": 3,
     "public": true,
-    "lastReviewed": "2026-07-30"
+    "lastReviewed": "2026-09-08"
   },
   {
     "id": "2u-edx-learning-specialist",
@@ -144,5 +144,29 @@
     "featuredOrder": null,
     "public": true,
     "lastReviewed": "2026-07-30"
+  },
+  {
+    "id": "appen-internet-analyst",
+    "company": "Appen",
+    "role": "Freelance Internet Analyst",
+    "contractType": "unknown",
+    "location": "Remote",
+    "remote": true,
+    "dateStart": null,
+    "dateEnd": null,
+    "current": false,
+    "dateNote": "Earlier experience; dates not recorded",
+    "summary": "Evaluated online information and supported data-quality assurance through research and analytical review.",
+    "highlights": [
+      "Applied research techniques and data-quality checks to internet analysis tasks."
+    ],
+    "tools": ["Internet research", "Data quality assurance"],
+    "evidenceLinks": [],
+    "evidenceState": "owner-supplied-profile",
+    "privacyStatus": "public",
+    "featured": false,
+    "featuredOrder": null,
+    "public": true,
+    "lastReviewed": "2026-09-08"
   }
 ]
