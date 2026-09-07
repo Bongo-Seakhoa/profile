@@ -483,7 +483,7 @@ export const siteSettingsSchema = z.object({
   publicContactLinkIds: z.array(recordIdSchema).min(1),
   documents: z.object({
     resumePages: z.literal(2),
-    cvPages: z.literal(3),
+    cvPages: z.literal(4),
     paper: z.literal("A4"),
     publicPhone: z.literal(false),
   }),

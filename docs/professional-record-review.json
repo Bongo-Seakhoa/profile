@@ -5,15 +5,15 @@
   "sourceHashes": {
     "capabilities.json": "da75627090a46fa965373178eb62634dcd4ac6a3c5c5d1e9c4f8c4bb18cb979b",
     "credentials.json": "5ded85f406bb8a5a9baae3d13b8360d34f936f5651e4b7e701fca8b82655d6e9",
-    "document-manifest.json": "9831ffd6a5af687c6024281350275ee897648c9e997c4006f09663e404710b5a",
+    "document-manifest.json": "de22b68563d4eaa3b8c9f098816a29db6336a7b6ebfabdbd01f9375ba7e31ba9",
     "education.json": "356f169630ad1c117d6d98dfed99cc670fe6475748c9d1cfb569f930e3886234",
     "experience.json": "e4c0c7f4a99337c31232fd35449ae38cbe59f14236761a2386fe965f25ba237c",
     "identity.json": "f99a6f523d6037051e3eb5865a2959f6cf526f7fa0fda85456c384ece4abbaf2",
     "methodologies.json": "5fc5237a53ed06073666e9e3751d71291277d87331c1d76b5a33e45304431dcf",
     "projects.json": "880ee2d19d6fcb2cd50a1f7f5d5acd90bad44ef3348407f3c0c40d33753cbcd3",
     "research.json": "91ae0d8f1a26756afe094d7ae16c3333b413fa0f0831f6c1da6f169ed9d4707e",
-    "routes.json": "411db400bac80917b1fab2493ca0b5067775fa0f225f05846f34fdde2473e03b",
-    "site-settings.json": "149188861cdd53b38474f01de82bdbc6bc9e66ca1d8bead252fffcb2f317060b",
+    "routes.json": "ebeb022ba6ae4f98898010340e8916a21147a3396cc7b3a48d3b55793de7a103",
+    "site-settings.json": "24401af54468aa483eec0469163686a9af91c90f66b3304ecde7bf22b64976d1",
     "skills.json": "88df9b9b3718afd42b6ca584154f2406335bb659d4bf7e4fe3d2a957ad08606e"
   }
 }

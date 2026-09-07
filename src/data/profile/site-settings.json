@@ -11,7 +11,7 @@
     "publicContactLinkIds": ["email", "linkedin", "github"],
     "documents": {
       "resumePages": 2,
-      "cvPages": 3,
+      "cvPages": 4,
       "paper": "A4",
       "publicPhone": false
     },

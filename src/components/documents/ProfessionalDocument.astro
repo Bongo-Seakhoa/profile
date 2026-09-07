@@ -299,7 +299,9 @@ const currentYear = new Date().getUTCFullYear();
                                     )}
                                   </span>
                                   <span>
-                                    {item.remote ? "Remote · " : ""}
+                                    {item.remote && item.location !== "Remote"
+                                      ? "Remote · "
+                                      : ""}
                                     {item.location}
                                   </span>
                                 </p>
@@ -347,6 +349,9 @@ const currentYear = new Date().getUTCFullYear();
                                   </div>
                                 </header>
                                 <p class="record__summary">{item.summary}</p>
+                                {document.id === "cv" && item.outcome && (
+                                  <p class="record__summary">{item.outcome}</p>
+                                )}
                                 <p class="record__tools">
                                   {item.technologies.join(" · ")}
                                 </p>
@@ -396,7 +401,9 @@ const currentYear = new Date().getUTCFullYear();
                                   <span>{item.location}</span>
                                 </p>
                               </header>
-                              <p class="record__summary">{item.details[0]}</p>
+                              {document.id === "cv" && (
+                                <p class="record__summary">{item.details[0]}</p>
+                              )}
                               {item.result && (
                                 <p class="record__tools">
                                   Result: {item.result}
@@ -758,6 +765,7 @@ const currentYear = new Date().getUTCFullYear();
     gap: 4mm;
   }
 
+  .document-section--research h3,
   .record__heading h3,
   .credential-record h3 {
     margin: 0;
@@ -875,11 +883,11 @@ const currentYear = new Date().getUTCFullYear();
 
   .credential-record {
     display: grid;
-    min-height: 10.8mm;
+    min-height: 0;
     padding: 1.7mm 0;
-    grid-template-columns: minmax(0, 1fr) 34mm;
+    grid-template-columns: 1fr;
     align-items: start;
-    gap: 2mm;
+    gap: 0.5mm;
     break-inside: avoid;
     border-bottom: 0.2mm solid var(--doc-line);
   }
@@ -887,14 +895,14 @@ const currentYear = new Date().getUTCFullYear();
   .credential-record p {
     margin: 0.35mm 0 0;
     color: var(--doc-soft);
-    font-size: 6.9pt;
+    font-size: 7.4pt;
     line-height: 1.2;
   }
 
   .credential-record__status {
     font-family: "IBM Plex Mono", monospace;
-    font-size: 6.1pt !important;
-    text-align: right;
+    font-size: 7pt !important;
+    text-align: left;
   }
 
   .document-footer {
@@ -942,48 +950,15 @@ const currentYear = new Date().getUTCFullYear();
   }
 
   .document-sheet--resume[data-page-number="2"] .record--education {
-    padding: 4.7mm;
+    padding: 3mm;
   }
 
   .document-sheet--resume[data-page-number="2"] .credential-record {
     min-height: 12.2mm;
   }
 
-  .document-sheet--cv[data-page-number="3"] .document-sections {
-    gap: 2.6mm;
-  }
-
-  .document-sheet--cv[data-page-number="3"] .document-section__header {
-    margin-bottom: 2mm;
-  }
-
-  .document-sheet--cv[data-page-number="3"] .document-section h2 {
-    font-size: 12.2pt;
-  }
-
-  .document-sheet--cv[data-page-number="3"] .record--education {
-    padding: 2.7mm 3mm;
-  }
-
-  .document-sheet--cv[data-page-number="3"] .credential-grid {
-    gap: 1.2mm 5mm;
-  }
-
-  .document-sheet--cv[data-page-number="3"] .credential-record {
-    min-height: 8.55mm;
-    padding: 1.15mm 0 1.25mm;
-  }
-
-  .document-sheet--cv[data-page-number="3"] .credential-record h3 {
-    font-size: 8pt;
-  }
-
-  .document-sheet--cv[data-page-number="3"] .credential-record p {
-    font-size: 6.25pt;
-  }
-
-  .document-sheet--cv[data-page-number="3"] .credential-record__status {
-    font-size: 5.6pt !important;
+  .document-sheet--cv .project-grid {
+    grid-template-columns: 1fr;
   }
 
   @media screen and (max-width: 900px) {

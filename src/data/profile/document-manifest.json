@@ -118,7 +118,7 @@
     "id": "cv",
     "label": "Curriculum vitae",
     "paper": "A4",
-    "pageCount": 3,
+    "pageCount": 4,
     "publicPhone": false,
     "variants": [
       {
@@ -196,35 +196,10 @@
             ]
           },
           {
-            "id": "cv-projects",
-            "kind": "projects",
-            "label": "Selected projects",
-            "itemIds": [
-              "metapos-app-data-management",
-              "omnimind",
-              "fxpm-validation-system"
-            ]
-          },
-          {
             "id": "cv-research",
             "kind": "research",
             "label": "Research and publications",
             "itemIds": ["ism-2026-validation-gates"]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "sections": [
-          {
-            "id": "cv-education",
-            "kind": "education",
-            "label": "Education",
-            "itemIds": [
-              "university-debrecen-engineering-management",
-              "explore-ai-data-science",
-              "north-west-university-bsc"
-            ]
           },
           {
             "id": "cv-coursework",
@@ -235,7 +210,37 @@
               "data-mining-methods",
               "data-mining-pipeline"
             ]
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "sections": [
+          {
+            "id": "cv-projects",
+            "kind": "projects",
+            "label": "Selected projects",
+            "itemIds": [
+              "metapos-app-data-management",
+              "omnimind",
+              "fxpm-validation-system"
+            ]
           },
+          {
+            "id": "cv-education",
+            "kind": "education",
+            "label": "Education",
+            "itemIds": [
+              "university-debrecen-engineering-management",
+              "explore-ai-data-science",
+              "north-west-university-bsc"
+            ]
+          }
+        ]
+      },
+      {
+        "number": 4,
+        "sections": [
           {
             "id": "cv-professional-credentials",
             "kind": "credentials",
@@ -259,12 +264,6 @@
             ]
           },
           {
-            "id": "cv-credential-history",
-            "kind": "credentials",
-            "label": "Credential history",
-            "itemIds": ["aws-cloud-practitioner"]
-          },
-          {
             "id": "cv-additional-learning",
             "kind": "credentials",
             "label": "Additional learning",
@@ -274,6 +273,12 @@
               "google-data-analytics-capstone",
               "data-analysis-r-programming"
             ]
+          },
+          {
+            "id": "cv-credential-history",
+            "kind": "credentials",
+            "label": "Credential history",
+            "itemIds": ["aws-cloud-practitioner"]
           }
         ]
       }
