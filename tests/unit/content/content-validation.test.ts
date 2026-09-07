@@ -203,9 +203,9 @@ describe("profile content contract", () => {
   it("rejects incomplete all-policy document selections", () => {
     const content = copyContent();
     const cv = content.documentManifest.find(({ id }) => id === "cv")!;
-    const credentialSection = cv.pages[2]!.sections.find(
-      ({ id }) => id === "cv-additional-learning",
-    )!;
+    const credentialSection = cv.pages
+      .flatMap((page) => page.sections)
+      .find(({ id }) => id === "cv-additional-learning")!;
     credentialSection.itemIds = credentialSection.itemIds.filter(
       (id) => id !== "data-analysis-r-programming",
     );
