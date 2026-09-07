@@ -1,0 +1,36 @@
+name: Format reviewed browser coverage
+
+on:
+  push:
+    branches:
+      - agent/portfolio-v2-1-professional-record
+    paths:
+      - .github/workflows/portfolio-test-format.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: agent/portfolio-v2-1-professional-record
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+          run_install: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: |
+          pnpm exec prettier --write tests/e2e/static-view.spec.ts
+          rm .github/workflows/portfolio-test-format.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "style: format expanded browser regression coverage"
+          git push origin HEAD:agent/portfolio-v2-1-professional-record
