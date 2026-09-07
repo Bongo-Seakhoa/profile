@@ -1,0 +1,121 @@
+name: Correct owner education attribution
+
+on:
+  push:
+    branches:
+      - agent/remove-misattributed-degree
+    paths:
+      - .github/workflows/correct-education.yml
+
+permissions:
+  contents: write
+
+jobs:
+  correct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: agent/remove-misattributed-degree
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+          run_install: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Correct the canonical record and derived narratives
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const read = path => readFileSync(path, 'utf8');
+          const write = (path, value) => writeFileSync(path, value);
+          const load = name => JSON.parse(read(`src/data/profile/${name}.json`));
+          const save = (name, value) => write(`src/data/profile/${name}.json`, JSON.stringify(value, null, 2) + '\n');
+          function replace(path, from, to) {
+            const text = read(path);
+            if (!text.includes(from)) throw new Error(`Expected source missing in ${path}: ${from.slice(0, 60)}`);
+            write(path, text.replace(from, to));
+          }
+          const removedId = 'north-west-university-bsc';
+          const education = load('education');
+          if (education.filter(record => record.id === removedId).length !== 1) throw new Error('Expected one misattributed education record.');
+          const retained = education.filter(record => record.id !== removedId);
+          retained.forEach((record, index) => {record.featuredOrder = index + 1;});
+          save('education', retained);
+          const identity = load('identity');
+          if (!identity[0].summary[2].includes('Microbiology')) throw new Error('Expected identity claim missing.');
+          identity[0].summary[2] = 'I am studying Engineering Management at the University of Debrecen. My background combines data science training with practical data engineering and technical learning support across distributed teams.';
+          save('identity', identity);
+          const documents = load('document-manifest');
+          let removedReferences = 0;
+          for (const plan of documents) for (const page of plan.pages) for (const section of page.sections) {
+            removedReferences += section.itemIds.filter(id => id === removedId).length;
+            section.itemIds = section.itemIds.filter(id => id !== removedId);
+          }
+          if (removedReferences !== 2) throw new Error('Expected resume and CV references.');
+          save('document-manifest', documents);
+          replace('src/pages/index.astro', 'A scientific foundation, continuing professional development', 'Education and continuing professional development');
+          replace('src/pages/index.astro', 'Engineering Management and scientific training', 'Engineering Management and data science');
+          replace('src/pages/education/index.astro', 'Current Engineering Management study, a completed science degree, data and AI training, and verified professional credentials.', 'Current Engineering Management study, completed data science training, and verified professional credentials.');
+          const manifestPath = 'public/assets/immersive/runtime-manifest.json';
+          const immersive = JSON.parse(read(manifestPath));
+          const garden = immersive.locations.find(location => location.id === 'garden-origins');
+          if (!garden) throw new Error('Missing Anzania learning location.');
+          garden.title = 'Learning grows through data science, engineering and practical delivery.';
+          garden.lead = 'Data science training developed into professional data work, cross-university bootcamp support and continued Engineering Management study.';
+          garden.evidence = retained.map(record => ({label: record.institution, value: record.qualification + (record.current ? ' (current study)' : ' (completed)')}));
+          garden.facts[0] = {value: 'Learning', label: 'foundation'};
+          garden.portalCaption = 'Follow the path from learning into engineered systems';
+          garden.deepDive.summary = 'Data science training established analytical practice. Professional data work added reproducibility and scale. Engineering Management study adds delivery context, ownership and the economics of making systems useful.';
+          garden.deepDive.pillars[0].title = 'Analytical reasoning';
+          garden.deepDive.notes[2] = {question: 'How does analytical training shape the work?', answer: 'It reinforces hypothesis discipline, attention to confounding factors and a preference for evidence that can be challenged and reproduced.'};
+          write(manifestPath, JSON.stringify(immersive, null, 2) + '\n');
+          replace('docs/portfolio-v21-review.md', '| North-West University and Appen | Restored verified qualification and role from owner-supplied history. Exact dates remain unrecorded and are labelled. |', '| Appen | Earlier role retained from the reviewed history. Exact dates remain unrecorded and are labelled. |');
+          write('docs/portfolio-v21-review.md', read('docs/portfolio-v21-review.md') + '\n## Owner correction: education attribution\n\nOn 8 September 2026, the owner identified an incorrectly attributed qualification in the initial V2.1 release. The implementation agent\'s earlier claim of verification was wrong. The education entry, identity summary, document selections and associated learning narrative have been corrected. Only the owner\'s qualifications belong in this record. No replacement qualification or unfinished study history has been added. Earlier release documents are superseded by the corrected build.\n');
+          replace('docs/update-playbook.md', 'The September 2026 review restored Appen and the completed North-West University BSc from owner-supplied history. Exact start/end months remain unrecorded; their displayed notes preserve that limitation rather than guessing. Contract modalities and external LinkedIn reconciliation remain explicitly evidence-bound.', 'The September 2026 review retained the earlier Appen role with unrecorded dates explicitly labelled. A subsequent owner correction removed a misattributed qualification. Check who earned each credential before adding it; related people\'s records are not evidence of the owner\'s education. Contract modalities and external LinkedIn reconciliation remain explicitly evidence-bound.');
+          write('scripts/professional-attribution.mjs', `// Owner correction, 8 September 2026: prevent reintroduction of a misattributed qualification.\nexport function assertProfessionalAttribution(text, source) {\n  if (/microbiolog|biochem|north-west-university-bsc|completed science degree/i.test(text)) {\n    throw new Error(source + ": contains an owner-rejected education attribution");\n  }\n}\n`);
+          replace('scripts/check-professional-record.mjs', 'import { createHash }', 'import { assertProfessionalAttribution } from "./professional-attribution.mjs";\nimport { createHash }');
+          replace('scripts/check-professional-record.mjs', 'const failures = [];', 'const failures = [];\nfor (const name of files) {\n  try {\n    assertProfessionalAttribution(JSON.stringify(readJson(resolve(directory, name))), name);\n  } catch (error) {\n    failures.push(error.message);\n  }\n}');
+          replace('scripts/validate-public-output.mjs', 'import { createHash }', 'import { assertProfessionalAttribution } from "./professional-attribution.mjs";\nimport { createHash }');
+          replace('scripts/validate-public-output.mjs', '  const text = await readFile(path, "utf8");', '  const text = await readFile(path, "utf8");\n  assertProfessionalAttribution(text, displayPath(path));');
+          replace('scripts/verify-live-deployment.mjs', 'import { mkdir', 'import { assertProfessionalAttribution } from "./professional-attribution.mjs";\nimport { mkdir');
+          replace('scripts/verify-live-deployment.mjs', '["education/", ["North-West University"]]', '["education/", ["BSc in Engineering Management", "Explore AI Academy"]],\n  ["about/", ["Engineering Management"]],\n  ["bongo-kosa/", ["One professional identity"]]');
+          let live = read('scripts/verify-live-deployment.mjs');
+          live = live.replaceAll('const html = await (await request(path)).text();', 'const html = await (await request(path)).text();\n    assertProfessionalAttribution(html, path || "home");');
+          live = live.replace('const report = {', 'assertProfessionalAttribution(JSON.stringify(immersive), "Anzania");\nconst report = {\n  attributionCheck: "Owner-rejected qualification absent from checked HTML and Anzania content",');
+          write('scripts/verify-live-deployment.mjs', live);
+          const tests = 'tests/unit/content/professional-record.test.ts';
+          write(tests, read(tests) + `\n\ndescribe("education attribution", () => {\n  it("retains the owner's current degree and removes the rejected qualification", async () => {\n    const content = await loadProfileContent();\n    expect(content.education.map(record => record.id)).toEqual(["university-debrecen-engineering-management", "explore-ai-data-science"]);\n    expect(content.education[0]!.current).toBe(true);\n    expect(JSON.stringify(content)).not.toMatch(/microbiolog|biochem|north-west-university-bsc|completed science degree/i);\n  });\n  it("blocks a rejected attribution even when explicitly recording a new review", () => {\n    const root = fixture();\n    const path = join(root, "src/data/profile/education.json");\n    const records = JSON.parse(readFileSync(path, "utf8")) as {qualification: string}[];\n    records[0]!.qualification = "BSc in Microbiology and Biochemistry";\n    writeFileSync(path, JSON.stringify(records));\n    const result = spawnSync(process.execPath, [resolve("scripts/check-professional-record.mjs"), "--record", "--reviewed-on=2026-09-08"], {env: {...process.env, PROFILE_REVIEW_ROOT: root}, encoding: "utf8"});\n    expect(result.status).toBe(1);\n    expect(result.stderr).toContain("owner-rejected education attribution");\n  });\n});\n`);
+          write('tests/e2e/education-attribution.spec.ts', `import { expect, test } from "@playwright/test";\n\ntest("education correction is consistent across profile and document surfaces", async ({page, request}, testInfo) => {\n  for (const route of ["", "about/", "bongo-kosa/", "education/", "documents/resume/bongo-seakhoa/", "documents/resume/bongo-kosa/", "documents/cv/bongo-seakhoa/", "documents/cv/bongo-kosa/"]) {\n    const response = await page.goto(route);\n    expect(response?.status()).toBe(200);\n    await expect(page.locator("body")).not.toContainText(/microbiolog|biochem|completed science degree/i);\n    await expect(page.locator('[data-record-id="north-west-university-bsc"]')).toHaveCount(0);\n    await expect(page.locator("body")).toContainText(route === "bongo-kosa/" ? "One professional identity" : "Engineering Management");\n  }\n  await page.goto("education/");\n  await expect(page.locator("main")).toContainText("Explore AI Academy");\n  await page.screenshot({path: testInfo.outputPath("corrected-education.png"), fullPage: true, animations: "disabled"});\n  const response = await request.get("/profile/assets/immersive/runtime-manifest.json");\n  expect(response.status()).toBe(200);\n  const text = await response.text();\n  expect(text).not.toMatch(/microbiolog|biochem|north-west-university-bsc|scientific roots|a foundation in science/i);\n  expect(text).toContain("Google Project Management Professional Certificate");\n});\n`);
+          console.log('Removed incorrect education record and two document selections; corrected derived narratives and added attribution checks.');
+          NODE
+          rm .github/workflows/correct-education.yml
+          git add -A
+          git diff --name-only --diff-filter=ACM -z 03092e2de09336e28dbcee9b50dbc25b657f05c2 | xargs -0 pnpm exec prettier --write --ignore-unknown
+          node scripts/check-professional-record.mjs --record --reviewed-on=2026-09-08
+          pnpm exec prettier --write docs/professional-record-review.json
+      - name: Validate correction before committing
+        run: |
+          pnpm run format:check
+          pnpm run lint
+          pnpm run check
+          pnpm run test:unit
+          pnpm run validate:content
+      - name: Commit reviewed correction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: remove misattributed qualification from all professional surfaces"
+          git push origin HEAD:agent/remove-misattributed-degree
+      - run: git archive --format=tar HEAD -o /tmp/corrected-education-source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: corrected-education-source
+          path: /tmp/corrected-education-source.tar
+          retention-days: 3
