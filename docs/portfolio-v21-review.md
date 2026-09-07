@@ -15,7 +15,7 @@ Owner authorization requested complete implementation of the portfolio audit and
 | OmniMind | Current entry, README and metrics documentation. Local calibration: estimated 8,502 to 3,600 tokens, 57.66% reduction, 2.199 seconds. One task; answer quality and provider cost not established. |
 | FXPM | Reviewed development architecture: regime-aware selection, persisted optimisation, broker-aware execution and readiness controls. No returns or production-readiness claim. |
 | ISM 2026 | Accepted-paper status and title carried from the current research record. Proceedings citation and DOI remain unrecorded. |
-| North-West University and Appen | Restored verified qualification and role from owner-supplied history. Exact dates remain unrecorded and are labelled. |
+| Appen | Earlier role retained from the reviewed history. Exact dates remain unrecorded and are labelled. |
 
 Private email, private source files, private account identifiers and raw operational evidence are not copied into this public repository.
 
@@ -28,3 +28,7 @@ Passing CI and the post-deployment verifier are the release evidence. This docum
 ## Boundaries
 
 Anzania artwork, companions, traversal mechanics and optional entry remain intact. Only its professional highlights are derived from the canonical record. The existing /profile/ address is preserved. Root-host DNS, Search Console re-indexing and third-party profile edits are outside what this repository deployment can prove or perform.
+
+## Owner correction: education attribution
+
+On 8 September 2026, the owner identified an incorrectly attributed qualification in the initial V2.1 release. The implementation agent's earlier claim of verification was wrong. The education entry, identity summary, document selections and associated learning narrative have been corrected. Only the owner's qualifications belong in this record. No replacement qualification or unfinished study history has been added. Earlier release documents are superseded by the corrected build.

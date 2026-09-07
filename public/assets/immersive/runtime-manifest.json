@@ -251,32 +251,24 @@
       "formalName": "The Garden of Origins",
       "region": "The Watered Terraces",
       "eyebrow": "Learning as a living system",
-      "title": "Scientific roots grew into AI, data systems and learning leadership.",
-      "lead": "A foundation in science expanded through formal AI and machine-learning training, professional data work, cross-university bootcamp support and continued Engineering Management study.",
+      "title": "Learning grows through data science, engineering and practical delivery.",
+      "lead": "Data science training developed into professional data work, cross-university bootcamp support and continued Engineering Management study.",
       "signal": "Learning system",
       "signalValue": "Formal study, professional credentials and practical experimentation",
       "biome": "garden",
       "evidence": [
         {
-          "label": "Current study",
-          "value": "Engineering Management at the University of Debrecen"
+          "label": "University of Debrecen",
+          "value": "BSc in Engineering Management (current study)"
         },
         {
-          "label": "Scientific foundation",
-          "value": "Microbiology, biochemistry and environmental systems"
-        },
-        {
-          "label": "AI and technical development",
-          "value": "IBM and Explore AI training plus data science, deep learning, cloud engineering and financial engineering"
-        },
-        {
-          "label": "Learning-specialist range",
-          "value": "FinTech, AI and Data Visualization bootcamps across multiple university programmes"
+          "label": "Explore AI Academy",
+          "value": "Data Science Certificate (completed)"
         }
       ],
       "facts": [
         {
-          "value": "Science",
+          "value": "Learning",
           "label": "foundation"
         },
         {
@@ -308,15 +300,15 @@
       },
       "power": "reality-bending",
       "portalAction": "Enter the memory court",
-      "portalCaption": "Follow the roots from science into engineered systems",
+      "portalCaption": "Follow the path from learning into engineered systems",
       "guideInsight": "A useful career does not need a straight line. It needs a coherent one.",
       "deepDive": {
         "kicker": "Inside the memory court",
         "heading": "Each discipline contributes a different way of seeing.",
-        "summary": "Science trained careful observation. Data work added reproducibility and scale. Engineering management adds delivery context, ownership and the economics of making systems useful.",
+        "summary": "Data science training established analytical practice. Professional data work added reproducibility and scale. Engineering Management study adds delivery context, ownership and the economics of making systems useful.",
         "pillars": [
           {
-            "title": "Scientific reasoning",
+            "title": "Analytical reasoning",
             "body": "Form hypotheses, distinguish observation from inference and stay alert to confounding factors."
           },
           {
@@ -355,7 +347,7 @@
             "answer": "A preference for evidence, structured reasoning and useful communication."
           },
           {
-            "question": "How does science still shape the work?",
+            "question": "How does analytical training shape the work?",
             "answer": "It reinforces hypothesis discipline, attention to confounding factors and a preference for evidence that can be challenged and reproduced."
           }
         ],

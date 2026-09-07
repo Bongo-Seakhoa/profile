@@ -1,3 +1,4 @@
+import { assertProfessionalAttribution } from "./professional-attribution.mjs";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -24,6 +25,16 @@ const hashes = Object.fromEntries(
   ]),
 );
 const failures = [];
+for (const name of files) {
+  try {
+    assertProfessionalAttribution(
+      JSON.stringify(readJson(resolve(directory, name))),
+      name,
+    );
+  } catch (error) {
+    failures.push(error.message);
+  }
+}
 if (existsSync(resolve(root, "content/profile.json")))
   failures.push(
     "A second editable professional record exists at content/profile.json.",
