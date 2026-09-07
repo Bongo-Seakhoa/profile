@@ -1,0 +1,48 @@
+name: Apply reviewed document layout repair
+
+on:
+  push:
+    branches:
+      - agent/portfolio-v2-1-professional-record
+    paths:
+      - .github/workflows/portfolio-layout-repair.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: agent/portfolio-v2-1-professional-record
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+          run_install: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Apply and format layout changes
+        run: |
+          node .github/portfolio-layout.mjs
+          rm .github/portfolio-layout.mjs .github/workflows/portfolio-layout-repair.yml
+          git add -A
+          git diff --name-only --diff-filter=ACM -z 228bb6dffdaf35f0808398cbe1a5f3c18552d2e9 | xargs -0 pnpm exec prettier --write --ignore-unknown
+          node scripts/check-professional-record.mjs --record --reviewed-on=2026-09-08
+          pnpm exec prettier --write docs/professional-record-review.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: improve document pagination and prevent footer collisions"
+          git push origin HEAD:agent/portfolio-v2-1-professional-record
+      - run: git archive --format=tar HEAD -o /tmp/portfolio-layout-source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-layout-source
+          path: /tmp/portfolio-layout-source.tar
+          retention-days: 3
