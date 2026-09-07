@@ -10,6 +10,7 @@ import {
   identitySchema,
   methodologySchema,
   projectSchema,
+  researchSchema,
   routeSchema,
   siteSettingsSchema,
   skillGroupSchema,
@@ -50,6 +51,11 @@ const projects = defineCollection({
   schema: projectSchema,
 });
 
+const research = defineCollection({
+  loader: file("src/data/profile/research.json"),
+  schema: researchSchema,
+});
+
 const methodologies = defineCollection({
   loader: file("src/data/profile/methodologies.json"),
   schema: methodologySchema,
@@ -78,6 +84,7 @@ export const collections = {
   education,
   credentials,
   projects,
+  research,
   methodologies,
   routes,
   siteSettings,

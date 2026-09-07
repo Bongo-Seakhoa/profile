@@ -1,3 +1,5 @@
+# Project-site reference copy, not a host-root crawler policy.
+# Search crawlers request /robots.txt at the host root, not /profile/robots.txt.
 User-agent: *
 Allow: /profile/
 

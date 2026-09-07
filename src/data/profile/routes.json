@@ -5,7 +5,7 @@
     "kind": "page",
     "label": "Overview",
     "title": "Bongo Seakhoa | AI and Data Systems Engineer",
-    "description": "AI-enabled products, reliable data systems, applied models and direct evidence from Bongo Seakhoa's work.",
+    "description": "I build governed AI systems and data pipelines that make decisions traceable, testable and accountable to people.",
     "navigation": true,
     "navigationOrder": 1,
     "sitemap": true,
@@ -451,5 +451,41 @@
     "entityRef": null,
     "staticRenderable": true,
     "immersiveDestinationId": null
+  },
+  {
+    "id": "project-omnimind",
+    "path": "work/omnimind/",
+    "kind": "project",
+    "label": "OmniMind",
+    "title": "OmniMind | Bongo Seakhoa",
+    "description": "A local AI-work control plane that compiles bounded, task-specific context and coordinates evidence, provider handoffs and human-approved capabilities without duplicating project data.",
+    "navigation": false,
+    "navigationOrder": null,
+    "sitemap": true,
+    "canonicalRouteId": null,
+    "entityRef": {
+      "collection": "project",
+      "id": "omnimind"
+    },
+    "staticRenderable": true,
+    "immersiveDestinationId": "project-omnimind"
+  },
+  {
+    "id": "project-fxpm-validation-system",
+    "path": "work/fxpm-validation-system/",
+    "kind": "project",
+    "label": "FXPM: validation and execution",
+    "title": "FXPM: validation and execution | Bongo Seakhoa",
+    "description": "A production-focused trading research system combining regime-aware strategy selection, stateful optimisation, statistical validation and broker-aware execution controls.",
+    "navigation": false,
+    "navigationOrder": null,
+    "sitemap": true,
+    "canonicalRouteId": null,
+    "entityRef": {
+      "collection": "project",
+      "id": "fxpm-validation-system"
+    },
+    "staticRenderable": true,
+    "immersiveDestinationId": "project-fxpm-validation-system"
   }
 ]

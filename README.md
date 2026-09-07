@@ -51,7 +51,7 @@ Anzania is a cinematic portfolio world created for Bongo Seakhoa.
 - `AI-COLLAB/`
   Plans, decisions, audits, risks, status, handoffs, communications and watcher protocol.
 
-The older root HTML, asset folders and `scripts/build.py` are retained only as historical rollback material. They are not invoked by package scripts, CI or the GitHub Pages artifact.
+The split records under `src/data/profile/` are the sole professional-content authority. The retired monolith, root HTML and legacy generator are recoverable from Git history, not editable alternatives. Anzania professional highlights are generated from the same records; its checked-in manifest remains a visual and narrative template. See `docs/update-playbook.md` for the required review and freshness gate.
 
 ## Requirements
 

@@ -1,4 +1,5 @@
 ---
+import { formatRecordDates } from "../../lib/content/format-record-dates";
 import type { Experience } from "../../lib/content/schemas";
 import TechnologyList from "./TechnologyList.astro";
 
@@ -8,25 +9,12 @@ export interface Props {
 }
 
 const { experience, compact = false } = Astro.props;
-const formatter = new Intl.DateTimeFormat("en-GB", {
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
-const formatMonth = (value: string) => {
-  const [yearPart, monthPart] = value.split("-");
-  const year = Number(yearPart);
-  const month = Number(monthPart);
-  if (!Number.isInteger(year) || !Number.isInteger(month)) {
-    throw new TypeError(`Invalid experience date: ${value}`);
-  }
-  return formatter.format(new Date(Date.UTC(year, month - 1, 1)));
-};
-const dateRange = `${formatMonth(experience.dateStart)} to ${
-  experience.current
-    ? "Present"
-    : formatMonth(experience.dateEnd ?? experience.dateStart)
-}`;
+const dateRange = formatRecordDates(
+  experience.dateStart,
+  experience.dateEnd,
+  experience.current,
+  experience.dateNote,
+);
 const companyMark = experience.company
   .split(/\s+/)
   .filter(Boolean)

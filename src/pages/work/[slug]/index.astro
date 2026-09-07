@@ -78,14 +78,18 @@ const statusTone = isMethodology
   : project?.status === "archived"
     ? "historical"
     : (project?.status ?? "public");
-const recordHost = new URL(record.publicUrl).hostname.toLocaleLowerCase("en");
+const recordHost = new URL(
+  record.publicUrl ?? "https://invalid.example",
+).hostname.toLocaleLowerCase("en");
 const sourceLabel = isMethodology
   ? "Public repository"
   : project?.status === "archived"
     ? "Portfolio record"
     : recordHost === "github.com"
       ? "GitHub repository"
-      : "Company website";
+      : record.publicUrl
+        ? "Company website"
+        : "Source-reviewed private implementation";
 const externalLinkLabel =
   recordHost === "github.com" ? "View repository" : "Visit organisation";
 const ownership = isMethodology ? methodology?.ownership : project?.role;
@@ -154,7 +158,7 @@ const workSchema = isMethodology
       "@type": "CreativeWork",
       name: record.title,
       description: record.summary,
-      url: record.publicUrl,
+      url: canonicalUrl,
       creator: {
         "@id": `${settings.siteUrl}#person`,
       },
@@ -187,7 +191,7 @@ const workSchema = isMethodology
       <MetadataList items={recordMetadata} />
     </div>
     {
-      project?.status !== "archived" && (
+      record.publicUrl && project?.status !== "archived" && (
         <ActionLink href={record.publicUrl} newTab>
           {externalLinkLabel}
         </ActionLink>
@@ -247,6 +251,26 @@ const workSchema = isMethodology
               {isMethodology ? "Method overview" : "Project overview"}
             </h2>
             <p>{record.summary}</p>
+            {
+              project?.problem && (
+                <>
+                  <>
+                    <h3>Problem</h3>
+                    <p>{project.problem}</p>
+                  </>
+                </>
+              )
+            }
+            {
+              project?.scale && (
+                <>
+                  <>
+                    <h3>Engineering scope</h3>
+                    <p>{project.scale}</p>
+                  </>
+                </>
+              )
+            }
             {
               ownership && (
                 <p>
@@ -317,6 +341,20 @@ const workSchema = isMethodology
             )
           }
 
+          {
+            project && project.evidenceNotes.length > 0 && (
+              <section>
+                <>
+                  <h2>Evidence scope</h2>
+                  <ul>
+                    {project.evidenceNotes.map((note) => (
+                      <li>{note}</li>
+                    ))}
+                  </ul>
+                </>
+              </section>
+            )
+          }
           <section class="integrity-note">
             <h2 id="public-scope">Public scope</h2>
             {
@@ -328,9 +366,9 @@ const workSchema = isMethodology
                 </p>
               ) : project?.privacyStatus === "client-safe-summary" ? (
                 <p>
-                  Client confidentiality limits the implementation detail shared
-                  here. This overview focuses on the system's purpose, Bongo's
-                  role and the technologies used.
+                  Private implementation and confidentiality boundaries limit
+                  the detail shared here. This overview focuses on the system's
+                  purpose, Bongo's role and the technologies used.
                 </p>
               ) : project?.caseStudyDepth === "summary" ? (
                 <p>

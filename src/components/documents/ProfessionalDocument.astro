@@ -1,4 +1,5 @@
 ---
+import { formatRecordDates as formatRange } from "../../lib/content/format-record-dates";
 import "@fontsource-variable/ibm-plex-sans/wght.css";
 import "@fontsource/ibm-plex-mono/500.css";
 
@@ -10,6 +11,7 @@ import type {
   Identity,
   ProfileContent,
   Project,
+  Research,
   SkillGroup,
 } from "../../lib/content/schemas";
 import { absoluteUrl, sitePath } from "../../lib/urls";
@@ -58,6 +60,9 @@ const manifestUrl = sitePath("site.webmanifest");
 const sitemapUrl = absoluteUrl("sitemap-index.xml", settings.siteUrl);
 
 const collections = {
+  research: new Map<string, Research>(
+    content.research.map((item) => [item.id, item]),
+  ),
   identity: new Map<string, Identity>(
     content.identity.map((item) => [item.id, item]),
   ),
@@ -86,29 +91,8 @@ const getItems = (section: DocumentSection) => {
   return section.itemIds.map((id) => collection.get(id)).filter(Boolean);
 };
 
-const monthFormatter = new Intl.DateTimeFormat("en-GB", {
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
-function formatMonth(value: string | null): string {
-  if (value === null) return "Present";
-  const [yearPart, monthPart] = value.split("-");
-  const year = Number(yearPart);
-  const month = Number(monthPart);
-  if (!Number.isInteger(year) || !Number.isInteger(month)) {
-    throw new TypeError(`Invalid document date: ${value}`);
-  }
-  return monthFormatter.format(new Date(Date.UTC(year, month - 1, 1)));
-}
-
-function formatRange(
-  start: string,
-  end: string | null,
-  current: boolean,
-): string {
-  return `${formatMonth(start)} to ${current ? "Present" : formatMonth(end)}`;
+function isResearch(value: unknown): value is Research {
+  return typeof value === "object" && value !== null && "citationNote" in value;
 }
 
 function isIdentity(value: unknown): value is Identity {
@@ -311,6 +295,7 @@ const currentYear = new Date().getUTCFullYear();
                                       item.dateStart,
                                       item.dateEnd,
                                       item.current,
+                                      item.dateNote,
                                     )}
                                   </span>
                                   <span>
@@ -353,7 +338,11 @@ const currentYear = new Date().getUTCFullYear();
                               <div>
                                 <header class="record__heading">
                                   <div>
-                                    <h3>{item.title}</h3>
+                                    <h3>
+                                      <a href={withBase(`work/${item.slug}/`)}>
+                                        {item.title}
+                                      </a>
+                                    </h3>
                                     <p>{item.type}</p>
                                   </div>
                                 </header>
@@ -362,6 +351,22 @@ const currentYear = new Date().getUTCFullYear();
                                   {item.technologies.join(" · ")}
                                 </p>
                               </div>
+                            </article>
+                          ))}
+                        </div>
+                      )}
+
+                      {section.kind === "research" && (
+                        <div class="record-list">
+                          {items.filter(isResearch).map((item) => (
+                            <article class="record" data-record-id={item.id}>
+                              <h3>
+                                <a href={withBase("research/")}>{item.title}</a>
+                              </h3>
+                              <p class="record__summary">
+                                {item.role}. {item.statusLabel}. {item.summary}
+                              </p>
+                              <p class="record__tools">{item.citationNote}</p>
                             </article>
                           ))}
                         </div>
@@ -385,6 +390,7 @@ const currentYear = new Date().getUTCFullYear();
                                       item.dateStart,
                                       item.dateEnd,
                                       item.current,
+                                      item.dateNote,
                                     )}
                                   </span>
                                   <span>{item.location}</span>
@@ -409,7 +415,11 @@ const currentYear = new Date().getUTCFullYear();
                               data-record-id={item.id}
                             >
                               <div>
-                                <h3>{item.title}</h3>
+                                <h3>
+                                  <a href={item.verificationUrl}>
+                                    {item.title}
+                                  </a>
+                                </h3>
                                 <p>{item.issuer}</p>
                               </div>
                               <p class="credential-record__status">

@@ -5,21 +5,21 @@
     "alternateNames": ["Bongo Kosa"],
     "fullNameVariants": ["Bongo Bokoa Seakhoa", "Bongo Bokoa Kosa"],
     "headline": "AI and data systems engineer",
-    "valueStatement": "I design AI-enabled products and reliable data systems that turn complex operational knowledge into decisions people can trust.",
+    "valueStatement": "I build governed AI systems and data pipelines that make decisions traceable, testable and accountable to people.",
     "location": "Debrecen, Hungary",
     "availability": "Open to remote, contract and globally distributed opportunities",
     "email": "bongokosa@gmail.com",
     "summary": [
-      "I work across AI-enabled systems, data engineering, analytics and applied machine learning, with a focus on dependable workflows, governed context and clear decision support.",
-      "My background combines technical delivery with remote mentoring and learner support. I use Python, SQL, cloud platforms, AI tooling and analytics interfaces to help operators, students and stakeholders make sense of complex information.",
-      "I am currently pursuing a BSc in Engineering Management at the University of Debrecen while continuing to build cloud data systems, AI interaction products and applied model work."
+      "I work at the intersection of data engineering, governed AI and statistically validated decision systems. At MetaPOS, I build retail data workflows and MetaPOS Mind, a permission-aware context system for people and AI assistants.",
+      "My independent work includes OmniMind, a local AI-work control plane, and FXPM, a regime-aware trading research and execution system. I separate implemented controls from measured results, and keep human approval explicit where decisions carry risk.",
+      "I am studying Engineering Management at the University of Debrecen. My background combines a completed BSc in Microbiology and Biochemistry, data science training, and technical learning support across distributed teams."
     ],
     "identityNote": "Bongo Seakhoa is also known professionally and legally in some records as Bongo Kosa. Both names refer to the same person and body of work.",
     "profileHighlights": [
-      "AI-enabled product and interaction-system delivery",
-      "Cloud data engineering, analytics and model deployment",
-      "Technical mentoring and learner support",
-      "Remote work across Africa, Australia and Europe"
+      "MetaPOS Mind: permission-aware organisational context",
+      "OmniMind: bounded context and human-controlled AI work",
+      "FXPM: regime-aware validation and execution engineering",
+      "Co-author of research accepted for ISM 2026"
     ],
     "links": [
       {
@@ -54,6 +54,6 @@
       }
     ],
     "evidenceState": "owner-supplied-profile",
-    "lastReviewed": "2026-08-10"
+    "lastReviewed": "2026-09-08"
   }
 ]

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "ism-2026-validation-gates",
+    "title": "Simulation and Historical Evaluation of Validation-Gate Design in a Regime-Adaptive Decision System",
+    "venue": "ISM 2026",
+    "status": "accepted",
+    "statusLabel": "Accepted for ISM 2026",
+    "role": "Co-author",
+    "summary": "Examines how validation gates shape a regime-adaptive decision system, separating simulation from historical evaluation and keeping the limits of both explicit.",
+    "citationNote": "Accepted paper. Proceedings details, publication date and DOI are not yet recorded.",
+    "publicUrl": null,
+    "relatedProjectIds": ["fxpm-validation-system"],
+    "lastReviewed": "2026-09-08"
+  }
+]

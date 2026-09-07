@@ -25,8 +25,9 @@
       "skills": "all",
       "experience": "selected",
       "projects": "selected",
-      "education": "all",
-      "credentials": "selected"
+      "education": "selected",
+      "credentials": "selected",
+      "research": "all"
     },
     "pages": [
       {
@@ -35,32 +36,29 @@
           {
             "id": "resume-identity",
             "kind": "identity",
-            "label": "Identity",
+            "label": "Professional profile",
             "itemIds": ["bongo-seakhoa"]
           },
           {
             "id": "resume-profile",
             "kind": "profile",
-            "label": "Professional summary",
+            "label": "Profile",
             "itemIds": ["bongo-seakhoa"]
           },
           {
             "id": "resume-skills",
             "kind": "skills",
-            "label": "Core skills",
+            "label": "Engineering focus",
             "itemIds": [
-              "languages",
-              "data-ml",
-              "ai-systems",
-              "cloud-delivery",
-              "analytics-bi",
-              "databases"
+              "core-engineering",
+              "regular-delivery",
+              "additional-experience"
             ]
           },
           {
             "id": "resume-experience",
             "kind": "experience",
-            "label": "Experience",
+            "label": "Selected experience",
             "itemIds": [
               "metapos-data-engineering-scientist",
               "2u-edx-learning-specialist",
@@ -75,13 +73,18 @@
           {
             "id": "resume-projects",
             "kind": "projects",
-            "label": "Selected projects",
+            "label": "Selected systems",
             "itemIds": [
               "metapos-app-data-management",
-              "visualizing-filters-cnn",
-              "airqo-environmental-data",
-              "openai-trader-experiment"
+              "omnimind",
+              "fxpm-validation-system"
             ]
+          },
+          {
+            "id": "resume-research",
+            "kind": "research",
+            "label": "Research",
+            "itemIds": ["ism-2026-validation-gates"]
           },
           {
             "id": "resume-education",
@@ -89,17 +92,8 @@
             "label": "Education",
             "itemIds": [
               "university-debrecen-engineering-management",
+              "north-west-university-bsc",
               "explore-ai-data-science"
-            ]
-          },
-          {
-            "id": "resume-coursework",
-            "kind": "credentials",
-            "label": "Selected coursework",
-            "itemIds": [
-              "statistical-inference-specialization",
-              "data-mining-methods",
-              "data-mining-pipeline"
             ]
           },
           {
@@ -107,9 +101,9 @@
             "kind": "credentials",
             "label": "Selected credentials",
             "itemIds": [
+              "google-project-management",
               "google-associate-cloud-engineer",
               "google-cloud-digital-leader",
-              "aws-educate-machine-learning-foundations",
               "datacamp-professional-data-scientist",
               "ibm-advanced-data-science",
               "worldquant-applied-data-science-lab"
@@ -118,7 +112,7 @@
         ]
       }
     ],
-    "lastReviewed": "2026-08-10"
+    "lastReviewed": "2026-09-08"
   },
   {
     "id": "cv",
@@ -147,7 +141,8 @@
       "experience": "all",
       "projects": "selected",
       "education": "all",
-      "credentials": "all"
+      "credentials": "all",
+      "research": "all"
     },
     "pages": [
       {
@@ -170,12 +165,9 @@
             "kind": "skills",
             "label": "Technical skills",
             "itemIds": [
-              "languages",
-              "data-ml",
-              "ai-systems",
-              "cloud-delivery",
-              "analytics-bi",
-              "databases"
+              "core-engineering",
+              "regular-delivery",
+              "additional-experience"
             ]
           },
           {
@@ -199,7 +191,8 @@
             "itemIds": [
               "blossom-superagent-mentor",
               "1eight-data-analyst-consultant",
-              "turing-freelance-data-scientist"
+              "turing-freelance-data-scientist",
+              "appen-internet-analyst"
             ]
           },
           {
@@ -208,11 +201,15 @@
             "label": "Selected projects",
             "itemIds": [
               "metapos-app-data-management",
-              "visualizing-filters-cnn",
-              "airqo-environmental-data",
-              "openai-trader-experiment",
-              "institutional-ls-sr-trading-ea"
+              "omnimind",
+              "fxpm-validation-system"
             ]
+          },
+          {
+            "id": "cv-research",
+            "kind": "research",
+            "label": "Research and publications",
+            "itemIds": ["ism-2026-validation-gates"]
           }
         ]
       },
@@ -225,7 +222,8 @@
             "label": "Education",
             "itemIds": [
               "university-debrecen-engineering-management",
-              "explore-ai-data-science"
+              "explore-ai-data-science",
+              "north-west-university-bsc"
             ]
           },
           {
@@ -243,6 +241,7 @@
             "kind": "credentials",
             "label": "Professional credentials",
             "itemIds": [
+              "google-project-management",
               "google-associate-cloud-engineer",
               "google-cloud-digital-leader",
               "aws-educate-machine-learning-foundations",
@@ -279,6 +278,6 @@
         ]
       }
     ],
-    "lastReviewed": "2026-08-10"
+    "lastReviewed": "2026-09-08"
   }
 ]

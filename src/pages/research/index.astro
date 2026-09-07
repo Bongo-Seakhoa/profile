@@ -13,6 +13,9 @@ const route = content.routes.find((entry) => entry.id === "research");
 
 if (!route) throw new Error("Research route content is missing.");
 
+const acceptedPaper = content.research[0];
+if (!acceptedPaper) throw new Error("Accepted research record is missing.");
+
 const researchIds = new Set([
   "visualizing-filters-cnn",
   "airqo-environmental-data",
@@ -60,6 +63,15 @@ const currentResearch = [
   description={route.description}
   canonicalPath={route.path}
   activeRouteId={route.id}
+  updatedDate={acceptedPaper.lastReviewed}
+  structuredData={{
+    "@type": "ScholarlyArticle",
+    name: acceptedPaper.title,
+    abstract: acceptedPaper.summary,
+    creativeWorkStatus: acceptedPaper.statusLabel,
+    author: { "@id": content.siteSettings[0]!.siteUrl + "#person" },
+    url: content.siteSettings[0]!.siteUrl + "research/",
+  }}
 >
   <ContentStyles />
   <PageMasthead
@@ -83,18 +95,12 @@ const currentResearch = [
         <div class="accepted-paper__body">
           <div class="accepted-paper__meta">
             <p>Accepted research paper</p>
-            <StatusBadge label="Accepted for ISM 2026" tone="public" />
+            <StatusBadge label={acceptedPaper.statusLabel} tone="public" />
           </div>
           <h2 id="accepted-paper-title">
-            Simulation and Historical Evaluation of Validation-Gate Design in a
-            Regime-Adaptive Decision System
+            {acceptedPaper.title}
           </h2>
-          <p class="accepted-paper__summary">
-            The study examines how validation gates shape the behaviour and
-            historical evaluation of a regime-adaptive decision system. It
-            separates simulated and historical results so the method and
-            conclusions are easier to assess.
-          </p>
+          <p class="accepted-paper__summary">{acceptedPaper.summary}</p>
           <div class="accepted-paper__methods" aria-label="Research design">
             <div>
               <span>01</span>
@@ -118,10 +124,7 @@ const currentResearch = [
               <p>Simulation and historical findings are reported separately.</p>
             </div>
           </div>
-          <p class="accepted-paper__note">
-            The paper has been accepted for ISM 2026. Proceedings details will
-            be added when they become available.
-          </p>
+          <p class="accepted-paper__note">{acceptedPaper.citationNote}</p>
         </div>
       </article>
     </Container>

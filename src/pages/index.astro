@@ -41,6 +41,10 @@ const activeCloudCredentials = content.credentials.filter(
   (credential) =>
     credential.category === "current-cloud" && credential.status === "active",
 );
+const acceptedPaper = content.research[0]!;
+const latestCredential = content.credentials.find(
+  (entry) => entry.id === "google-project-management",
+)!;
 const linkedin = identity.links.find((link) => link.id === "linkedin");
 ---
 
@@ -93,7 +97,7 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             <dl class="home-hero__meta">
               <div>
                 <dt>Current focus</dt>
-                <dd>MetaPOS Mind, AI systems and retail data engineering</dd>
+                <dd>MetaPOS Mind, OmniMind and validation research</dd>
               </div>
               <div>
                 <dt>Based in</dt>
@@ -108,8 +112,10 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
             aria-labelledby="system-profile-title"
           >
             <div class="home-hero__ledger-heading">
-              <strong>System profile / live index</strong>
-              <span>BS.2026.08</span>
+              <strong>System profile / reviewed record</strong>
+              <span
+                >BS.{identity.lastReviewed.slice(0, 7).replace("-", ".")}</span
+              >
             </div>
 
             <svg
@@ -234,8 +240,8 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
       <SectionIntro
         id="featured-work-title"
         eyebrow="Selected work"
-        title="AI systems, data products and applied models"
-        description="Flagship systems and public projects spanning governed AI, engineering workflows and applied models."
+        title="Governed AI and validated decision systems"
+        description="Three current systems, with responsibility, engineering decisions, evidence and limitations made explicit."
       />
       <div class="featured-work-grid">
         {leadProject && <ProjectCard project={leadProject} variant="lead" />}
@@ -256,28 +262,35 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   </section>
 
   <section
-    class="page-section page-section--surface"
-    aria-labelledby="capabilities-title"
-    data-section-label="Capabilities"
+    class="page-section page-section--muted"
+    aria-labelledby="research-education-title"
+    data-section-label="Accepted research"
   >
     <Container>
       <SectionIntro
-        id="capabilities-title"
-        eyebrow="Capabilities"
-        title="From governed AI context to reliable data delivery"
-        description="Each capability connects a real delivery problem with the systems, analysis and tools used to solve it."
+        id="research-education-title"
+        eyebrow="Research and evidence"
+        title="Validation is part of the system"
       />
-      <div class="home-capabilities">
-        {
-          content.capabilities.map((capability, index) => (
-            <CapabilityRecord capability={capability} index={index + 1} />
-          ))
-        }
-      </div>
-      <div class="section-actions">
-        <ActionLink href="capabilities/" variant="quiet">
-          Read the capability detail
-        </ActionLink>
+      <div class="home-split-panels">
+        <article data-signal-card>
+          <p class="home-split-panels__label">{acceptedPaper.statusLabel}</p>
+          <h3>{acceptedPaper.title}</h3><p>{acceptedPaper.summary}</p>
+          <a href={sitePath("research/")}>Read the research record</a>
+        </article>
+        <article data-signal-card>
+          <p class="home-split-panels__label">Current investigation</p>
+          <h3>What counts as sufficient evidence?</h3>
+          <p>
+            Selection effects, dependence, transaction costs and changing
+            regimes are part of the question. Implemented controls and
+            historical results are kept separate from claims about live
+            performance.
+          </p>
+          <a href={sitePath("work/fxpm-validation-system/")}
+            >Explore the FXPM case study</a
+          >
+        </article>
       </div>
     </Container>
   </section>
@@ -310,39 +323,69 @@ const linkedin = identity.links.find((link) => link.id === "linkedin");
   </section>
 
   <section
-    class="page-section page-section--muted"
-    aria-labelledby="research-education-title"
-    data-section-label="Learning and inquiry"
+    class="page-section page-section--surface"
+    aria-labelledby="capabilities-title"
+    data-section-label="Capabilities"
   >
     <Container>
       <SectionIntro
-        id="research-education-title"
-        eyebrow="Learning and inquiry"
-        title="Research experiments and formal study"
+        id="capabilities-title"
+        eyebrow="Capabilities"
+        title="From governed AI context to reliable data delivery"
+        description="Each capability connects a real delivery problem with the systems, analysis and tools used to solve it."
+      />
+      <div class="home-capabilities">
+        {
+          content.capabilities
+            .slice(0, 3)
+            .map((capability, index) => (
+              <CapabilityRecord capability={capability} index={index + 1} />
+            ))
+        }
+      </div>
+      <div class="section-actions">
+        <ActionLink href="capabilities/" variant="quiet">
+          Read the capability detail
+        </ActionLink>
+      </div>
+    </Container>
+  </section>
+
+  <section
+    class="page-section"
+    aria-labelledby="learning-title"
+    data-section-label="Education and credentials"
+  >
+    <Container>
+      <SectionIntro
+        id="learning-title"
+        eyebrow="Education and credentials"
+        title="A scientific foundation, continuing professional development"
       />
       <div class="home-split-panels">
         <article data-signal-card>
-          <p class="home-split-panels__label">Research and experiments</p>
-          <h3>Public technical explorations</h3>
-          <p>
-            CNN filter visualisation, environmental data analysis and trading
-            experiments, with the technical context and current status of each
-            project.
-          </p>
-          <a href={sitePath("research/")}>Review research and experiments</a>
+          <p class="home-split-panels__label">
+            Current study and completed education
+          </p><h3>Engineering Management and scientific training</h3><p>
+            {
+              content.education
+                .map(
+                  (entry) => entry.qualification + " at " + entry.institution,
+                )
+                .join(". ")
+            }.
+          </p><a href={sitePath("education/")}>View the academic record</a>
         </article>
         <article data-signal-card>
-          <p class="home-split-panels__label">Education and credentials</p>
-          <h3>Current study and professional learning</h3>
-          <p>
-            Formal study at the University of Debrecen, Explore AI Academy
-            training and active Google Cloud credentials are recorded with dates
-            and verification links.
-          </p>
-          <div>
-            <a href={sitePath("education/")}>View education</a>
-            <a href={sitePath("credentials/")}>Verify credentials</a>
-          </div>
+          <p class="home-split-panels__label">
+            {latestCredential.statusLabel}
+          </p><h3>{latestCredential.title}</h3><p>
+            {latestCredential.issuer}. Alongside active Google Cloud
+            credentials, this adds formal project-delivery training to the
+            engineering record.
+          </p><a href={latestCredential.verificationUrl}
+            >Verify the latest certificate</a
+          ><p><a href={sitePath("credentials/")}>Browse all credentials</a></p>
         </article>
       </div>
     </Container>

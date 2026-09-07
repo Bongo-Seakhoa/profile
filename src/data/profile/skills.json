@@ -1,88 +1,51 @@
 [
   {
-    "id": "languages",
-    "label": "Languages",
-    "items": ["Python", "SQL", "R"]
+    "id": "core-engineering",
+    "label": "Core engineering",
+    "items": [
+      "Python",
+      "SQL",
+      "BigQuery / GCP",
+      "Data modelling and quality",
+      "Permission-aware AI context",
+      "Statistical validation"
+    ],
+    "evidenceProjectIds": [
+      "metapos-app-data-management",
+      "omnimind",
+      "fxpm-validation-system"
+    ]
   },
   {
-    "id": "data-ml",
-    "label": "Data science and machine learning",
+    "id": "regular-delivery",
+    "label": "Regular delivery tools",
     "items": [
-      "Pandas",
-      "NumPy",
-      "SciPy",
+      "Git / GitHub",
+      "MCP",
+      "JSON Schema",
+      "YAML",
+      "Docker",
+      "Pandas / NumPy",
+      "Looker / Power BI"
+    ],
+    "evidenceProjectIds": ["metapos-app-data-management", "omnimind"]
+  },
+  {
+    "id": "additional-experience",
+    "label": "Additional experience",
+    "items": [
+      "R",
+      "AWS",
       "Scikit-learn",
       "TensorFlow",
-      "PyTorch",
-      "Deep learning",
-      "Computer vision",
-      "Model evaluation",
-      "Statistical inference",
-      "Hypothesis testing",
-      "Data mining",
-      "Data wrangling",
-      "Anomaly detection",
-      "Time-series analysis",
-      "Natural language processing",
-      "Machine learning pipelines",
-      "Apache Spark"
-    ]
-  },
-  {
-    "id": "ai-systems",
-    "label": "AI systems and interaction",
-    "items": [
-      "Model Context Protocol (MCP)",
-      "Permission-aware context engineering",
-      "JSON Schema",
-      "LangChain",
-      "LangSmith",
-      "OpenAI API",
-      "ChatGPT, Claude, Gemini and Copilot integration",
-      "Human-governed agent workflows",
-      "AI-assisted software delivery"
-    ]
-  },
-  {
-    "id": "cloud-delivery",
-    "label": "Cloud, security and delivery",
-    "items": [
-      "Google Cloud Platform",
-      "AWS",
-      "Cybersecurity fundamentals",
-      "Network security",
-      "Risk management",
-      "Docker",
-      "Git",
-      "GitHub",
       "Streamlit",
-      "Flask"
-    ]
-  },
-  {
-    "id": "analytics-bi",
-    "label": "Analytics and BI",
-    "items": [
-      "Tableau",
-      "Power BI",
-      "Looker",
-      "Matplotlib",
-      "Seaborn",
-      "Plotly"
-    ]
-  },
-  {
-    "id": "databases",
-    "label": "Databases and warehousing",
-    "items": [
-      "PostgreSQL",
-      "MySQL",
-      "MongoDB",
-      "SQLite",
-      "Oracle",
-      "Microsoft SQL Server",
-      "Amazon RDS",
-      "Data warehousing"
+      "Flask",
+      "Tableau"
+    ],
+    "evidenceProjectIds": [
+      "visualizing-filters-cnn",
+      "streamlit-recommender-system",
+      "regression-predict-api"
     ]
   }
 ]

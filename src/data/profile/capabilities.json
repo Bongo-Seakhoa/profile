@@ -60,7 +60,7 @@
   },
   {
     "id": "applied-machine-learning",
-    "title": "AI and applied model systems",
+    "title": "Governed AI and validated decision systems",
     "problem": "AI-enabled workflows and models are useful only when their data, context, validation, human authority and delivery paths are understood.",
     "delivers": [
       "Governed AI interaction and company-context systems",
@@ -74,37 +74,31 @@
         "id": "metapos-app-data-management"
       },
       {
+        "label": "OmniMind bounded context and coordination",
+        "collection": "project",
+        "id": "omnimind"
+      },
+      {
+        "label": "FXPM validation and execution engineering",
+        "collection": "project",
+        "id": "fxpm-validation-system"
+      },
+      {
         "label": "Human-governed AI delivery methodology",
         "collection": "methodology",
         "id": "human-governed-ai-delivery-method"
-      },
-      {
-        "label": "CNN filter visualisation",
-        "collection": "project",
-        "id": "visualizing-filters-cnn"
-      },
-      {
-        "label": "Early OpenAI trading experiment",
-        "collection": "project",
-        "id": "openai-trader-experiment"
       }
     ],
     "tools": [
+      "Python",
       "MCP",
       "JSON Schema",
-      "Permission-aware context assembly",
-      "Human-governed agent workflows",
-      "Scikit-learn",
-      "TensorFlow",
-      "PyTorch",
-      "Statistical inference",
-      "Data mining",
-      "Pandas",
-      "Flask"
+      "Context engineering",
+      "Statistical validation"
     ],
     "featuredOrder": 3,
     "public": true,
-    "lastReviewed": "2026-08-10"
+    "lastReviewed": "2026-09-08"
   },
   {
     "id": "technical-mentoring",

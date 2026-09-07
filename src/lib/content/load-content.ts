@@ -11,6 +11,7 @@ const CONTENT_FILES = {
   education: "education.json",
   credentials: "credentials.json",
   projects: "projects.json",
+  research: "research.json",
   methodologies: "methodologies.json",
   routes: "routes.json",
   siteSettings: "site-settings.json",
@@ -47,6 +48,7 @@ export async function loadProfileContent(
     education: profileCollectionSchemas.education.parse(loaded.education),
     credentials: profileCollectionSchemas.credentials.parse(loaded.credentials),
     projects: profileCollectionSchemas.projects.parse(loaded.projects),
+    research: profileCollectionSchemas.research.parse(loaded.research),
     methodologies: profileCollectionSchemas.methodologies.parse(
       loaded.methodologies,
     ),

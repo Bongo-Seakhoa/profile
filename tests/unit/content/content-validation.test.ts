@@ -18,7 +18,7 @@ function copyContent(): ProfileContent {
 describe("profile content contract", () => {
   it("accepts the canonical migration with owner-review warnings only", () => {
     const result = validateProfileContent(canonical, {
-      now: new Date("2026-07-31T00:00:00.000Z"),
+      now: new Date("2026-09-08T00:00:00.000Z"),
     });
 
     expect(result.errors).toEqual([]);
@@ -94,7 +94,7 @@ describe("profile content contract", () => {
   });
 
   it("keeps every project summary recruiter-ready with a visible stack", () => {
-    expect(canonical.projects).toHaveLength(10);
+    expect(canonical.projects.length).toBeGreaterThanOrEqual(12);
     for (const project of canonical.projects) {
       expect(project.summary.length, project.id).toBeGreaterThanOrEqual(80);
       expect(project.summary.length, project.id).toBeLessThanOrEqual(220);

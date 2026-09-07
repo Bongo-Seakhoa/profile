@@ -23,9 +23,15 @@ export interface ContentValidationOptions {
 }
 
 type SelectableCollection =
-  "skills" | "experience" | "projects" | "education" | "credentials";
+  | "skills"
+  | "experience"
+  | "projects"
+  | "education"
+  | "credentials"
+  | "research";
 
 const DOCUMENT_SECTION_TO_COLLECTION = {
+  research: "research",
   skills: "skills",
   experience: "experience",
   projects: "projects",
@@ -103,6 +109,7 @@ function checkRecordIdentifiers(
     "education",
     "credentials",
     "projects",
+    "research",
     "methodologies",
     "routes",
     "siteSettings",
@@ -119,16 +126,6 @@ function checkRecordIdentifiers(
   }
 
   checkUniqueValues(issues, topLevelIds, "DUPLICATE_ID", "Record ID");
-
-  if (content.projects.length !== 10) {
-    addIssue(
-      issues,
-      "PROJECT_COUNT_DRIFT",
-      "error",
-      "projects",
-      `The public project collection must contain exactly 10 projects; found ${content.projects.length}`,
-    );
-  }
 
   const credentialIds = [
     ...content.credentials.map((credential, index) => ({
@@ -189,7 +186,7 @@ function checkDates(
 
   for (const collection of ["experience", "education"] as const) {
     for (const [index, record] of content[collection].entries()) {
-      if (record.dateStart > currentMonth) {
+      if (record.dateStart !== null && record.dateStart > currentMonth) {
         addIssue(
           issues,
           "FUTURE_START_DATE",
@@ -198,7 +195,11 @@ function checkDates(
           `${record.id} starts in the future (${record.dateStart})`,
         );
       }
-      if (record.dateEnd !== null && record.dateEnd < record.dateStart) {
+      if (
+        record.dateStart !== null &&
+        record.dateEnd !== null &&
+        record.dateEnd < record.dateStart
+      ) {
         addIssue(
           issues,
           "END_BEFORE_START",
@@ -413,8 +414,9 @@ function checkEvidenceStates(
   for (const [index, project] of content.projects.entries()) {
     if (
       project.evidenceState === "public-repository" &&
-      new URL(project.publicUrl).hostname.toLocaleLowerCase("en") !==
-        "github.com"
+      new URL(
+        project.publicUrl ?? "https://invalid.example",
+      ).hostname.toLocaleLowerCase("en") !== "github.com"
     ) {
       addIssue(
         issues,
@@ -788,8 +790,10 @@ function checkDocuments(
     projects: content.projects.map(({ id }) => id),
     education: content.education.map(({ id }) => id),
     credentials: content.credentials.map(({ id }) => id),
+    research: content.research.map(({ id }) => id),
   };
   const featuredIds: Record<SelectableCollection, string[]> = {
+    research: content.research.map(({ id }) => id),
     skills: [],
     experience: content.experience
       .filter(({ featured }) => featured)
@@ -1025,6 +1029,45 @@ export function validateProfileContent(
   checkRoutes(content, issues);
   checkDocuments(content, issues);
   checkSourceReviewState(content, issues);
+  const projectIds = new Set(content.projects.map(({ id }) => id));
+  for (const record of [
+    ...content.skills.map((skill) => ({
+      id: skill.id,
+      refs: skill.evidenceProjectIds,
+    })),
+    ...content.research.map((research) => ({
+      id: research.id,
+      refs: research.relatedProjectIds,
+    })),
+  ]) {
+    for (const id of record.refs)
+      if (!projectIds.has(id))
+        addIssue(
+          issues,
+          "BROKEN_EVIDENCE_REFERENCE",
+          "error",
+          record.id,
+          "Missing evidence project: " + id,
+        );
+  }
+  for (const project of content.projects.filter(({ featured }) => featured)) {
+    if (
+      !project.problem ||
+      !project.scale ||
+      !project.role ||
+      !project.outcome ||
+      project.validation.length === 0 ||
+      project.evidenceNotes.length === 0 ||
+      project.limitations.length === 0
+    )
+      addIssue(
+        issues,
+        "FEATURED_EVIDENCE_GAP",
+        "error",
+        project.id,
+        "Featured systems require problem, responsibility, scale, validation, result, evidence scope and limitations",
+      );
+  }
 
   issues.sort(
     (left, right) =>
