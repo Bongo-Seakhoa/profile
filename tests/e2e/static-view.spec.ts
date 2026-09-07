@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import documentPlans from "../../src/data/profile/document-manifest.json";
-import projects from "../../src/data/profile/projects.json";
+import documentPlans from "../../src/data/profile/document-manifest.json" with { type: "json" };
+import projects from "../../src/data/profile/projects.json" with { type: "json" };
 
 const coreRoutes = [
   "",
