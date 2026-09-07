@@ -1,5 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import documentPlans from "../../src/data/profile/document-manifest.json";
+import projects from "../../src/data/profile/projects.json";
 
 const coreRoutes = [
   "",
@@ -15,18 +17,9 @@ const coreRoutes = [
   "bongo-kosa/",
 ] as const;
 
-const projectRoutes = [
-  "work/metapos-app-data-management/",
-  "work/fxpm-1-4-forex-portfolio-manager/",
-  "work/streamlit-recommender-system/",
-  "work/regression-predict-api/",
-  "work/visualizing-filters-cnn/",
-  "work/airqo-environmental-data/",
-  "work/mql5-expert-advisor/",
-  "work/fxpm-backtester/",
-  "work/institutional-ls-sr-trading-ea/",
-  "work/openai-trader-experiment/",
-] as const;
+const projectRoutes = projects
+  .filter((project) => project.public)
+  .map((project) => `work/${project.slug}/`);
 
 const methodologyRoutes = ["work/human-governed-ai-delivery-method/"] as const;
 
@@ -46,7 +39,7 @@ const pdfRoutes = [
   "documents/bongo-kosa-cv.pdf",
 ] as const;
 
-test.describe("Static View route and accessibility contract", () => {
+ test.describe("Static View route and accessibility contract", () => {
   for (const route of [...coreRoutes, ...workRoutes]) {
     test(`${route || "overview"} renders semantic, static content`, async ({
       page,
@@ -158,10 +151,8 @@ test.describe("Static View route and accessibility contract", () => {
     });
 
     let relatedWork = page.getByRole("region", { name: "Related work" });
-    await expect(relatedWork).toContainText(
-      "Streamlit-Based Recommender System",
-    );
-    await expect(relatedWork).toContainText("Regression Predict API");
+    await expect(relatedWork).toContainText("OmniMind");
+    await expect(relatedWork).toContainText("FXPM: validation and execution");
     await expect(relatedWork).not.toContainText("Visualizing Filters of a CNN");
     await expect(relatedWork).not.toContainText("FxPM 1.4");
 
@@ -414,7 +405,9 @@ test("document previews and direct PDFs are available", async ({
   for (const route of documentRoutes) {
     const response = await page.goto(route, { waitUntil: "networkidle" });
     expect(response?.status()).toBe(200);
-    const expectedPages = route.includes("/cv/") ? 3 : 2;
+    const expectedPages = documentPlans.find((plan) =>
+      route.includes(`/${plan.id}/`),
+    )!.pageCount;
     await expect(page.locator("[data-document-page]")).toHaveCount(
       expectedPages,
     );
