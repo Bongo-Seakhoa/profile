@@ -39,7 +39,7 @@ const pdfRoutes = [
   "documents/bongo-kosa-cv.pdf",
 ] as const;
 
- test.describe("Static View route and accessibility contract", () => {
+test.describe("Static View route and accessibility contract", () => {
   for (const route of [...coreRoutes, ...workRoutes]) {
     test(`${route || "overview"} renders semantic, static content`, async ({
       page,
