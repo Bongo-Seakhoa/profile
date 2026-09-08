@@ -127,3 +127,37 @@ describe("professional-record regression gates", () => {
     expect(check(second)).toBe(1);
   });
 });
+
+describe("education attribution", () => {
+  it("retains the owner's current degree and removes the rejected qualification", async () => {
+    const content = await loadProfileContent();
+    expect(content.education.map((record) => record.id)).toEqual([
+      "university-debrecen-engineering-management",
+      "explore-ai-data-science",
+    ]);
+    expect(content.education[0]!.current).toBe(true);
+    expect(JSON.stringify(content)).not.toMatch(
+      /microbiolog|biochem|north-west-university-bsc|completed science degree/i,
+    );
+  });
+  it("blocks a rejected attribution even when explicitly recording a new review", () => {
+    const root = fixture();
+    const path = join(root, "src/data/profile/education.json");
+    const records = JSON.parse(readFileSync(path, "utf8")) as {
+      qualification: string;
+    }[];
+    records[0]!.qualification = "BSc in Microbiology and Biochemistry";
+    writeFileSync(path, JSON.stringify(records));
+    const result = spawnSync(
+      process.execPath,
+      [
+        resolve("scripts/check-professional-record.mjs"),
+        "--record",
+        "--reviewed-on=2026-09-08",
+      ],
+      { env: { ...process.env, PROFILE_REVIEW_ROOT: root }, encoding: "utf8" },
+    );
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("owner-rejected education attribution");
+  });
+});

@@ -29,27 +29,8 @@
     "result": "85 percent",
     "evidenceLinks": [],
     "evidenceState": "owner-supplied-profile",
-    "featuredOrder": 3,
-    "public": true,
-    "lastReviewed": "2026-07-30"
-  },
-  {
-    "id": "north-west-university-bsc",
-    "institution": "North-West University",
-    "qualification": "BSc in Microbiology and Biochemistry",
-    "dateStart": null,
-    "dateEnd": null,
-    "current": false,
-    "dateNote": "Completed; dates not recorded",
-    "location": "South Africa",
-    "details": [
-      "Completed undergraduate study in microbiology and biochemistry, providing a foundation in scientific inquiry and evidence-led analysis."
-    ],
-    "result": null,
-    "evidenceLinks": [],
-    "evidenceState": "owner-supplied-profile",
     "featuredOrder": 2,
     "public": true,
-    "lastReviewed": "2026-09-08"
+    "lastReviewed": "2026-07-30"
   }
 ]

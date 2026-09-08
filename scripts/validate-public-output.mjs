@@ -1,3 +1,4 @@
+import { assertProfessionalAttribution } from "./professional-attribution.mjs";
 import { createHash } from "node:crypto";
 import { readdir, readFile, stat } from "node:fs/promises";
 import { extname, join, relative, resolve } from "node:path";
@@ -52,6 +53,7 @@ function findLineColumn(text, offset) {
 async function rejectEmDashes(path) {
   if (!textExtensions.has(extname(path).toLowerCase())) return;
   const text = await readFile(path, "utf8");
+  assertProfessionalAttribution(text, displayPath(path));
   let offset = text.indexOf("\u2014");
   while (offset !== -1) {
     const { line, column } = findLineColumn(text, offset);

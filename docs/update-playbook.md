@@ -19,7 +19,7 @@ The normal build rejects an unreviewed semantic content change, a second profess
 
 Publish summaries of private work, not private code, customer records, mail, tokens or account metadata. Label local estimates and single-task calibrations precisely. A smaller context pack is not proof of better answers or lower billed cost. Accepted research is not described as published without a proceedings citation. Trading controls are not advertised as profitability or live-readiness evidence.
 
-The September 2026 review restored Appen and the completed North-West University BSc from owner-supplied history. Exact start/end months remain unrecorded; their displayed notes preserve that limitation rather than guessing. Contract modalities and external LinkedIn reconciliation remain explicitly evidence-bound.
+The September 2026 review retained the earlier Appen role with unrecorded dates explicitly labelled. A subsequent owner correction removed a misattributed qualification. Check who earned each credential before adding it; related people's records are not evidence of the owner's education. Contract modalities and external LinkedIn reconciliation remain explicitly evidence-bound.
 
 ## Search and external identities
 

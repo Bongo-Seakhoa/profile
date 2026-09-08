@@ -1,3 +1,4 @@
+import { assertProfessionalAttribution } from "./professional-attribution.mjs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { setTimeout } from "node:timers/promises";
 import { URL } from "node:url";
@@ -47,12 +48,15 @@ for (const [path, needles] of [
     ],
   ],
   ["experience/", ["Nov 2024 to Jun 2025", "Appen"]],
-  ["education/", ["North-West University"]],
+  ["education/", ["BSc in Engineering Management", "Explore AI Academy"]],
+  ["about/", ["Engineering Management"]],
+  ["bongo-kosa/", ["One professional identity"]],
   ["credentials/", ["TN8RXZY8M354"]],
   ["research/", ["Accepted for ISM 2026"]],
   ["work/omnimind/", ["57.66%", "does not establish improved answer quality"]],
 ]) {
   const html = await (await request(path)).text();
+  assertProfessionalAttribution(html, path || "home");
   for (const needle of needles)
     if (!html.includes(needle)) throw new Error(`${path} lacks ${needle}`);
   checks.push(path || "home");
@@ -61,6 +65,7 @@ for (const kind of ["resume", "cv"])
   for (const name of ["bongo-seakhoa", "bongo-kosa"]) {
     const path = `documents/${kind}/${name}/`;
     const html = await (await request(path)).text();
+    assertProfessionalAttribution(html, path || "home");
     for (const needle of [
       "TN8RXZY8M354",
       "ism-2026-validation-gates",
@@ -87,7 +92,10 @@ if (
   !JSON.stringify(immersive).includes("OmniMind")
 )
   throw new Error("Anzania professional highlights are stale");
+assertProfessionalAttribution(JSON.stringify(immersive), "Anzania");
 const report = {
+  attributionCheck:
+    "Owner-rejected qualification absent from checked HTML and Anzania content",
   revision: expected,
   verifiedAt: new Date().toISOString(),
   siteUrl: base,

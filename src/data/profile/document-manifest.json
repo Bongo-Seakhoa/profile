@@ -92,7 +92,6 @@
             "label": "Education",
             "itemIds": [
               "university-debrecen-engineering-management",
-              "north-west-university-bsc",
               "explore-ai-data-science"
             ]
           },
@@ -232,8 +231,7 @@
             "label": "Education",
             "itemIds": [
               "university-debrecen-engineering-management",
-              "explore-ai-data-science",
-              "north-west-university-bsc"
+              "explore-ai-data-science"
             ]
           }
         ]
