@@ -51,7 +51,7 @@ function priceParts(offer: ServiceOffer) {
     slot="masthead"
     eyebrow="Selected engagements"
     title={route.title}
-    lede="Small, well-scoped data and web jobs at fixed prices. You describe the job, I send a written quote, and the work starts once you accept it."
+    lede="Small, well-scoped data and web jobs at fixed prices. You describe the job, I send a written quote, and the work starts once you accept it and pay the deposit."
   >
     <ActionLink href={`mailto:${identity.email}`}>Email a brief</ActionLink>
     <ActionLink href="contact/" variant="secondary">
@@ -115,13 +115,13 @@ function priceParts(offer: ServiceOffer) {
                       <li>{item}</li>
                     ))}
                   </ul>
-                  <p class="service-offer__terms">{offer.terms.join(" · ")}</p>
                   {offer.example && (
                     <p class="service-offer__example">
                       Example:{" "}
                       <a href={offer.example.url}>{offer.example.label}</a>
                     </p>
                   )}
+                  <p class="service-offer__terms">{offer.terms.join(" · ")}</p>
                 </article>
               </li>
             );

@@ -8,7 +8,7 @@
         "priceBasis": "from",
         "priceUsd": 49,
         "priceZar": 850,
-        "summary": "I clean, de-duplicate and restructure Excel or Google Sheets workbooks so the numbers are easier to trust and maintain.",
+        "summary": "I clean, de-duplicate and restructure Excel or Google Sheets workbooks.",
         "includes": [
           "Cleaning, de-duplication and restructuring",
           "Formulas, lookups and pivot summaries",
@@ -24,9 +24,9 @@
         "priceBasis": "from",
         "priceUsd": 149,
         "priceZar": 2500,
-        "summary": "A Power BI, Looker Studio or Google Sheets dashboard for the sales, stock, cash-flow or marketing KPIs you already track.",
+        "summary": "A Power BI, Looker Studio or Google Sheets dashboard for sales, stock, cash-flow or marketing KPIs.",
         "includes": [
-          "Dashboard built in the tool you already use",
+          "Built in Power BI, Looker Studio or Google Sheets",
           "Sales, stock, cash-flow or marketing KPIs",
           "Short handover walkthrough"
         ],
@@ -127,7 +127,7 @@
       {
         "id": "review-and-revise",
         "title": "Review and revise",
-        "detail": "You review the result. Revisions are included until it matches the agreed brief.",
+        "detail": "You review the result. Revisions within the quoted rounds are included until it matches the agreed brief.",
         "link": null
       }
     ],
