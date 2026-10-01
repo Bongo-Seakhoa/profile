@@ -157,7 +157,7 @@
     "title": "Contact Bongo Seakhoa",
     "description": "Contact Bongo Seakhoa about AI systems, data engineering and globally distributed opportunities.",
     "navigation": true,
-    "navigationOrder": 10,
+    "navigationOrder": 11,
     "sitemap": true,
     "canonicalRouteId": null,
     "entityRef": null,
@@ -487,5 +487,20 @@
     },
     "staticRenderable": true,
     "immersiveDestinationId": "project-fxpm-validation-system"
+  },
+  {
+    "id": "services",
+    "path": "services/",
+    "kind": "page",
+    "label": "Services",
+    "title": "Fixed-Price Data and Web Services",
+    "description": "Fixed-price spreadsheet, dashboard, website and data extraction work from Bongo Seakhoa, plus hourly data science tutoring.",
+    "navigation": true,
+    "navigationOrder": 10,
+    "sitemap": true,
+    "canonicalRouteId": null,
+    "entityRef": null,
+    "staticRenderable": true,
+    "immersiveDestinationId": "services"
   }
 ]

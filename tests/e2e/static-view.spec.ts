@@ -13,6 +13,7 @@ const coreRoutes = [
   "credentials/",
   "about/",
   "documents/",
+  "services/",
   "contact/",
   "bongo-kosa/",
 ] as const;
@@ -209,7 +210,7 @@ test.describe("Static View route and accessibility contract", () => {
     });
     const page = await context.newPage();
 
-    for (const route of ["", "work/", "documents/", "contact/"]) {
+    for (const route of ["", "work/", "documents/", "services/", "contact/"]) {
       const response = await page.goto(
         new URL(route, "http://127.0.0.1:4321/profile/").href,
       );
