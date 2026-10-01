@@ -98,15 +98,6 @@ const github = identity.links.find((link) => link.id === "github");
               )
             }
             <div>
-              <dt>Services</dt>
-              <dd>
-                <a href={sitePath("services/")}>Fixed-price services</a>
-              </dd>
-              <dd class="contact-methods__note">
-                Fixed-price data and web jobs with starting prices.
-              </dd>
-            </div>
-            <div>
               <dt>Location</dt>
               <dd>{identity.location}</dd>
               <dd class="contact-methods__note">
@@ -178,6 +169,11 @@ const github = identity.links.find((link) => link.id === "github");
           <p>
             Email, LinkedIn, GitHub and downloadable documents make it easy to
             move from portfolio review to a focused conversation about the role.
+          </p>
+          <p>
+            For a smaller, well-defined job, the
+            <a href={sitePath("services/")}>services page</a> lists fixed starting
+            prices.
           </p>
         </div>
       </div>
@@ -417,6 +413,12 @@ const github = identity.links.find((link) => link.id === "github");
     margin-block-start: var(--space-4);
     color: var(--ink-soft);
     font-size: var(--step-1);
+  }
+
+  .contact-assurance a {
+    color: var(--indigo);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
   }
 
   @media (max-width: 64rem) {

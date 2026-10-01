@@ -10,7 +10,7 @@
         "priceZar": 850,
         "summary": "I clean, de-duplicate and restructure Excel or Google Sheets workbooks.",
         "includes": [
-          "Cleaning, de-duplication and restructuring",
+          "Consistent dates, names, numbers and currencies",
           "Formulas, lookups and pivot summaries",
           "Repetitive steps automated with Apps Script or Python"
         ],
@@ -26,8 +26,8 @@
         "priceZar": 2500,
         "summary": "A Power BI, Looker Studio or Google Sheets dashboard for sales, stock, cash-flow or marketing KPIs.",
         "includes": [
-          "Built in Power BI, Looker Studio or Google Sheets",
-          "Sales, stock, cash-flow or marketing KPIs",
+          "Data cleaned before it is charted",
+          "Filters by date, product or region",
           "Short handover walkthrough"
         ],
         "terms": ["Typically 2 to 4 days", "Two revision rounds"],
@@ -62,7 +62,6 @@
         "summary": "Public data such as product lists, prices, directories and listings, delivered as clean CSV or Excel.",
         "includes": [
           "A one-off extract or a rerunnable Python script",
-          "Clean CSV or Excel output",
           "Collection that respects each site's terms"
         ],
         "terms": ["Typically 1 to 3 days"],
@@ -90,14 +89,14 @@
         "priceBasis": "quote",
         "priceUsd": null,
         "priceZar": null,
-        "summary": "Smaller data and web jobs that do not fit one of the offers above.",
+        "summary": "Data and web jobs that do not fit one of the offers above.",
         "includes": [
           "Data reports and CSV merges",
           "PDF table extraction",
           "Python scripts and small automations",
           "Fixes to an existing site or dashboard"
         ],
-        "terms": ["Fixed written quote before work starts"],
+        "terms": ["Priced from your brief"],
         "example": null,
         "order": 6
       }
@@ -127,7 +126,7 @@
       {
         "id": "review-and-revise",
         "title": "Review and revise",
-        "detail": "You review the result. Revisions within the quoted rounds are included until it matches the agreed brief.",
+        "detail": "You review the result. The revision rounds in your quote cover changes needed to match the agreed brief.",
         "link": null
       }
     ],
