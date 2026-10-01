@@ -1,0 +1,138 @@
+[
+  {
+    "id": "fixed-price-services",
+    "offers": [
+      {
+        "id": "spreadsheet-rescue",
+        "title": "Spreadsheet rescue",
+        "priceBasis": "from",
+        "priceUsd": 49,
+        "priceZar": 850,
+        "summary": "I clean, de-duplicate and restructure Excel or Google Sheets workbooks so the numbers are easier to trust and maintain.",
+        "includes": [
+          "Cleaning, de-duplication and restructuring",
+          "Formulas, lookups and pivot summaries",
+          "Repetitive steps automated with Apps Script or Python"
+        ],
+        "terms": ["Typically 1 to 2 days", "Two revision rounds"],
+        "example": null,
+        "order": 1
+      },
+      {
+        "id": "business-dashboard",
+        "title": "Business dashboard",
+        "priceBasis": "from",
+        "priceUsd": 149,
+        "priceZar": 2500,
+        "summary": "A Power BI, Looker Studio or Google Sheets dashboard for the sales, stock, cash-flow or marketing KPIs you already track.",
+        "includes": [
+          "Dashboard built in the tool you already use",
+          "Sales, stock, cash-flow or marketing KPIs",
+          "Short handover walkthrough"
+        ],
+        "terms": ["Typically 2 to 4 days", "Two revision rounds"],
+        "example": null,
+        "order": 2
+      },
+      {
+        "id": "small-business-website",
+        "title": "Small-business website",
+        "priceBasis": "from",
+        "priceUsd": 149,
+        "priceZar": 2500,
+        "summary": "A fast one-page site that shows your services, prices, contact details and map.",
+        "includes": [
+          "Free static hosting with no platform fee",
+          "Mobile-friendly layout",
+          "Your own domain supported"
+        ],
+        "terms": ["Typically about 3 days"],
+        "example": {
+          "label": "MOEMODI manufacturer website",
+          "url": "https://bongo-seakhoa.github.io/moemodi-dev/"
+        },
+        "order": 3
+      },
+      {
+        "id": "web-data-extraction",
+        "title": "Web data extraction",
+        "priceBasis": "from",
+        "priceUsd": 79,
+        "priceZar": 1400,
+        "summary": "Public data such as product lists, prices, directories and listings, delivered as clean CSV or Excel.",
+        "includes": [
+          "A one-off extract or a rerunnable Python script",
+          "Clean CSV or Excel output",
+          "Collection that respects each site's terms"
+        ],
+        "terms": ["Typically 1 to 3 days"],
+        "example": null,
+        "order": 4
+      },
+      {
+        "id": "data-science-tutoring",
+        "title": "Data science tutoring",
+        "priceBasis": "hourly",
+        "priceUsd": 20,
+        "priceZar": 350,
+        "summary": "Python, SQL, statistics, machine learning and Power BI, taught in online sessions.",
+        "includes": [
+          "Assignment walk-throughs and project reviews where the learner does the work",
+          "Entry-level data career guidance"
+        ],
+        "terms": ["Online sessions"],
+        "example": null,
+        "order": 5
+      },
+      {
+        "id": "custom-work",
+        "title": "Custom work",
+        "priceBasis": "quote",
+        "priceUsd": null,
+        "priceZar": null,
+        "summary": "Smaller data and web jobs that do not fit one of the offers above.",
+        "includes": [
+          "Data reports and CSV merges",
+          "PDF table extraction",
+          "Python scripts and small automations",
+          "Fixes to an existing site or dashboard"
+        ],
+        "terms": ["Fixed written quote before work starts"],
+        "example": null,
+        "order": 6
+      }
+    ],
+    "steps": [
+      {
+        "id": "send-the-brief",
+        "title": "Send the brief",
+        "detail": "Email a short description of the job and, if possible, a sample file.",
+        "link": null
+      },
+      {
+        "id": "receive-a-quote",
+        "title": "Receive a fixed quote",
+        "detail": "You get a written quote with the price, deadline and scope before any work starts.",
+        "link": null
+      },
+      {
+        "id": "pay-the-deposit",
+        "title": "Pay the deposit",
+        "detail": "A 50% deposit starts the work, by PayPal or by EFT for South African clients. The balance is due on delivery.",
+        "link": {
+          "label": "PayPal, once a quote is accepted",
+          "url": "https://paypal.me/Bongi917"
+        }
+      },
+      {
+        "id": "review-and-revise",
+        "title": "Review and revise",
+        "detail": "You review the result. Revisions are included until it matches the agreed brief.",
+        "link": null
+      }
+    ],
+    "responseNote": "Replies usually within one working day.",
+    "footnote": "Prices exclude third-party software, licences and domain costs. Payment links are used only after a quote is accepted.",
+    "lastReviewed": "2026-10-01"
+  }
+]

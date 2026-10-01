@@ -12,6 +12,7 @@ import {
   projectSchema,
   researchSchema,
   routeSchema,
+  servicesSchema,
   siteSettingsSchema,
   skillGroupSchema,
 } from "@/lib/content/schemas";
@@ -76,6 +77,11 @@ const documentManifest = defineCollection({
   schema: documentManifestSchema,
 });
 
+const services = defineCollection({
+  loader: file("src/data/profile/services.json"),
+  schema: servicesSchema,
+});
+
 export const collections = {
   identity,
   capabilities,
@@ -89,4 +95,5 @@ export const collections = {
   routes,
   siteSettings,
   documentManifest,
+  services,
 };

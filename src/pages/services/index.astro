@@ -1,0 +1,344 @@
+---
+import ContentStyles from "../../components/content/ContentStyles.astro";
+import ActionLink from "../../components/primitives/ActionLink.astro";
+import Container from "../../components/primitives/Container.astro";
+import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import SectionIntro from "../../components/primitives/SectionIntro.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../lib/content/load-content";
+import type { ServiceOffer } from "../../lib/content/schemas";
+import { sitePath } from "../../lib/urls";
+
+const content = await loadProfileContent();
+const route = content.routes.find((entry) => entry.id === "services");
+const identity = content.identity[0];
+const services = content.services[0];
+
+if (!route || !identity || !services) {
+  throw new Error("Services route content is missing.");
+}
+
+const offers = [...services.offers].sort(
+  (left, right) => left.order - right.order,
+);
+
+// en-US grouping keeps "R2,500"; en-ZA would print "R 2 500".
+const amount = (value: number) => value.toLocaleString("en-US");
+
+function priceParts(offer: ServiceOffer) {
+  if (offer.priceUsd === null || offer.priceZar === null) {
+    return null;
+  }
+  const hourly = offer.priceBasis === "hourly";
+  return {
+    lead: hourly ? null : "From",
+    usd: `$${amount(offer.priceUsd)}`,
+    zar: `R${amount(offer.priceZar)}`,
+    unit: hourly ? "per hour" : null,
+  };
+}
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={route.path}
+  activeRouteId={route.id}
+  updatedDate={services.lastReviewed}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    eyebrow="Selected engagements"
+    title={route.title}
+    lede="Small, well-scoped data and web jobs at fixed prices. You describe the job, I send a written quote, and the work starts once you accept it."
+  >
+    <ActionLink href={`mailto:${identity.email}`}>Email a brief</ActionLink>
+    <ActionLink href="contact/" variant="secondary">
+      Other contact options
+    </ActionLink>
+  </PageMasthead>
+
+  <section
+    class="page-section"
+    aria-labelledby="service-offers-title"
+    data-section-label="Offers"
+  >
+    <Container>
+      <SectionIntro
+        id="service-offers-title"
+        eyebrow="Offers"
+        title="Starting prices"
+        description="Prices are in US dollars with the South African rand amount alongside. The written quote fixes the final price before any work begins."
+      />
+
+      <ul class="service-offers">
+        {
+          offers.map((offer) => {
+            const price = priceParts(offer);
+            return (
+              <li>
+                <article
+                  class="service-offer"
+                  aria-labelledby={`offer-${offer.id}`}
+                  data-record-id={offer.id}
+                >
+                  <h3 id={`offer-${offer.id}`}>{offer.title}</h3>
+                  <p class="service-offer__price">
+                    {price ? (
+                      <>
+                        {price.lead && (
+                          <span class="service-offer__basis">
+                            {price.lead}{" "}
+                          </span>
+                        )}
+                        <strong>{price.usd}</strong>
+                        {price.unit && (
+                          <span class="service-offer__basis">
+                            {" "}
+                            {price.unit}
+                          </span>
+                        )}
+                        <span class="service-offer__zar">
+                          <span class="visually-hidden">or </span>
+                          {price.zar}
+                          {price.unit && ` ${price.unit}`}
+                        </span>
+                      </>
+                    ) : (
+                      <strong>Quoted per job</strong>
+                    )}
+                  </p>
+                  <p class="service-offer__summary">{offer.summary}</p>
+                  <ul class="service-offer__includes">
+                    {offer.includes.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                  <p class="service-offer__terms">{offer.terms.join(" · ")}</p>
+                  {offer.example && (
+                    <p class="service-offer__example">
+                      Example:{" "}
+                      <a href={offer.example.url}>{offer.example.label}</a>
+                    </p>
+                  )}
+                </article>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </Container>
+  </section>
+
+  <section
+    class="page-section page-section--surface"
+    aria-labelledby="service-process-title"
+    data-section-label="How it works"
+  >
+    <Container>
+      <SectionIntro
+        id="service-process-title"
+        eyebrow="How it works"
+        title="From brief to delivery"
+      />
+
+      <ol class="service-steps">
+        {
+          services.steps.map((step, index) => (
+            <li data-record-id={step.id}>
+              <span aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.detail}</p>
+                {step.link && (
+                  <p class="service-steps__link">
+                    <a href={step.link.url}>{step.link.label}</a>
+                  </p>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </Container>
+  </section>
+
+  <section
+    class="page-section"
+    aria-labelledby="service-contact-title"
+    data-section-label="Start a job"
+  >
+    <Container>
+      <div class="contact-panel">
+        <div>
+          <h2 id="service-contact-title">Send a short brief</h2>
+          <p>
+            Describe the job in a few lines. {services.responseNote}
+          </p>
+          <p class="service-footnote">{services.footnote}</p>
+        </div>
+        <div class="contact-panel__links">
+          <a href={`mailto:${identity.email}`}>{identity.email}</a>
+          <a href={sitePath("contact/")}>Contact page</a>
+        </div>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .service-offers {
+    display: grid;
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    list-style: none;
+  }
+
+  .service-offers > li {
+    display: flex;
+    min-inline-size: 0;
+  }
+
+  .service-offer {
+    position: relative;
+    display: flex;
+    inline-size: 100%;
+    padding: var(--space-5);
+    flex-direction: column;
+    gap: var(--space-3);
+    border: 1px solid var(--line-strong);
+    background: rgb(251 245 234 / 88%);
+  }
+
+  .service-offer::before {
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: -1px;
+    inline-size: 3.5rem;
+    block-size: 2px;
+    background: var(--gold);
+    content: "";
+  }
+
+  .service-offer h3 {
+    font-size: var(--step-1);
+  }
+
+  .service-offer__price {
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .service-offer__price strong {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+  }
+
+  .service-offer__basis {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .service-offer__zar {
+    display: block;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .service-offer__summary {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .service-offer__includes {
+    display: grid;
+    margin: 0;
+    padding-inline-start: 1.1rem;
+    gap: var(--space-1);
+    font-size: 0.88rem;
+  }
+
+  .service-offer__terms {
+    margin: auto 0 0;
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid var(--line);
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .service-offer__example {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  .service-offer a,
+  .service-steps a {
+    color: var(--indigo);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .service-steps {
+    display: grid;
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+    list-style: none;
+  }
+
+  .service-steps li {
+    display: grid;
+    padding-block-start: var(--space-4);
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--space-3);
+    border-block-start: 1px solid var(--line-strong);
+  }
+
+  .service-steps li > span {
+    color: var(--rust-strong);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+  }
+
+  .service-steps h3 {
+    font-size: 1.05rem;
+  }
+
+  .service-steps p {
+    margin-block-start: var(--space-2);
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+  }
+
+  .contact-panel .service-footnote {
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 64rem) {
+    .service-offers,
+    .service-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .service-offers,
+    .service-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -114,6 +114,7 @@ function checkRecordIdentifiers(
     "routes",
     "siteSettings",
     "documentManifest",
+    "services",
   ] as const;
 
   for (const collection of collections) {
@@ -163,6 +164,34 @@ function checkRecordIdentifiers(
     credentialTitles,
     "DUPLICATE_CREDENTIAL_TITLE",
     "Credential or component title",
+  );
+
+  checkUniqueValues(
+    issues,
+    content.services.flatMap((services, servicesIndex) => [
+      ...services.offers.map((offer, offerIndex) => ({
+        value: offer.id,
+        path: `services[${servicesIndex}].offers[${offerIndex}].id`,
+      })),
+      ...services.steps.map((step, stepIndex) => ({
+        value: step.id,
+        path: `services[${servicesIndex}].steps[${stepIndex}].id`,
+      })),
+    ]),
+    "DUPLICATE_SERVICE_ID",
+    "Service offer or step ID",
+  );
+
+  checkUniqueValues(
+    issues,
+    content.services.flatMap((services, servicesIndex) =>
+      services.offers.map((offer, offerIndex) => ({
+        value: String(offer.order),
+        path: `services[${servicesIndex}].offers[${offerIndex}].order`,
+      })),
+    ),
+    "DUPLICATE_SERVICE_ORDER",
+    "Service offer order",
   );
 
   checkUniqueValues(

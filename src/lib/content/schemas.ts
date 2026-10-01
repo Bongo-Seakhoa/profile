@@ -495,6 +495,48 @@ export const siteSettingsSchema = z.object({
   lastReviewed: reviewedDateSchema,
 });
 
+export const serviceLinkSchema = z.object({
+  label: z.string().min(1),
+  url: httpsUrlSchema,
+});
+
+export const serviceOfferSchema = z
+  .object({
+    id: recordIdSchema,
+    title: z.string().min(1),
+    priceBasis: z.enum(["from", "hourly", "quote"]),
+    priceUsd: z.number().int().positive().nullable(),
+    priceZar: z.number().int().positive().nullable(),
+    summary: z.string().min(1),
+    includes: z.array(z.string().min(1)).min(1),
+    terms: z.array(z.string().min(1)).min(1),
+    example: serviceLinkSchema.nullable(),
+    order: z.number().int().positive(),
+  })
+  .refine(
+    (offer) =>
+      offer.priceBasis === "quote"
+        ? offer.priceUsd === null && offer.priceZar === null
+        : offer.priceUsd !== null && offer.priceZar !== null,
+    "Priced offers need USD and ZAR prices; quoted offers need neither",
+  );
+
+export const serviceStepSchema = z.object({
+  id: recordIdSchema,
+  title: z.string().min(1),
+  detail: z.string().min(1),
+  link: serviceLinkSchema.nullable(),
+});
+
+export const servicesSchema = z.object({
+  id: z.literal("fixed-price-services"),
+  offers: z.array(serviceOfferSchema).min(1),
+  steps: z.array(serviceStepSchema).length(4),
+  responseNote: z.string().min(1),
+  footnote: z.string().min(1),
+  lastReviewed: reviewedDateSchema,
+});
+
 export const profileCollectionSchemas = {
   identity: z.array(identitySchema).length(1),
   capabilities: z.array(capabilitySchema),
@@ -508,6 +550,7 @@ export const profileCollectionSchemas = {
   routes: z.array(routeSchema),
   siteSettings: z.array(siteSettingsSchema).length(1),
   documentManifest: z.array(documentManifestSchema).length(2),
+  services: z.array(servicesSchema).length(1),
 } as const;
 
 export type Identity = z.infer<typeof identitySchema>;
@@ -522,6 +565,8 @@ export type Methodology = z.infer<typeof methodologySchema>;
 export type RouteRecord = z.infer<typeof routeSchema>;
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 export type DocumentManifest = z.infer<typeof documentManifestSchema>;
+export type ServiceOffer = z.infer<typeof serviceOfferSchema>;
+export type Services = z.infer<typeof servicesSchema>;
 
 export interface ProfileContent {
   identity: Identity[];
@@ -536,4 +581,5 @@ export interface ProfileContent {
   routes: RouteRecord[];
   siteSettings: SiteSettings[];
   documentManifest: DocumentManifest[];
+  services: Services[];
 }

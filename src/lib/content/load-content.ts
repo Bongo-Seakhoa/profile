@@ -16,6 +16,7 @@ const CONTENT_FILES = {
   routes: "routes.json",
   siteSettings: "site-settings.json",
   documentManifest: "document-manifest.json",
+  services: "services.json",
 } as const;
 
 type ContentCollectionName = keyof typeof CONTENT_FILES;
@@ -59,5 +60,6 @@ export async function loadProfileContent(
     documentManifest: profileCollectionSchemas.documentManifest.parse(
       loaded.documentManifest,
     ),
+    services: profileCollectionSchemas.services.parse(loaded.services),
   };
 }
