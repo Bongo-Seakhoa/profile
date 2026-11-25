@@ -1,34 +1,25 @@
 ---
 import ContentStyles from "../../components/content/ContentStyles.astro";
-import DocumentCard from "../../components/content/DocumentCard.astro";
+import DocumentCards from "../../components/documents/DocumentCards.astro";
 import Container from "../../components/primitives/Container.astro";
 import PageMasthead from "../../components/primitives/PageMasthead.astro";
 import SectionIntro from "../../components/primitives/SectionIntro.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadProfileContent } from "../../lib/content/load-content";
+import { sitePath } from "../../lib/urls";
 
 const content = await loadProfileContent();
 const route = content.routes.find((entry) => entry.id === "documents");
 
-if (!route) throw new Error("Documents route content is missing.");
-
-const cards = content.documentManifest.flatMap((document) =>
-  document.variants.map((variant) => ({
-    id: variant.id,
-    label: `${variant.displayName} ${document.id === "cv" ? "CV" : "Resume"}`,
-    description:
-      document.id === "resume"
-        ? "A concise professional summary with selected experience, projects, education and credentials."
-        : "A fuller professional profile with complete experience, selected projects, education and credential history.",
-    previewPath: variant.previewPath,
-    pdfPath: variant.pdfPath,
-    pageCount: document.pageCount,
-    identity: variant.displayName,
-    kind: document.id,
-  })),
+const identity = content.identity[0];
+const alternateName = identity?.alternateNames[0];
+const kosaRoute = content.routes.find(
+  (entry) => entry.id === "documents-bongo-kosa",
 );
-const primaryCards = cards.filter((card) => card.identity === "Bongo Seakhoa");
-const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
+
+if (!route || !identity || !alternateName || !kosaRoute) {
+  throw new Error("Documents route content is missing.");
+}
 ---
 
 <BaseLayout
@@ -43,7 +34,29 @@ const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
     eyebrow="Professional documents"
     title={route.title}
     lede="Choose a concise resume or the fuller CV, each available under both professional name variants."
-  />
+  >
+    <nav
+      aria-label="Document names"
+      class="page-masthead__actions"
+      style="margin-block-start: 0"
+    >
+      <a
+        class="action-link action-link--primary"
+        href={sitePath(route.path)}
+        aria-label={identity.primaryName}
+        aria-current="page"
+      >
+        {identity.primaryName}
+      </a>
+      <a
+        class="action-link action-link--secondary"
+        href={sitePath(kosaRoute.path)}
+        aria-label={alternateName}
+      >
+        {alternateName}
+      </a>
+    </nav>
+  </PageMasthead>
 
   <section class="page-section" aria-labelledby="primary-documents-title">
     <Container>
@@ -53,20 +66,11 @@ const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
         title="Bongo Seakhoa documents"
         description="Choose the concise resume or the fuller CV. Both are browser-readable and available as direct PDF downloads."
       />
-      <div class="documents-grid">
-        {
-          primaryCards.map((card) => (
-            <DocumentCard
-              label={card.label}
-              description={card.description}
-              previewPath={card.previewPath}
-              pdfPath={card.pdfPath}
-              pageCount={card.pageCount}
-              primary
-            />
-          ))
-        }
-      </div>
+      <DocumentCards
+        documents={content.documentManifest}
+        displayName={identity.primaryName}
+        primary
+      />
     </Container>
   </section>
 
@@ -81,19 +85,10 @@ const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
         title="Bongo Kosa document variants"
         description="These versions present the same career history under Bongo Kosa, an alternate professional and legal name."
       />
-      <div class="documents-grid">
-        {
-          alternateCards.map((card) => (
-            <DocumentCard
-              label={card.label}
-              description={card.description}
-              previewPath={card.previewPath}
-              pdfPath={card.pdfPath}
-              pageCount={card.pageCount}
-            />
-          ))
-        }
-      </div>
+      <DocumentCards
+        documents={content.documentManifest}
+        displayName={alternateName}
+      />
     </Container>
   </section>
 
@@ -112,17 +107,3 @@ const alternateCards = cards.filter((card) => card.identity === "Bongo Kosa");
     </Container>
   </section>
 </BaseLayout>
-
-<style>
-  .documents-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-5);
-  }
-
-  @media (max-width: 44rem) {
-    .documents-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

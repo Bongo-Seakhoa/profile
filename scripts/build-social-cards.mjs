@@ -87,7 +87,9 @@ function textLines(lines, { x, y, lineHeight, className }) {
 }
 
 function routeLabelFor(route) {
-  if (route.id === "home") return "PROFESSIONAL PORTFOLIO";
+  if (route.id === "home" || route.id === "bongo-kosa")
+    return "PROFESSIONAL PORTFOLIO";
+  if (route.id === "documents-bongo-kosa") return "PROFESSIONAL DOCUMENTS";
   if (route.id === "explore") return "CINEMATIC PORTFOLIO JOURNEY";
   if (route.kind === "project") return "SELECTED WORK";
   if (route.kind === "methodology") return "DELIVERY METHODOLOGY";
@@ -105,6 +107,13 @@ function cardSvg(route, index) {
   const descriptionBaseline = titleBaseline + titleLines.length * 72 + 42;
   const routeLabel = routeLabelFor(route);
   const motifOffset = (index % 5) * 20;
+  const displayName =
+    (route.path.endsWith("bongo-kosa/") && identity.alternateNames[0]) ||
+    identity.primaryName;
+  const initials = displayName
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("");
 
   return `
     <svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
@@ -131,8 +140,8 @@ function cardSvg(route, index) {
       <path d="M900 630 C995 570, 1090 584, 1200 520 L1200 630 Z" fill="#f5e9d2" />
 
       <rect x="64" y="56" width="56" height="56" rx="14" fill="none" stroke="${accent.primary}" stroke-width="3" />
-      <text x="92" y="92" text-anchor="middle" class="mark">BS</text>
-      <text x="142" y="92" class="brand">${escapeXml(identity.primaryName)}</text>
+      <text x="92" y="92" text-anchor="middle" class="mark">${escapeXml(initials)}</text>
+      <text x="142" y="92" class="brand">${escapeXml(displayName)}</text>
       <rect x="64" y="137" width="118" height="5" rx="2.5" fill="${accent.primary}" />
       <rect x="190" y="137" width="54" height="5" rx="2.5" fill="${accent.secondary}" />
 

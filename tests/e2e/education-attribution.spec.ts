@@ -22,11 +22,15 @@ test("education correction is consistent across profile and document surfaces", 
     await expect(
       page.locator('[data-record-id="north-west-university-bsc"]'),
     ).toHaveCount(0);
-    await expect(page.locator("body")).toContainText(
-      route === "bongo-kosa/"
-        ? "One professional identity"
-        : "Engineering Management",
-    );
+    if (route === "bongo-kosa/") {
+      await expect(
+        page.getByRole("heading", { level: 1, name: "Bongo Kosa" }),
+      ).toBeVisible();
+    } else {
+      await expect(page.locator("body")).toContainText(
+        "Engineering Management",
+      );
+    }
   }
   await page.goto("education/");
   await expect(page.locator("main")).toContainText("Explore AI Academy");

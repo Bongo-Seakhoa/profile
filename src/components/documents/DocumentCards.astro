@@ -1,0 +1,51 @@
+---
+import DocumentCard from "../content/DocumentCard.astro";
+import type { DocumentManifest } from "../../lib/content/schemas";
+
+interface Props {
+  documents: DocumentManifest[];
+  displayName: string;
+  primary?: boolean;
+}
+
+const { documents, displayName, primary = false } = Astro.props;
+
+const cards = documents.map((document) => {
+  const variant = document.variants.find(
+    (entry) => entry.displayName === displayName,
+  );
+
+  if (!variant) {
+    throw new Error(`Missing ${document.label} for ${displayName}.`);
+  }
+
+  return {
+    label: `${displayName} ${document.id === "cv" ? "CV" : "Resume"}`,
+    description:
+      document.id === "resume"
+        ? "A concise professional summary with selected experience, projects, education and credentials."
+        : "A fuller professional profile with complete experience, selected projects, education and credential history.",
+    previewPath: variant.previewPath,
+    pdfPath: variant.pdfPath,
+    pageCount: document.pageCount,
+  };
+});
+---
+
+<div class="documents-grid">
+  {cards.map((card) => <DocumentCard {...card} primary={primary} />)}
+</div>
+
+<style>
+  .documents-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 44rem) {
+    .documents-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

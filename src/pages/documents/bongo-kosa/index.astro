@@ -1,0 +1,78 @@
+---
+import ContentStyles from "../../../components/content/ContentStyles.astro";
+import DocumentCards from "../../../components/documents/DocumentCards.astro";
+import ActionLink from "../../../components/primitives/ActionLink.astro";
+import Container from "../../../components/primitives/Container.astro";
+import PageMasthead from "../../../components/primitives/PageMasthead.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { loadProfileContent } from "../../../lib/content/load-content";
+import { sitePath } from "../../../lib/urls";
+
+const content = await loadProfileContent();
+const identity = content.identity[0];
+const displayName = identity?.alternateNames[0];
+const route = content.routes.find(
+  (entry) => entry.id === "documents-bongo-kosa",
+);
+const homeRoute = content.routes.find((entry) => entry.id === "bongo-kosa");
+const canonicalRoute = content.routes.find(
+  (entry) => entry.id === route?.canonicalRouteId,
+);
+
+if (!identity || !displayName || !route || !homeRoute || !canonicalRoute) {
+  throw new Error("Bongo Kosa documents content is missing.");
+}
+---
+
+<BaseLayout
+  title={route.title}
+  description={route.description}
+  canonicalPath={canonicalRoute.path}
+  activeRouteId={canonicalRoute.id}
+  profileDisplay={{
+    name: displayName,
+    homePath: homeRoute.path,
+    documentsPath: route.path,
+  }}
+>
+  <ContentStyles />
+  <PageMasthead
+    slot="masthead"
+    title={route.title}
+    lede="Read either document online or download it as an A4 PDF."
+  >
+    <nav
+      aria-label="Document names"
+      class="page-masthead__actions"
+      style="margin-block-start: 0"
+    >
+      <a
+        class="action-link action-link--secondary"
+        href={sitePath(canonicalRoute.path)}
+        aria-label={identity.primaryName}
+      >
+        {identity.primaryName}
+      </a>
+      <a
+        class="action-link action-link--primary"
+        href={sitePath(route.path)}
+        aria-label={displayName}
+        aria-current="page"
+      >
+        {displayName}
+      </a>
+    </nav>
+    <ActionLink href={homeRoute.path} variant="quiet">
+      Bongo Kosa portfolio
+    </ActionLink>
+  </PageMasthead>
+  <section class="page-section" aria-label="Bongo Kosa downloads">
+    <Container>
+      <DocumentCards
+        documents={content.documentManifest}
+        displayName={displayName}
+        primary
+      />
+    </Container>
+  </section>
+</BaseLayout>

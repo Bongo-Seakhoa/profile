@@ -31,8 +31,19 @@ const {
   <h2>{label}</h2>
   <p>{description}</p>
   <div class="document-card__actions">
-    <a href={sitePath(pdfPath)} download>Download PDF</a>
-    <a href={sitePath(previewPath)}>View browser preview</a>
+    <a
+      href={sitePath(pdfPath)}
+      aria-label={`Download PDF of ${label}`}
+      download
+    >
+      Download PDF
+    </a>
+    <a
+      href={sitePath(previewPath)}
+      aria-label={`View browser preview of ${label}`}
+    >
+      View browser preview
+    </a>
   </div>
 </article>
 

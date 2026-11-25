@@ -196,6 +196,34 @@
       "path": "assets/social/not-found.jpg",
       "width": 1200,
       "height": 630
+    },
+    {
+      "routeId": "project-omnimind",
+      "routePath": "work/omnimind/",
+      "path": "assets/social/project-omnimind.jpg",
+      "width": 1200,
+      "height": 630
+    },
+    {
+      "routeId": "project-fxpm-validation-system",
+      "routePath": "work/fxpm-validation-system/",
+      "path": "assets/social/project-fxpm-validation-system.jpg",
+      "width": 1200,
+      "height": 630
+    },
+    {
+      "routeId": "services",
+      "routePath": "services/",
+      "path": "assets/social/services.jpg",
+      "width": 1200,
+      "height": 630
+    },
+    {
+      "routeId": "documents-bongo-kosa",
+      "routePath": "documents/bongo-kosa/",
+      "path": "assets/social/documents-bongo-kosa.jpg",
+      "width": 1200,
+      "height": 630
     }
   ]
 }

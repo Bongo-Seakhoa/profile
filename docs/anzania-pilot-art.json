@@ -1,0 +1,134 @@
+{
+  "approval": "Anzania production pilot scriptboards, November 2026",
+  "baseline": "00d2d8d8bfe4d63c4aeae359299d06046f6e609d",
+  "generation": "Built-in ImageGen",
+  "rollout": {
+    "scenes": [
+      {
+        "location": "forge-resolve",
+        "mode": "outer",
+        "derivatives": [
+          "scenes/forge-resolve-outer-1600.webp",
+          "scenes/forge-resolve-outer-960.webp"
+        ],
+        "direction": "Preserve the citadel and approach, correct the caravan silhouettes, and keep the guide's foreground path clear."
+      },
+      {
+        "location": "threshold-dunes",
+        "mode": "inner",
+        "derivatives": [
+          "scenes/threshold-dunes-inner-1600.webp",
+          "scenes/threshold-dunes-inner-960.webp"
+        ],
+        "direction": "Place the visitor inside the open-sided pavilion with the desert beyond it. Keep the rug walkable and the map and folios on the right."
+      }
+    ],
+    "guideKeyframes": {
+      "reference": "The shipped idle sprite of the same guide",
+      "guides": ["ren", "zayd", "zuri", "priya", "avery", "nia", "lucia", "hana", "sol", "manu"],
+      "actions": ["dune", "sand", "solar", "fold"],
+      "derivativePattern": "pilot/{guide}-{action}-key.webp",
+      "direction": "Commission a distinct active pose for each crossing. Keep the guide's face, clothes, equipment and full silhouette. Compose each cutout on its contact baseline and map the light to the Solar Step palm."
+    }
+  },
+  "scenes": [
+    {
+      "derivatives": [
+        "scenes/threshold-dunes-outer-1600.webp",
+        "scenes/threshold-dunes-outer-960.webp"
+      ],
+      "master": "threshold.webp",
+      "prompt": "Use case: illustration-story. Produce a single ultra-wide landscape environmental plate (wide 16:9 or wider) for the opening shot of Anzania, an original cinematic portfolio world. Fine-art large-format location cinematography with painterly atmospheric depth and believable materials. Camera stands out on Threshold Dunes, looking across an immense Saharan dune sea at late golden dusk. A particular freestanding monumental arch cleft at the crest of a red sandstone mesa, with three asymmetric weathered pillars alongside it and one pale faded blue expedition banner attached at the right, forms the iconic landmark on the RIGHT two-thirds, framed against a glowing pale sun just off to its right. Layered dunes, very crisp rippled foreground sand fading into airborne dust, subtle tawny reflected light, distant ridge silhouettes. Warm umber shadows, fine amber ridgelines, soft copper daylight, no fake glow. Strong foreground-to-background perspective. The LEFT third remains a quieter low-contrast shaded sweep of dunes and haze for off-image HTML headline overlay. Architectural believability, elegant museum-film grading. Full-bleed image, genuinely cinematic, no typography, marks, UI, grids, people, creatures, or border."
+    },
+    {
+      "derivatives": [
+        "scenes/stone-pass-outer-1600.webp",
+        "scenes/stone-pass-outer-960.webp"
+      ],
+      "master": "pass.webp",
+      "prompt": "Use case: illustration-story. Generate one ultra-wide 16:9 cinematic environment plate for an original expedition film Anzania, the Stone Pass. We are now near the same monumental naturally cleft sandstone arch across the dune sea. Foreground ancient wind-smoothed terracotta and umber cliff walls, realistic layered geology, sparse brass trail fixtures, one pale faded blue linen expedition banner attached on the right of the arch, canyon passage narrowing from the left then opening on the RIGHT half of the image; three weathered asymmetric stone columns near the arch. Sun from just outside to the right casts a single diffuse amber ray across dust and onto winding small steps leading toward the arch at x~70%. Rich tonal depth with near-black coffee and red ochre shade on the LEFT third as negative space for web text, a brighter iconic focal point on right. Tangible erosion, hand-finished cinematic color grading, large-format film still meets naturalistic editorial illustration. The sand/stone world feels ancient, practical and lived in. Full-bleed art only. No people, lettering, UI, borders, fantastical magic effects, or logos."
+    },
+    {
+      "derivatives": [
+        "scenes/stone-pass-inner-1600.webp",
+        "scenes/stone-pass-inner-960.webp"
+      ],
+      "master": "chamber.webp",
+      "prompt": "Use case: illustration-story. Single full-bleed landscape 16:9 cinematic background plate for the interior of the Context Chamber in fictional Anzania, a high-end documentary-style portfolio film. A still made looking inward from the massive eroded honey-brown sandstone arch at the Stone Pass. Reveal a secluded rock-cut octagonal archive built into the canyon: a large low bronze and dark stone cartographer's working table toward the LEFT CENTER (approximately 27–38% of width), physical parchment charts weighted with brass disks, a very subdued blue-green reflection from oxidized bronze, rich stone reliefs and tall stacked alcoves, one small faded blue linen banner. Single thin shaft of warm sunset light from an exterior cleft behind left, grazing the tabletop and suspended dust, burnished brass and nearly black umber depth. The right half should be in quieter charcoal shadow for a distinct off-image UI. Convincing near-to-far depth, rich tactile materials, composition refined like large-format location cinematography with realistic editorial illustration. Iconic silhouette, beautiful warm contrast, restrained and adult. No people, words, writing that can be read, text, logos, border, UI, floating holograms or magic energy."
+    }
+  ],
+  "amani": {
+    "source": "Approved local prototype",
+    "actions": [
+      {
+        "files": "guides/amani-dune-{1,2,3}.webp",
+        "reference": "guides/amani-idle.webp",
+        "prompt": "Use the supplied reference as a strict identity, costume, paint and texture reference for Amani. Preserve the same adult man's facial features, dark hair, skin tone, ecru scarf, weathered brown expedition layers, teal fittings, hand wraps, trousers and bronze-trimmed boots. Naturalistic cinematic painted expedition character, same realism, anatomical proportions and cloth weight as reference, with a neutral side key light. Create a single transparent RGBA horizontal sprite sheet with precisely three full-body chronologically ordered poses in three equal, well-separated columns of a wide 16:9 canvas. Entire head, hands, costume and both boots visible in each pose. Each figure around the same character scale, baseline and view angle, with margins in each cell and roughly centered in its own third. Absolutely no overlaps between cells or limbs crossing cell boundaries. The poses are for a browser animation, and identity and costume continuity between them matter more than dramatic camera. Background entirely transparent, no object, ground, shadows, sparks, power effects, labels, borders or typography anywhere.\n\nDune Surf sequence, same three-quarter side view facing SCREEN RIGHT in every frame. Left cell: anticipating a glide, crouch slightly, lower body into a balanced surfer's stance, front/right foot leading, rear/left foot braced, hands by hips. Center cell: actual fast sand glide, knees flexed, torso and leading open hand angle purposefully toward screen right, rear arm extended modestly behind, scarf trails screen left. Right cell: controlled brake and settle, raise torso a little and draw hands back in, both boots still in the same low surf stance, face looking toward right. There is no literal surfboard, he rides sand directly. Natural grounded weight and fluid changes, no repetitive copies of the idle stance."
+      },
+      {
+        "files": "guides/amani-solar-{1,2,3}.webp",
+        "reference": "guides/amani-idle.webp",
+        "prompt": "Use the supplied reference as a strict identity, costume, paint and texture reference for Amani. Preserve the same adult man's facial features, dark hair, skin tone, ecru scarf, weathered brown expedition layers, teal fittings, hand wraps, trousers and bronze-trimmed boots. Naturalistic cinematic painted expedition character, same realism, anatomical proportions and cloth weight as reference, with a neutral side key light. Create a single transparent RGBA horizontal sprite sheet with precisely three full-body chronologically ordered poses in three equal, well-separated columns of a wide 16:9 canvas. Entire head, hands, costume and both boots visible in each pose. Each figure around the same character scale, baseline and view angle, with margins in each cell and roughly centered in its own third. Absolutely no overlaps between cells or limbs crossing cell boundaries. The poses are for a browser animation, and identity and costume continuity between them matter more than dramatic camera. Background entirely transparent, no object, ground, shadows, sparks, power effects, labels, borders or typography anywhere.\n\nSolar Step sequence facing SCREEN RIGHT. Make a single deliberate, grounded walking step, like stepping up a short rise with body weight, no jump or flying kick. Left cell: weight rests on rear foot as the leading boot comes forward low, one empty open palm held forward at chest height, clear and visible. Center cell: leading right boot plants one short stride ahead, rear heel releasing, body shifts over the front foot, same open palm at shoulder height extended slightly to the right with five natural fingers. Right cell: feet come closer together as he settles after the step, still holding that same empty palm forward, lowers arm slightly. Keep hand cleanly separated from torso in all three images for a tracked effect. Understate every gesture, avoid martial arts and exaggerated stride."
+      },
+      {
+        "files": "guides/amani-sand-{1,2,3}.webp",
+        "reference": "guides/amani-idle.webp",
+        "prompt": "Use the supplied reference as a strict identity, costume, paint and texture reference for Amani. Preserve the same adult man's facial features, dark hair, skin tone, ecru scarf, weathered brown expedition layers, teal fittings, hand wraps, trousers and bronze-trimmed boots. Naturalistic cinematic painted expedition character, same realism, anatomical proportions and cloth weight as reference, with a neutral side key light. Create a single transparent RGBA horizontal sprite sheet with precisely three full-body chronologically ordered poses in three equal, well-separated columns of a wide 16:9 canvas. Entire head, hands, costume and both boots visible in each pose. Each figure around the same character scale, baseline and view angle, with margins in each cell and roughly centered in its own third. Absolutely no overlaps between cells or limbs crossing cell boundaries. The poses are for a browser animation, and identity and costume continuity between them matter more than dramatic camera. Background entirely transparent, no object, ground, shadows, sparks, power effects, labels, borders or typography anywhere.\n\nSandfold sequence, mainly a standing pivot turning a little toward the right. Left cell: preparation at rest with knees softened and one boot slightly ahead, forearms low on either side. Center cell: rotate shoulders subtly, arms draw the sand into a column around him, one hand crosses chest while the other opens outward lower, boots planted, cloth naturally trails controlled rotation. Right cell: three-quarter turn back toward camera, arms release and lower with controlled weight, boots under body. Show a resolved series of practical deliberate arm shapes and gentle balanced pivots, no jumping, no cartoon magician gesture."
+      },
+      {
+        "files": "guides/amani-fold-{1,2,3}.webp",
+        "reference": "guides/amani-idle.webp",
+        "prompt": "Use the supplied reference as a strict identity, costume, paint and texture reference for Amani. Preserve the same adult man's facial features, dark hair, skin tone, ecru scarf, weathered brown expedition layers, teal fittings, hand wraps, trousers and bronze-trimmed boots. Naturalistic cinematic painted expedition character, same realism, anatomical proportions and cloth weight as reference, with a neutral side key light. Create a single transparent RGBA horizontal sprite sheet with precisely three full-body chronologically ordered poses in three equal, well-separated columns of a wide 16:9 canvas. Entire head, hands, costume and both boots visible in each pose. Each figure around the same character scale, baseline and view angle, with margins in each cell and roughly centered in its own third. Absolutely no overlaps between cells or limbs crossing cell boundaries. The poses are for a browser animation, and identity and costume continuity between them matter more than dramatic camera. Background entirely transparent, no object, ground, shadows, sparks, power effects, labels, borders or typography anywhere.\n\nReality Fold sequence framed from the front with slight turn to the right. Left cell: both hands gather close in front of chest as if feeling for the two sides of a seam, boots apart and body relaxed. Center cell: both open hands pull apart left and right at chest height, shoulders lean into the opening as if opening a book from the center, natural fingers and wrists, eyes on the space in front of him. Right cell: hands move down to waist height and remain partway open, torso relaxes, like letting the pages pass by. Keep arms within each cell, grounded waist and no overacting."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "file": "dune-wake.webp",
+      "prompt": "Create a transparent RGBA visual effects production plate, extra-wide landscape 16:9, for a premium realistic desert expedition film. ONLY the effect, no background at all. Low horizontal ground-hugging dust wake peeling from a fast surfer skimming red sandstone sand, coarse real sand grains embedded in long fine streams, strongest across lower center/right. Rich sunlit pale copper edges, deep soft smoky muted ochre bodies and very subtle white gold glancing speculars. Shape it like a fast lateral ribbon with a thick turbulent crest and many fine tendrils trailing to the left. Upper two thirds predominantly clear alpha, organically feathered outer edges, very sparse airborne grains above. Photographic natural atmosphere, optical scattering, elegant detailed not cartoon. Do not put a visible figure, board, ground, horizon, solid color backdrop, black backdrop, text, logo, frame, or UI. Preserve fully transparent pixels surrounding the wake."
+    },
+    {
+      "file": "sand-veil.webp",
+      "prompt": "A transparent RGBA VFX element only, portrait or squarish aspect, optical plate for upscale desert cinema. A wide column of fine copper-gold red sand erupting upward in layers from a broad low dusty base, with a curled crest leaning slightly right and fine photoreal sunlit strands ascending. Broad semitransparent rusty umber interior, varied translucent layers, glancing cream highlights, edge particles separating from the main cloud above and to the sides. Mass concentrates mid-column, melting into fully transparent background at every edge. Distinctly granular, textured real desert dust, dramatic restraint. No person, sand stacks, environment, floor, frame, lettering, decorative portal circle, or UI. Real alpha transparent background, do not flatten onto black or white."
+    },
+    {
+      "file": "solar-plume.webp",
+      "prompt": "Transparent RGBA visual effect element for a realistic golden-hour desert film, portrait orientation. A narrowly focused warm flare plume flowing diagonally upward to the right, with burnished golden white optical core in lower middle, fine reach of amber shafts and sparse blown incandescent dust drifting along its trail. Physically credible sunshine through thin dusty air, like an intense localized lens flare as energy kicks upward off the sand. Warm white accents subject to smooth falloff into true alpha. Very high-end photographic optical compositing element. No character, landscape or mountains, no literal sun disk, no cartoon fire, no concentric rings, no text or frame. No solid background. Leave generous empty alpha outside the plume."
+    },
+    {
+      "file": "fold-seam.webp",
+      "prompt": "A transparent RGBA visual effects element for a high-end fictional desert expedition, predominantly vertical, portrait. A slender asymmetrical fissure of warm pearl-gold light in suspended dust, like late afternoon daylight showing between two closely passing folds of space. Tiny refracted amber fragments bend inward on each side and faint translucent umber ripples echo the seam, with a few beautifully separated grains. Maximum brightness in short irregular flecks near center, narrow rather than explosive, tapered before canvas edges, high optical realism. No lightning bolt blur, neon, purple, portal ring, character, environment, background of any kind, text, logo, or border. Transparent alpha outside the seam, meant as one additive compositing element alongside separate physical scene refraction."
+    }
+  ],
+  "mateo": {
+    "reference": "characters/mateo-idle.webp",
+    "sheets": [
+      {
+        "action": "dune",
+        "master": "exec-c04d57f0-9bfe-4378-b5c0-edba06307d64.png",
+        "prompt": "Use case illustration-story. Make a game-production pose reference sheet with genuine transparent RGBA background, using the provided full-body image as the identity, costume and prosthesis reference for Mateo from Anzania. Premium tactile realistic painted full-body sprite art, subdued neutral studio key to composite into light and dark scenes. Four separate equally spaced full-body sprites across one wide sheet, never touch or overlap, generous alpha between each, every scarf, hand, head and both soles fully visible. Keep the same actor face, cobalt coat, copper shirt, cream scarf, asymmetrical belt and EXACTLY one visible anatomically LEFT below-knee brass/steel prosthesis in every frame, right leg ends in worn leather full normal boot. No mirrored costume. Keep actors mostly frontal at three-quarter, so the prosthesis sits visually viewer-right in ALL four frames, even when he leans or steps screen left. Feet on one common line, similar physical height, natural hands and knees. No ground, text, dividers, effect glow, atmosphere, cast shadow, stage or printed checker. Distinct body action only. Dune Surf direction study. Pose 1 prepares to travel screen-right, flexing his knees and setting weight over foot. Pose 2 visibly surfs right with a low well-balanced bent-hip stance, shoulder and gaze toward screen-right and scarf flowing left. Pose 3 prepares in the actual opposite direction, twisting upper body left while keeping the prosthesis anatomically on LEFT. Pose 4 banks and surfs left, scarf windswept to the right, prosthesis still on viewer-right. Never swap anatomical accessories to show reverse movement, use shoulder, head, lean and foot weight."
+      },
+      {
+        "action": "sand",
+        "master": "exec-07c58951-55f6-4f65-8d0b-8c7a213354e7.png",
+        "prompt": "Use case illustration-story. Make a game-production pose reference sheet with genuine transparent RGBA background, using the provided full-body image as the identity, costume and prosthesis reference for Mateo from Anzania. Premium tactile realistic painted full-body sprite art, subdued neutral studio key to composite into light and dark scenes. Four separate equally spaced full-body sprites across one wide sheet, never touch or overlap, generous alpha between each, every scarf, hand, head and both soles fully visible. Keep the same actor face, cobalt coat, copper shirt, cream scarf, asymmetrical belt and EXACTLY one visible anatomically LEFT below-knee brass/steel prosthesis in every frame, right leg ends in worn leather full normal boot. No mirrored costume. Keep actors mostly frontal at three-quarter, so the prosthesis sits visually viewer-right in ALL four frames, even when he leans or steps screen left. Feet on one common line, similar physical height, natural hands and knees. No ground, text, dividers, effect glow, atmosphere, cast shadow, stage or printed checker. Distinct body action only. Sandfold grounded power. Four consecutive poses: 1 anchors his stance with focused look and lowered hands; 2 draws his forearms inward around chest with a measured turn; 3 sets one hand palm down, the other opens to close the sand columns as he compresses slightly; 4 lands with both feet firm and lowers the hands. Visible actual left prosthesis and a separate normal right leather boot at every step."
+      },
+      {
+        "action": "solar",
+        "master": "exec-0781d93e-1dc7-4172-9c3e-0ebe49dc6b81.png",
+        "prompt": "Use case illustration-story. Make a game-production pose reference sheet with genuine transparent RGBA background, using the provided full-body image as the identity, costume and prosthesis reference for Mateo from Anzania. Premium tactile realistic painted full-body sprite art, subdued neutral studio key to composite into light and dark scenes. Four separate equally spaced full-body sprites across one wide sheet, never touch or overlap, generous alpha between each, every scarf, hand, head and both soles fully visible. Keep the same actor face, cobalt coat, copper shirt, cream scarf, asymmetrical belt and EXACTLY one visible anatomically LEFT below-knee brass/steel prosthesis in every frame, right leg ends in worn leather full normal boot. No mirrored costume. Keep actors mostly frontal at three-quarter, so the prosthesis sits visually viewer-right in ALL four frames, even when he leans or steps screen left. Feet on one common line, similar physical height, natural hands and knees. No ground, text, dividers, effect glow, atmosphere, cast shadow, stage or printed checker. Distinct body action only. Solar Step directional hand study. Pose 1 places his weight in preparation, facing screen-right and presenting open rightward lead palm at shoulder height. Pose 2 takes one compact planted step right, keeping the open rightward palm visually clear. Pose 3 is the actual opposite direction with shoulders, gaze and presented open palm aiming screen left, anatomical left prosthesis still viewer-right. Pose 4 plants one compact step toward screen left, same left prosthesis and kit. No leap, no charging orb, no cast effect. Repeat face and never position the prosthesis on the opposite leg."
+      },
+      {
+        "action": "fold",
+        "master": "exec-7dfcbaf2-28a0-4b68-b2ce-40d9efab2580.png",
+        "prompt": "Use case illustration-story. Make a game-production pose reference sheet with genuine transparent RGBA background, using the provided full-body image as the identity, costume and prosthesis reference for Mateo from Anzania. Premium tactile realistic painted full-body sprite art, subdued neutral studio key to composite into light and dark scenes. Four separate equally spaced full-body sprites across one wide sheet, never touch or overlap, generous alpha between each, every scarf, hand, head and both soles fully visible. Keep the same actor face, cobalt coat, copper shirt, cream scarf, asymmetrical belt and EXACTLY one visible anatomically LEFT below-knee brass/steel prosthesis in every frame, right leg ends in worn leather full normal boot. No mirrored costume. Keep actors mostly frontal at three-quarter, so the prosthesis sits visually viewer-right in ALL four frames, even when he leans or steps screen left. Feet on one common line, similar physical height, natural hands and knees. No ground, text, dividers, effect glow, atmosphere, cast shadow, stage or printed checker. Distinct body action only. Reality Fold grounded power. Four successive active poses: 1 settles with hips planted, hands gather close at chest; 2 holds palms at chest facing each other around a precise narrow gap; 3 draws both palms away from each other to open a dramatic seam, wide enough to communicate the gesture; 4 lowers open palms to waist as the transition settles. Maintain same proportion and one anatomical left brass prosthesis visible viewer-right plus one normal worn right leather boot."
+      },
+      {
+        "action": "dune_alpha",
+        "master": "exec-cef36ac4-a3bd-4687-9497-d35d458b70ee.png",
+        "prompt": "Use case background-extraction. Preserve precisely the four existing separate full-body Mateo action figures and all their faces, left prostheses, correct side, scarf, clothes and spacing, crop no limbs. Remove every pixel of the pale white backdrop and cast shadows, including inside enclosed gaps between arms and body and around knees or scarf, and return visually genuine 100% transparent alpha (A=0) behind the figures. Only the four painted figures should remain at full opacity, with fine transparent edge antialiasing. Do not create a white translucent background, redraw power gestures, add text, flip anything, or change lighting."
+      }
+    ],
+    "orientation": "The left-leg prosthesis remains on the same side. Dune and Solar use separately drawn return sequences."
+  }
+}

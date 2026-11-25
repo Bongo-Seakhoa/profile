@@ -425,10 +425,10 @@
   {
     "id": "bongo-kosa",
     "path": "bongo-kosa/",
-    "kind": "continuity",
+    "kind": "page",
     "label": "Bongo Kosa",
-    "title": "Bongo Kosa is Bongo Seakhoa",
-    "description": "Bongo Kosa and Bongo Seakhoa are professional and legal name variants for the same person and work.",
+    "title": "Bongo Kosa | AI and Data Systems Engineer",
+    "description": "Explore Bongo Kosa’s work in governed AI, data engineering and validation research, and find his resume and CV.",
     "navigation": false,
     "navigationOrder": null,
     "sitemap": false,
@@ -502,5 +502,20 @@
     "entityRef": null,
     "staticRenderable": true,
     "immersiveDestinationId": "services"
+  },
+  {
+    "id": "documents-bongo-kosa",
+    "path": "documents/bongo-kosa/",
+    "kind": "page",
+    "label": "Bongo Kosa documents",
+    "title": "Bongo Kosa Resume and CV",
+    "description": "Read Bongo Kosa’s resume and CV online or download either as an A4 PDF.",
+    "navigation": false,
+    "navigationOrder": null,
+    "sitemap": false,
+    "canonicalRouteId": "documents",
+    "entityRef": null,
+    "staticRenderable": true,
+    "immersiveDestinationId": null
   }
 ]

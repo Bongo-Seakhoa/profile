@@ -1,110 +1,107 @@
 ---
 import ContentStyles from "../../components/content/ContentStyles.astro";
+import ProjectCard from "../../components/content/ProjectCard.astro";
 import ActionLink from "../../components/primitives/ActionLink.astro";
 import Container from "../../components/primitives/Container.astro";
 import PageMasthead from "../../components/primitives/PageMasthead.astro";
+import SectionIntro from "../../components/primitives/SectionIntro.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadProfileContent } from "../../lib/content/load-content";
-import { sitePath } from "../../lib/urls";
 
 const content = await loadProfileContent();
-const route = content.routes.find((entry) => entry.id === "bongo-kosa");
 const identity = content.identity[0];
-const resume = content.documentManifest
-  .find((document) => document.id === "resume")
-  ?.variants.find((variant) => variant.displayName === "Bongo Kosa");
-const cv = content.documentManifest
-  .find((document) => document.id === "cv")
-  ?.variants.find((variant) => variant.displayName === "Bongo Kosa");
+const displayName = identity?.alternateNames[0];
+const route = content.routes.find((entry) => entry.id === "bongo-kosa");
+const documentsRoute = content.routes.find(
+  (entry) => entry.id === "documents-bongo-kosa",
+);
+const canonicalRoute = content.routes.find(
+  (entry) => entry.id === route?.canonicalRouteId,
+);
 
-if (!route || !identity || !resume || !cv) {
-  throw new Error("Bongo Kosa continuity content is missing.");
+if (!identity || !displayName || !route || !documentsRoute || !canonicalRoute) {
+  throw new Error("Bongo Kosa profile content is missing.");
 }
+
+const [leadProject, ...supportingProjects] = content.projects
+  .filter((project) => project.featured)
+  .sort(
+    (left, right) =>
+      (left.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+      (right.featuredOrder ?? Number.MAX_SAFE_INTEGER),
+  );
 ---
 
 <BaseLayout
   title={route.title}
   description={route.description}
-  canonicalPath=""
+  canonicalPath={canonicalRoute.path}
+  activeRouteId="home"
   updatedDate={identity.lastReviewed}
+  profileDisplay={{
+    name: displayName,
+    homePath: route.path,
+    documentsPath: documentsRoute.path,
+  }}
 >
   <ContentStyles />
   <PageMasthead
     slot="masthead"
-    eyebrow="Identity continuity"
-    title={route.title}
-    lede={identity.identityNote}
+    eyebrow={identity.headline}
+    title={displayName}
+    lede={identity.valueStatement}
   >
-    <ActionLink href="">Visit the main portfolio</ActionLink>
-    <ActionLink href="about/" variant="secondary">
-      About Bongo Seakhoa
+    <ActionLink href="#kosa-work">Selected work</ActionLink>
+    <ActionLink href={documentsRoute.path} variant="secondary">
+      Resume and CV
     </ActionLink>
+    <ActionLink href="contact/" variant="secondary">Contact</ActionLink>
   </PageMasthead>
 
-  <section class="page-section" aria-labelledby="continuity-title">
-    <Container size="content">
-      <article class="continuity-record">
-        <p class="continuity-record__label">One professional identity</p>
-        <h2 id="continuity-title">The work is maintained in one place.</h2>
-        <p>
-          The Bongo Kosa resume and CV below contain the same experience and
-          qualifications as the primary Bongo Seakhoa versions.
-        </p>
-        <div class="continuity-record__documents">
-          <a href={sitePath(resume.pdfPath)} download>
-            Download Bongo Kosa resume
-          </a>
-          <a href={sitePath(cv.pdfPath)} download>Download Bongo Kosa CV</a>
-          <a href={sitePath("documents/")}>View every document variant</a>
+  <section class="page-section" aria-labelledby="kosa-work">
+    <Container>
+      <SectionIntro id="kosa-work" title="Selected work" />
+      <div class="selected-work">
+        {leadProject && <ProjectCard project={leadProject} variant="lead" />}
+        <div class="supporting-work">
+          {
+            supportingProjects.map((project) => (
+              <ProjectCard project={project} />
+            ))
+          }
         </div>
-      </article>
+      </div>
+      <div class="work-links">
+        <ActionLink href="work/" variant="secondary">All projects</ActionLink>
+        <ActionLink href="experience/" variant="secondary"
+          >Experience</ActionLink
+        >
+      </div>
     </Container>
   </section>
 </BaseLayout>
 
 <style>
-  .continuity-record {
-    padding: clamp(1.5rem, 5vw, 4rem);
-    border: 1px solid var(--line-strong);
-    border-block-start: 0.35rem solid var(--gold);
-    background: var(--surface);
+  .selected-work,
+  .supporting-work {
+    display: grid;
+    gap: var(--space-5);
   }
 
-  .continuity-record__label {
-    color: var(--rust-strong);
-    font-family: var(--font-mono);
-    font-size: var(--step--1);
-    font-weight: 700;
-    text-transform: uppercase;
+  .selected-work {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   }
 
-  h2 {
-    max-inline-size: 26ch;
-    margin-block-start: var(--space-3);
-    font-size: var(--step-3);
-  }
-
-  article > p:not(.continuity-record__label) {
-    max-inline-size: 62ch;
-    margin-block-start: var(--space-4);
-    color: var(--ink-soft);
-    font-size: var(--step-1);
-  }
-
-  .continuity-record__documents {
+  .work-links {
     display: flex;
     margin-block-start: var(--space-6);
     flex-wrap: wrap;
-    gap: var(--space-3) var(--space-5);
+    gap: var(--space-3);
   }
 
-  .continuity-record__documents a {
-    display: inline-flex;
-    min-block-size: var(--target-size);
-    padding-block: 0.65rem;
-    align-items: center;
-    color: var(--rust-strong);
-    font-weight: 700;
-    text-underline-offset: 0.2em;
+  @media (max-width: 48rem) {
+    .selected-work {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>

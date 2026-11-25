@@ -59,7 +59,7 @@ function resolveHref(href: string): string {
       <section class="site-footer__identity" aria-labelledby="footer-identity">
         <h2 id="footer-identity">{primaryName}</h2>
         <p>{valueStatement}</p>
-        <p class="site-footer__continuity">{identityNote}</p>
+        {identityNote && <p class="site-footer__continuity">{identityNote}</p>}
       </section>
 
       <nav class="site-footer__navigation" aria-label="Footer">

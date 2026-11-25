@@ -50,7 +50,19 @@ for (const [path, needles] of [
   ["experience/", ["Nov 2024 to Jun 2025", "Appen"]],
   ["education/", ["BSc in Engineering Management", "Explore AI Academy"]],
   ["about/", ["Engineering Management"]],
-  ["bongo-kosa/", ["One professional identity"]],
+  [
+    "bongo-kosa/",
+    ["Bongo Kosa", "/profile/documents/bongo-kosa/", "MetaPOS Mind"],
+  ],
+  ["documents/", ["/profile/documents/bongo-kosa/"]],
+  [
+    "documents/bongo-kosa/",
+    [
+      "Bongo Kosa Resume and CV",
+      "/profile/documents/bongo-kosa-resume.pdf",
+      "/profile/documents/bongo-kosa-cv.pdf",
+    ],
+  ],
   ["credentials/", ["TN8RXZY8M354"]],
   ["research/", ["Accepted for ISM 2026"]],
   ["work/omnimind/", ["57.66%", "does not establish improved answer quality"]],

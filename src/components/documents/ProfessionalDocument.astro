@@ -52,7 +52,19 @@ const socialImageUrl = absoluteUrl(
   `assets/social/${route.id}.jpg`,
   settings.siteUrl,
 );
-const socialImageAlt = `${route.title}. Professional document by Bongo Seakhoa.`;
+const isPrimaryName = displayName === identity.primaryName;
+const documentTitle = isPrimaryName
+  ? `${route.title} | ${identity.primaryName}`
+  : route.title;
+const documentsRoute = content.routes.find(
+  (entry) =>
+    entry.id === (isPrimaryName ? "documents" : "documents-bongo-kosa"),
+);
+
+if (!documentsRoute) {
+  throw new Error(`Document listing route is missing for ${displayName}.`);
+}
+const socialImageAlt = `${route.title}. Professional document by ${displayName}.`;
 const faviconUrl = sitePath("favicon.svg");
 const faviconPngUrl = sitePath("favicon-32.png");
 const appleTouchIconUrl = sitePath("apple-touch-icon.png");
@@ -138,7 +150,7 @@ const currentYear = new Date().getUTCFullYear();
     <meta name="description" content={route.description} />
     <meta name="robots" content="noindex,follow" />
     <meta name="theme-color" content={settings.themeColor} />
-    <title>{route.title} | Bongo Seakhoa</title>
+    <title>{documentTitle}</title>
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href={faviconUrl} type="image/svg+xml" />
     <link rel="icon" href={faviconPngUrl} sizes="32x32" type="image/png" />
@@ -146,9 +158,12 @@ const currentYear = new Date().getUTCFullYear();
     <link rel="manifest" href={manifestUrl} />
     <link rel="sitemap" href={sitemapUrl} type="application/xml" />
 
-    <meta property="og:site_name" content={settings.siteName} />
+    <meta
+      property="og:site_name"
+      content={isPrimaryName ? settings.siteName : displayName}
+    />
     <meta property="og:type" content="profile" />
-    <meta property="og:title" content={`${route.title} | Bongo Seakhoa`} />
+    <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={route.description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:locale" content="en_US" />
@@ -160,7 +175,7 @@ const currentYear = new Date().getUTCFullYear();
     <meta property="og:image:alt" content={socialImageAlt} />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${route.title} | Bongo Seakhoa`} />
+    <meta name="twitter:title" content={documentTitle} />
     <meta name="twitter:description" content={route.description} />
     <meta name="twitter:image" content={socialImageUrl} />
     <meta name="twitter:image:alt" content={socialImageAlt} />
@@ -171,7 +186,7 @@ const currentYear = new Date().getUTCFullYear();
     data-document-name={displayName}
   >
     <nav class="document-toolbar" aria-label="Document actions">
-      <a href={withBase("documents/")}>← All documents</a>
+      <a href={withBase(documentsRoute.path)}>← All documents</a>
       <span>{documentLabel} · A4 · {document.pageCount} pages</span>
       <a class="document-toolbar__download" href={withBase(pdfPath)} download>
         Download PDF

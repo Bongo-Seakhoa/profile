@@ -18,6 +18,7 @@ export interface Props {
   headline: string;
   navigation: NavigationItem[];
   currentPath: string;
+  homePath?: string;
   activeRouteId?: string;
   documentsPath?: string;
   documentDownloads?: DocumentDownload[];
@@ -30,6 +31,7 @@ const {
   headline,
   navigation,
   currentPath,
+  homePath = "",
   activeRouteId,
   documentsPath = "documents/",
   documentDownloads = [],
@@ -46,7 +48,7 @@ function isActive(item: NavigationItem): boolean {
 
 <header class="site-header">
   <Container size="wide" class="site-header__inner">
-    <a class="site-header__brand" href={sitePath("")}>
+    <a class="site-header__brand" href={sitePath(homePath)}>
       <span class="site-header__wordmark">{primaryName}</span>
       <span class="site-header__descriptor">{headline}</span>
     </a>

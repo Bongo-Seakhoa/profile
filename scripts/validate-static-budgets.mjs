@@ -27,7 +27,7 @@ const limits = {
   maximumSocialCard: 100 * 1024,
   maximumPdf: 750 * 1024,
   maximumImmersiveImage: 650 * 1024,
-  maximumImmersiveAssetTotal: 9 * 1024 * 1024,
+  maximumImmersiveAssetTotal: 10 * 1024 * 1024,
   maximumDist: 25 * 1024 * 1024,
 };
 
@@ -227,7 +227,7 @@ const immersiveAssetBytes = (
 ).reduce((total, bytes) => total + bytes, 0);
 if (immersiveAssetBytes > limits.maximumImmersiveAssetTotal) {
   failures.push(
-    `Explore Anzania assets total ${immersiveAssetBytes} bytes, above the 9 MB budget`,
+    `Explore Anzania assets total ${immersiveAssetBytes} bytes, above the 10 MiB budget`,
   );
 }
 

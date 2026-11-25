@@ -1,0 +1,223 @@
+---
+import { sitePath } from "../../lib/urls";
+
+const caseStudyPath = sitePath("work/metapos-app-data-management/");
+const waypoints = [
+  { action: "journey-next", label: "Stone Pass" },
+  { action: "chamber-enter", label: "Context Chamber" },
+  { action: "chamber-exit", label: "Return to Stone Pass" },
+  { action: "journey-back", label: "Return to Threshold Dunes" },
+  { action: "workbench", label: "Working table", dialog: true },
+  { action: "source-books", label: "Source books", dialog: true },
+  { action: "validation-scroll", label: "Validation scroll", dialog: true },
+  { action: "archive-exit", label: "Return to Archive entrance" },
+  {
+    action: "archive-shelves",
+    label: "Scroll shelves",
+    dialog: "archive-checkpoint-dialog",
+  },
+  {
+    action: "archive-astrolabe",
+    label: "Review instrument",
+    dialog: "archive-checkpoint-dialog",
+  },
+  {
+    action: "archive-folio",
+    label: "Open folio",
+    dialog: "archive-checkpoint-dialog",
+  },
+];
+---
+
+<div class="pilot-waypoints" data-pilot-waypoints hidden>
+  {
+    waypoints.map(({ action, label, dialog }) => (
+      <button
+        class="pilot-waypoint"
+        type="button"
+        data-pilot-action={action}
+        aria-haspopup={dialog ? "dialog" : undefined}
+        aria-controls={
+          typeof dialog === "string"
+            ? dialog
+            : dialog
+              ? "context-chamber-dialog"
+              : undefined
+        }
+        hidden
+      >
+        <span class="pilot-waypoint__pin" data-pilot-pin aria-hidden="true">
+          <i />
+        </span>
+        <span class="pilot-waypoint__label" data-pilot-label>
+          {label}
+        </span>
+      </button>
+    ))
+  }
+</div>
+
+<div class="pilot-effects" data-pilot-effects aria-hidden="true" hidden>
+  <img data-pilot-effect-far alt="" hidden />
+  <img data-pilot-effect-near alt="" hidden />
+</div>
+
+<button class="pilot-skip" data-pilot-skip type="button" hidden>
+  Skip crossing
+</button>
+
+<dialog
+  id="context-chamber-dialog"
+  class="explore-dialog context-chamber"
+  data-chamber-dialog
+  aria-label="Context Chamber"
+>
+  <div class="explore-dialog__frame context-chamber__frame">
+    <form method="dialog" class="context-chamber__close">
+      <button
+        class="dialog-close"
+        type="submit"
+        data-chamber-close
+        aria-label="Close Context Chamber inspection"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+
+    <section
+      class="context-chamber__panel"
+      data-chamber-panel="workbench"
+      aria-labelledby="context-chamber-workbench-title"
+      hidden
+    >
+      <header class="explore-dialog__header context-chamber__header">
+        <div>
+          <p class="dialog-kicker">Working table</p>
+          <h2 id="context-chamber-workbench-title">Trace a request</h2>
+          <p>
+            Fictional records and roles illustrate how project access shapes an
+            answer.
+          </p>
+        </div>
+      </header>
+
+      <div class="context-chamber__request">
+        <strong>Request</strong>
+        <p>What should I review before the inventory sync release?</p>
+      </div>
+
+      <fieldset class="context-chamber__roles">
+        <legend>View as</legend>
+        <label>
+          <input type="radio" name="request-role" value="contributor" checked />
+          Project contributor
+        </label>
+        <label>
+          <input type="radio" name="request-role" value="outside" />
+          Outside the project
+        </label>
+      </fieldset>
+
+      <ol class="context-chamber__trace" aria-label="Request processing">
+        <li>Request</li>
+        <li>Access check</li>
+        <li>
+          <span data-chamber-route="granted" aria-current="true"
+            >Scoped answer</span
+          >
+          <span data-chamber-route="limited">No project context</span>
+        </li>
+      </ol>
+
+      <div
+        class="context-chamber__result"
+        data-chamber-result
+        data-access="granted"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <strong data-chamber-status>Project access granted</strong>
+        <p data-chamber-answer>
+          The release review is pending. Compare the latest test run with the
+          readiness checklist.
+        </p>
+        <div class="context-chamber__sources" data-chamber-sources>
+          <span>Sources</span>
+          <ul aria-label="Sources used in the answer">
+            <li>Delivery note 18</li>
+            <li>Readiness checklist</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="context-chamber__panel"
+      data-chamber-panel="source-books"
+      aria-labelledby="context-chamber-books-title"
+      hidden
+    >
+      <header class="explore-dialog__header context-chamber__header">
+        <div>
+          <p class="dialog-kicker">Fictional project records</p>
+          <h2 id="context-chamber-books-title">The source books</h2>
+          <p>Two entries support the example answer at the working table.</p>
+        </div>
+      </header>
+      <dl class="context-chamber__records">
+        <div>
+          <dt>Delivery note 18</dt>
+          <dd>
+            The inventory sync release is still in review. The project team can
+            inspect a new test run.
+          </dd>
+        </div>
+        <div>
+          <dt>Readiness checklist</dt>
+          <dd>
+            Compare the latest run with the release checks before asking the
+            owner to sign off.
+          </dd>
+        </div>
+      </dl>
+      <p class="context-chamber__note">
+        In the walkthrough, project contributors have access to these records.
+      </p>
+    </section>
+
+    <section
+      class="context-chamber__panel"
+      data-chamber-panel="validation-scroll"
+      aria-labelledby="context-chamber-scroll-title"
+      hidden
+    >
+      <header class="explore-dialog__header context-chamber__header">
+        <div>
+          <p class="dialog-kicker">Engineering notes</p>
+          <h2 id="context-chamber-scroll-title">The validation scroll</h2>
+          <p>
+            As primary developer, I built the Python context and validation
+            layer and its read-only MCP-compatible interface.
+          </p>
+        </div>
+      </header>
+      <dl class="context-chamber__records">
+        <div>
+          <dt>Check the shape</dt>
+          <dd>Validate structured project records against JSON Schema.</dd>
+        </div>
+        <div>
+          <dt>Resolve the scope</dt>
+          <dd>Use sources the requester is authorized to access.</dd>
+        </div>
+        <div>
+          <dt>Serve the context</dt>
+          <dd>Expose the assembled record through the read-only interface.</dd>
+        </div>
+      </dl>
+      <a class="option-static-link" href={caseStudyPath}>
+        Read the MetaPOS Mind case study <span aria-hidden="true">→</span>
+      </a>
+    </section>
+  </div>
+</dialog>

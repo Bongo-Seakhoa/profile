@@ -13,6 +13,7 @@ const coreRoutes = [
   "credentials/",
   "about/",
   "documents/",
+  "documents/bongo-kosa/",
   "services/",
   "contact/",
   "bongo-kosa/",
@@ -396,6 +397,102 @@ test.describe("Responsive layout", () => {
       expect(headerState.desktopDisplay === "block").toBe(scenario.desktop);
       expect(headerState.mobileDisplay === "block").toBe(!scenario.desktop);
     }
+  });
+});
+
+test.describe("Shareable surname routes", () => {
+  test.use({ javaScriptEnabled: false });
+  test.beforeEach(async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+  });
+
+  test("opens the Kosa profile and its named documents directly", async ({
+    page,
+  }) => {
+    const profile = await page.goto("bongo-kosa/");
+    expect(profile?.ok()).toBe(true);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Bongo Kosa",
+    );
+    await expect(
+      page.getByRole("heading", { name: "MetaPOS Mind", exact: true }),
+    ).toBeVisible();
+    await expect(page.locator(".site-header__brand")).toHaveAttribute(
+      "href",
+      "/profile/bongo-kosa/",
+    );
+
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "Resume and CV" })
+      .click();
+    await expect(page).toHaveURL(/\/profile\/documents\/bongo-kosa\/$/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Bongo Kosa Resume and CV",
+    );
+    const nameNavigation = page.getByRole("navigation", {
+      name: "Document names",
+    });
+    const seakhoa = nameNavigation.getByRole("link", {
+      name: "Bongo Seakhoa",
+      exact: true,
+    });
+    const kosa = nameNavigation.getByRole("link", {
+      name: "Bongo Kosa",
+      exact: true,
+    });
+    await expect(kosa).toHaveAttribute("aria-current", "page");
+    await expect(seakhoa).not.toHaveAttribute("aria-current");
+    for (const kind of ["Resume", "CV"]) {
+      await expect(
+        page.getByRole("link", { name: `Download PDF of Bongo Kosa ${kind}` }),
+      ).toHaveAttribute(
+        "href",
+        `/profile/documents/bongo-kosa-${kind.toLowerCase()}.pdf`,
+      );
+      await expect(
+        page.getByRole("link", {
+          name: `View browser preview of Bongo Kosa ${kind}`,
+        }),
+      ).toHaveAttribute(
+        "href",
+        `/profile/documents/${kind.toLowerCase()}/bongo-kosa/`,
+      );
+    }
+    await expect(page.locator("main a[href*='bongo-seakhoa']")).toHaveCount(0);
+    await expect(page.locator("link[rel='canonical']")).toHaveAttribute(
+      "href",
+      "https://bongo-seakhoa.github.io/profile/documents/",
+    );
+
+    await page
+      .locator('main a[href="/profile/documents/resume/bongo-kosa/"]')
+      .click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Bongo Kosa",
+    );
+    await expect(
+      page.getByRole("link", { name: "All documents" }),
+    ).toHaveAttribute("href", "/profile/documents/bongo-kosa/");
+
+    await page.getByRole("link", { name: "All documents" }).click();
+    await expect(kosa).toHaveAttribute("aria-current", "page");
+    await seakhoa.click();
+    await expect(page).toHaveURL(/\/profile\/documents\/$/);
+    await expect(seakhoa).toHaveAttribute("aria-current", "page");
+    await expect(kosa).not.toHaveAttribute("aria-current");
+    await expect(page.locator("#alternate-documents-title")).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Download PDF of Bongo Seakhoa Resume" }),
+    ).toHaveAttribute("href", "/profile/documents/bongo-seakhoa-resume.pdf");
+    await kosa.click();
+    await expect(page).toHaveURL(/\/profile\/documents\/bongo-kosa\/$/);
+    await expect(kosa).toHaveAttribute("aria-current", "page");
+
+    await page.goto("./");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Bongo Seakhoa",
+    );
   });
 });
 

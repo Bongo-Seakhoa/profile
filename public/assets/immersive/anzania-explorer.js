@@ -5,6 +5,7 @@ const assetRootUrl = new URL("./", import.meta.url);
 const siteRootUrl = new URL("../../", import.meta.url);
 
 const selectors = {
+  skipLink: ".explore-skip-link",
   experience: "[data-experience]",
   loadingGate: "[data-loading-gate]",
   loadingProgress: "[data-loading-progress]",
@@ -23,8 +24,13 @@ const selectors = {
   mapLocationList: "[data-map-location-list]",
   locationNumber: "[data-location-number]",
   locationRegion: "[data-location-region]",
+  locationMark: ".location-mark",
   locationName: "[data-location-name]",
+  sceneBrief: "[data-scene-brief]",
+  sceneEvidence: "[data-scene-evidence]",
+  scenePortal: "[data-scene-portal]",
   chapterPanel: "[data-chapter-panel]",
+  chapterBody: "[data-chapter-body]",
   chapterEyebrow: "[data-chapter-eyebrow]",
   chapterTitle: "[data-chapter-title]",
   chapterLead: "[data-chapter-lead]",
@@ -70,6 +76,15 @@ const selectors = {
   motionToggle: "[data-motion-toggle]",
   toast: "[data-experience-toast]",
   announcer: "[data-experience-announcer]",
+  pilotWaypoints: "[data-pilot-waypoints]",
+  chamberDialog: "[data-chamber-dialog]",
+  archiveDialog: "[data-archive-dialog]",
+  pilotSkip: "[data-pilot-skip]",
+  pilotGuide: "[data-pilot-guide]",
+  pilotNotes: "[data-pilot-notes]",
+  closeNotes: "[data-close-notes]",
+  pilotEffectFar: "[data-pilot-effect-far]",
+  pilotEffectNear: "[data-pilot-effect-near]",
 };
 
 const elements = Object.fromEntries(
@@ -130,6 +145,96 @@ const storageKeys = {
   visited: "anzania-visited-v2",
 };
 
+const scenePilot = {
+  dunes: {
+    location: "threshold-dunes",
+    mode: "outer",
+    focus: [65, 46],
+    portraitFocus: [76, 44],
+    guides: [
+      [0.673, 0.813, 0.215],
+      [0.741, 0.61, 0.145],
+    ],
+    shortLandscapeGuide: [0.643, 0.62, 0.215],
+    waypoints: { "journey-next": { point: [0.752, 0.349] } },
+  },
+  pass: {
+    location: "stone-pass",
+    mode: "outer",
+    focus: [64, 48],
+    portraitFocus: [76, 32],
+    guides: [
+      [0.665, 0.799, 0.225],
+      [0.756, 0.614, 0.153],
+    ],
+    waypoints: {
+      "chamber-enter": { point: [0.67, 0.425], portrait: [0.775, 0.42] },
+      "journey-back": {
+        point: [0.769, 0.699],
+        portrait: [0.736, 0.282],
+        portraitSide: "below",
+      },
+    },
+  },
+  chamber: {
+    location: "stone-pass",
+    mode: "inner",
+    focus: [36, 54],
+    portraitFocus: [49, 48],
+    guides: [
+      [0.559, 0.824, 0.393],
+      [0.552, 0.781, 0.287],
+    ],
+    waypoints: {
+      "chamber-exit": {
+        point: [0.119, 0.424],
+        portrait: [0.532, 0.234],
+        portraitSide: "below",
+      },
+      workbench: {
+        point: [653 / 1672, 579 / 941],
+        portrait: [700 / 1672, 579 / 941],
+      },
+      "source-books": { point: [835 / 1672, 507 / 941], side: "left" },
+      "validation-scroll": {
+        point: [1120 / 1672, 403 / 941],
+        portrait: [914 / 1672, 486 / 941],
+        alternate: [588 / 1672, 301 / 941],
+        portraitSide: "above",
+      },
+    },
+  },
+};
+
+const archiveWaypoints = {
+  "archive-exit": {
+    point: [0.395, 0.631],
+    portrait: [0.46, 0.567],
+    label: "Return to Archive entrance",
+    portraitLabel: "Back to entrance",
+    portraitSide: "right",
+  },
+  "archive-shelves": {
+    point: [0.897, 0.391],
+    portrait: [0.506, 0.431],
+    label: "Scroll shelves",
+    portraitLabel: "Carved record",
+    side: "left",
+  },
+  "archive-astrolabe": {
+    point: [0.606, 0.504],
+    label: "Review instrument",
+    portraitSide: "left",
+  },
+  "archive-folio": {
+    point: [0.871, 0.816],
+    portrait: [0.559, 0.628],
+    label: "Open folio",
+    portraitLabel: "Reader’s stand",
+    side: "left",
+  },
+};
+
 const state = {
   manifest: null,
   locationIndex: 0,
@@ -154,6 +259,9 @@ const state = {
   reframeTimer: 0,
   chapterScrollFrame: 0,
   parallaxFrame: 0,
+  pendingHash: false,
+  crossing: null,
+  inspection: null,
 };
 
 const guidePoseNames = new Set(["idle", "present", "travel", "lookback"]);
@@ -235,6 +343,138 @@ function chooseSceneSource(scene) {
   return resolveAsset(requiredWidth <= 1_050 ? scene.small : scene.large);
 }
 
+function getPilotSetting(
+  location = getCurrentLocation(),
+  mode = state.sceneMode,
+) {
+  return Object.keys(scenePilot).find(
+    (key) =>
+      scenePilot[key].location === location?.id &&
+      scenePilot[key].mode === mode,
+  );
+}
+
+function pilotPortrait() {
+  return window.innerWidth <= 704;
+}
+
+function sceneGuide(location = getCurrentLocation(), mode = state.sceneMode) {
+  return location?.[mode]?.guideStage;
+}
+
+function sceneFocus(setting, stage) {
+  const profile = scenePilot[setting];
+  if (profile) return pilotPortrait() ? profile.portraitFocus : profile.focus;
+  if (!stage) return [50, 50];
+  const { clientWidth: width, clientHeight: height } = elements.sceneCurrent;
+  const crop = height * (16 / 9) - width;
+  const portrait = width <= 820 && height > width;
+  const anchor = (
+    portrait && stage.portrait ? stage.portrait : stage.anchors[0]
+  )[0];
+  const x =
+    portrait && crop > 0
+      ? clamp((anchor * (width + crop) - width * 0.67) / crop, 0, 1) * 100
+      : 50;
+  return [x, stage.focusY ?? 50];
+}
+
+function setSceneFocus(setting, stage) {
+  const focus = sceneFocus(setting, stage)
+    .map((axis) => `${axis}%`)
+    .join(" ");
+  elements.sceneCurrent.style.backgroundPosition = focus;
+  elements.sceneForeground.style.backgroundPosition = focus;
+}
+
+function projectPilotPoint(point, setting, stage) {
+  const width = elements.sceneCurrent.clientWidth;
+  const height = elements.sceneCurrent.clientHeight;
+  const sourceRatio = 1600 / 900;
+  const artWidth = Math.max(width, height * sourceRatio);
+  const artHeight = artWidth / sourceRatio;
+  const [x, y] = sceneFocus(setting, stage);
+  return [
+    ((width - artWidth) * x) / 100 + artWidth * point[0],
+    ((height - artHeight) * y) / 100 + artHeight * point[1],
+  ];
+}
+
+function renderPilotWaypoints() {
+  const layer = elements.pilotWaypoints;
+  const setting = getPilotSetting();
+  if (setting) elements.experience.dataset.pilotSetting = setting;
+  else delete elements.experience.dataset.pilotSetting;
+  if (!layer) return;
+  const archive =
+    state.sceneMode === "inner" &&
+    getCurrentLocation()?.id === "archive-echoes";
+  const waypoints = archive ? archiveWaypoints : scenePilot[setting]?.waypoints;
+  layer.hidden =
+    !waypoints || !state.hasBegun || state.isTraversing || state.isViewingScene;
+  if (layer.hidden) return;
+
+  const stage = sceneGuide();
+  const portrait = archive
+    ? window.innerWidth <= 820 && window.innerWidth < window.innerHeight
+    : pilotPortrait();
+  const width = layer.clientWidth;
+  const height = layer.clientHeight;
+  const visible = ([x, y]) =>
+    x > 27 && x < width - 27 && y > 29 && y < height - 29;
+  for (const button of layer.querySelectorAll("[data-pilot-action]")) {
+    const pin = waypoints[button.dataset.pilotAction];
+    const choices =
+      pin &&
+      (portrait
+        ? [pin.portrait, pin.point, pin.alternate]
+        : [pin.point, pin.alternate, pin.portrait]
+      ).filter(Boolean);
+    const point = choices?.find((candidate) =>
+      visible(projectPilotPoint(candidate, setting, stage)),
+    );
+    button.hidden = !point;
+    if (!point) continue;
+    const [x, y] = projectPilotPoint(point, setting, stage);
+    const label = button.querySelector("[data-pilot-label]");
+    if (pin.label)
+      label.textContent =
+        point === pin.portrait && pin.portraitLabel
+          ? pin.portraitLabel
+          : pin.label;
+    const labelWidth = label.offsetWidth;
+    let side =
+      (portrait && point === pin.portrait && pin.portraitSide) ||
+      pin.side ||
+      "right";
+    if (side === "right" && x + labelWidth + 30 > width) side = "left";
+    if (side === "left" && x - labelWidth - 30 < 0) side = "below";
+    button.dataset.pilotLabelSide = side;
+    button.style.setProperty("--pilot-x", `${x}px`);
+    button.style.setProperty("--pilot-y", `${y}px`);
+  }
+}
+
+function setFieldNotes(open, { focus = true } = {}) {
+  elements.experience.toggleAttribute("data-pilot-notes-open", open);
+  elements.pilotNotes?.setAttribute("aria-expanded", String(open));
+  if (elements.chapterPanel)
+    elements.chapterPanel.inert = !open || state.isViewingScene;
+  if (focus) {
+    recalculateFraming({ immediate: true });
+    window.requestAnimationFrame(() => {
+      if (
+        state.isViewingScene ||
+        open !== elements.experience.hasAttribute("data-pilot-notes-open")
+      )
+        return;
+      (open ? elements.chapterPanel : elements.pilotNotes)?.focus({
+        preventScroll: true,
+      });
+    });
+  }
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -289,6 +529,8 @@ function setInteractionLock(locked) {
     elements.previousLocation,
     elements.nextLocation,
     elements.portalButton,
+    elements.scenePortal,
+    elements.pilotNotes,
     elements.mapButton,
     elements.guideButton,
     elements.viewSceneButton,
@@ -299,6 +541,7 @@ function setInteractionLock(locked) {
   elements.abilityList
     ?.querySelectorAll("button")
     .forEach((control) => control.toggleAttribute("disabled", locked));
+  renderPilotWaypoints();
 }
 
 function getCurrentLocation() {
@@ -399,6 +642,10 @@ async function setGuidePose(pose, { guide = getCurrentGuide() } = {}) {
 
     elements.companionImage.src = source;
     elements.companionImage.alt = getGuidePoseAlt(guide, requestedPose);
+    elements.companionImage.style.setProperty(
+      "--guide-foot-offset",
+      `${100 - (guide.footline?.[sourcePose] ?? 94)}%`,
+    );
     elements.companionImage.dataset.guidePose = requestedPose;
     elements.companionImage.toggleAttribute(
       "data-guide-pose-fallback",
@@ -457,14 +704,14 @@ function getSettledGuidePose() {
 }
 
 function resetChapterScroll() {
-  if (!elements.chapterPanel) return;
-  elements.chapterPanel.scrollTop = 0;
+  if (!elements.chapterBody) return;
+  elements.chapterBody.scrollTop = 0;
   if (state.chapterScrollFrame) {
     window.cancelAnimationFrame(state.chapterScrollFrame);
   }
   state.chapterScrollFrame = window.requestAnimationFrame(() => {
     state.chapterScrollFrame = 0;
-    if (elements.chapterPanel) elements.chapterPanel.scrollTop = 0;
+    elements.chapterBody.scrollTop = 0;
   });
 }
 
@@ -529,6 +776,7 @@ function renderAbilities() {
           data-power-id="${escapeHtml(powerId)}"
           aria-pressed="${powerId === state.selectedPowerId ? "true" : "false"}"
           aria-label="Use ${escapeHtml(power.name)} for travel"
+          title="${escapeHtml(power.description ?? "")}"
         >
           <span class="ability-dock__glyph" aria-hidden="true"><i>${escapeHtml(power.glyph ?? "◇")}</i></span>
           <span class="ability-dock__copy">
@@ -623,14 +871,20 @@ function renderGuide() {
   });
 }
 
+function fieldNotesHeading(record) {
+  const title = escapeHtml(record.title);
+  return record.path
+    ? `<a href="${escapeHtml(resolveSitePath(record.path))}">${title}</a>`
+    : title;
+}
+
 function tabDefinitions(location) {
   return [
     {
       id: "now",
-      label: "Now",
-      eyebrow: "Live work",
-      description:
-        "Current work, accepted research and systems in development.",
+      label: "Evidence",
+      eyebrow: "Records and examples",
+      description: "The projects, roles and study behind this scene.",
       render: () => `
         <div class="inside-now-grid">
           ${location.deepDive.now
@@ -638,7 +892,7 @@ function tabDefinitions(location) {
               (item) => `
                 <article class="inside-now-card">
                   <span>${escapeHtml(item.status)}</span>
-                  <h4>${escapeHtml(item.title)}</h4>
+                  <h4>${fieldNotesHeading(item)}</h4>
                   <p>${escapeHtml(item.detail)}</p>
                 </article>`,
             )
@@ -658,7 +912,7 @@ function tabDefinitions(location) {
               (pillar, index) => `
                 <article class="inside-pillar-card">
                   <span>${String(index + 1).padStart(2, "0")}</span>
-                  <h4>${escapeHtml(pillar.title)}</h4>
+                  <h4>${fieldNotesHeading(pillar)}</h4>
                   <p>${escapeHtml(pillar.body)}</p>
                 </article>`,
             )
@@ -667,7 +921,7 @@ function tabDefinitions(location) {
     },
     {
       id: "field-notes",
-      label: "Field notes",
+      label: "Questions",
       eyebrow: "Questions worth carrying",
       description:
         "Concise answers that reveal the operating judgement behind the record.",
@@ -676,7 +930,7 @@ function tabDefinitions(location) {
           ${location.deepDive.notes
             .map(
               (note) => `
-                <details>
+                <details name="field-notes-questions">
                   <summary>${escapeHtml(note.question)}</summary>
                   <p>${escapeHtml(note.answer)}</p>
                 </details>`,
@@ -801,6 +1055,14 @@ function advanceForward() {
   if (canOpenFinalLocationEndState()) void togglePortal();
 }
 
+const pilotBriefs = {
+  dunes:
+    "Follow the ridge to Stone Pass, where the first project makes the case for giving AI the right context.",
+  pass: "A project update is scattered across several records. Follow the stone arch to see what MetaPOS Mind can retrieve under different access rules.",
+  chamber:
+    "Start at the working table to see MetaPOS Mind in action. The source books and validation scroll show how the answer was checked.",
+};
+
 function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   const location = getCurrentLocation();
   if (!location || !state.manifest) return;
@@ -816,7 +1078,8 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   elements.experience.dataset.location = location.id;
   elements.chapterPanel.dataset.mode = state.sceneMode;
   if (elements.chapterInside) {
-    elements.chapterInside.hidden = state.sceneMode !== "inner";
+    elements.chapterInside.hidden =
+      state.sceneMode !== "inner" && location.id !== "archive-echoes";
   }
 
   if (elements.progressLabel) {
@@ -832,8 +1095,37 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   if (elements.locationNumber)
     elements.locationNumber.textContent = location.number;
   if (elements.locationRegion)
-    elements.locationRegion.textContent = location.region;
-  if (elements.locationName) elements.locationName.textContent = location.name;
+    elements.locationRegion.textContent =
+      getPilotSetting() === "chamber"
+        ? "Stone Pass checkpoint"
+        : location.region;
+  if (elements.locationName)
+    elements.locationName.textContent =
+      getPilotSetting() === "chamber"
+        ? "Context Chamber"
+        : (location[state.sceneMode].name ?? location.name);
+  const setting = getPilotSetting();
+  elements.sceneBrief.textContent =
+    pilotBriefs[setting] ?? location[state.sceneMode].brief ?? location.title;
+  const feature = location.actions[0];
+  if (elements.sceneEvidence) {
+    elements.sceneEvidence.hidden = !feature;
+    if (feature) {
+      elements.sceneEvidence.href = resolveSitePath(feature.path);
+      elements.sceneEvidence.textContent = feature.label;
+    }
+  }
+  const light = sceneGuide(location)?.light;
+  elements.companion.toggleAttribute("data-scene-lit", Boolean(light));
+  if (light) {
+    const { brightness, contrast, saturation, hue, rim } = light;
+    elements.companion.style.setProperty(
+      "--guide-grade",
+      `brightness(${brightness}) contrast(${contrast}) saturate(${saturation}) hue-rotate(${hue ?? 0}deg)`,
+    );
+    elements.companion.style.setProperty("--guide-scene-rim", rim);
+  }
+  elements.scenePortal.hidden = setting === "pass" || setting === "chamber";
   if (elements.chapterEyebrow)
     elements.chapterEyebrow.textContent = location.eyebrow;
   if (elements.chapterTitle) elements.chapterTitle.textContent = location.title;
@@ -848,6 +1140,7 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
       state.sceneMode === "outer"
         ? location.portalAction
         : "Return to the outer approach";
+    elements.scenePortal.textContent = elements.portalAction.textContent;
   }
   if (elements.portalCaption) {
     elements.portalCaption.textContent =
@@ -926,12 +1219,7 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
       }
     });
 
-  try {
-    window.history.replaceState(null, "", `#${location.id}`);
-  } catch {
-    // Hash state is progressive enhancement only.
-  }
-
+  renderPilotWaypoints();
   if (resetScroll) resetChapterScroll();
   window.requestAnimationFrame(() => recalculateFraming());
   if (announceChange) announce(`${location.formalName}. ${location.title}`);
@@ -990,7 +1278,7 @@ function transitionScene(nextSource, { immediate = false } = {}) {
   });
 }
 
-function stageSceneTransition(nextSource) {
+function stageSceneTransition(nextSource, setting, guideStage) {
   if (
     !elements.sceneCurrent ||
     !elements.scenePrevious ||
@@ -1005,6 +1293,11 @@ function stageSceneTransition(nextSource) {
   const outgoingForeground =
     elements.sceneForeground.style.backgroundImage || outgoingBackground;
   const incomingBackground = `url("${nextSource}")`;
+  elements.scenePrevious.style.backgroundPosition =
+    elements.sceneCurrent.style.backgroundPosition;
+  elements.sceneForegroundPrevious.style.backgroundPosition =
+    elements.sceneForeground.style.backgroundPosition;
+  setSceneFocus(setting, guideStage);
 
   elements.experience.classList.add("is-scene-staged");
   elements.scenePrevious.style.backgroundImage = outgoingBackground;
@@ -1057,7 +1350,9 @@ function finishSceneTransition() {
 function renderScene(options = {}) {
   const location = getCurrentLocation();
   if (!location) return;
+  setSceneFocus(getPilotSetting(location), sceneGuide(location));
   transitionScene(chooseSceneSource(location[state.sceneMode]), options);
+  renderPilotWaypoints();
 }
 
 function rectFromElement(element, expansion = 0) {
@@ -1119,6 +1414,68 @@ function frameRange(viewport) {
   return { target: 0.43, minimum: 0.34, maximum: 0.48 };
 }
 
+function authoredGuideFrame(stage, context) {
+  const {
+    viewport,
+    compact,
+    minimumTop,
+    maximumBottom,
+    safeLeft,
+    safeRight,
+    obstacles,
+  } = context;
+  const artHeight = Math.max(
+    elements.sceneCurrent.clientHeight,
+    elements.sceneCurrent.clientWidth * (9 / 16),
+  );
+  const anchors =
+    compact && viewport.height > viewport.width && stage.portrait
+      ? [stage.portrait, ...stage.anchors]
+      : stage.anchors;
+  for (const anchor of anchors) {
+    const [x, y] = projectPilotPoint(anchor, null, stage);
+    const feetX = viewport.width / 2 + (x - viewport.width / 2) * 1.045;
+    const bottom = viewport.height / 2 + (y - viewport.height / 2) * 1.045;
+    const height = Math.min(
+      artHeight * anchor[2],
+      viewport.height * (compact ? 0.23 : 0.38),
+    );
+    const width = height * (640 / 960);
+    const left = feetX - width / 2;
+    const frame = {
+      left,
+      top: bottom - height,
+      right: left + width,
+      bottom,
+      width,
+      height,
+    };
+    if (
+      left < safeLeft ||
+      frame.right > viewport.width - safeRight ||
+      frame.top < minimumTop ||
+      bottom > maximumBottom
+    )
+      continue;
+    const overlap = obstacles.reduce(
+      (sum, obstacle) => sum + intersectionArea(frame, obstacle),
+      0,
+    );
+    if (overlap < 25)
+      return {
+        ...frame,
+        viewport,
+        compact,
+        overlap,
+        ratio: height / viewport.height,
+        score: 0,
+        fullyVisible: true,
+        grounded: true,
+      };
+  }
+  return null;
+}
+
 function calculateFraming() {
   const viewport = {
     width: Math.max(1, window.innerWidth),
@@ -1143,10 +1500,7 @@ function calculateFraming() {
     10,
   );
   const chapterRect = rectFromElement(elements.chapterPanel, compact ? 16 : 24);
-  const locationRect = rectFromElement(
-    document.querySelector(".location-mark"),
-    14,
-  );
+  const locationRect = rectFromElement(elements.locationMark, 14);
   const railRect = rectFromElement(
     document.querySelector(".location-rail"),
     10,
@@ -1175,6 +1529,72 @@ function calculateFraming() {
 
   const minimumTop = Math.max(safeTop, (topbarRect?.bottom ?? safeTop) + 12);
   const maximumBottom = viewport.height - safeBottom;
+  const stage = sceneGuide();
+  if (stage) {
+    const frame = authoredGuideFrame(stage, {
+      viewport,
+      compact,
+      minimumTop,
+      maximumBottom,
+      safeLeft,
+      safeRight,
+      obstacles: [
+        topbarRect,
+        locationRect,
+        railRect,
+        abilityRect,
+        lookRect,
+        traversalRect,
+        modeRect,
+      ].filter(Boolean),
+    });
+    if (frame) return frame;
+  }
+  const pilot = getPilotSetting();
+  if (pilot && elements.sceneCurrent.clientWidth > 0) {
+    const profile = scenePilot[pilot];
+    const [anchorX, anchorY, authoredRatio] =
+      !portrait && viewport.height <= 560 && profile.shortLandscapeGuide
+        ? profile.shortLandscapeGuide
+        : profile.guides[pilotPortrait() ? 1 : 0];
+    const [groundX, groundY] = projectPilotPoint([anchorX, anchorY], pilot);
+    const [screenX, screenY] = [groundX, groundY].map((axis, i) => {
+      const middle = (i ? viewport.height : viewport.width) / 2;
+      return middle + (axis - middle) * 1.045;
+    });
+    const ratio = Math.max(0.205, authoredRatio);
+    const height = viewport.height * ratio;
+    const width = height * avatarAspect;
+    const left = clamp(
+      screenX - width / 2,
+      safeLeft,
+      viewport.width - safeRight - width,
+    );
+    const bottom = clamp(screenY, minimumTop + height, maximumBottom);
+    const frame = {
+      left,
+      top: bottom - height,
+      right: left + width,
+      bottom,
+      width,
+      height,
+      ratio,
+    };
+    const overlap = obstacles.reduce(
+      (sum, obstacle) => sum + intersectionArea(frame, obstacle),
+      0,
+    );
+    if (overlap < 25) {
+      return {
+        ...frame,
+        viewport,
+        compact,
+        overlap,
+        score: 0,
+        fullyVisible: true,
+      };
+    }
+  }
   const ratioCandidates = [
     targetRatio,
     targetRatio - 0.025,
@@ -1313,6 +1733,7 @@ function recalculateFraming({ immediate = false } = {}) {
 
   const frame = calculateFraming();
   state.lastFrame = frame;
+  elements.companion.toggleAttribute("data-grounded", Boolean(frame.grounded));
 
   document.documentElement.style.setProperty(
     "--avatar-height",
@@ -1430,132 +1851,733 @@ function stopSceneTransitionEffect() {
   }
 }
 
-async function travelTo(
+const pilotPowers = {
+  "dune-surfing": {
+    name: "dune",
+    artwork: "dune-wake",
+    beats: [0.17, 0.67, 0.89],
+  },
+  "sand-teleportation": {
+    name: "sand",
+    artwork: "sand-veil",
+    beats: [0.19, 0.65, 0.85],
+  },
+  "solar-propulsion": {
+    name: "solar",
+    artwork: "solar-plume",
+    beats: [0.25, 0.63, 0.86],
+  },
+  "reality-bending": {
+    name: "fold",
+    artwork: "fold-seam",
+    beats: [0.24, 0.66, 0.87],
+  },
+};
+
+const amaniContacts = {
+  solar: [
+    [543, 292],
+    [585, 240],
+    [545, 278],
+  ],
+  fold: [
+    [306, 266],
+    [299, 268],
+    [294, 452],
+  ],
+};
+
+const mateoActions = {
+  dune: {
+    frames: [1, 2],
+    returnFrames: [3, 4],
+    beats: [0.2, 0.8],
+    width: 137.5,
+  },
+  sand: { frames: [1, 2, 3, 4], beats: [0.17, 0.37, 0.66, 0.88], width: 100 },
+  solar: {
+    frames: [1, 2],
+    returnFrames: [3, 4],
+    beats: [0.27, 0.83],
+    width: 112.5,
+    palms: [
+      [0.848935, 0.198578],
+      [0.84282, 0.220941],
+      [0.127374, 0.232402],
+      [0.110445, 0.254745],
+    ],
+  },
+  fold: {
+    frames: [1, 2, 3, 4],
+    beats: [0.14, 0.28, 0.65, 0.88],
+    width: 100,
+    palms: [
+      [0.475159, 0.270161],
+      [0.482404, 0.262131],
+      [0.502192, 0.272006],
+      [0.500463, 0.420438],
+    ],
+  },
+};
+
+const guideSolarContact = {
+  "dn-m-afr-01": { point: [538, 182] },
+  "dn-m-eas-01": { point: [537, 188] },
+  "dn-m-mena-01": { point: [440, 226] },
+  "dn-f-afr-01": { point: [90, 276] },
+  "dn-f-sas-01": { point: [432, 232] },
+  "dn-n-eur-01": { point: [414, 186] },
+  "dn-f-afr-02": { point: [500, 207] },
+  "dn-f-lat-01": { point: [513, 239] },
+  "dn-m-lat-01": { point: [518, 254] },
+  "dn-f-eas-02": { point: [516, 284], pose: "present" },
+  "dn-n-sea-01": { point: [146, 300], pose: "present" },
+  "dn-m-pac-01": { point: [504, 284], pose: "present" },
+};
+
+const leftDuneStance = new Set([
+  "dn-m-mena-01",
+  "dn-f-afr-01",
+  "dn-n-eur-01",
+  "dn-n-sea-01",
+]);
+const fixedWardrobeSide = new Set([
+  "dn-m-lat-01",
+  "dn-f-eas-02",
+  "dn-n-sea-01",
+]);
+
+const pilotImageCache = new Map();
+const unit = (value) => clamp(value, 0, 1);
+const smooth = (value) => {
+  const t = unit(value);
+  return t * t * (3 - 2 * t);
+};
+
+function loadPilotAsset(file) {
+  if (!pilotImageCache.has(file)) {
+    pilotImageCache.set(
+      file,
+      loadImage(resolveAsset(`pilot/${file}.webp`)).then((result) => {
+        if (!result.loaded) pilotImageCache.delete(file);
+        return result;
+      }),
+    );
+  }
+  return pilotImageCache.get(file);
+}
+
+async function preparePilotCrossing(powerId, direction) {
+  const spec = pilotPowers[powerId];
+  const keyframe = getCurrentGuide()?.crossing?.[spec.name];
+  const mateo =
+    state.selectedGuideId === "dn-m-lat-01" ? mateoActions[spec.name] : null;
+  const frameNumbers =
+    mateo && ((direction < 0 && mateo.returnFrames) || mateo.frames);
+  const poseFiles =
+    mateo && elements.pilotGuide
+      ? frameNumbers.map((frame) => `mateo-${spec.name}-${frame}`)
+      : state.selectedGuideId === "dn-m-afr-01" && elements.pilotGuide
+        ? [1, 2, 3].map((frame) => `amani-${spec.name}-${frame}`)
+        : keyframe && elements.pilotGuide
+          ? [keyframe.file]
+          : [];
+  const [effect, ...loaded] = await Promise.all(
+    [spec.artwork, ...poseFiles].map(loadPilotAsset),
+  );
+  if (!effect.loaded) return null;
+  const poses = loaded.every((pose) => pose.loaded)
+    ? loaded.map((pose) => pose.src)
+    : [];
+  return {
+    ...spec,
+    effect: effect.src,
+    poses,
+    mateo: Boolean(mateo),
+    beats: mateo?.beats ?? spec.beats,
+    contacts: mateo?.palms
+      ? frameNumbers.map((frame) => [
+          mateo.palms[frame - 1][0] * 640,
+          mateo.palms[frame - 1][1] * 960,
+        ])
+      : keyframe?.contact
+        ? [keyframe.contact]
+        : amaniContacts[spec.name],
+    mirrorArt: !mateo,
+    width: mateo?.width ?? (keyframe ? 150 : spec.name === "dune" ? 125 : 100),
+  };
+}
+
+function positionPilotEffect(
+  image,
+  { x, y, size, origin, alpha, direction = 1, angle = 0, stretch = 1 },
+) {
+  image.hidden = alpha <= 0.002;
+  image.style.left = `${x}px`;
+  image.style.top = `${y}px`;
+  image.style.width = `${size}px`;
+  image.style.opacity = alpha;
+  image.style.transform = `translate(-50%, ${origin}%) rotate(${angle}deg) scale(${direction}, ${stretch})`;
+}
+
+function paintPilotRollers(rollers, edges, opening, focus, width, height) {
+  const artWidth = Math.max(width, (height * 1600) / 900);
+  const artHeight = (artWidth * 900) / 1600;
+  const widthOfCurl = Math.max(18, Math.min(width * 0.055, 74));
+  const shown = Math.sin(opening * Math.PI);
+  rollers.forEach((roller, index) => {
+    const side = index === 0 ? -1 : 1;
+    const left = edges[index] - widthOfCurl * (side < 0 ? 0.72 : 0.28);
+    roller.hidden = shown < 0.015;
+    roller.style.width = `${widthOfCurl}px`;
+    roller.style.left = `${left}px`;
+    roller.style.opacity = String(shown * 0.86);
+    roller.style.backgroundSize = `${artWidth}px ${artHeight}px`;
+    roller.style.backgroundPosition = `${((width - artWidth) * focus[0]) / 100 - left}px ${((height - artHeight) * focus[1]) / 100}px`;
+    roller.style.transform = `perspective(340px) rotateY(${side * 38}deg)`;
+  });
+}
+
+function playPilotCrossing({
+  spec,
+  direction,
+  duration,
+  handoffAt,
+  handoff,
+  fromSetting,
+  toSetting,
+  fromStage,
+  toStage,
+}) {
+  const {
+    experience,
+    sceneCurrent,
+    scenePrevious,
+    sceneForeground,
+    sceneForegroundPrevious,
+    companion,
+    companionImage,
+    pilotGuide,
+    pilotEffectFar: far,
+    pilotEffectNear: near,
+    pilotSkip,
+  } = elements;
+  const effectLayer = far.parentElement;
+  const rollers = [...experience.querySelectorAll("[data-pilot-roller]")];
+  const authored = spec.poses.length > 0;
+  const usesKeyframe = spec.poses.length === 1;
+  const name = spec.name;
+  const lightFor = (setting, stage) =>
+    stage?.light ??
+    (setting === "chamber"
+      ? { brightness: 0.76, contrast: 1.1, saturation: 0.75, hue: 0 }
+      : { brightness: 1, contrast: 1.06, saturation: 0.91, hue: 0 });
+  const departureLight = lightFor(fromSetting, fromStage);
+  const arrivalLight = lightFor(toSetting, toStage);
+  const departureFocus = sceneFocus(fromSetting, fromStage);
+  const guideId = state.selectedGuideId;
+  const fallbackContact =
+    guideSolarContact[guideId] ?? guideSolarContact["dn-m-afr-01"];
+  const directional = name === "dune" || name === "solar";
+  const baselineFacesLeft =
+    name === "dune"
+      ? leftDuneStance.has(guideId)
+      : fallbackContact.point[0] < 320;
+  const reflectedBaseline =
+    directional &&
+    !fixedWardrobeSide.has(guideId) &&
+    direction !== (baselineFacesLeft ? -1 : 1);
+  const reflectedArt = directional && direction < 0 && spec.mirrorArt;
+  const start = performance.now();
+  let request = 0;
+  let pastHandoff = false;
+  let finished = false;
+  let currentPose = -1;
+  let foldCenter = null;
+
+  const movingLayers = [
+    sceneCurrent,
+    scenePrevious,
+    sceneForeground,
+    sceneForegroundPrevious,
+  ];
+  for (const element of movingLayers) {
+    element.style.setProperty("animation", "none", "important");
+    element.style.setProperty("transition", "none", "important");
+  }
+  sceneCurrent.style.opacity = "1";
+  sceneForeground.style.opacity = "0";
+  sceneForegroundPrevious.style.opacity = "0";
+  effectLayer.hidden = false;
+  far.src = near.src = spec.effect;
+  pilotSkip.hidden = false;
+  experience.dataset.pilotCrossing = name;
+  experience.dataset.effectRenderer = "authored-pilot";
+  if (name === "fold") {
+    for (const roller of rollers)
+      roller.style.backgroundImage = scenePrevious.style.backgroundImage;
+  }
+
+  function paint(progress) {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const bounds = companion.getBoundingClientRect();
+    const center = bounds.left + bounds.width / 2;
+    const wind =
+      name === "dune"
+        ? smooth((progress - 0.06) / 0.28) *
+          (1 - smooth((progress - 0.65) / 0.32))
+        : 0;
+    const sand =
+      name === "sand"
+        ? smooth((progress - 0.1) / 0.28) *
+          (1 - smooth((progress - 0.59) / 0.32))
+        : 0;
+    const step = unit((progress - 0.17) / 0.58);
+    const arc = name === "solar" ? 4 * step * (1 - step) : 0;
+    const fold = name === "fold" ? Math.sin(Math.PI * progress) ** 2 : 0;
+    const pivot = sand * Math.sin((progress - 0.11) * Math.PI * 2.4);
+    const settle = 1 - smooth((progress - 0.6) / 0.4);
+    const reach =
+      bounds.height * (0.31 + (spec.mateo ? 0.23 : 0.18) * wind) + 6;
+    const drift =
+      name === "dune"
+        ? clamp(
+            direction * Math.min(width * 0.075, 87) * wind,
+            reach - center,
+            width - reach - center,
+          )
+        : direction *
+          (Math.min(width * 0.047, 52) * smooth(step) * arc * settle +
+            8 * pivot +
+            5 * fold);
+    const lift =
+      -Math.min(height * 0.019, 14) * arc - Math.min(height * 0.009, 6) * wind;
+    const blend = usesKeyframe
+      ? smooth((progress - 0.1) / 0.16) * (1 - smooth((progress - 0.68) / 0.2))
+      : 1;
+    const phase = usesKeyframe
+      ? blend > 0.004
+        ? 0
+        : -1
+      : spec.beats.findIndex((end) => progress < end);
+    const acting = authored && phase >= 0;
+    companion.toggleAttribute("data-pilot-acting", acting);
+    companion.toggleAttribute("data-pilot-keyframe", usesKeyframe && acting);
+    if (pilotGuide) pilotGuide.hidden = !acting;
+    if (acting && phase !== currentPose) {
+      pilotGuide.src = spec.poses[phase];
+      pilotGuide.style.setProperty("--pilot-guide-width", `${spec.width}%`);
+      pilotGuide.style.setProperty("--pilot-guide-foot", "-6.25%");
+      if (currentPose >= 0)
+        pilotGuide.animate([{ opacity: 0.65 }, { opacity: 1 }], {
+          duration: 90,
+        });
+      currentPose = phase;
+    }
+
+    const reflected = acting
+      ? reflectedArt
+      : reflectedBaseline && progress < 0.87;
+    const moves = `translate3d(${drift}px,${lift}px,0) rotate(${direction * (7 * wind + 3 * pivot)}deg) scaleX(${reflected ? -1 : 1})`;
+    if (acting) {
+      pilotGuide.style.transform = `translateX(-50%) ${moves}`;
+      if (usesKeyframe) {
+        pilotGuide.style.opacity = String(blend);
+        companionImage.style.opacity = String(1 - blend);
+      }
+    }
+    if (!acting || usesKeyframe) {
+      companionImage.style.transform =
+        usesKeyframe && acting && reflectedArt !== reflectedBaseline
+          ? `${moves} scaleX(-1)`
+          : moves;
+      if (!acting && usesKeyframe)
+        companionImage.style.removeProperty("opacity");
+    }
+
+    if (name === "sand") {
+      const cover =
+        smooth((progress - 0.27) / 0.15) *
+        (1 - smooth((progress - 0.62) / 0.2));
+      companion.style.opacity = String(1 - cover);
+    }
+
+    const x = center + drift;
+    const y = bounds.bottom;
+    const reveal = smooth((progress - 0.12) / 0.72);
+    far.hidden = true;
+    near.hidden = true;
+    const relight = smooth((progress - 0.36) / 0.41);
+    const gradeAt = (key) =>
+      departureLight[key] + (arrivalLight[key] - departureLight[key]) * relight;
+    const grade = `brightness(${gradeAt("brightness")}) contrast(${gradeAt("contrast")}) saturate(${gradeAt("saturation")}) hue-rotate(${gradeAt("hue")}deg)`;
+    far.style.filter = grade;
+    near.style.filter = name === "solar" ? "saturate(.91)" : grade;
+    near.style.mixBlendMode =
+      name === "solar" || name === "fold" ? "screen" : "";
+
+    if (name === "dune") {
+      const cut = reveal * 130 - 15;
+      sceneCurrent.style.maskImage = `linear-gradient(${direction > 0 ? 264 : 96}deg, #000 ${cut - 8}%, transparent ${cut + 8}%)`;
+      const size =
+        Math.max(200, Math.min(740, width * (0.29 + wind * 0.25))) *
+        (spec.mateo ? 0.88 : 1);
+      positionPilotEffect(far, {
+        x: x - direction * size * 0.3,
+        y,
+        size: size * 0.86,
+        origin: -93,
+        alpha: wind * 0.48,
+        direction,
+        angle: -4 * direction,
+      });
+      positionPilotEffect(near, {
+        x: x - direction * size * 0.42,
+        y: y + height * 0.015,
+        size,
+        origin: -88,
+        alpha: wind * 0.65,
+        direction,
+        angle: 3 * direction,
+      });
+    } else if (name === "sand") {
+      const begin = direction < 0 ? 0.38 : 0.32;
+      const growth = smooth((progress - begin) / (0.77 - begin));
+      const radius = Math.hypot(width, height) * growth;
+      const feather = Math.max(34, Math.min(155, width * 0.16));
+      const maskY = y - Math.min(height * 0.18, bounds.height * 0.52);
+      sceneCurrent.style.maskImage = `radial-gradient(circle at ${x}px ${maskY}px, #000 ${Math.max(0, radius - feather)}px, transparent ${radius + feather}px)`;
+      sceneCurrent.style.opacity = String(
+        smooth((progress - begin + 0.01) / 0.18),
+      );
+      const baseSize = Math.max(
+        148,
+        Math.min(width * 0.32, height * (0.19 + sand * 0.235)),
+      );
+      const size =
+        Math.max(
+          baseSize,
+          Math.min(width * 0.5, bounds.height * (0.77 + sand * 0.2)),
+        ) * (spec.mateo ? 0.9 : 1);
+      const separation =
+        size * (0.17 * (1 - smooth((progress - 0.19) / 0.36)) + 0.035);
+      const lean = Math.cos(progress * 5.6) * (3.5 + sand * 2.9);
+      const drop = 1 - 0.28 * smooth((progress - 0.61) / 0.28);
+      positionPilotEffect(far, {
+        x: x - direction * separation,
+        y: y + size * 0.025,
+        size,
+        origin: -91,
+        alpha: sand * 0.58,
+        direction,
+        angle: direction * (lean - 3),
+        stretch: 1.17 * drop,
+      });
+      positionPilotEffect(near, {
+        x: x + direction * separation,
+        y: y + size * 0.023,
+        size: size * 1.08,
+        origin: -91,
+        alpha: sand * 0.78,
+        direction: -direction,
+        angle: direction * (2 - lean),
+        stretch: 1.22 * drop,
+      });
+    } else if (name === "solar") {
+      sceneCurrent.style.opacity = String(smooth((progress - 0.34) / 0.24));
+      const handAt = (image, point, mirror) => {
+        const box = image.getBoundingClientRect();
+        const u = point[0] / 640;
+        return [
+          box.left + (mirror ? 1 - u : u) * box.width,
+          box.top + (point[1] / 960) * box.height,
+        ];
+      };
+      let [handX, handY] = acting
+        ? handAt(pilotGuide, spec.contacts[phase], reflected)
+        : handAt(companionImage, fallbackContact.point, reflected);
+      if (acting && usesKeyframe && blend < 0.999) {
+        const [baseX, baseY] = handAt(
+          companionImage,
+          fallbackContact.point,
+          reflectedBaseline,
+        );
+        handX = baseX + (handX - baseX) * blend;
+        handY = baseY + (handY - baseY) * blend;
+      }
+      const peak = (at, span) =>
+        Math.max(0, 1 - Math.abs(progress - at) / span) ** 2;
+      const size =
+        Math.max(138, Math.min(width * 0.36, height * 0.57)) *
+        (spec.mateo ? 0.82 : 1);
+      near.style.transformOrigin = "42.3% 71%";
+      positionPilotEffect(near, {
+        x: handX + 0.077 * size,
+        y: handY,
+        size,
+        origin: -71,
+        alpha: Math.min(
+          0.97,
+          peak(0.27, 0.19) * 0.81 + peak(0.49, 0.25) * 0.95,
+        ),
+        direction,
+        angle: -9 * direction,
+      });
+    } else {
+      const contact = acting
+        ? (spec.contacts?.[phase] ?? [320, 350])
+        : [320, 350];
+      const gesture = (
+        acting ? pilotGuide : companionImage
+      ).getBoundingClientRect();
+      if (foldCenter === null || (acting && progress < 0.22)) {
+        foldCenter = clamp(
+          gesture.left + (contact[0] / 640) * gesture.width,
+          width * 0.24,
+          width * 0.85,
+        );
+      }
+      const opening = smooth((progress - 0.235) / 0.54);
+      const left = foldCenter * (1 - opening) - width * 0.055 * opening;
+      const right = foldCenter + (width - foldCenter + width * 0.055) * opening;
+      const edge = Math.max(4, Math.min(20, width * 0.012));
+      sceneCurrent.style.maskImage = `linear-gradient(90deg, transparent ${left - edge}px, #000 ${left + edge}px, #000 ${right - edge}px, transparent ${right + edge}px)`;
+      sceneCurrent.style.opacity = String(smooth((progress - 0.14) / 0.17));
+      paintPilotRollers(
+        rollers,
+        [left, right],
+        opening,
+        departureFocus,
+        width,
+        height,
+      );
+      const handY = gesture.top + (contact[1] / 960) * gesture.height;
+      positionPilotEffect(near, {
+        x: foldCenter,
+        y: handY,
+        size: Math.min(width * 0.2, height * 0.38),
+        origin: -50,
+        alpha: fold * (1 - opening) * 0.72,
+        angle: -2 * direction,
+      });
+    }
+  }
+
+  function commitHandoff() {
+    if (pastHandoff) return;
+    pastHandoff = true;
+    handoff();
+  }
+
+  return new Promise((resolve) => {
+    function finish() {
+      if (finished) return;
+      finished = true;
+      window.cancelAnimationFrame(request);
+      commitHandoff();
+      for (const element of movingLayers) {
+        for (const property of ["animation", "transition", "mask-image"])
+          element.style.removeProperty(property);
+      }
+      if (pilotGuide) {
+        pilotGuide.hidden = true;
+        pilotGuide.style.removeProperty("transform");
+        pilotGuide.style.removeProperty("opacity");
+      }
+      companionImage.style.removeProperty("transform");
+      companionImage.style.removeProperty("opacity");
+      companion.style.removeProperty("opacity");
+      companion.removeAttribute("data-pilot-acting");
+      companion.removeAttribute("data-pilot-keyframe");
+      delete experience.dataset.pilotCrossing;
+      effectLayer.hidden = true;
+      far.hidden = near.hidden = true;
+      for (const roller of rollers) {
+        roller.hidden = true;
+        roller.style.removeProperty("background-image");
+      }
+      near.style.removeProperty("transform-origin");
+      pilotSkip.hidden = true;
+      state.crossing = null;
+      resolve();
+    }
+    function frame(now) {
+      const progress = unit((now - start) / duration);
+      if (progress >= 1) {
+        finish();
+        return;
+      }
+      if (progress >= handoffAt) commitHandoff();
+      paint(progress);
+      request = window.requestAnimationFrame(frame);
+    }
+    state.crossing = { skip: finish };
+    request = window.requestAnimationFrame(frame);
+  });
+}
+
+async function moveToScene(
   nextIndex,
+  nextMode,
   { focusChapter = false, announceChange = true } = {},
 ) {
-  if (!state.manifest || state.isTraversing) return;
-  const clampedIndex = clamp(nextIndex, 0, state.manifest.locations.length - 1);
-  if (clampedIndex === state.locationIndex) return;
-
-  const nextLocation = state.manifest.locations[clampedIndex];
+  if (
+    !state.manifest ||
+    !state.hasBegun ||
+    state.isTraversing ||
+    (nextIndex === state.locationIndex && nextMode === state.sceneMode)
+  )
+    return;
+  const nextLocation = state.manifest.locations[nextIndex];
   const power = getCurrentPower();
+  if (!nextLocation || !power) return;
   const duration = state.motionEnabled ? power.durationMs : 40;
   const handoffAt = clamp(power.handoffAt ?? 0.52, 0.4, 0.62);
-  const direction = clampedIndex < state.locationIndex ? -1 : 1;
+  const direction =
+    nextIndex === state.locationIndex
+      ? nextMode === "inner"
+        ? 1
+        : -1
+      : Math.sign(nextIndex - state.locationIndex);
+  const fromSetting = getPilotSetting();
+  const toSetting = getPilotSetting(nextLocation, nextMode);
+  const fromGuideStage = sceneGuide();
+  const nextGuideStage = sceneGuide(nextLocation, nextMode);
 
   clearTransitionPreview();
+  state.inspection?.cancel();
+  setFieldNotes(false, { focus: false });
+  window.clearTimeout(state.toastTimer);
+  elements.toast?.classList.remove("is-visible");
   setLookBack(false);
   setSceneView(false);
   setPresenting(false, 0, { updateGuidePose: false });
   state.isTraversing = true;
-  state.sceneMode = "outer";
-  state.activeInsideTab = "now";
-  void setGuidePose("travel");
-  document.documentElement.dataset.experienceState = "traversing";
+  document.documentElement.dataset.experienceState =
+    nextIndex === state.locationIndex ? "transitioning" : "traversing";
   setInteractionLock(true);
   recalculateFraming();
-  announce(`${power.name}. Travelling to ${nextLocation.formalName}.`);
 
-  const outgoingSource = elements.sceneCurrent?.dataset.source;
-  const nextSource = chooseSceneSource(nextLocation.outer);
-  await loadImage(nextSource);
-  await startSceneTransitionEffect({
-    fromSource: outgoingSource,
-    toSource: nextSource,
-    duration,
-    direction,
-    sunAnchor: getSolarAnchor(nextLocation, "outer"),
-  });
-  stageSceneTransition(nextSource);
-  activatePower(power, { duration, handoffAt, direction });
-  elements.experience.dataset.transitionPhase = "departure";
-  elements.experience.classList.add("is-traversing", power.className);
-  await wait(Math.max(16, duration * handoffAt));
+  const nextSource = chooseSceneSource(nextLocation[nextMode]);
+  const shouldStage = Boolean(
+    state.motionEnabled &&
+    pilotPowers[state.selectedPowerId] &&
+    elements.pilotEffectFar &&
+    elements.pilotEffectNear &&
+    elements.pilotSkip,
+  );
+  const [loaded, authored] = await Promise.all([
+    loadImage(nextSource),
+    shouldStage ? preparePilotCrossing(state.selectedPowerId, direction) : null,
+  ]);
+  const handoff = () => {
+    state.locationIndex = nextIndex;
+    state.sceneMode = nextMode;
+    state.activeInsideTab = "now";
+    elements.experience.dataset.transitionPhase = "arrival";
+    renderLocation({ resetScroll: true });
+  };
 
-  state.locationIndex = clampedIndex;
-  elements.experience.dataset.transitionPhase = "arrival";
-  revealStagedScene();
-  renderLocation({ announceChange: false, resetScroll: true });
-  await wait(Math.max(16, duration * (1 - handoffAt)));
+  if (!loaded.loaded) {
+    state.isTraversing = false;
+    setInteractionLock(false);
+    renderLocation();
+    setPresenting(true, 600);
+    showToast("That crossing did not load. Try the route again.");
+    if (state.pendingHash) {
+      state.pendingHash = false;
+      restoreJourneyHash();
+    }
+    return;
+  }
 
-  elements.experience.classList.remove("is-traversing", power.className);
-  stopSceneTransitionEffect();
-  finishSceneTransition();
+  if (state.motionEnabled) {
+    const solarPose = guideSolarContact[state.selectedGuideId]?.pose;
+    await setGuidePose(
+      authored?.name === "solar" && solarPose ? solarPose : "travel",
+    );
+    announce(`${power.name}. Continuing to ${nextLocation.formalName}.`);
+    const outgoingSource = elements.sceneCurrent.dataset.source;
+    if (!authored) {
+      await startSceneTransitionEffect({
+        fromSource: outgoingSource,
+        toSource: nextSource,
+        duration,
+        direction,
+        sunAnchor: getSolarAnchor(nextLocation, nextMode),
+      });
+    }
+    stageSceneTransition(nextSource, toSetting, nextGuideStage);
+    activatePower(power, { duration, handoffAt, direction });
+    elements.experience.dataset.transitionPhase = "departure";
+    elements.experience.classList.add("is-traversing", power.className);
+    if (authored) {
+      await playPilotCrossing({
+        spec: authored,
+        direction,
+        duration,
+        handoffAt,
+        handoff,
+        fromSetting,
+        toSetting,
+        fromStage: fromGuideStage,
+        toStage: nextGuideStage,
+      });
+    } else {
+      await wait(duration * handoffAt);
+      revealStagedScene();
+      handoff();
+      await wait(duration * (1 - handoffAt));
+    }
+    elements.experience.classList.remove("is-traversing", power.className);
+    stopSceneTransitionEffect();
+    finishSceneTransition();
+  } else {
+    setSceneFocus(toSetting, nextGuideStage);
+    transitionScene(nextSource, { immediate: true });
+    handoff();
+  }
+
   state.isTraversing = false;
   setInteractionLock(false);
   document.documentElement.dataset.experienceState = "exploring";
+  if (state.pendingHash) {
+    state.pendingHash = false;
+    restoreJourneyHash();
+  } else {
+    writeJourneyHash();
+  }
   renderLocation({ announceChange, resetScroll: true });
   setPresenting(true, 780);
   recalculateFraming();
-
-  if (focusChapter) elements.chapterPanel?.focus({ preventScroll: true });
+  if (focusChapter) elements.locationName?.focus({ preventScroll: true });
   preloadAdjacentScenes();
   warmSceneTransition();
 }
 
+function travelTo(nextIndex, options) {
+  if (!state.manifest) return;
+  const index = clamp(nextIndex, 0, state.manifest.locations.length - 1);
+  if (index === state.locationIndex) return;
+  return moveToScene(index, "outer", options);
+}
+
+function opensFieldNotesOnArrival() {
+  return (
+    state.sceneMode === "inner" &&
+    getPilotSetting() !== "chamber" &&
+    getCurrentLocation()?.id !== "archive-echoes"
+  );
+}
+
 async function togglePortal() {
-  if (!state.manifest || state.isTraversing) return;
-  const location = getCurrentLocation();
-  const power = getCurrentPower();
-  if (!location || !power) return;
-
-  const duration = state.motionEnabled ? power.durationMs : 40;
-  const handoffAt = clamp(power.handoffAt ?? 0.52, 0.4, 0.62);
-  const nextMode = state.sceneMode === "outer" ? "inner" : "outer";
-  const direction = nextMode === "inner" ? 1 : -1;
-  clearTransitionPreview();
-  setLookBack(false);
-  setSceneView(false);
-  setPresenting(false, 0, { updateGuidePose: false });
-  state.isTraversing = true;
-  void setGuidePose("travel");
-  document.documentElement.dataset.experienceState = "transitioning";
-  setInteractionLock(true);
-  recalculateFraming();
-
-  const outgoingSource = elements.sceneCurrent?.dataset.source;
-  const nextSource = chooseSceneSource(location[nextMode]);
-  await loadImage(nextSource);
-  await startSceneTransitionEffect({
-    fromSource: outgoingSource,
-    toSource: nextSource,
-    duration,
-    direction,
-    sunAnchor: getSolarAnchor(location, nextMode),
+  if (!state.hasBegun || state.isTraversing) return;
+  const opening = state.sceneMode === "outer";
+  await moveToScene(state.locationIndex, opening ? "inner" : "outer", {
+    focusChapter: true,
   });
-  stageSceneTransition(nextSource);
-  activatePower(power, { duration, handoffAt, direction });
-  elements.experience.dataset.transitionPhase = "departure";
-  elements.experience.classList.add("is-traversing", power.className);
-  announce(
-    `${power.name}. ${nextMode === "inner" ? "Entering" : "Leaving"} ${location.formalName}.`,
-  );
-
-  await wait(Math.max(16, duration * handoffAt));
-  state.sceneMode = nextMode;
-  if (state.sceneMode === "inner") state.activeInsideTab = "now";
-  elements.experience.dataset.transitionPhase = "arrival";
-  revealStagedScene();
-  renderLocation({ announceChange: false, resetScroll: true });
-  await wait(Math.max(16, duration * (1 - handoffAt)));
-
-  elements.experience.classList.remove("is-traversing", power.className);
-  stopSceneTransitionEffect();
-  finishSceneTransition();
-  state.isTraversing = false;
-  setInteractionLock(false);
-  renderTraversalNavigation();
-  resetChapterScroll();
-  document.documentElement.dataset.experienceState = "exploring";
-  recalculateFraming({ immediate: true });
-  announce(
-    state.sceneMode === "inner"
-      ? `Entered ${location.formalName}. ${location.deepDive.heading}`
-      : `Returned to the outer approach of ${location.formalName}.`,
-  );
-  setPresenting(true, 860);
-  warmSceneTransition();
+  if (opening && opensFieldNotesOnArrival()) setFieldNotes(true);
 }
 
 function selectGuide(guideId) {
@@ -1601,9 +2623,17 @@ function selectInsideTab(tabId, { focus = false } = {}) {
   state.activeInsideTab = tabId;
   renderDeepDive();
   if (focus) {
-    elements.chapterTabs
+    const { chapterTabs, chapterBody, chapterTabPanel } = elements;
+    chapterTabs
       ?.querySelector(`[data-inside-tab="${CSS.escape(tabId)}"]`)
-      ?.focus();
+      ?.focus({ preventScroll: true });
+    if (chapterBody && chapterTabs && chapterTabPanel) {
+      const bodyBounds = chapterBody.getBoundingClientRect();
+      const sectionTop = chapterTabs.getBoundingClientRect().top;
+      if (chapterTabPanel.getBoundingClientRect().bottom > bodyBounds.bottom) {
+        chapterBody.scrollTop += Math.max(0, sectionTop - bodyBounds.top - 8);
+      }
+    }
   }
   window.requestAnimationFrame(() => recalculateFraming());
 }
@@ -1724,6 +2754,10 @@ function setSceneView(active) {
 
   state.isViewingScene = nextState;
   elements.experience?.classList.toggle("is-viewing-scene", nextState);
+  if (elements.locationMark) elements.locationMark.inert = nextState;
+  setFieldNotes(elements.experience.hasAttribute("data-pilot-notes-open"), {
+    focus: false,
+  });
   elements.viewSceneButton?.setAttribute("aria-pressed", String(nextState));
   elements.viewSceneButton?.setAttribute(
     "aria-label",
@@ -1735,6 +2769,7 @@ function setSceneView(active) {
     elements.viewSceneLabel.textContent = nextState ? "Release" : "View scene";
   }
   elements.viewSceneStatus?.setAttribute("aria-hidden", String(!nextState));
+  renderPilotWaypoints();
 
   if (nextState) {
     setLookBack(false);
@@ -1745,6 +2780,7 @@ function setSceneView(active) {
 
 function applyMotionPreference(enabled, { persist = true } = {}) {
   state.motionEnabled = Boolean(enabled);
+  if (!state.motionEnabled) state.crossing?.skip();
   elements.experience.dataset.motion = state.motionEnabled ? "on" : "off";
   if (elements.motionToggle)
     elements.motionToggle.checked = state.motionEnabled;
@@ -1883,27 +2919,186 @@ function beginJourney() {
   elements.explorer.hidden = false;
   document.documentElement.dataset.experienceState = "exploring";
   renderLocation({ announceChange: true, resetScroll: true });
+  writeJourneyHash({ replace: true });
   renderGuide();
   renderAbilities();
   setPresenting(true, 1_100);
   window.requestAnimationFrame(() => {
     recalculateFraming({ immediate: true });
-    elements.chapterPanel?.focus({ preventScroll: true });
+    const first =
+      getPilotSetting() === "chamber"
+        ? elements.pilotWaypoints?.querySelector(
+            '[data-pilot-action="workbench"]',
+          )
+        : elements.locationName;
+    if (opensFieldNotesOnArrival()) {
+      setFieldNotes(true);
+      return;
+    }
+    first?.focus({ preventScroll: true });
   });
   resetIdleTimer();
-  showToast(
-    "Choose a crossing ability, then use the arrows. Enter each place to open its living professional record.",
-    4_200,
-  );
+  if (getPilotSetting() !== "chamber") {
+    showToast(
+      "Choose a crossing ability, then follow a waypoint or open the atlas.",
+      3_400,
+    );
+  }
 }
 
 function parseInitialLocation() {
-  if (!state.manifest) return 0;
   const hash = window.location.hash.replace(/^#/, "");
-  const index = state.manifest.locations.findIndex(
-    (location) => location.id === hash,
+  const [id, view] =
+    hash === "context-chamber" ? ["stone-pass", "inside"] : hash.split("/");
+  const index =
+    state.manifest?.locations.findIndex((location) => location.id === id) ?? -1;
+  return {
+    index: Math.max(0, index),
+    mode: index >= 0 && view === "inside" ? "inner" : "outer",
+  };
+}
+
+function writeJourneyHash({ replace = false } = {}) {
+  const id = getCurrentLocation()?.id;
+  if (!id) return;
+  const locationHash =
+    state.sceneMode === "outer"
+      ? id
+      : id === "stone-pass"
+        ? "context-chamber"
+        : `${id}/inside`;
+  if (window.location.hash === `#${locationHash}`) return;
+  const method = replace ? "replaceState" : "pushState";
+  window.history[method](null, "", `#${locationHash}`);
+}
+
+function restoreJourneyHash() {
+  if (!state.manifest) return;
+  if (state.isTraversing) {
+    state.pendingHash = true;
+    state.crossing?.skip();
+    return;
+  }
+  const { index, mode } = parseInitialLocation();
+  if (index === state.locationIndex && mode === state.sceneMode) return;
+  closeOpenDialog();
+  setFieldNotes(false, { focus: false });
+  setLookBack(false);
+  setSceneView(false);
+  state.locationIndex = index;
+  state.sceneMode = mode;
+  state.activeInsideTab = "now";
+  renderScene({ immediate: true });
+  renderLocation({ announceChange: state.hasBegun, resetScroll: true });
+  recalculateFraming({ immediate: true });
+  preloadAdjacentScenes();
+  warmSceneTransition();
+}
+
+const chamberRequests = {
+  contributor: {
+    access: "granted",
+    status: "Project access granted",
+    outcome: "Scoped answer",
+    answer:
+      "The release review is pending. Compare the latest test run with the readiness checklist.",
+  },
+  outside: {
+    access: "limited",
+    status: "Outside the access scope",
+    outcome: "No project context",
+    answer:
+      "No project records are available to this role. Ask the project owner for access.",
+  },
+};
+
+function renderChamberRequest(input) {
+  const result = chamberRequests[input?.value];
+  if (!result || !input.checked) return;
+  const dialog = elements.chamberDialog;
+  dialog.querySelector("[data-chamber-result]").dataset.access = result.access;
+  dialog.querySelector("[data-chamber-status]").textContent = result.status;
+  dialog.querySelector("[data-chamber-answer]").textContent = result.answer;
+  const outcome = dialog.querySelector("[data-chamber-outcome]");
+  if (outcome) outcome.textContent = result.outcome;
+  dialog.querySelector("[data-chamber-sources]").hidden =
+    result.access === "limited";
+  for (const route of dialog.querySelectorAll("[data-chamber-route]")) {
+    if (route.dataset.chamberRoute === result.access)
+      route.setAttribute("aria-current", "true");
+    else route.removeAttribute("aria-current");
+  }
+}
+
+async function openSceneArtifact(action, button) {
+  const archive = action.startsWith("archive-");
+  const dialog = archive ? elements.archiveDialog : elements.chamberDialog;
+  if (!dialog || dialog.open || state.inspection) return;
+  const panels = [
+    ...dialog.querySelectorAll(
+      archive ? "[data-archive-panel]" : "[data-chamber-panel]",
+    ),
+  ];
+  const selected = panels.find(
+    (panel) =>
+      (archive ? panel.dataset.archivePanel : panel.dataset.chamberPanel) ===
+      action,
   );
-  return index >= 0 ? index : 0;
+  if (!selected) return;
+  for (const panel of panels) panel.hidden = panel !== selected;
+  dialog.setAttribute("aria-labelledby", selected.querySelector("h2").id);
+  if (
+    state.motionEnabled &&
+    typeof elements.sceneCurrent.animate === "function"
+  ) {
+    const pin = button
+      .querySelector("[data-pilot-pin]")
+      .getBoundingClientRect();
+    const origin = `${pin.left + pin.width / 2}px ${pin.top + pin.height / 2}px`;
+    const view = window.getComputedStyle(elements.sceneCurrent).transform;
+    const push = elements.sceneCurrent.animate(
+      [
+        { transformOrigin: origin, transform: view },
+        { transformOrigin: origin, transform: `${view} scale(1.11)` },
+      ],
+      { duration: 320, easing: "cubic-bezier(.2,.72,.24,1)", fill: "forwards" },
+    );
+    state.inspection = push;
+    try {
+      await push.finished;
+    } catch {
+      return;
+    } finally {
+      state.inspection = null;
+    }
+    dialog.addEventListener("close", () => push.cancel(), { once: true });
+  }
+  dialog.addEventListener(
+    "close",
+    () => button.focus({ preventScroll: true }),
+    { once: true },
+  );
+  openDialog(dialog);
+}
+
+function activatePilotWaypoint(event) {
+  const button = event.target.closest("[data-pilot-action]");
+  if (!button || state.isTraversing) return;
+  switch (button.dataset.pilotAction) {
+    case "journey-next":
+      void travelTo(state.locationIndex + 1, { focusChapter: true });
+      break;
+    case "journey-back":
+      void travelTo(state.locationIndex - 1, { focusChapter: true });
+      break;
+    case "chamber-enter":
+    case "chamber-exit":
+    case "archive-exit":
+      void togglePortal();
+      break;
+    default:
+      openSceneArtifact(button.dataset.pilotAction, button);
+  }
 }
 
 function restorePreferences() {
@@ -1943,12 +3138,32 @@ function restorePreferences() {
 }
 
 function bindEvents() {
+  elements.skipLink?.addEventListener("click", (event) => {
+    event.preventDefault();
+    const target = !state.hasBegun
+      ? elements.beginJourney
+      : elements.experience.hasAttribute("data-pilot-notes-open")
+        ? elements.chapterPanel
+        : elements.locationName;
+    target?.focus({ preventScroll: true });
+  });
   elements.beginJourney?.addEventListener("click", beginJourney);
   elements.previousLocation?.addEventListener("click", () =>
     travelTo(state.locationIndex - 1),
   );
   elements.nextLocation?.addEventListener("click", advanceForward);
   elements.portalButton?.addEventListener("click", togglePortal);
+  elements.scenePortal?.addEventListener("click", togglePortal);
+  elements.pilotWaypoints?.addEventListener("click", activatePilotWaypoint);
+  elements.pilotSkip?.addEventListener("click", () => state.crossing?.skip());
+  elements.pilotNotes?.addEventListener("click", () =>
+    setFieldNotes(!elements.experience.hasAttribute("data-pilot-notes-open")),
+  );
+  elements.closeNotes?.addEventListener("click", () => setFieldNotes(false));
+  elements.chamberDialog?.addEventListener("change", (event) => {
+    if (event.target.matches("input[name='request-role']"))
+      renderChamberRequest(event.target);
+  });
 
   elements.locationRailList?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-location-index]");
@@ -1984,7 +3199,7 @@ function bindEvents() {
   elements.chapterTabs?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-inside-tab]");
     if (!button) return;
-    selectInsideTab(button.dataset.insideTab);
+    selectInsideTab(button.dataset.insideTab, { focus: true });
   });
 
   elements.chapterTabs?.addEventListener("keydown", (event) => {
@@ -2120,6 +3335,19 @@ function bindEvents() {
       event.preventDefault();
       return;
     }
+    if (event.key === "Escape" && state.inspection) {
+      event.preventDefault();
+      state.inspection.cancel();
+      return;
+    }
+    if (
+      event.key === "Escape" &&
+      elements.experience.hasAttribute("data-pilot-notes-open")
+    ) {
+      event.preventDefault();
+      setFieldNotes(false);
+      return;
+    }
     if (!state.hasBegun) {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -2189,11 +3417,8 @@ function bindEvents() {
   window.addEventListener("orientationchange", () => {
     window.setTimeout(() => recalculateFraming({ immediate: true }), 180);
   });
-  window.addEventListener("hashchange", () => {
-    if (!state.manifest || state.isTraversing) return;
-    const nextIndex = parseInitialLocation();
-    if (nextIndex !== state.locationIndex) travelTo(nextIndex);
-  });
+  window.addEventListener("hashchange", restoreJourneyHash);
+  window.addEventListener("popstate", restoreJourneyHash);
 
   if ("ResizeObserver" in window && elements.chapterPanel) {
     const observer = new ResizeObserver(() => recalculateFraming());
@@ -2211,7 +3436,9 @@ async function initialise() {
     state.manifest = await response.json();
 
     setLoadingProgress(32, "Opening the western reach…");
-    state.locationIndex = parseInitialLocation();
+    const initial = parseInitialLocation();
+    state.locationIndex = initial.index;
+    state.sceneMode = initial.mode;
     restorePreferences();
     renderNavigation();
     renderAbilities();

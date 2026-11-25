@@ -1,0 +1,225 @@
+---
+import manifest from "../../../public/assets/immersive/runtime-manifest.json";
+import projects from "../../data/profile/projects.json";
+import { sitePath } from "../../lib/urls";
+
+const archive = manifest.locations.find(({ id }) => id === "archive-echoes");
+const cnnProject = projects.find(({ id }) => id === "visualizing-filters-cnn");
+const methodPath = sitePath("work/human-governed-ai-delivery-method/");
+---
+
+<dialog
+  id="archive-checkpoint-dialog"
+  class="explore-dialog context-chamber archive-checkpoint"
+  data-archive-dialog
+  aria-label="Archive of Echoes"
+>
+  <div class="explore-dialog__frame context-chamber__frame">
+    <form method="dialog" class="context-chamber__close">
+      <button
+        class="dialog-close"
+        type="submit"
+        data-archive-close
+        aria-label="Close Archive inspection"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+
+    <section
+      data-archive-panel="archive-shelves"
+      aria-labelledby="archive-shelves-title"
+      hidden
+    >
+      <header class="explore-dialog__header context-chamber__header">
+        <div>
+          <p class="dialog-kicker">Source shelves</p>
+          <h2 id="archive-shelves-title" tabindex="-1">Inspect the records</h2>
+          <p>Two projects show different ways to make evidence available.</p>
+        </div>
+      </header>
+
+      <div class="archive-records">
+        <article>
+          <p class="dialog-kicker">Client-safe case study</p>
+          <h3>OmniMind</h3>
+          <p>
+            Read how the system supplies bounded project context and how one
+            context pack was checked against its sources.
+          </p>
+          <a href={sitePath("work/omnimind/")}>Read the OmniMind case study</a>
+        </article>
+        <article>
+          <p class="dialog-kicker">Public code</p>
+          <h3>Visualizing Filters of a CNN</h3>
+          <p>
+            See how TensorFlow and VGG16 were used to visualize learned filters
+            and inspect the code that produced the images.
+          </p>
+          <a href={sitePath("work/visualizing-filters-cnn/")}
+            >Read the CNN case study</a
+          >
+          {
+            cnnProject?.publicUrl && (
+              <a href={cnnProject.publicUrl}>Open the public repository</a>
+            )
+          }
+        </article>
+      </div>
+    </section>
+
+    <section
+      data-archive-panel="archive-astrolabe"
+      aria-labelledby="archive-astrolabe-title"
+      hidden
+    >
+      <header class="explore-dialog__header context-chamber__header">
+        <div>
+          <p class="dialog-kicker">Astrolabe</p>
+          <h2 id="archive-astrolabe-title" tabindex="-1">
+            Trace a release decision
+          </h2>
+          <p>
+            Follow the evidence from implementation through review to a human
+            decision.
+          </p>
+        </div>
+      </header>
+
+      <ol class="archive-trace">
+        <li>
+          <strong>Record the evidence</strong>
+          <p>
+            Capture what changed, the checks run, and the risks that carry into
+            handoff.
+          </p>
+        </li>
+        <li>
+          <strong>Verify independently</strong>
+          <p>
+            Review the implementation against its acceptance criteria and check
+            the automated results.
+          </p>
+        </li>
+        <li>
+          <strong>Authorize the release</strong>
+          <p>
+            The person responsible reviews the evidence and records the decision
+            to release or hold.
+          </p>
+        </li>
+      </ol>
+      <a href={methodPath}>Read the Human-Governed AI Delivery Method</a>
+    </section>
+
+    <section
+      data-archive-panel="archive-folio"
+      aria-labelledby="archive-folio-title"
+      hidden
+    >
+      <header class="explore-dialog__header context-chamber__header">
+        <div>
+          <p class="dialog-kicker">Open folio</p>
+          <h2 id="archive-folio-title" tabindex="-1">Question the evidence</h2>
+          <p>
+            Compare what you can inspect, what was measured, and who signs off.
+          </p>
+        </div>
+      </header>
+
+      <div class="archive-questions">
+        {
+          archive?.deepDive?.notes?.map(({ question, answer }) => (
+            <details name="archive-checkpoint-questions">
+              <summary>{question}</summary>
+              <p>{answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</dialog>
+
+<style>
+  .archive-checkpoint .context-chamber__frame {
+    background: linear-gradient(150deg, #211a11, #120e0a 66%);
+  }
+
+  .archive-records,
+  .archive-trace,
+  .archive-questions {
+    margin-block: 1.15rem;
+  }
+
+  .archive-records {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 0.7rem;
+  }
+
+  .archive-records article,
+  .archive-questions details {
+    border: 1px solid var(--line);
+    background: rgba(215, 169, 76, 0.05);
+  }
+
+  .archive-records article {
+    padding: 0.85rem 1rem;
+  }
+
+  .archive-records h3 {
+    margin: 0 0 0.45rem;
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.32rem;
+  }
+
+  .archive-records article > p:not(.dialog-kicker),
+  .archive-trace p,
+  .archive-questions p {
+    margin: 0.35rem 0 0;
+    color: var(--cream-muted);
+    line-height: 1.5;
+  }
+
+  .archive-records a {
+    display: block;
+    width: fit-content;
+    margin-top: 0.7rem;
+  }
+
+  .archive-checkpoint a {
+    color: var(--gold-bright);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .archive-trace {
+    display: grid;
+    gap: 0.8rem;
+    padding-inline-start: 1.3rem;
+  }
+
+  .archive-trace li::marker,
+  .archive-trace strong,
+  .archive-questions summary {
+    color: var(--gold-bright);
+    font-weight: 650;
+  }
+
+  .archive-questions {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .archive-questions summary {
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+  }
+
+  .archive-questions details p {
+    margin-top: 0;
+    padding: 0 1rem 0.85rem;
+  }
+</style>

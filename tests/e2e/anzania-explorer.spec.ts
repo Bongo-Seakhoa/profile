@@ -4,8 +4,10 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import sharp from "sharp";
 
-async function beginJourney(page: Page) {
-  await page.goto("explore/", { waitUntil: "networkidle" });
+async function beginJourney(page: Page, location?: string) {
+  await page.goto(location ? `explore/#${location}` : "explore/", {
+    waitUntil: "networkidle",
+  });
   await expect(page.locator("[data-arrival-gate]")).toBeVisible();
   await expect(
     page.getByText("Anzania is a fictional place.", { exact: true }),
@@ -271,6 +273,87 @@ test.describe("Explore Anzania release experience", () => {
   });
 
   for (const viewport of [
+    { width: 1900, height: 800 },
+    { width: 1280, height: 720 },
+  ]) {
+    test(`keeps the scene story and crossing dock clear at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== "chrome-desktop");
+      await page.setViewportSize(viewport);
+      await beginJourney(page);
+
+      for (const location of [
+        {
+          name: "Threshold Dunes",
+          chapter: "AI and data systems built for decisions people can trust.",
+        },
+        {
+          waypoint: '[data-pilot-action="journey-next"]',
+          name: "Stone Pass of Context",
+          chapter: "MetaPOS Mind gives AI assistants governed company context.",
+        },
+      ]) {
+        await test.step(location.name, async () => {
+          if (location.waypoint) {
+            await page.locator(location.waypoint).click();
+            await expect(page).toHaveURL(/#stone-pass$/);
+            await expect(page.locator("html")).toHaveAttribute(
+              "data-experience-state",
+              "exploring",
+            );
+          }
+          await page.evaluate(async () => {
+            await document.fonts.ready;
+          });
+
+          const story = page.locator(".location-mark");
+          const dock = page.locator("[data-ability-dock]");
+          const notes = page.locator("[data-pilot-notes]");
+          const chapter = page.locator("[data-chapter-panel]");
+
+          await expect(story.locator("[data-location-name]")).toHaveText(
+            location.name,
+          );
+          await expect(notes).toHaveAttribute("aria-expanded", "false");
+          await expect(chapter).toBeHidden();
+          await expect(story).toBeInViewport({ ratio: 0.99 });
+          await expect(story).toHaveCSS("overflow", "visible");
+          for (const part of [
+            story.locator("[data-location-name]"),
+            story.locator("[data-scene-brief]"),
+          ]) {
+            await expect(part).toBeInViewport({ ratio: 0.99 });
+            await expect(part).toHaveCSS("overflow", "visible");
+            await expect(part).toHaveCSS("-webkit-line-clamp", "none");
+          }
+          await expect(dock).toBeInViewport({ ratio: 0.99 });
+          const storyBounds = await story.boundingBox();
+          const dockBounds = await dock.boundingBox();
+          expect(
+            storyBounds &&
+              dockBounds &&
+              (storyBounds.x + storyBounds.width <= dockBounds.x ||
+                dockBounds.x + dockBounds.width <= storyBounds.x ||
+                storyBounds.y + storyBounds.height <= dockBounds.y ||
+                dockBounds.y + dockBounds.height <= storyBounds.y),
+          ).toBe(true);
+
+          await notes.click();
+          await expect(notes).toHaveAttribute("aria-expanded", "true");
+          await expect(chapter).toBeVisible();
+          const chapterTitle = chapter.locator("[data-chapter-title]");
+          await expect(chapterTitle).toHaveText(location.chapter);
+          await expect(chapterTitle).toBeInViewport({ ratio: 0.99 });
+          await page.keyboard.press("Escape");
+          await expect(chapter).toBeHidden();
+          await expect(notes).toBeFocused();
+        });
+      }
+    });
+  }
+
+  for (const viewport of [
     { width: 390, height: 844 },
     { width: 844, height: 390 },
     { width: 768, height: 1024 },
@@ -423,7 +506,11 @@ test.describe("Explore Anzania release experience", () => {
         ? { width: 390, height: 844 }
         : { width: 1440, height: 900 };
     await page.setViewportSize(testViewport);
-    await beginJourney(page);
+    await page.route(
+      /\/immersive\/pilot\/(?:dune-wake|sand-veil|solar-plume|fold-seam)\.webp$/,
+      (route) => route.abort(),
+    );
+    await beginJourney(page, "garden-origins");
 
     await expect(
       page.locator(
@@ -637,8 +724,8 @@ test.describe("Explore Anzania release experience", () => {
         };
         return debugWindow.__ANZANIA_DEBUG__.previewTransition({
           powerId,
-          fromIndex: 0,
-          toIndex: 1,
+          fromIndex: 2,
+          toIndex: 3,
           progress: 0.5,
         });
       }, ability.id);
@@ -689,8 +776,8 @@ test.describe("Explore Anzania release experience", () => {
             };
             return debugWindow.__ANZANIA_DEBUG__.previewTransition({
               powerId,
-              fromIndex: 0,
-              toIndex: 1,
+              fromIndex: 2,
+              toIndex: 3,
               progress,
             });
           },
@@ -748,7 +835,10 @@ test.describe("Explore Anzania release experience", () => {
       })();`,
     });
     await page.setViewportSize({ width: 1440, height: 900 });
-    await beginJourney(page);
+    await page.route("**/immersive/pilot/fold-seam.webp", (route) =>
+      route.abort(),
+    );
+    await beginJourney(page, "garden-origins");
 
     await page.locator('[data-power-id="reality-bending"]').click();
     await page.locator("[data-next-location]").click();
@@ -804,7 +894,7 @@ test.describe("Explore Anzania release experience", () => {
       { timeout: 12_000 },
     );
     await expect(page.locator("[data-location-name]")).toHaveText(
-      "Stone Pass of Context",
+      "Archive of Echoes",
     );
   });
 
@@ -816,7 +906,10 @@ test.describe("Explore Anzania release experience", () => {
       "The controlled context-loss check runs once on desktop Chrome.",
     );
     await page.setViewportSize({ width: 1440, height: 900 });
-    await beginJourney(page);
+    await page.route("**/immersive/pilot/dune-wake.webp", (route) =>
+      route.abort(),
+    );
+    await beginJourney(page, "garden-origins");
     await page.locator('[data-power-id="dune-surfing"]').click();
     await page.locator("[data-next-location]").click();
 
@@ -869,13 +962,9 @@ test.describe("Explore Anzania release experience", () => {
     await expect(experience).toHaveClass(/is-viewing-scene/);
     await expect(sceneButton).toHaveAttribute("aria-pressed", "true");
     await expect(sceneStatus).toHaveAttribute("aria-hidden", "false");
-    await expect
-      .poll(() =>
-        page
-          .locator("[data-chapter-panel]")
-          .evaluate((element) => getComputedStyle(element).opacity),
-      )
-      .toBe("0");
+    const story = page.locator(".location-mark");
+    await expect(story).toHaveCSS("opacity", "0");
+    await expect(story).toHaveAttribute("inert");
     for (const selector of [
       ".scene__veil",
       ".scene__vignette",
@@ -892,6 +981,7 @@ test.describe("Explore Anzania release experience", () => {
     await page.mouse.up();
     await expect(experience).not.toHaveClass(/is-viewing-scene/);
     await expect(sceneButton).toHaveAttribute("aria-pressed", "false");
+    await expect(story).not.toHaveAttribute("inert");
 
     await page.keyboard.down("v");
     await expect(experience).toHaveClass(/is-viewing-scene/);
@@ -967,7 +1057,7 @@ test.describe("Explore Anzania release experience", () => {
     expect(await companionRemainsPainted).toBe(true);
     expectCompleteFullBody(await framingMetrics(page));
 
-    await page.locator("[data-portal-button]").click();
+    await page.locator("[data-scene-portal]").click();
     await expect(page.locator("[data-experience]")).toHaveAttribute(
       "data-scene-mode",
       "inner",
@@ -983,6 +1073,534 @@ test.describe("Explore Anzania release experience", () => {
     await expect(
       page.getByText("Make complexity navigable", { exact: true }),
     ).toBeVisible();
+  });
+
+  test("keeps the Observatory guide on its lit stage and opens the accepted research", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "chrome-desktop");
+    await page.setViewportSize({ width: 1900, height: 800 });
+    await beginJourney(page, "observatory-horizons/inside");
+
+    const guide = page.locator("[data-companion]");
+    const notes = page.locator("[data-pilot-notes]");
+    const research = page.locator("[data-scene-evidence]");
+    const stageFoot = async () => {
+      await settleCompanionFrame(page);
+      return guide.evaluate((figure) => {
+        const scene = document.querySelector<HTMLElement>(
+          "[data-scene-current]",
+        );
+        if (!scene) throw new Error("The Observatory scene is missing.");
+        const actor = figure.getBoundingClientRect();
+        const backdrop = scene.getBoundingClientRect();
+        const [focusX = 0.5, focusY = 0.5] = getComputedStyle(scene)
+          .backgroundPosition.split(" ")
+          .map((value) => Number.parseFloat(value) / 100);
+        const coverWidth = Math.max(
+          scene.clientWidth,
+          (scene.clientHeight * 16) / 9,
+        );
+        const coverHeight = (coverWidth * 9) / 16;
+        const x =
+          ((actor.left + actor.width / 2 - backdrop.left) * scene.clientWidth) /
+          backdrop.width;
+        const y =
+          ((actor.bottom - backdrop.top) * scene.clientHeight) /
+          backdrop.height;
+        return {
+          x: (x - (scene.clientWidth - coverWidth) * focusX) / coverWidth,
+          y: (y - (scene.clientHeight - coverHeight) * focusY) / coverHeight,
+        };
+      });
+    };
+
+    await expect(guide).toHaveAttribute("data-grounded");
+    await expect(guide).toHaveAttribute("data-scene-lit");
+    await expect(guide).toHaveAttribute("data-frame-status", "safe");
+    await expect(guide.locator(".companion__ground")).toBeVisible();
+    await expect(guide.locator("[data-companion-image]")).toHaveCSS(
+      "filter",
+      /brightness\(0\.\d+\).*saturate\(0\.\d+\).*drop-shadow/,
+    );
+    await expect(page.getByRole("tab", { name: "Questions" })).toBeVisible();
+    const opened = await stageFoot();
+    expect(opened.x).toBeGreaterThan(0.64);
+    expect(opened.x).toBeLessThan(0.74);
+    expect(opened.y).toBeGreaterThan(0.82);
+    expect(opened.y).toBeLessThan(0.88);
+
+    await page.keyboard.press("Escape");
+    await expect(notes).toBeFocused();
+    await expect(guide).toHaveAttribute("data-grounded");
+    const closed = await stageFoot();
+    expect(closed.x).toBeCloseTo(opened.x, 2);
+    expect(closed.y).toBeCloseTo(opened.y, 2);
+
+    await notes.click();
+    await expect(page.getByRole("tab", { name: "Questions" })).toBeVisible();
+    await expect(guide).toHaveAttribute("data-grounded");
+    const reopened = await stageFoot();
+    expect(reopened.x).toBeCloseTo(opened.x, 2);
+    expect(reopened.y).toBeCloseTo(opened.y, 2);
+    await page.keyboard.press("Escape");
+    await expect(notes).toBeFocused();
+
+    await expect(research).toHaveAttribute(
+      "href",
+      new URL("/profile/research/#accepted-paper-title", page.url()).href,
+    );
+    await research.click();
+    await expect(page).toHaveURL(/\/research\/#accepted-paper-title$/);
+    await expect(page.locator("#accepted-paper-title")).toBeVisible();
+  });
+
+  test("opens the deep-linked Context Chamber and inspects its three objects", async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize(
+      testInfo.project.name === "chrome-mobile"
+        ? { width: 390, height: 844 }
+        : { width: 1440, height: 900 },
+    );
+    await beginJourney(page, "context-chamber");
+
+    const experience = page.locator("[data-experience]");
+    const notes = page.locator("[data-pilot-notes]");
+    const dialog = page.locator("[data-chamber-dialog]");
+    await expect(page).toHaveURL(/#context-chamber$/);
+    await expect(experience).toHaveAttribute("data-scene-mode", "inner");
+    await expect(experience).toHaveAttribute("data-pilot-setting", "chamber");
+    await expect(page.locator("[data-scene-current]")).not.toHaveCSS(
+      "background-image",
+      "none",
+    );
+    await expect(page.locator("[data-scene-foreground]")).toHaveCSS(
+      "visibility",
+      "hidden",
+    );
+    await expect(notes).toHaveAccessibleName("Field notes");
+    await expect(notes).toHaveAttribute("aria-expanded", "false");
+    await expect(page.locator("[data-chapter-panel]")).toBeHidden();
+    await expect
+      .poll(async () => (await framingMetrics(page))?.frameStatus)
+      .toBe("safe");
+    expectCompleteFullBody(await framingMetrics(page));
+
+    for (const artifact of [
+      { action: "workbench", title: "Trace a request" },
+      { action: "source-books", title: "The source books" },
+      { action: "validation-scroll", title: "The validation scroll" },
+    ]) {
+      const trigger = page.locator(`[data-pilot-action="${artifact.action}"]`);
+      await trigger.locator("[data-pilot-pin]").click();
+      await expect(dialog).toHaveAttribute("open");
+      await expect(
+        dialog.getByRole("heading", { name: artifact.title, exact: true }),
+      ).toBeVisible();
+
+      if (artifact.action === "workbench") {
+        const result = dialog.locator("[data-chamber-result]");
+        const sources = dialog.locator("[data-chamber-sources]");
+        const contributor = dialog.getByRole("radio", {
+          name: "Project contributor",
+        });
+        await expect(contributor).toBeChecked();
+        await expect(result).toHaveAttribute("data-access", "granted");
+        await expect(sources).toContainText("Delivery note 18");
+        await expect(sources).toContainText("Readiness checklist");
+
+        await dialog
+          .getByRole("radio", { name: "Outside the project" })
+          .check();
+        await expect(result).toHaveAttribute("data-access", "limited");
+        await expect(result).toContainText(
+          "No project records are available to this role.",
+        );
+        await expect(sources).toBeHidden();
+        await expect(
+          dialog.locator('[data-chamber-route="limited"]'),
+        ).toHaveAttribute("aria-current", "true");
+
+        await contributor.check();
+        await expect(result).toHaveAttribute("data-access", "granted");
+        await expect(sources).toBeVisible();
+      } else if (artifact.action === "source-books") {
+        await expect(
+          dialog
+            .locator('[data-chamber-panel="source-books"]')
+            .getByText("Delivery note 18", { exact: true }),
+        ).toBeVisible();
+      } else {
+        await expect(
+          dialog.getByRole("link", {
+            name: "Read the MetaPOS Mind case study",
+          }),
+        ).toHaveAttribute("href", "/profile/work/metapos-app-data-management/");
+      }
+
+      await dialog.locator("[data-chamber-close]").click();
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+    }
+
+    await notes.click();
+    await expect(notes).toHaveAttribute("aria-expanded", "true");
+    const fieldRecord = page.locator("[data-chapter-inside]");
+    await expect(fieldRecord).toBeVisible();
+    await fieldRecord.locator('[data-inside-tab="logic"]').click();
+    await expect(
+      fieldRecord.getByText("Permission-aware context", { exact: true }),
+    ).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(notes).toHaveAttribute("aria-expanded", "false");
+    await expect(notes).toBeFocused();
+  });
+
+  test("paints the authored pilot crossing and supports Skip and browser history", async ({
+    page,
+  }) => {
+    await beginJourney(page);
+    const experience = page.locator("[data-experience]");
+    const skip = page.locator("[data-pilot-skip]");
+
+    await page.locator('[data-pilot-action="journey-next"]').click();
+    await expect(experience).toHaveAttribute(
+      "data-effect-renderer",
+      "authored-pilot",
+    );
+    await expect(experience).toHaveAttribute("data-pilot-crossing", /.+/);
+    const effect = page.locator("[data-pilot-effect-far]");
+    await expect(effect).toHaveAttribute("src", /\.webp$/);
+    await expect(effect).toBeVisible();
+    await skip.click();
+    await expect(page).toHaveURL(/#stone-pass$/);
+    await expect(experience).toHaveAttribute("data-pilot-setting", "pass");
+    await expect(experience).not.toHaveAttribute("data-pilot-crossing");
+    await expect(skip).toBeHidden();
+
+    await page.locator('[data-pilot-action="chamber-enter"]').click();
+    await skip.click();
+    await expect(page).toHaveURL(/#context-chamber$/);
+    await expect(experience).toHaveAttribute("data-pilot-setting", "chamber");
+
+    await page.goBack();
+    await expect(page).toHaveURL(/#stone-pass$/);
+    await expect(experience).toHaveAttribute("data-pilot-setting", "pass");
+    await expect(experience).toHaveAttribute("data-scene-mode", "outer");
+
+    await page.goForward();
+    await expect(page).toHaveURL(/#context-chamber$/);
+    await expect(experience).toHaveAttribute("data-pilot-setting", "chamber");
+    await expect(experience).toHaveAttribute("data-scene-mode", "inner");
+  });
+
+  test("keeps Archive Field notes readable and closed on arrival", async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize(
+      testInfo.project.name === "chrome-mobile"
+        ? { width: 390, height: 640 }
+        : { width: 1440, height: 900 },
+    );
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await beginJourney(page, "archive-echoes");
+
+    const notes = page.locator("[data-pilot-notes]");
+    const panel = page.locator("[data-chapter-panel]");
+    const body = panel.locator("[data-chapter-body]");
+    const toolbar = panel.locator(".chapter-panel__toolbar");
+    const close = toolbar.getByRole("button", { name: "Close field notes" });
+
+    await expect(notes).toHaveAttribute("aria-expanded", "false");
+    await notes.click();
+    await expect(panel.getByRole("tab")).toHaveText([
+      "Evidence",
+      "Design logic",
+      "Questions",
+    ]);
+    await expect(
+      panel.getByRole("heading", { name: "OmniMind", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("heading", { name: "Visualizing Filters of a CNN" }),
+    ).toBeVisible();
+
+    const toolbarOffset = () =>
+      toolbar.evaluate((element) => {
+        const owner = element.closest<HTMLElement>("[data-chapter-panel]");
+        if (!owner)
+          throw new Error("Field notes toolbar is outside its panel.");
+        return (
+          element.getBoundingClientRect().top -
+          owner.getBoundingClientRect().top -
+          owner.clientTop
+        );
+      });
+    expect(Math.abs(await toolbarOffset())).toBeLessThanOrEqual(1);
+    await body.evaluate((element) => {
+      element.scrollTop = element.scrollHeight;
+    });
+    await expect
+      .poll(() => body.evaluate((element) => element.scrollTop))
+      .toBeGreaterThan(0);
+    expect(Math.abs(await toolbarOffset())).toBeLessThanOrEqual(1);
+    await expect(close).toBeInViewport();
+
+    await panel.getByRole("tab", { name: "Design logic" }).click();
+    for (const name of [
+      "Review the evidence before measuring the pack",
+      "Leave a decision another person can review",
+    ]) {
+      await expect(
+        panel.getByRole("heading", { name, exact: true }),
+      ).toBeVisible();
+    }
+
+    await panel.getByRole("tab", { name: "Questions" }).click();
+    const questions = panel.locator("details");
+    await expect(questions.locator("summary")).toHaveText([
+      "What can I open and inspect?",
+      "How far does the OmniMind calibration reach?",
+      "Who decides whether work is ready to release?",
+    ]);
+    const expanded = panel.locator("details[open]");
+    await expect(expanded).toHaveCount(0);
+    await questions.nth(0).locator("summary").click();
+    await expect(expanded.locator("summary")).toHaveText(
+      "What can I open and inspect?",
+    );
+    await questions.nth(1).locator("summary").click();
+    await expect(expanded.locator("summary")).toHaveText(
+      "How far does the OmniMind calibration reach?",
+    );
+
+    await close.click();
+    await page.locator("[data-scene-portal]").click();
+    await expect(page).toHaveURL(/#archive-echoes\/inside$/);
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-experience-state",
+      "exploring",
+    );
+    await waitForTwoPaintFrames(page);
+    await expect(page.locator("[data-experience]")).toHaveAttribute(
+      "data-scene-mode",
+      "inner",
+    );
+    await expect(notes).toHaveAttribute("aria-expanded", "false");
+    await expect(panel).toBeHidden();
+
+    await page.goto("about:blank");
+    await beginJourney(page, "archive-echoes/inside");
+    await waitForTwoPaintFrames(page);
+    await expect(page.locator("[data-experience]")).toHaveAttribute(
+      "data-scene-mode",
+      "inner",
+    );
+    await expect(notes).toHaveAttribute("aria-expanded", "false");
+    await expect(panel).toBeHidden();
+  });
+
+  test("opens the three Archive objects and returns through the in-world exit", async ({
+    page,
+  }, testInfo) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.setViewportSize(
+      testInfo.project.name === "chrome-mobile"
+        ? { width: 390, height: 844 }
+        : { width: 1440, height: 900 },
+    );
+    await beginJourney(page, "archive-echoes");
+    await page.locator("[data-scene-portal]").click();
+    await expect(page).toHaveURL(/#archive-echoes\/inside$/);
+
+    const dialog = page.locator("[data-archive-dialog]");
+    for (const artifact of [
+      { action: "archive-shelves", title: "Inspect the records" },
+      { action: "archive-astrolabe", title: "Trace a release decision" },
+      { action: "archive-folio", title: "Question the evidence" },
+    ]) {
+      const trigger = page.locator(`[data-pilot-action="${artifact.action}"]`);
+      await trigger.locator("[data-pilot-pin]").click();
+      await expect(dialog).toHaveAttribute("open");
+      await expect(dialog).toHaveAccessibleName(artifact.title);
+      await expect(dialog.locator("[data-archive-panel]:visible")).toHaveCount(
+        1,
+      );
+      await expect(
+        dialog.getByRole("heading", { name: artifact.title, exact: true }),
+      ).toBeVisible();
+
+      if (artifact.action === "archive-shelves") {
+        await expect(
+          dialog.getByRole("link", { name: "Read the OmniMind case study" }),
+        ).toHaveAttribute("href", "/profile/work/omnimind/");
+        await expect(
+          dialog.getByRole("link", { name: "Open the public repository" }),
+        ).toHaveAttribute(
+          "href",
+          /github\.com\/Bongo-Seakhoa\/Visualizing_Filters_CNN$/,
+        );
+      } else if (artifact.action === "archive-astrolabe") {
+        await expect(dialog.getByRole("listitem")).toHaveCount(3);
+        await expect(
+          dialog.getByRole("link", {
+            name: "Read the Human-Governed AI Delivery Method",
+          }),
+        ).toHaveAttribute(
+          "href",
+          "/profile/work/human-governed-ai-delivery-method/",
+        );
+      } else {
+        const questions = dialog.locator("details");
+        await expect(questions).toHaveCount(3);
+        await questions.nth(0).locator("summary").click();
+        await expect(dialog.locator("details[open] summary")).toHaveText(
+          "What can I open and inspect?",
+        );
+        await questions.nth(1).locator("summary").click();
+        await expect(dialog.locator("details[open] summary")).toHaveText(
+          "How far does the OmniMind calibration reach?",
+        );
+      }
+
+      await dialog.locator("[data-archive-close]").click();
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+    }
+
+    await page
+      .locator('[data-pilot-action="archive-exit"] [data-pilot-pin]')
+      .click();
+    await expect(page).toHaveURL(/#archive-echoes$/);
+    await expect(page.locator("[data-experience]")).toHaveAttribute(
+      "data-scene-mode",
+      "outer",
+    );
+    await expect(
+      page.locator('[data-pilot-action="archive-shelves"]'),
+    ).toBeHidden();
+  });
+
+  test("uses all four authored crossings outside the pilot in both directions", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "chrome-desktop");
+    test.setTimeout(90_000);
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await beginJourney(page, "garden-origins");
+
+    const experience = page.locator("[data-experience]");
+    const guide = page.locator("[data-pilot-guide]");
+    const near = page.locator("[data-pilot-effect-near]");
+    const far = page.locator("[data-pilot-effect-far]");
+    const rollers = page.locator("[data-pilot-roller]");
+    const skip = page.locator("[data-pilot-skip]");
+    const crossings = [
+      { control: "next", direction: "forward", destination: "archive-echoes" },
+      {
+        control: "previous",
+        direction: "backward",
+        destination: "garden-origins",
+      },
+    ] as const;
+    for (const ability of [
+      { id: "dune-surfing", name: "dune", effect: "dune-wake" },
+      { id: "sand-teleportation", name: "sand", effect: "sand-veil" },
+      { id: "solar-propulsion", name: "solar", effect: "solar-plume" },
+      { id: "reality-bending", name: "fold", effect: "fold-seam" },
+    ]) {
+      await page.locator(`[data-power-id="${ability.id}"]`).click();
+      for (const crossing of crossings) {
+        const painted = page.evaluate(
+          ({ name, effect, direction }) =>
+            new Promise((resolve) => {
+              const root =
+                document.querySelector<HTMLElement>("[data-experience]");
+              const image =
+                document.querySelector<HTMLImageElement>("[data-pilot-guide]");
+              const near = document.querySelector<HTMLImageElement>(
+                "[data-pilot-effect-near]",
+              );
+              const far = document.querySelector<HTMLImageElement>(
+                "[data-pilot-effect-far]",
+              );
+              const button =
+                document.querySelector<HTMLButtonElement>("[data-pilot-skip]");
+              const rollers = [
+                ...document.querySelectorAll<HTMLElement>(
+                  "[data-pilot-roller]",
+                ),
+              ];
+              const expires = performance.now() + 8500;
+              const visible = (layer: HTMLElement | null) =>
+                !!layer &&
+                !layer.hidden &&
+                Number(getComputedStyle(layer).opacity) > 0;
+              function inspect() {
+                if (
+                  root?.dataset.effectRenderer === "authored-pilot" &&
+                  root.dataset.pilotCrossing === name &&
+                  root.dataset.travelDirection === direction &&
+                  image?.src.includes(`/amani-${name}-`) &&
+                  image.naturalWidth > 0 &&
+                  near?.src.endsWith(`/${effect}.webp`) &&
+                  near.naturalWidth > 0 &&
+                  visible(image) &&
+                  visible(near) &&
+                  visible(button) &&
+                  (!(name === "dune" || name === "sand") || visible(far)) &&
+                  (name !== "fold" || rollers.filter(visible).length === 2)
+                ) {
+                  const box = button!.getBoundingClientRect();
+                  const hit = document.elementFromPoint(
+                    box.x + box.width / 2,
+                    box.y + box.height / 2,
+                  );
+                  if (direction === "forward" && hit && button!.contains(hit)) {
+                    button!.click();
+                    resolve("skipped");
+                    return;
+                  }
+                  if (direction === "backward") {
+                    resolve("painted");
+                    return;
+                  }
+                }
+                if (performance.now() >= expires)
+                  resolve(root?.dataset.effectRenderer ?? "no active renderer");
+                else requestAnimationFrame(inspect);
+              }
+              requestAnimationFrame(inspect);
+            }),
+          {
+            name: ability.name,
+            effect: ability.effect,
+            direction: crossing.direction,
+          },
+        );
+        await page.locator(`[data-${crossing.control}-location]`).click();
+        expect(await painted, `${ability.name} ${crossing.direction}`).toBe(
+          crossing.direction === "forward" ? "skipped" : "painted",
+        );
+        await expect(page).toHaveURL(new RegExp(`#${crossing.destination}$`));
+        await expect(experience).toHaveAttribute(
+          "data-location",
+          crossing.destination,
+        );
+        await expect(page.locator("html")).toHaveAttribute(
+          "data-experience-state",
+          "exploring",
+        );
+        await expect(experience).not.toHaveAttribute("data-pilot-crossing");
+        await expect(guide).toBeHidden();
+        await expect(near).toBeHidden();
+        await expect(far).toBeHidden();
+        await expect(rollers.first()).toBeHidden();
+        await expect(rollers.last()).toBeHidden();
+        await expect(skip).toBeHidden();
+      }
+    }
   });
 
   test("has no serious accessibility violations after the crossing opens", async ({

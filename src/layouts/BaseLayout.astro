@@ -25,6 +25,7 @@ export interface BreadcrumbItem {
 export type StructuredData = Record<string, unknown>;
 
 export interface Props {
+  profileDisplay?: { name: string; homePath: string; documentsPath: string };
   title?: string;
   description?: string;
   canonicalPath?: string;
@@ -50,6 +51,7 @@ if (!settings || !identity) {
 }
 
 const {
+  profileDisplay,
   title = settings.defaultTitle,
   description = settings.defaultDescription,
   canonicalPath = Astro.url.pathname,
@@ -66,12 +68,15 @@ const {
   pageClass,
 } = Astro.props;
 
+const profileName = profileDisplay?.name ?? identity.primaryName;
+const homePath = profileDisplay?.homePath ?? "";
+const documentsPath = profileDisplay?.documentsPath ?? "documents/";
 const documentTitle =
   title === settings.defaultTitle ||
-  title.includes("| Bongo Seakhoa") ||
-  title.startsWith("Bongo Seakhoa")
+  title.includes(`| ${profileName}`) ||
+  title.startsWith(profileName)
     ? title
-    : `${title} | Bongo Seakhoa`;
+    : `${title} | ${profileName}`;
 
 const routePath = Astro.url.pathname
   .replace(new RegExp(`^${settings.basePath}/?`), "")
@@ -88,7 +93,7 @@ const socialCardId = requestedRoute?.staticRenderable
   : "home";
 const resolvedSocialImage = ogImage ?? `assets/social/${socialCardId}.jpg`;
 const resolvedSocialImageAlt =
-  ogImageAlt ?? `${documentTitle}. Professional portfolio by Bongo Seakhoa.`;
+  ogImageAlt ?? `${documentTitle}. Professional portfolio by ${profileName}.`;
 const canonicalUrl = absoluteUrl(canonicalPath, settings.siteUrl);
 const socialImageUrl = absoluteUrl(resolvedSocialImage, settings.siteUrl);
 const faviconUrl = sitePath("favicon.svg");
@@ -96,36 +101,32 @@ const faviconPngUrl = sitePath("favicon-32.png");
 const appleTouchIconUrl = sitePath("apple-touch-icon.png");
 const manifestUrl = sitePath("site.webmanifest");
 const sitemapUrl = absoluteUrl("sitemap-index.xml", settings.siteUrl);
-const navigationRoutes = content.routes
-  .filter(
-    (route) =>
-      route.navigation &&
-      route.id !== "credentials" &&
-      route.id !== "documents",
-  )
-  .sort(
-    (left, right) =>
-      (left.navigationOrder ?? Number.MAX_SAFE_INTEGER) -
-      (right.navigationOrder ?? Number.MAX_SAFE_INTEGER),
-  );
 const footerRoutes = content.routes
   .filter((route) => route.navigation)
   .sort(
     (left, right) =>
       (left.navigationOrder ?? Number.MAX_SAFE_INTEGER) -
       (right.navigationOrder ?? Number.MAX_SAFE_INTEGER),
-  );
+  )
+  .map((route) => {
+    if (route.id === "home") return { ...route, path: homePath };
+    if (route.id === "documents") return { ...route, path: documentsPath };
+    return route;
+  });
+const navigationRoutes = footerRoutes.filter(
+  (route) => route.id !== "credentials" && route.id !== "documents",
+);
 const commandRoutes = footerRoutes.filter((route) => route.id !== "documents");
 const documentDownloads = content.documentManifest.flatMap((document) => {
-  const primaryVariant = document.variants.find(
-    (variant) => variant.displayName === identity.primaryName,
+  const variant = document.variants.find(
+    (entry) => entry.displayName === profileName,
   );
 
-  return primaryVariant
+  return variant
     ? [
         {
           label: `Download ${document.label} PDF`,
-          path: primaryVariant.pdfPath,
+          path: variant.pdfPath,
         },
       ]
     : [];
@@ -231,7 +232,10 @@ const jsonLd = JSON.stringify({
     <link rel="manifest" href={manifestUrl} />
     <link rel="sitemap" href={sitemapUrl} type="application/xml" />
 
-    <meta property="og:site_name" content={settings.siteName} />
+    <meta
+      property="og:site_name"
+      content={profileDisplay?.name ?? settings.siteName}
+    />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
@@ -265,7 +269,8 @@ const jsonLd = JSON.stringify({
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
     <StaticInterface
-      primaryName={identity.primaryName}
+      primaryName={profileName}
+      documentsPath={documentsPath}
       activeRouteId={resolvedActiveRouteId}
       navigation={commandRoutes}
       documentDownloads={documentDownloads}
@@ -274,7 +279,9 @@ const jsonLd = JSON.stringify({
     />
 
     <SiteHeader
-      primaryName={identity.primaryName}
+      primaryName={profileName}
+      homePath={homePath}
+      documentsPath={documentsPath}
       headline={identity.headline}
       navigation={navigationRoutes}
       currentPath={Astro.url.pathname}
@@ -291,9 +298,9 @@ const jsonLd = JSON.stringify({
     </main>
 
     <SiteFooter
-      primaryName={identity.primaryName}
+      primaryName={profileName}
       valueStatement={identity.valueStatement}
-      identityNote={identity.identityNote}
+      identityNote={profileDisplay ? "" : identity.identityNote}
       navigation={footerRoutes}
       links={identity.links}
       lastReviewed={identity.lastReviewed}

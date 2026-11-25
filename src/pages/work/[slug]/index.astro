@@ -197,6 +197,13 @@ const workSchema = isMethodology
         </ActionLink>
       )
     }
+    {
+      project?.slug === "metapos-app-data-management" && (
+        <ActionLink href="explore/#context-chamber" variant="secondary">
+          Explore the Context Chamber
+        </ActionLink>
+      )
+    }
     <ActionLink href="work/" variant="secondary">
       Back to work index
     </ActionLink>
