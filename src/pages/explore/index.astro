@@ -5,6 +5,7 @@ import "@fontsource/ibm-plex-mono/400.css";
 
 import ContextChamber from "../../components/immersive/ContextChamber.astro";
 import ArchiveCheckpoint from "../../components/immersive/ArchiveCheckpoint.astro";
+import JourneyCheckpoints from "../../components/immersive/JourneyCheckpoints.astro";
 import { absoluteUrl, sitePath } from "../../lib/urls";
 
 const title = "Explore Anzania | Bongo Seakhoa";
@@ -276,6 +277,7 @@ const structuredData = JSON.stringify({
 
         <ContextChamber />
         <ArchiveCheckpoint />
+        <JourneyCheckpoints />
 
         <aside class="location-rail" aria-label="Anzania locations">
           <p class="location-rail__title">THE CROSSING</p>

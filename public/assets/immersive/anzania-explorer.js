@@ -73,7 +73,6 @@ const selectors = {
   announcer: "[data-experience-announcer]",
   pilotWaypoints: "[data-pilot-waypoints]",
   chamberDialog: "[data-chamber-dialog]",
-  archiveDialog: "[data-archive-dialog]",
   pilotSkip: "[data-pilot-skip]",
   pilotGuide: "[data-pilot-guide]",
   pilotEffectFar: "[data-pilot-effect-far]",
@@ -392,18 +391,31 @@ function renderPilotWaypoints() {
   if (setting) elements.experience.dataset.pilotSetting = setting;
   else delete elements.experience.dataset.pilotSetting;
   if (!layer) return;
-  const archive =
-    state.sceneMode === "inner" &&
-    getCurrentLocation()?.id === "archive-echoes";
-  const waypoints = archive ? archiveWaypoints : scenePilot[setting]?.waypoints;
+  const location = getCurrentLocation();
+  const isInner = state.sceneMode === "inner";
+  const archive = isInner && location?.id === "archive-echoes";
+  const checkpoint = isInner ? location?.inner.checkpoint : undefined;
+  let waypoints = archive
+    ? archiveWaypoints
+    : (checkpoint ?? scenePilot[setting]?.waypoints);
+  if (!isInner && location?.outer.checkpointEntry) {
+    waypoints = {
+      ...waypoints,
+      "checkpoint-enter": {
+        ...location.outer.checkpointEntry,
+        label: location.portalAction,
+      },
+    };
+  }
   layer.hidden =
     !waypoints || !state.hasBegun || state.isTraversing || state.isViewingScene;
   if (layer.hidden) return;
 
   const stage = sceneGuide();
-  const portrait = archive
-    ? window.innerWidth <= 820 && window.innerWidth < window.innerHeight
-    : pilotPortrait();
+  const portrait =
+    archive || checkpoint || !setting
+      ? window.innerWidth <= 820 && window.innerWidth < window.innerHeight
+      : pilotPortrait();
   const width = layer.clientWidth;
   const height = layer.clientHeight;
   const readingBounds = elements.chapterPanel.getBoundingClientRect();
@@ -2974,17 +2986,16 @@ function renderChamberRequest(input) {
 }
 
 async function openSceneArtifact(action, button) {
-  const archive = action.startsWith("archive-");
-  const dialog = archive ? elements.archiveDialog : elements.chamberDialog;
+  const dialog = document.getElementById(button.getAttribute("aria-controls"));
   if (!dialog || dialog.open || state.inspection) return;
   const panels = [
     ...dialog.querySelectorAll(
-      archive ? "[data-archive-panel]" : "[data-chamber-panel]",
+      "[data-archive-panel], [data-chamber-panel], [data-journey-panel]",
     ),
   ];
   const selected = panels.find(
-    (panel) =>
-      (archive ? panel.dataset.archivePanel : panel.dataset.chamberPanel) ===
+    ({ dataset }) =>
+      (dataset.archivePanel ?? dataset.chamberPanel ?? dataset.journeyPanel) ===
       action,
   );
   if (!selected) return;
@@ -3034,6 +3045,7 @@ function activatePilotWaypoint(event) {
     case "journey-back":
       void travelTo(state.locationIndex - 1, { focusChapter: true });
       break;
+    case "checkpoint-enter":
     case "chamber-enter":
     case "chamber-exit":
     case "archive-exit":

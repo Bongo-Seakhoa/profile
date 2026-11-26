@@ -1,9 +1,11 @@
 ---
+import manifest from "../../../public/assets/immersive/runtime-manifest.json";
 import { sitePath } from "../../lib/urls";
 
 const caseStudyPath = sitePath("work/metapos-app-data-management/");
 const waypoints = [
   { action: "journey-next", label: "Stone Pass" },
+  { action: "checkpoint-enter", label: "Enter checkpoint" },
   { action: "chamber-enter", label: "Context Chamber" },
   { action: "chamber-exit", label: "Return to Stone Pass" },
   { action: "journey-back", label: "Return to Threshold Dunes" },
@@ -21,6 +23,14 @@ const waypoints = [
     label: "Review instrument",
     dialog: "archive-checkpoint-dialog",
   },
+  ...manifest.locations.flatMap((location) => {
+    if (!("checkpoint" in location.inner)) return [];
+    return Object.entries(location.inner.checkpoint).map(([action, pin]) => ({
+      action,
+      label: pin.label,
+      dialog: "journey-checkpoint-dialog",
+    }));
+  }),
 ];
 ---
 

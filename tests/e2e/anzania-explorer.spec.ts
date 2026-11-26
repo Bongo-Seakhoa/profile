@@ -1205,7 +1205,7 @@ test.describe("Explore Anzania release experience", () => {
     );
     await expect(reading).toBeVisible();
     await expect(reading.locator("[data-scene-brief]")).toContainText(
-      "separate FXPM case study",
+      "separate FXPM engineering case",
     );
     const before = await stageFoot();
     expect(before.x).toBeGreaterThan(0.64);
@@ -1569,6 +1569,136 @@ test.describe("Explore Anzania release experience", () => {
     await expect(
       page.locator('[data-pilot-action="archive-shelves"]'),
     ).toBeHidden();
+  });
+
+  test("contains scrolling copy inside the desktop reading frame", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "chrome-desktop");
+    await page.setViewportSize({ width: 1900, height: 800 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await beginJourney(page, "context-chamber");
+
+    const outer = page.locator("[data-chapter-panel]");
+    const reading = page.locator("[data-chapter-body]");
+    const dock = page.locator(".ability-dock");
+    const frame = await reading.evaluate((element) => {
+      const inner = element.getBoundingClientRect();
+      const outer = element.closest("[data-chapter-panel]")!;
+      const bounds = outer.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      return {
+        inset: Math.min(
+          inner.left - bounds.left,
+          inner.top - bounds.top,
+          bounds.right - inner.right,
+          bounds.bottom - inner.bottom,
+        ),
+        borders: [
+          style.borderTopWidth,
+          style.borderRightWidth,
+          style.borderBottomWidth,
+          style.borderLeftWidth,
+        ],
+        overflow: style.overflowY,
+      };
+    });
+    expect(frame.inset).toBeGreaterThanOrEqual(7);
+    expect(frame.borders).toEqual(["1px", "1px", "1px", "1px"]);
+    expect(frame.overflow).toBe("auto");
+    expect((await outer.boundingBox())!.width).toBeGreaterThanOrEqual(
+      (await dock.boundingBox())!.width,
+    );
+    const fixedFrame = await reading.boundingBox();
+    await reading.hover();
+    await page.mouse.wheel(0, 620);
+    await expect
+      .poll(() => reading.evaluate((element) => element.scrollTop))
+      .toBeGreaterThan(0);
+    expect(await reading.boundingBox()).toEqual(fixedFrame);
+  });
+
+  for (const [location, actions] of [
+    ["threshold-dunes", ["threshold-route-map"]],
+    ["garden-origins", ["garden-study-record", "garden-mentoring-record"]],
+    ["forge-resolve", ["forge-release-checklist", "forge-handoff-record"]],
+    ["bazaar-skill", ["bazaar-capability-map", "bazaar-model-service"]],
+    [
+      "observatory-horizons",
+      ["observatory-research-chart", "observatory-execution-instrument"],
+    ],
+    ["oasis-audience", ["oasis-documents", "oasis-contact"]],
+  ] as const) {
+    test(`opens the ${location} checkpoint and its in-world evidence`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== "chrome-desktop");
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await beginJourney(page, location);
+
+      const entrance = page.locator('[data-pilot-action="checkpoint-enter"]');
+      await entrance.locator("[data-pilot-label]").click();
+      await expect(page.locator("[data-experience]")).toHaveAttribute(
+        "data-scene-mode",
+        "inner",
+      );
+
+      const dialog = page.locator("[data-journey-dialog]");
+      for (const action of actions) {
+        const trigger = page.locator(`[data-pilot-action="${action}"]`);
+        await trigger.locator("[data-pilot-label]").click();
+        const panel = dialog.locator(`[data-journey-panel="${action}"]`);
+        await expect(dialog).toHaveAttribute("open");
+        await expect(panel.getByRole("heading", { level: 2 })).toBeVisible();
+        await expect(
+          dialog.locator("[data-journey-panel]:visible"),
+        ).toHaveCount(1);
+        await expect(
+          panel.locator('a[href^="/profile/"]').first(),
+        ).toBeVisible();
+        await page.keyboard.press("Escape");
+        await expect(dialog).toBeHidden();
+        await expect(trigger).toBeFocused();
+      }
+
+      await page.locator("[data-scene-portal]").click();
+      await expect(page.locator("[data-experience]")).toHaveAttribute(
+        "data-scene-mode",
+        "outer",
+      );
+      await expect(entrance).toBeVisible();
+    });
+  }
+
+  test("preserves Observatory look-back orientation after arrival settles", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "chrome-desktop");
+    await page.setViewportSize({ width: 1900, height: 800 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await beginJourney(page, "observatory-horizons/inside");
+
+    const experience = page.locator("[data-experience]");
+    const guide = page.locator("[data-companion-image]");
+    const facing = () =>
+      guide.evaluate(
+        (element) =>
+          new DOMMatrixReadOnly(getComputedStyle(element).transform).m11,
+      );
+    await expect(experience).toHaveClass(/is-presenting/);
+    await page.keyboard.down("l");
+    try {
+      await expect(guide).toHaveAttribute("data-guide-pose", "lookback");
+      await expect.poll(facing).toBeGreaterThan(0.99);
+      await expect(experience).not.toHaveClass(/is-presenting/);
+      await expect(guide).toHaveAttribute("data-guide-pose", "lookback");
+      await waitForTwoPaintFrames(page);
+      expect(await facing()).toBeGreaterThan(0.99);
+    } finally {
+      await page.keyboard.up("l");
+    }
+    await expect(guide).toHaveAttribute("data-guide-pose", "idle");
   });
 
   test("uses all four authored crossings outside the pilot in both directions", async ({

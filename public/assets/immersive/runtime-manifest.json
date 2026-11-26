@@ -55,7 +55,10 @@
       "outer": {
         "large": "./scenes/threshold-dunes-outer-1600.webp",
         "small": "./scenes/threshold-dunes-outer-960.webp",
-        "brief": "Explore the AI systems and data work behind this portfolio."
+        "brief": "Explore the AI systems and data work behind this portfolio.",
+        "checkpointEntry": {
+          "point": [0.738, 0.546]
+        }
       },
       "inner": {
         "large": "./scenes/threshold-dunes-inner-1600.webp",
@@ -76,7 +79,15 @@
           "portrait": [0.615, 0.782, 0.149]
         },
         "name": "Threshold Waystation",
-        "brief": "Start with three of my systems. MetaPOS Mind governs access to company context, OmniMind helps AI work from project evidence, and FXPM explores validation and execution."
+        "brief": "Open the route map on the waystation table to pick a system. Compare how MetaPOS Mind handles permissions, how OmniMind uses project evidence, and how FXPM evaluates decisions before execution.",
+        "checkpoint": {
+          "threshold-route-map": {
+            "label": "Route map",
+            "point": [0.824, 0.568],
+            "side": "left",
+            "portrait": [0.91, 0.573]
+          }
+        }
       },
       "power": "sand-teleportation",
       "portalAction": "Enter the waystation",
@@ -327,7 +338,10 @@
           },
           "portrait": [0.597, 0.674, 0.104]
         },
-        "brief": "The Context Chamber shows what I build. The Garden traces where those skills came from, through data science training, technical mentoring and my current engineering studies."
+        "brief": "The Context Chamber shows what I build. The Garden traces where those skills came from, through data science training, technical mentoring and my current engineering studies.",
+        "checkpointEntry": {
+          "point": [0.781, 0.499]
+        }
       },
       "inner": {
         "large": "./scenes/garden-origins-inner-1600.webp",
@@ -346,7 +360,19 @@
             "rim": "#e8d49f77"
           }
         },
-        "brief": "Follow the record from my completed Explore AI Academy certificate to technical mentoring at 2U / edX and my current Engineering Management studies at the University of Debrecen."
+        "brief": "Open the study shelves for my completed Explore AI Academy certificate and current Engineering Management studies. Visit the mentoring alcove to see how I applied that training in my 2U / edX role.",
+        "checkpoint": {
+          "garden-study-record": {
+            "label": "Study shelves",
+            "point": [0.831, 0.455],
+            "side": "left"
+          },
+          "garden-mentoring-record": {
+            "label": "Mentoring alcove",
+            "point": [0.637, 0.429],
+            "side": "left"
+          }
+        }
       },
       "power": "reality-bending",
       "portalAction": "Enter the memory court",
@@ -470,7 +496,10 @@
           },
           "portrait": [0.518, 0.794, 0.09]
         },
-        "brief": "Here the focus shifts from my background to my work. Inside, you can compare what is available as public code with what I can show in a case study, and trace a release decision."
+        "brief": "Here the focus shifts from my background to my work. Inside, you can compare what is available as public code with what I can show in a case study, and trace a release decision.",
+        "checkpointEntry": {
+          "point": [0.709, 0.543]
+        }
       },
       "inner": {
         "large": "./scenes/archive-echoes-inner-1600.webp",
@@ -621,7 +650,10 @@
           },
           "portrait": [0.555, 0.797, 0.085]
         },
-        "brief": "The foundry is about engineering for bad inputs and difficult handoffs. Start with my retail POS data work, then see how validation and a clear recovery path make failures easier to diagnose."
+        "brief": "The foundry is about engineering for bad inputs and difficult handoffs. Start with my retail POS data work, then see how validation and a clear recovery path make failures easier to diagnose.",
+        "checkpointEntry": {
+          "point": [0.669, 0.568]
+        }
       },
       "inner": {
         "large": "./scenes/forge-resolve-inner-1600.webp",
@@ -641,7 +673,19 @@
           },
           "portrait": [0.535, 0.641, 0.096]
         },
-        "brief": "Follow the decisions that help a release hold up under pressure. Reject an invalid input, leave enough evidence to diagnose it, and make the handoff clear to the person responsible for recovery."
+        "brief": "Try a release decision at the inspection station, then open the handoff plans for the checks and documentation another engineer needs to take over.",
+        "checkpoint": {
+          "forge-release-checklist": {
+            "label": "Inspection station",
+            "point": [0.818, 0.512],
+            "side": "left"
+          },
+          "forge-handoff-record": {
+            "label": "Handoff plans",
+            "point": [0.642, 0.867],
+            "side": "above"
+          }
+        }
       },
       "power": "solar-propulsion",
       "portalAction": "Cross the foundry floor",
@@ -767,7 +811,10 @@
             "rim": "#dab07b64"
           }
         },
-        "brief": "Use this market to match your team's needs with evidence from my work on governed AI, cloud data and analytics that support a decision."
+        "brief": "Use this market to match your team's needs with evidence from my work on governed AI, cloud data and analytics that support a decision.",
+        "checkpointEntry": {
+          "point": [0.758, 0.493]
+        }
       },
       "inner": {
         "large": "./scenes/bazaar-skill-inner-1600.webp",
@@ -786,7 +833,20 @@
             "rim": "#d2a47468"
           }
         },
-        "brief": "Start with a problem your team owns. The capability map connects Python and SQL, cloud workflows, reporting and technical mentoring to examples of how I use them."
+        "brief": "Start at the capability stall to match a team problem with a deliverable. Open the model service counter for a concrete Python API example and access to its public code.",
+        "checkpoint": {
+          "bazaar-capability-map": {
+            "label": "Capability stall",
+            "point": [0.73, 0.545],
+            "side": "left"
+          },
+          "bazaar-model-service": {
+            "label": "Model service counter",
+            "point": [0.823, 0.648],
+            "alternate": [0.789, 0.644],
+            "side": "left"
+          }
+        }
       },
       "power": "dune-surfing",
       "portalAction": "Walk the market court",
@@ -912,7 +972,10 @@
             "rim": "#a3b5d456"
           }
         },
-        "brief": "My accepted ISM 2026 paper studies when a decision system should be allowed to act. The charting chamber puts that research question beside a separate engineering example in FXPM."
+        "brief": "My accepted ISM 2026 paper studies when a decision system should be allowed to act. The charting chamber puts that research question beside a separate engineering example in FXPM.",
+        "checkpointEntry": {
+          "point": [0.698, 0.568]
+        }
       },
       "inner": {
         "large": "./scenes/observatory-horizons-inner-1600.webp",
@@ -932,7 +995,19 @@
           },
           "portrait": [0.526, 0.799, 0.112]
         },
-        "brief": "Read the ISM 2026 acceptance record and the separate FXPM case study. Compare the validation questions they share, the evidence behind each, and the limits of what it shows."
+        "brief": "Open the research armillary to read the ISM 2026 acceptance record and the limits of its evidence. Use the execution instrument for the separate FXPM engineering case and its checks before execution.",
+        "checkpoint": {
+          "observatory-research-chart": {
+            "label": "Research armillary",
+            "point": [0.615, 0.472],
+            "side": "left"
+          },
+          "observatory-execution-instrument": {
+            "label": "Execution instrument",
+            "point": [0.786, 0.703],
+            "side": "above"
+          }
+        }
       },
       "power": "solar-propulsion",
       "portalAction": "Enter the charting chamber",
@@ -1063,7 +1138,10 @@
           },
           "portrait": [0.149, 0.692, 0.077]
         },
-        "brief": "This is where the journey turns into a hiring conversation. Contact me about an AI or data problem, or open the résumé or CV you want to share."
+        "brief": "This is where the journey turns into a hiring conversation. Contact me about an AI or data problem, or open the résumé or CV you want to share.",
+        "checkpointEntry": {
+          "point": [0.796, 0.51]
+        }
       },
       "inner": {
         "large": "./scenes/oasis-audience-inner-1600.webp",
@@ -1083,7 +1161,19 @@
           },
           "portrait": [0.62, 0.799, 0.156]
         },
-        "brief": "Choose a résumé or CV under either surname, or tell me about the role, the problem your team owns, and the kind of collaboration you need."
+        "brief": "At the document table, choose a résumé or CV under either surname. Open the meeting lantern for direct contact and the details that help start a useful first conversation.",
+        "checkpoint": {
+          "oasis-documents": {
+            "label": "Document table",
+            "point": [0.745, 0.688],
+            "side": "right"
+          },
+          "oasis-contact": {
+            "label": "Meeting lantern",
+            "point": [0.667, 0.441],
+            "side": "left"
+          }
+        }
       },
       "power": "reality-bending",
       "portalAction": "Enter the hiring pavilion",

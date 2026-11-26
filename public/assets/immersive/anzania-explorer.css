@@ -926,14 +926,20 @@ input:focus-visible {
 }
 
 .experience.is-looking-back .companion img {
+  transform: rotate(-1.5deg);
+}
+
+.experience.is-looking-back
+  .companion
+  img[data-guide-pose="lookback"][data-guide-pose-fallback] {
   transform: perspective(420px) rotateY(180deg) rotate(-1.5deg);
 }
 
-.experience.is-presenting .companion img {
+.experience.is-presenting:not(.is-looking-back) .companion img {
   transform: rotate(-2deg) translateY(-2%);
 }
 
-.experience.is-idle-leaning .companion img {
+.experience.is-idle-leaning:not(.is-looking-back) .companion img {
   transform: rotate(var(--idle-lean-angle, -4deg))
     translateX(var(--idle-lean-shift, -3%));
 }

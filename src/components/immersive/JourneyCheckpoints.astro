@@ -1,0 +1,572 @@
+---
+import documents from "../../data/profile/document-manifest.json";
+import education from "../../data/profile/education.json";
+import experience from "../../data/profile/experience.json";
+import identity from "../../data/profile/identity.json";
+import projects from "../../data/profile/projects.json";
+import research from "../../data/profile/research.json";
+import { sitePath } from "../../lib/urls";
+
+interface EvidenceLink {
+  label: string;
+  path: string;
+}
+
+interface EvidenceItem {
+  label?: string;
+  title: string;
+  detail?: string;
+  links?: EvidenceLink[];
+}
+
+interface CheckpointPanel {
+  id: string;
+  biome: string;
+  location: string;
+  title: string;
+  intro: string;
+  items: EvidenceItem[];
+  flow?: boolean;
+  note?: string;
+  links?: EvidenceLink[];
+}
+
+function getRecord<T extends { id: string }>(records: T[], id: string): T {
+  const record = records.find((entry) => entry.id === id);
+  if (!record) throw new Error(`Anzania checkpoint record is missing (${id}).`);
+  return record;
+}
+
+function projectLink(id: string, label: string): EvidenceLink {
+  return { label, path: `work/${getRecord(projects, id).slug}/` };
+}
+
+const study = getRecord(
+  education,
+  "university-debrecen-engineering-management",
+);
+const training = getRecord(education, "explore-ai-data-science");
+const mentoring = getRecord(experience, "2u-edx-learning-specialist");
+const consulting = getRecord(experience, "1eight-data-analyst-consultant");
+const modelService = getRecord(projects, "regression-predict-api");
+const paper = getRecord(research, "ism-2026-validation-gates");
+const person = getRecord(identity, "bongo-seakhoa");
+const methodLink = {
+  label: "Read the delivery method",
+  path: "work/human-governed-ai-delivery-method/",
+};
+
+const panels: CheckpointPanel[] = [
+  {
+    id: "threshold-route-map",
+    biome: "threshold",
+    location: "Threshold Waystation",
+    title: "Choose what to explore",
+    intro:
+      "Start with the question most relevant to your team. The route connects each to a different piece of my work, with a case study you can open directly.",
+    items: [
+      {
+        label: "Stone Pass of Context",
+        title: "Who can see what an assistant knows?",
+        detail:
+          "Try a request as two different roles in the Context Chamber. Compare the restricted response with the source-backed response.",
+        links: [
+          projectLink(
+            "metapos-app-data-management",
+            "Read the MetaPOS Mind case study",
+          ),
+        ],
+      },
+      {
+        label: "Archive of Echoes",
+        title: "How do you verify an AI handoff?",
+        detail:
+          "Inspect how OmniMind selects project context, then trace the evidence a reviewer needs before a human decides to release.",
+        links: [projectLink("omnimind", "Read the OmniMind case study")],
+      },
+      {
+        label: "Observatory of Horizons",
+        title: "What makes evidence strong enough to act on?",
+        detail:
+          "Compare an accepted study about validation gates with the separate development work that connects research to execution controls.",
+        links: [
+          projectLink("fxpm-validation-system", "Read the FXPM case study"),
+        ],
+      },
+    ],
+  },
+  {
+    id: "garden-study-record",
+    biome: "garden",
+    location: "Garden of Origins",
+    title: "Where I trained",
+    intro:
+      "I started with hands-on data science training and now study how engineering decisions fit into wider systems and organizations.",
+    items: [
+      {
+        label: "Completed in 2022",
+        title: training.qualification,
+        detail: `At ${training.institution}, I completed immersive data science training.`,
+      },
+      {
+        label: "Current study",
+        title: study.qualification,
+        detail: `At the ${study.institution}, I study engineering fundamentals, management and systems thinking.`,
+      },
+    ],
+    links: [
+      {
+        label: "View education and dates",
+        path: "education/#formal-education-title",
+      },
+    ],
+  },
+  {
+    id: "garden-mentoring-record",
+    biome: "garden",
+    location: "Garden of Origins",
+    title: "How I taught technical work",
+    intro: `As a ${mentoring.role} at ${mentoring.company}, I supported learners in FinTech, AI and Data Visualization bootcamps.`,
+    items: [
+      {
+        title: "Work through the problem",
+        detail:
+          "I tutored learners in Python, Git, GitHub and machine learning, and answered their technical questions on AskBCS.",
+      },
+      {
+        title: "Make feedback actionable",
+        detail:
+          "I graded work against structured rubrics so learners could connect the feedback to the requirements of the assignment.",
+      },
+    ],
+    links: [{ label: "View the experience record", path: "experience/" }],
+  },
+  {
+    id: "forge-release-checklist",
+    biome: "forge",
+    location: "Forge of Resolve",
+    title: "When the input fails a check",
+    intro:
+      "Suppose a source record arrives without a required field just before a release. This example shows how schema validation and human release ownership fit together.",
+    flow: true,
+    items: [
+      {
+        title: "Stop the invalid record",
+        detail:
+          "Reject it at validation so downstream work can’t treat it as complete.",
+      },
+      {
+        title: "Keep the failed check visible",
+        detail:
+          "Record the source and the missing field so the next reviewer knows what needs to change.",
+      },
+      {
+        title: "Put the decision in a reviewer’s hands",
+        detail:
+          "Send the correction through the check again. An independent reviewer verifies the evidence before the person responsible decides whether to release.",
+      },
+    ],
+    links: [methodLink],
+  },
+  {
+    id: "forge-handoff-record",
+    biome: "forge",
+    location: "Forge of Resolve",
+    title: "What survives a handoff",
+    intro:
+      "I built handoff and work-assurance checks into MetaPOS Mind so teams could detect stale work before continuing.",
+    items: [
+      {
+        title: "Detect concurrent changes",
+        detail:
+          "The Python system checks for concurrent changes at handoff to catch work based on an earlier state.",
+      },
+      {
+        title: "Keep the receiving role in scope",
+        detail:
+          "Identity-bound handoffs carry context within permission limits. Deterministic verification covers handoffs, routing and access boundaries.",
+      },
+    ],
+    links: [
+      projectLink(
+        "metapos-app-data-management",
+        "Read the client-safe MetaPOS Mind case study",
+      ),
+    ],
+  },
+  {
+    id: "bazaar-capability-map",
+    biome: "bazaar",
+    location: "Bazaar of Skill",
+    title: "Start with your team’s problem",
+    intro:
+      "Choose the problem you need help with. The examples below show how I’ve approached each one.",
+    items: [
+      {
+        title: "Make retail data easier to trust",
+        detail:
+          "At MetaPOS, I use Python, SQL and data modelling to support transaction, inventory and sales workflows.",
+        links: [
+          {
+            label: "View the professional experience timeline",
+            path: "experience/",
+          },
+        ],
+      },
+      {
+        title: "Turn analysis into a decision",
+        detail: `At ${consulting.company}, I used SQL, statistical analysis and visualization to turn complex datasets into recommendations for stakeholders.`,
+      },
+      {
+        title: "Give AI the right company context",
+        detail:
+          "I built a read-only interface that assembles structured context within users’ permissions.",
+        links: [
+          projectLink(
+            "metapos-app-data-management",
+            "See the governed context system",
+          ),
+        ],
+      },
+    ],
+    links: [
+      { label: "Compare capabilities and examples", path: "capabilities/" },
+    ],
+  },
+  {
+    id: "bazaar-model-service",
+    biome: "bazaar",
+    location: "Bazaar of Skill",
+    title: "From a model to a prediction API",
+    intro:
+      "This public coursework fork of an Explore AI Academy template shows how an application can call a trained regression model.",
+    items: [
+      {
+        title: "Prepare the model inputs",
+        detail:
+          "The model adapter parses a submitted record, encodes its timestamp and converts categorical weather fields into numbers before predicting the energy-load shortfall.",
+      },
+      {
+        title: "Return the prediction to the caller",
+        detail:
+          "A Flask endpoint reads the JSON request, calls the model adapter and returns the estimate as JSON.",
+        links: modelService.publicUrl
+          ? [
+              {
+                label: "Inspect the public coursework fork",
+                path: modelService.publicUrl,
+              },
+            ]
+          : [],
+      },
+    ],
+    links: [
+      projectLink(
+        modelService.id,
+        "Read the Regression Predict API case study",
+      ),
+    ],
+  },
+  {
+    id: "observatory-research-chart",
+    biome: "observatory",
+    location: "Observatory of Horizons",
+    title: "How validation gates were studied",
+    intro: `${paper.statusLabel} · ${paper.role}`,
+    items: [
+      {
+        title: paper.title,
+        detail: paper.summary,
+      },
+      {
+        title: "Two kinds of evidence",
+        detail:
+          "Simulation lets researchers control the conditions under which a gate is tested. Historical evaluation examines how the design behaves on recorded data across market conditions.",
+      },
+    ],
+    note: paper.citationNote,
+    links: [
+      {
+        label: "View the accepted research record",
+        path: "research/#accepted-paper-title",
+      },
+    ],
+  },
+  {
+    id: "observatory-execution-instrument",
+    biome: "observatory",
+    location: "Observatory of Horizons",
+    title: "How FXPM handles a candidate",
+    intro:
+      "The separate FXPM development case study follows a strategy from selection to the checks that must pass before an order can be considered.",
+    flow: true,
+    items: [
+      {
+        title: "Select for the market regime",
+        detail:
+          "The system evaluates candidates by regime and keeps optimization state across runs.",
+      },
+      {
+        title: "Keep weak evidence out of live execution",
+        detail:
+          "A readiness decision distinguishes tradeable candidates, paper-only candidates and cases where no order should be sent.",
+      },
+      {
+        title: "Check the broker constraints",
+        detail:
+          "Preflight checks account for contract metadata, position sizing, spread and margin.",
+      },
+    ],
+    note: "This describes the development system. Funded live performance and production readiness remain unverified.",
+    links: [
+      projectLink(
+        "fxpm-validation-system",
+        "Read the FXPM development case study",
+      ),
+    ],
+  },
+  {
+    id: "oasis-documents",
+    biome: "oasis",
+    location: "Oasis of Audience",
+    title: "Open my résumé or CV",
+    intro:
+      "Use the résumé for a quick review of selected work or the CV for the full experience and credential record. Both are available under either professional name.",
+    items: [person.primaryName, ...person.alternateNames].map((name) => ({
+      title: name,
+      links: documents.flatMap((document) =>
+        document.variants
+          .filter((variant) => variant.displayName === name)
+          .map((variant) => ({
+            label: `${document.id === "cv" ? "CV" : "Résumé"} for ${name}`,
+            path: variant.previewPath,
+          })),
+      ),
+    })),
+  },
+  {
+    id: "oasis-contact",
+    biome: "oasis",
+    location: "Oasis of Audience",
+    title: "Tell me what you’re building",
+    intro:
+      "I’m open to AI systems, data engineering and analytical roles or projects with remote and distributed teams.",
+    items: [
+      {
+        title: "Hiring for a role?",
+        detail:
+          "Send the role or team name, the problem you want the person to own and the working arrangement.",
+      },
+      {
+        title: "Scoping a project?",
+        detail:
+          "Tell me what you need delivered, what you have already and any timing constraints.",
+      },
+    ],
+    links: [
+      { label: "Email Bongo", path: `mailto:${person.email}` },
+      { label: "View other contact options", path: "contact/" },
+    ],
+  },
+];
+---
+
+<dialog
+  id="journey-checkpoint-dialog"
+  class="explore-dialog context-chamber journey-checkpoint"
+  data-journey-dialog
+  aria-label="Inspect checkpoint evidence"
+>
+  <div
+    class="explore-dialog__frame context-chamber__frame journey-checkpoint__frame"
+  >
+    <form method="dialog" class="context-chamber__close">
+      <button
+        class="dialog-close"
+        type="submit"
+        data-journey-close
+        aria-label="Close checkpoint evidence"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+
+    {
+      panels.map((panel) => {
+        const titleId = `${panel.id}-title`;
+        const EntryList = panel.flow ? "ol" : "ul";
+        return (
+          <section
+            data-journey-panel={panel.id}
+            data-checkpoint-biome={panel.biome}
+            aria-labelledby={titleId}
+            hidden
+          >
+            <header class="explore-dialog__header context-chamber__header journey-checkpoint__header">
+              <div>
+                <p class="dialog-kicker">{panel.location}</p>
+                <h2 id={titleId} tabindex="-1">
+                  {panel.title}
+                </h2>
+                <p>{panel.intro}</p>
+              </div>
+            </header>
+
+            <EntryList
+              class="journey-checkpoint__evidence"
+              data-flow={panel.flow ? "true" : undefined}
+            >
+              {panel.items.map((item) => (
+                <li>
+                  {item.label && (
+                    <p class="journey-checkpoint__source">{item.label}</p>
+                  )}
+                  <h3>{item.title}</h3>
+                  {item.detail && (
+                    <p class="journey-checkpoint__detail">{item.detail}</p>
+                  )}
+                  {item.links?.length ? (
+                    <div class="journey-checkpoint__links">
+                      {item.links.map((link) => (
+                        <a href={sitePath(link.path)}>{link.label}</a>
+                      ))}
+                    </div>
+                  ) : null}
+                </li>
+              ))}
+            </EntryList>
+
+            {panel.note && <p class="journey-checkpoint__note">{panel.note}</p>}
+            {panel.links?.length ? (
+              <div class="journey-checkpoint__links journey-checkpoint__links--footer">
+                {panel.links.map((link) => (
+                  <a href={sitePath(link.path)}>{link.label}</a>
+                ))}
+              </div>
+            ) : null}
+          </section>
+        );
+      })
+    }
+  </div>
+</dialog>
+
+<style>
+  .journey-checkpoint {
+    width: min(54rem, calc(100vw - 28px));
+  }
+
+  .journey-checkpoint__frame {
+    background: linear-gradient(150deg, #231b12, #100d0a 73%);
+  }
+
+  [data-checkpoint-biome] {
+    --station-ink: #ecc479;
+  }
+
+  [data-checkpoint-biome="garden"] {
+    --station-ink: #b9d2a5;
+  }
+
+  [data-checkpoint-biome="forge"] {
+    --station-ink: #f3ac84;
+  }
+
+  [data-checkpoint-biome="observatory"] {
+    --station-ink: #bfc9f3;
+  }
+
+  .journey-checkpoint__header {
+    border-bottom-color: color-mix(
+      in srgb,
+      var(--station-ink) 34%,
+      transparent
+    );
+  }
+
+  .journey-checkpoint__header .dialog-kicker,
+  .journey-checkpoint__source {
+    color: var(--station-ink);
+  }
+
+  .journey-checkpoint__header h2 {
+    text-wrap: balance;
+  }
+
+  .journey-checkpoint__evidence {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 0.75rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .journey-checkpoint__evidence li {
+    min-width: 0;
+    padding: 0.95rem 0.9rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--station-ink) 34%, transparent);
+    background: color-mix(in srgb, var(--station-ink) 6%, #15110d);
+  }
+
+  .journey-checkpoint__evidence[data-flow="true"] {
+    grid-template-columns: 1fr;
+    padding-inline-start: 1.3rem;
+    list-style: decimal-leading-zero;
+  }
+
+  .journey-checkpoint__evidence[data-flow="true"] li {
+    padding-block: 0.75rem;
+    margin-inline-start: 0.55rem;
+  }
+
+  .journey-checkpoint__evidence li::marker,
+  .journey-checkpoint__source {
+    color: var(--station-ink);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+  }
+
+  .journey-checkpoint__source {
+    margin: 0 0 0.34rem;
+  }
+
+  .journey-checkpoint__evidence h3 {
+    margin: 0;
+    font-family: "Source Serif 4 Variable", Georgia, serif;
+    font-size: 1.26rem;
+    font-weight: 550;
+    line-height: 1.16;
+  }
+
+  .journey-checkpoint__detail,
+  .journey-checkpoint__note {
+    margin: 0.42rem 0 0;
+    color: var(--cream-muted);
+    line-height: 1.48;
+  }
+
+  .journey-checkpoint__note {
+    margin-block-start: 1rem;
+    padding-inline-start: 0.7rem;
+    border-inline-start: 2px solid var(--station-ink);
+  }
+
+  .journey-checkpoint__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
+    margin-block-start: 0.7rem;
+  }
+
+  .journey-checkpoint__links--footer {
+    margin-block-start: 1rem;
+  }
+
+  .journey-checkpoint__links a {
+    color: var(--station-ink);
+    line-height: 1.45;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
