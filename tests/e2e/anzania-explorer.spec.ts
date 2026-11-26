@@ -122,7 +122,17 @@ async function settleCompanionFrame(page: Page) {
         companionWidth: companionRect.width,
         companionHeight: companionRect.height,
       };
+      const transformInFlight = image
+        .getAnimations()
+        .some(
+          (animation) =>
+            typeof CSSTransition !== "undefined" &&
+            animation instanceof CSSTransition &&
+            animation.transitionProperty === "transform" &&
+            (animation.pending || animation.playState === "running"),
+        );
       const stable =
+        !transformInFlight &&
         previous !== null &&
         current.transform === previous.transform &&
         Math.abs(current.imageTop - previous.imageTop) < 0.1 &&
