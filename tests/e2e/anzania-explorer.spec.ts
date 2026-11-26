@@ -1067,7 +1067,7 @@ test.describe("Explore Anzania release experience", () => {
     for (const [name, slug] of [
       ["OmniMind", "omnimind"],
       ["FXPM: validation and execution", "fxpm-validation-system"],
-    ]) {
+    ] as const) {
       await expect(
         page.locator("[data-chapter-actions]").getByRole("link", { name }),
       ).toHaveAttribute("href", new RegExp(`/work/${slug}/$`));
