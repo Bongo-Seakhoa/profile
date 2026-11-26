@@ -31,6 +31,7 @@ threshold.deepDive.now = projects.map((project) => ({
   status: "Professional case study",
   title: project.title,
   detail: project.role,
+  path: `work/${project.slug}/`,
 }));
 const archive = location("archive-echoes");
 archive.deepDive.now = [

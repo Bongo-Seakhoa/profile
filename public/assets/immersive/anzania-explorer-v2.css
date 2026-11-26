@@ -2481,8 +2481,7 @@
   margin-top: 23px;
 }
 
-.scene-action,
-.chapter-panel__toolbar button {
+.scene-action {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2504,8 +2503,7 @@
   pointer-events: auto;
 }
 
-.scene-action:hover,
-.chapter-panel__toolbar button:hover {
+.scene-action:hover {
   background: #302316;
   border-color: var(--gold-bright);
 }
@@ -2514,20 +2512,11 @@
   border-color: #e5ceb740;
 }
 
-.experience:not([data-pilot-notes-open]) .chapter-panel {
-  display: none;
-  opacity: 0;
-}
-
-.experience[data-pilot-notes-open] :is(.location-mark, .experience-toast) {
-  display: none;
-}
-
 .chapter-panel,
 .chapter-panel[data-mode="inner"] {
-  --notes-inset: clamp(18px, 2.1vw, 30px);
+  --reading-inset: clamp(18px, 2.1vw, 30px);
   z-index: 21;
-  width: min(540px, 45vw);
+  width: min(430px, 32vw);
   max-height: none;
   display: flex;
   flex-direction: column;
@@ -2535,27 +2524,7 @@
   overflow: hidden;
   inset: calc(var(--safe-top) + 74px) auto calc(var(--hud-bottom) + 90px)
     var(--scene-gutter);
-  background: #15100def;
-}
-
-.chapter-panel[data-mode="inner"] {
-  width: min(690px, 54vw);
-}
-
-.chapter-panel__toolbar {
-  flex: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px;
-  min-height: 57px;
-  padding: 5px var(--notes-inset);
-  border-bottom: 1px solid #efcb7340;
-  color: var(--cream-muted);
-  font-size: 0.73rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  background: #15100d;
+  background: linear-gradient(150deg, #201910f5, #15100df2 68%);
 }
 
 .chapter-panel__body {
@@ -2566,7 +2535,7 @@
   scrollbar-width: thin;
   scrollbar-color: #efcb7373 transparent;
   scrollbar-gutter: stable;
-  padding: 18px var(--notes-inset) var(--notes-inset);
+  padding: 18px var(--reading-inset) var(--reading-inset);
 }
 
 .chapter-panel__actions {
@@ -2618,13 +2587,6 @@
   text-underline-offset: 0.2em;
 }
 
-.chapter-panel__toolbar button {
-  justify-content: center;
-  width: 44px;
-  padding: 0;
-  font-size: 1.3rem;
-}
-
 .chapter-panel h2 {
   margin-top: 0;
   font-size: clamp(1.65rem, 2.65vw, 2.85rem);
@@ -2672,22 +2634,6 @@
 }
 
 @media (width > 820px) {
-  .experience[data-pilot-setting="chamber"] .location-mark {
-    top: clamp(200px, 45vh, 430px);
-    right: clamp(32px, 4vw, 100px);
-    left: auto;
-    width: min(28vw, 450px);
-  }
-
-  .experience[data-pilot-setting="chamber"] .location-mark h2 {
-    font-size: clamp(2.2rem, 3.8vw, 4.5rem);
-  }
-
-  .experience[data-pilot-setting="chamber"] .chapter-panel {
-    right: clamp(32px, 4vw, 100px);
-    left: auto;
-  }
-
   .ability-dock {
     inset: auto auto var(--hud-bottom) var(--scene-gutter);
     width: min(570px, calc(100vw - var(--scene-gutter) - 290px));
@@ -2797,8 +2743,9 @@
   .chapter-panel,
   .chapter-panel[data-mode="inner"] {
     width: auto;
-    inset: max(78px, 22dvh) var(--safe-right) calc(var(--safe-bottom) + 111px)
+    inset: auto var(--safe-right) calc(var(--safe-bottom) + 111px)
       var(--safe-left);
+    height: min(20.5dvh, 190px);
   }
 
   .ability-dock {
@@ -2866,13 +2813,6 @@
     min-height: 36px;
   }
 
-  .experience[data-pilot-setting="chamber"] .location-mark {
-    top: 32vh;
-    right: var(--safe-right);
-    left: auto;
-    width: min(32vw, 450px);
-  }
-
   .experience-toast {
     max-width: min(33vw, 235px);
     inset: auto var(--safe-right) calc(var(--safe-bottom) + 105px) auto;
@@ -2883,4 +2823,69 @@
     right: auto;
     left: var(--scene-gutter);
   }
+}
+
+.chapter-panel .location-mark {
+  position: relative;
+  inset: auto;
+  width: auto;
+  margin-block-end: 1.25rem;
+  padding: 0 0 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.chapter-panel .location-mark::before {
+  content: none;
+}
+
+.chapter-panel .location-mark h2 {
+  margin-block: 0.45rem 0;
+  font-size: clamp(1.85rem, 3vw, 3.3rem);
+}
+
+.chapter-panel .location-mark__brief {
+  max-width: 38ch;
+  margin-block-start: 0.65rem;
+  font-size: clamp(0.88rem, 1.12vw, 1.08rem);
+  line-height: 1.55;
+}
+
+.chapter-panel .location-mark__actions {
+  align-items: center;
+  margin-block-start: 0.85rem;
+}
+
+.chapter-panel .location-mark__evidence {
+  margin: 0;
+}
+
+.chapter-panel .chapter-panel__meta {
+  display: block;
+}
+
+.chapter-panel .chapter-panel__signal {
+  display: none;
+}
+
+.chapter-panel [data-chapter-title] {
+  font-size: clamp(1.22rem, 1.85vw, 1.85rem);
+}
+
+.chapter-panel__body:focus-visible {
+  outline-offset: -4px;
+}
+
+@media (width <= 820px) {
+  .chapter-panel .location-mark h2 {
+    font-size: clamp(1.45rem, 5.5vw, 2rem);
+  }
+
+  .chapter-panel .location-mark__brief {
+    max-width: none;
+  }
+}
+
+.experience-toast {
+  inset: calc(var(--safe-top) + 83px) var(--safe-right) auto auto;
+  transform: none;
 }

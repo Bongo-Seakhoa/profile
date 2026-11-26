@@ -1,9 +1,7 @@
 ---
-import manifest from "../../../public/assets/immersive/runtime-manifest.json";
 import projects from "../../data/profile/projects.json";
 import { sitePath } from "../../lib/urls";
 
-const archive = manifest.locations.find(({ id }) => id === "archive-echoes");
 const cnnProject = projects.find(({ id }) => id === "visualizing-filters-cnn");
 const methodPath = sitePath("work/human-governed-ai-delivery-method/");
 ---
@@ -111,33 +109,6 @@ const methodPath = sitePath("work/human-governed-ai-delivery-method/");
       </ol>
       <a href={methodPath}>Read the Human-Governed AI Delivery Method</a>
     </section>
-
-    <section
-      data-archive-panel="archive-folio"
-      aria-labelledby="archive-folio-title"
-      hidden
-    >
-      <header class="explore-dialog__header context-chamber__header">
-        <div>
-          <p class="dialog-kicker">Open folio</p>
-          <h2 id="archive-folio-title" tabindex="-1">Question the evidence</h2>
-          <p>
-            Compare what you can inspect, what was measured, and who signs off.
-          </p>
-        </div>
-      </header>
-
-      <div class="archive-questions">
-        {
-          archive?.deepDive?.notes?.map(({ question, answer }) => (
-            <details name="archive-checkpoint-questions">
-              <summary>{question}</summary>
-              <p>{answer}</p>
-            </details>
-          ))
-        }
-      </div>
-    </section>
   </div>
 </dialog>
 
@@ -147,8 +118,7 @@ const methodPath = sitePath("work/human-governed-ai-delivery-method/");
   }
 
   .archive-records,
-  .archive-trace,
-  .archive-questions {
+  .archive-trace {
     margin-block: 1.15rem;
   }
 
@@ -158,8 +128,7 @@ const methodPath = sitePath("work/human-governed-ai-delivery-method/");
     gap: 0.7rem;
   }
 
-  .archive-records article,
-  .archive-questions details {
+  .archive-records article {
     border: 1px solid var(--line);
     background: rgba(215, 169, 76, 0.05);
   }
@@ -175,8 +144,7 @@ const methodPath = sitePath("work/human-governed-ai-delivery-method/");
   }
 
   .archive-records article > p:not(.dialog-kicker),
-  .archive-trace p,
-  .archive-questions p {
+  .archive-trace p {
     margin: 0.35rem 0 0;
     color: var(--cream-muted);
     line-height: 1.5;
@@ -201,25 +169,8 @@ const methodPath = sitePath("work/human-governed-ai-delivery-method/");
   }
 
   .archive-trace li::marker,
-  .archive-trace strong,
-  .archive-questions summary {
+  .archive-trace strong {
     color: var(--gold-bright);
     font-weight: 650;
-  }
-
-  .archive-questions {
-    display: grid;
-    gap: 0.55rem;
-  }
-
-  .archive-questions summary {
-    min-height: 44px;
-    padding: 0.65rem 1rem;
-    cursor: pointer;
-  }
-
-  .archive-questions details p {
-    margin-top: 0;
-    padding: 0 1rem 0.85rem;
   }
 </style>

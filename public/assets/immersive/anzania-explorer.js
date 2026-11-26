@@ -24,7 +24,6 @@ const selectors = {
   mapLocationList: "[data-map-location-list]",
   locationNumber: "[data-location-number]",
   locationRegion: "[data-location-region]",
-  locationMark: ".location-mark",
   locationName: "[data-location-name]",
   sceneBrief: "[data-scene-brief]",
   sceneEvidence: "[data-scene-evidence]",
@@ -39,16 +38,12 @@ const selectors = {
   chapterEvidence: "[data-chapter-evidence]",
   chapterFacts: "[data-chapter-facts]",
   chapterActions: "[data-chapter-actions]",
-  chapterInside: "[data-chapter-inside]",
   chapterInsideKicker: "[data-chapter-inside-kicker]",
   chapterInsideTitle: "[data-chapter-inside-title]",
   chapterInsideSummary: "[data-chapter-inside-summary]",
   chapterTabs: "[data-chapter-tabs]",
   chapterTabPanel: "[data-chapter-tab-panel]",
   chapterArtifact: "[data-chapter-artifact]",
-  portalButton: "[data-portal-button]",
-  portalAction: "[data-portal-action]",
-  portalCaption: "[data-portal-caption]",
   companion: "[data-companion]",
   companionImage: "[data-companion-image]",
   companionName: "[data-companion-name]",
@@ -81,8 +76,6 @@ const selectors = {
   archiveDialog: "[data-archive-dialog]",
   pilotSkip: "[data-pilot-skip]",
   pilotGuide: "[data-pilot-guide]",
-  pilotNotes: "[data-pilot-notes]",
-  closeNotes: "[data-close-notes]",
   pilotEffectFar: "[data-pilot-effect-far]",
   pilotEffectNear: "[data-pilot-effect-near]",
 };
@@ -187,12 +180,12 @@ const scenePilot = {
     ],
     waypoints: {
       "chamber-exit": {
-        point: [0.119, 0.424],
+        point: [0.805, 0.734],
         portrait: [0.532, 0.234],
-        portraitSide: "below",
+        portraitSide: "left",
       },
       workbench: {
-        point: [653 / 1672, 579 / 941],
+        point: [725 / 1672, 579 / 941],
         portrait: [700 / 1672, 579 / 941],
       },
       "source-books": { point: [835 / 1672, 507 / 941], side: "left" },
@@ -208,7 +201,7 @@ const scenePilot = {
 
 const archiveWaypoints = {
   "archive-exit": {
-    point: [0.395, 0.631],
+    point: [0.486, 0.631],
     portrait: [0.46, 0.567],
     label: "Return to Archive entrance",
     portraitLabel: "Back to entrance",
@@ -225,13 +218,6 @@ const archiveWaypoints = {
     point: [0.606, 0.504],
     label: "Review instrument",
     portraitSide: "left",
-  },
-  "archive-folio": {
-    point: [0.871, 0.816],
-    portrait: [0.559, 0.628],
-    label: "Open folio",
-    portraitLabel: "Reader’s stand",
-    side: "left",
   },
 };
 
@@ -420,6 +406,7 @@ function renderPilotWaypoints() {
     : pilotPortrait();
   const width = layer.clientWidth;
   const height = layer.clientHeight;
+  const readingBounds = elements.chapterPanel.getBoundingClientRect();
   const visible = ([x, y]) =>
     x > 27 && x < width - 27 && y > 29 && y < height - 29;
   for (const button of layer.querySelectorAll("[data-pilot-action]")) {
@@ -449,29 +436,19 @@ function renderPilotWaypoints() {
       "right";
     if (side === "right" && x + labelWidth + 30 > width) side = "left";
     if (side === "left" && x - labelWidth - 30 < 0) side = "below";
+    if (
+      side === "left" &&
+      y >= readingBounds.top &&
+      y <= readingBounds.bottom &&
+      x > readingBounds.right &&
+      x - labelWidth - 30 < readingBounds.right &&
+      x + labelWidth + 30 < width
+    ) {
+      side = "right";
+    }
     button.dataset.pilotLabelSide = side;
     button.style.setProperty("--pilot-x", `${x}px`);
     button.style.setProperty("--pilot-y", `${y}px`);
-  }
-}
-
-function setFieldNotes(open, { focus = true } = {}) {
-  elements.experience.toggleAttribute("data-pilot-notes-open", open);
-  elements.pilotNotes?.setAttribute("aria-expanded", String(open));
-  if (elements.chapterPanel)
-    elements.chapterPanel.inert = !open || state.isViewingScene;
-  if (focus) {
-    recalculateFraming({ immediate: true });
-    window.requestAnimationFrame(() => {
-      if (
-        state.isViewingScene ||
-        open !== elements.experience.hasAttribute("data-pilot-notes-open")
-      )
-        return;
-      (open ? elements.chapterPanel : elements.pilotNotes)?.focus({
-        preventScroll: true,
-      });
-    });
   }
 }
 
@@ -525,12 +502,11 @@ function setPresenting(
 }
 
 function setInteractionLock(locked) {
+  elements.chapterPanel.inert = locked || state.isViewingScene;
   for (const control of [
     elements.previousLocation,
     elements.nextLocation,
-    elements.portalButton,
     elements.scenePortal,
-    elements.pilotNotes,
     elements.mapButton,
     elements.guideButton,
     elements.viewSceneButton,
@@ -1004,7 +980,7 @@ function renderDeepDive() {
 }
 
 function canOpenFinalLocationEndState() {
-  if (!state.manifest || !elements.portalButton) return false;
+  if (!state.manifest) return false;
   const location = getCurrentLocation();
   return Boolean(
     location &&
@@ -1055,14 +1031,6 @@ function advanceForward() {
   if (canOpenFinalLocationEndState()) void togglePortal();
 }
 
-const pilotBriefs = {
-  dunes:
-    "Follow the ridge to Stone Pass, where the first project makes the case for giving AI the right context.",
-  pass: "A project update is scattered across several records. Follow the stone arch to see what MetaPOS Mind can retrieve under different access rules.",
-  chamber:
-    "Start at the working table to see MetaPOS Mind in action. The source books and validation scroll show how the answer was checked.",
-};
-
 function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   const location = getCurrentLocation();
   if (!location || !state.manifest) return;
@@ -1077,10 +1045,6 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   elements.experience.dataset.sceneMode = state.sceneMode;
   elements.experience.dataset.location = location.id;
   elements.chapterPanel.dataset.mode = state.sceneMode;
-  if (elements.chapterInside) {
-    elements.chapterInside.hidden =
-      state.sceneMode !== "inner" && location.id !== "archive-echoes";
-  }
 
   if (elements.progressLabel) {
     elements.progressLabel.textContent = `${location.number} / ${String(
@@ -1106,8 +1070,14 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
         : (location[state.sceneMode].name ?? location.name);
   const setting = getPilotSetting();
   elements.sceneBrief.textContent =
-    pilotBriefs[setting] ?? location[state.sceneMode].brief ?? location.title;
-  const feature = location.actions[0];
+    location[state.sceneMode].brief ?? location.title;
+  const actions =
+    location.id === "threshold-dunes" && state.sceneMode === "inner"
+      ? location.deepDive.now
+          .filter(({ path }) => path)
+          .map(({ title, path }) => ({ label: title, path }))
+      : location.actions;
+  const [feature, ...secondaryActions] = actions;
   if (elements.sceneEvidence) {
     elements.sceneEvidence.hidden = !feature;
     if (feature) {
@@ -1125,7 +1095,10 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
     );
     elements.companion.style.setProperty("--guide-scene-rim", rim);
   }
-  elements.scenePortal.hidden = setting === "pass" || setting === "chamber";
+  elements.scenePortal.hidden =
+    setting === "pass" ||
+    setting === "chamber" ||
+    (location.id === "archive-echoes" && state.sceneMode === "inner");
   if (elements.chapterEyebrow)
     elements.chapterEyebrow.textContent = location.eyebrow;
   if (elements.chapterTitle) elements.chapterTitle.textContent = location.title;
@@ -1135,19 +1108,10 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   if (elements.chapterSignalValue) {
     elements.chapterSignalValue.textContent = location.signalValue;
   }
-  if (elements.portalAction) {
-    elements.portalAction.textContent =
-      state.sceneMode === "outer"
-        ? location.portalAction
-        : "Return to the outer approach";
-    elements.scenePortal.textContent = elements.portalAction.textContent;
-  }
-  if (elements.portalCaption) {
-    elements.portalCaption.textContent =
-      state.sceneMode === "outer"
-        ? location.portalCaption
-        : "Close the field notes and restore the wider landscape";
-  }
+  elements.scenePortal.textContent =
+    state.sceneMode === "outer"
+      ? location.portalAction
+      : "Return to the outer approach";
   if (elements.modeCopy) {
     elements.modeCopy.textContent =
       state.sceneMode === "outer"
@@ -1180,7 +1144,7 @@ function renderLocation({ announceChange = false, resetScroll = false } = {}) {
   }
 
   if (elements.chapterActions) {
-    elements.chapterActions.innerHTML = location.actions
+    elements.chapterActions.innerHTML = secondaryActions
       .map(
         (action) => `
           <a href="${resolveSitePath(action.path)}">
@@ -1500,7 +1464,6 @@ function calculateFraming() {
     10,
   );
   const chapterRect = rectFromElement(elements.chapterPanel, compact ? 16 : 24);
-  const locationRect = rectFromElement(elements.locationMark, 14);
   const railRect = rectFromElement(
     document.querySelector(".location-rail"),
     10,
@@ -1518,7 +1481,6 @@ function calculateFraming() {
   const obstacles = [
     topbarRect,
     chapterRect,
-    locationRect,
     railRect,
     abilityRect,
     lookRect,
@@ -1540,7 +1502,7 @@ function calculateFraming() {
       safeRight,
       obstacles: [
         topbarRect,
-        locationRect,
+        chapterRect,
         railRect,
         abilityRect,
         lookRect,
@@ -1627,7 +1589,6 @@ function calculateFraming() {
       preferredTop - 36,
       preferredTop + 32,
       minimumTop + 8,
-      (locationRect?.bottom ?? minimumTop) + 16,
       abilityRect
         ? abilityRect.top - avatarHeight - captionAllowance - 16
         : preferredTop,
@@ -2447,7 +2408,6 @@ async function moveToScene(
 
   clearTransitionPreview();
   state.inspection?.cancel();
-  setFieldNotes(false, { focus: false });
   window.clearTimeout(state.toastTimer);
   elements.toast?.classList.remove("is-visible");
   setLookBack(false);
@@ -2563,21 +2523,12 @@ function travelTo(nextIndex, options) {
   return moveToScene(index, "outer", options);
 }
 
-function opensFieldNotesOnArrival() {
-  return (
-    state.sceneMode === "inner" &&
-    getPilotSetting() !== "chamber" &&
-    getCurrentLocation()?.id !== "archive-echoes"
-  );
-}
-
 async function togglePortal() {
   if (!state.hasBegun || state.isTraversing) return;
   const opening = state.sceneMode === "outer";
   await moveToScene(state.locationIndex, opening ? "inner" : "outer", {
     focusChapter: true,
   });
-  if (opening && opensFieldNotesOnArrival()) setFieldNotes(true);
 }
 
 function selectGuide(guideId) {
@@ -2754,10 +2705,7 @@ function setSceneView(active) {
 
   state.isViewingScene = nextState;
   elements.experience?.classList.toggle("is-viewing-scene", nextState);
-  if (elements.locationMark) elements.locationMark.inert = nextState;
-  setFieldNotes(elements.experience.hasAttribute("data-pilot-notes-open"), {
-    focus: false,
-  });
+  elements.chapterPanel.inert = nextState;
   elements.viewSceneButton?.setAttribute("aria-pressed", String(nextState));
   elements.viewSceneButton?.setAttribute(
     "aria-label",
@@ -2931,14 +2879,10 @@ function beginJourney() {
             '[data-pilot-action="workbench"]',
           )
         : elements.locationName;
-    if (opensFieldNotesOnArrival()) {
-      setFieldNotes(true);
-      return;
-    }
     first?.focus({ preventScroll: true });
   });
   resetIdleTimer();
-  if (getPilotSetting() !== "chamber") {
+  if (getPilotSetting() === "dunes") {
     showToast(
       "Choose a crossing ability, then follow a waypoint or open the atlas.",
       3_400,
@@ -2982,7 +2926,6 @@ function restoreJourneyHash() {
   const { index, mode } = parseInitialLocation();
   if (index === state.locationIndex && mode === state.sceneMode) return;
   closeOpenDialog();
-  setFieldNotes(false, { focus: false });
   setLookBack(false);
   setSceneView(false);
   state.locationIndex = index;
@@ -3142,9 +3085,7 @@ function bindEvents() {
     event.preventDefault();
     const target = !state.hasBegun
       ? elements.beginJourney
-      : elements.experience.hasAttribute("data-pilot-notes-open")
-        ? elements.chapterPanel
-        : elements.locationName;
+      : elements.locationName;
     target?.focus({ preventScroll: true });
   });
   elements.beginJourney?.addEventListener("click", beginJourney);
@@ -3152,14 +3093,9 @@ function bindEvents() {
     travelTo(state.locationIndex - 1),
   );
   elements.nextLocation?.addEventListener("click", advanceForward);
-  elements.portalButton?.addEventListener("click", togglePortal);
   elements.scenePortal?.addEventListener("click", togglePortal);
   elements.pilotWaypoints?.addEventListener("click", activatePilotWaypoint);
   elements.pilotSkip?.addEventListener("click", () => state.crossing?.skip());
-  elements.pilotNotes?.addEventListener("click", () =>
-    setFieldNotes(!elements.experience.hasAttribute("data-pilot-notes-open")),
-  );
-  elements.closeNotes?.addEventListener("click", () => setFieldNotes(false));
   elements.chamberDialog?.addEventListener("change", (event) => {
     if (event.target.matches("input[name='request-role']"))
       renderChamberRequest(event.target);
@@ -3341,11 +3277,10 @@ function bindEvents() {
       return;
     }
     if (
-      event.key === "Escape" &&
-      elements.experience.hasAttribute("data-pilot-notes-open")
+      event.key === "Enter" &&
+      event.target instanceof Element &&
+      event.target.closest("button, a[href], summary")
     ) {
-      event.preventDefault();
-      setFieldNotes(false);
       return;
     }
     if (!state.hasBegun) {

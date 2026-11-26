@@ -48,7 +48,6 @@
   }
 
   .site-header__descriptor {
-    max-inline-size: 31ch;
     margin-block-start: 0.42rem;
     overflow: hidden;
     color: var(--gold-light);

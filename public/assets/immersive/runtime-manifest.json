@@ -76,7 +76,7 @@
           "portrait": [0.615, 0.782, 0.149]
         },
         "name": "Threshold Waystation",
-        "brief": "Inside the waystation, start with three systems I built: MetaPOS Mind, OmniMind and FXPM."
+        "brief": "Start with three of my systems. MetaPOS Mind governs access to company context, OmniMind helps AI work from project evidence, and FXPM explores validation and execution."
       },
       "power": "sand-teleportation",
       "portalAction": "Enter the waystation",
@@ -102,19 +102,22 @@
         ],
         "now": [
           {
-            "status": "Active",
+            "status": "Professional case study",
             "title": "MetaPOS Mind",
-            "detail": "A governed company-state and execution context system that joins product, business and delivery knowledge without overriding core policy."
+            "detail": "Primary developer, AI context and governance engineering",
+            "path": "work/metapos-app-data-management/"
           },
           {
-            "status": "Accepted",
-            "title": "Validation-gate research",
-            "detail": "Simulation and historical evaluation of validation-gate design in a regime-adaptive decision system, accepted for ISM 2026."
+            "status": "Professional case study",
+            "title": "OmniMind",
+            "detail": "System design and AI-assisted implementation",
+            "path": "work/omnimind/"
           },
           {
-            "status": "In development",
-            "title": "Anzania portfolio world",
-            "detail": "A high-quality 2.5D professional narrative that lets visitors choose how they travel through the evidence."
+            "status": "Professional case study",
+            "title": "FXPM: validation and execution",
+            "detail": "System design, validation research and AI-assisted engineering",
+            "path": "work/fxpm-validation-system/"
           }
         ],
         "notes": [
@@ -188,12 +191,12 @@
       "outer": {
         "large": "./scenes/stone-pass-outer-1600.webp",
         "small": "./scenes/stone-pass-outer-960.webp",
-        "brief": "Follow a project update through permission checks and source records."
+        "brief": "Two colleagues can ask the same project question and have access to different records. Enter the Context Chamber to see what MetaPOS Mind returns, what it withholds, and how each answer traces back to its sources."
       },
       "inner": {
         "large": "./scenes/stone-pass-inner-1600.webp",
         "small": "./scenes/stone-pass-inner-960.webp",
-        "brief": "Inspect the fictional request, the source records and the validation step."
+        "brief": "At the working table, try the same fictional project request as two different roles. Use the source books to check the delivery note and readiness checklist behind the answer. The validation scroll shows why the system stops when the evidence is out of scope."
       },
       "power": "reality-bending",
       "portalAction": "Enter the context chamber",
@@ -311,8 +314,8 @@
         "small": "./scenes/garden-origins-outer-960.webp",
         "guideStage": {
           "anchors": [
-            [0.132, 0.729, 0.142],
-            [0.597, 0.674, 0.071]
+            [0.597, 0.674, 0.133],
+            [0.418, 0.73, 0.141]
           ],
           "focusY": 64,
           "light": {
@@ -321,17 +324,18 @@
             "saturation": 0.86,
             "hue": 5,
             "rim": "#d7dcb06b"
-          }
+          },
+          "portrait": [0.597, 0.674, 0.104]
         },
-        "brief": "See how data science training grew into technical mentoring, data engineering and current study."
+        "brief": "The Context Chamber shows what I build. The Garden traces where those skills came from, through data science training, technical mentoring and my current engineering studies."
       },
       "inner": {
         "large": "./scenes/garden-origins-inner-1600.webp",
         "small": "./scenes/garden-origins-inner-960.webp",
         "guideStage": {
           "anchors": [
-            [0.746, 0.747, 0.165],
-            [0.753, 0.669, 0.12]
+            [0.746, 0.747, 0.177],
+            [0.753, 0.669, 0.143]
           ],
           "focusY": 63,
           "light": {
@@ -342,7 +346,7 @@
             "rim": "#e8d49f77"
           }
         },
-        "brief": "The education and credential record traces each step into professional practice."
+        "brief": "Follow the record from my completed Explore AI Academy certificate to technical mentoring at 2U / edX and my current Engineering Management studies at the University of Debrecen."
       },
       "power": "reality-bending",
       "portalAction": "Enter the memory court",
@@ -452,7 +456,8 @@
         "small": "./scenes/archive-echoes-outer-960.webp",
         "guideStage": {
           "anchors": [
-            [0.581, 0.887, 0.132],
+            [0.581, 0.887, 0.118],
+            [0.66, 0.852, 0.107],
             [0.511, 0.862, 0.096]
           ],
           "focusY": 88,
@@ -465,15 +470,15 @@
           },
           "portrait": [0.518, 0.794, 0.09]
         },
-        "brief": "Browse case studies and public code, with my role and the available evidence identified for each."
+        "brief": "Here the focus shifts from my background to my work. Inside, you can compare what is available as public code with what I can show in a case study, and trace a release decision."
       },
       "inner": {
         "large": "./scenes/archive-echoes-inner-1600.webp",
         "small": "./scenes/archive-echoes-inner-960.webp",
         "guideStage": {
           "anchors": [
-            [0.675, 0.854, 0.183],
-            [0.63, 0.82, 0.154]
+            [0.675, 0.854, 0.153],
+            [0.63, 0.82, 0.132]
           ],
           "focusY": 74,
           "light": {
@@ -485,7 +490,7 @@
           },
           "portrait": [0.58, 0.795, 0.125]
         },
-        "brief": "Inspect three Archive objects to see how project claims are sourced, reviewed and bounded."
+        "brief": "Open the scroll shelves to compare public code with client-safe case studies. Use the review instrument to trace the evidence and independent review behind a release decision."
       },
       "power": "sand-teleportation",
       "portalAction": "Open the archive",
@@ -616,15 +621,15 @@
           },
           "portrait": [0.555, 0.797, 0.085]
         },
-        "brief": "Explore retail data pipelines and the checks that make releases and handoffs dependable."
+        "brief": "The foundry is about engineering for bad inputs and difficult handoffs. Start with my retail POS data work, then see how validation and a clear recovery path make failures easier to diagnose."
       },
       "inner": {
         "large": "./scenes/forge-resolve-inner-1600.webp",
         "small": "./scenes/forge-resolve-inner-960.webp",
         "guideStage": {
           "anchors": [
-            [0.363, 0.682, 0.081],
-            [0.125, 0.842, 0.125]
+            [0.777, 0.746, 0.13],
+            [0.874, 0.747, 0.134]
           ],
           "focusY": 98,
           "light": {
@@ -633,9 +638,10 @@
             "saturation": 0.99,
             "hue": -9,
             "rim": "#f48a46a0"
-          }
+          },
+          "portrait": [0.535, 0.641, 0.096]
         },
-        "brief": "See where validation, recovery and human review fit into a release."
+        "brief": "Follow the decisions that help a release hold up under pressure. Reject an invalid input, leave enough evidence to diagnose it, and make the handoff clear to the person responsible for recovery."
       },
       "power": "solar-propulsion",
       "portalAction": "Cross the foundry floor",
@@ -761,7 +767,7 @@
             "rim": "#dab07b64"
           }
         },
-        "brief": "Match a team problem to a deliverable in AI, analytics, engineering or technical mentoring."
+        "brief": "Use this market to match your team's needs with evidence from my work on governed AI, cloud data and analytics that support a decision."
       },
       "inner": {
         "large": "./scenes/bazaar-skill-inner-1600.webp",
@@ -780,7 +786,7 @@
             "rim": "#d2a47468"
           }
         },
-        "brief": "Use the capability map to connect a delivery need to examples of my work."
+        "brief": "Start with a problem your team owns. The capability map connects Python and SQL, cloud workflows, reporting and technical mentoring to examples of how I use them."
       },
       "power": "dune-surfing",
       "portalAction": "Walk the market court",
@@ -894,8 +900,8 @@
         "small": "./scenes/observatory-horizons-outer-960.webp",
         "guideStage": {
           "anchors": [
-            [0.563, 0.715, 0.125],
-            [0.539, 0.736, 0.115]
+            [0.563, 0.715, 0.105],
+            [0.539, 0.736, 0.095]
           ],
           "focusY": 61,
           "light": {
@@ -906,15 +912,15 @@
             "rim": "#a3b5d456"
           }
         },
-        "brief": "Read the accepted validation-gate research and follow the separate work on FXPM execution."
+        "brief": "My accepted ISM 2026 paper studies when a decision system should be allowed to act. The charting chamber puts that research question beside a separate engineering example in FXPM."
       },
       "inner": {
         "large": "./scenes/observatory-horizons-inner-1600.webp",
         "small": "./scenes/observatory-horizons-inner-960.webp",
         "guideStage": {
           "anchors": [
-            [0.673, 0.852, 0.232],
-            [0.72, 0.83, 0.21]
+            [0.673, 0.852, 0.169],
+            [0.72, 0.83, 0.158]
           ],
           "focusY": 68,
           "light": {
@@ -926,7 +932,7 @@
           },
           "portrait": [0.526, 0.799, 0.112]
         },
-        "brief": "Compare the research question with the engineering decisions documented in FXPM."
+        "brief": "Read the ISM 2026 acceptance record and the separate FXPM case study. Compare the validation questions they share, the evidence behind each, and the limits of what it shows."
       },
       "power": "solar-propulsion",
       "portalAction": "Enter the charting chamber",
@@ -1057,7 +1063,7 @@
           },
           "portrait": [0.149, 0.692, 0.077]
         },
-        "brief": "Review my résumé or get in touch about an AI or data systems role."
+        "brief": "This is where the journey turns into a hiring conversation. Contact me about an AI or data problem, or open the résumé or CV you want to share."
       },
       "inner": {
         "large": "./scenes/oasis-audience-inner-1600.webp",
@@ -1077,7 +1083,7 @@
           },
           "portrait": [0.62, 0.799, 0.156]
         },
-        "brief": "Use the contact and document links to take the next step."
+        "brief": "Choose a résumé or CV under either surname, or tell me about the role, the problem your team owns, and the kind of collaboration you need."
       },
       "power": "reality-bending",
       "portalAction": "Enter the hiring pavilion",

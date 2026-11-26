@@ -177,6 +177,23 @@ test.describe("Static View route and accessibility contract", () => {
     }
   });
 
+  test("MetaPOS case study opens the Context Chamber without page errors", async ({
+    page,
+  }) => {
+    const pageErrors: string[] = [];
+    page.on("pageerror", ({ message }) => pageErrors.push(message));
+
+    await page.goto("work/metapos-app-data-management/");
+    await page
+      .getByRole("link", { name: "Explore the Context Chamber" })
+      .click();
+    await page.getByRole("button", { name: /Begin the journey/ }).click();
+
+    await expect(page).toHaveURL(/\/explore\/#context-chamber$/);
+    await expect(page.locator("#location-name")).toHaveText("Context Chamber");
+    expect(pageErrors).toEqual([]);
+  });
+
   test("methodology publishes HowTo metadata and methodology social naming", async ({
     page,
   }) => {
@@ -367,11 +384,13 @@ test.describe("Responsive layout", () => {
       });
       await page.goto("", { waitUntil: "networkidle" });
 
-      const headerState = await page.evaluate(() => {
+      const headerState = await page.evaluate(async () => {
+        await document.fonts.ready;
         const header = document.querySelector(".site-header");
         const desktopNavigation = document.querySelector(".desktop-navigation");
         const mobileNavigation = document.querySelector(".mobile-navigation");
         const utilities = document.querySelector(".site-header__utilities");
+        const descriptor = document.querySelector(".site-header__descriptor");
         const box = header?.getBoundingClientRect();
         const utilityBox = utilities?.getBoundingClientRect();
         return {
@@ -380,6 +399,9 @@ test.describe("Responsive layout", () => {
             document.documentElement.clientWidth,
           headerRight: box?.right ?? 0,
           utilitiesRight: utilityBox?.right ?? 0,
+          descriptorOverflow: descriptor
+            ? descriptor.scrollWidth - descriptor.clientWidth
+            : Number.POSITIVE_INFINITY,
           desktopDisplay: desktopNavigation
             ? getComputedStyle(desktopNavigation).display
             : "none",
@@ -394,6 +416,7 @@ test.describe("Responsive layout", () => {
       expect(headerState.utilitiesRight).toBeLessThanOrEqual(
         scenario.width + 1,
       );
+      expect(headerState.descriptorOverflow).toBeLessThanOrEqual(1);
       expect(headerState.desktopDisplay === "block").toBe(scenario.desktop);
       expect(headerState.mobileDisplay === "block").toBe(!scenario.desktop);
     }

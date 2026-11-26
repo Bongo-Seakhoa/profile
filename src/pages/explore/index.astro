@@ -46,6 +46,19 @@ const structuredData = JSON.stringify({
 <!doctype html>
 <html lang="en" data-view="explore" data-experience-state="loading">
   <head>
+    <style is:inline>
+      @view-transition {
+        navigation: auto;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        ::view-transition-group(*),
+        ::view-transition-old(*),
+        ::view-transition-new(*) {
+          animation: none !important;
+        }
+      }
+    </style>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -269,61 +282,41 @@ const structuredData = JSON.stringify({
           <ol data-location-rail-list></ol>
         </aside>
 
-        <section class="location-mark" aria-labelledby="location-name">
-          <div class="location-mark__overline">
-            <p class="location-mark__number" data-location-number>01</p>
-            <p class="location-mark__region" data-location-region>
-              The Western Reach
-            </p>
-          </div>
-          <h2 id="location-name" data-location-name tabindex="-1">
-            Threshold Dunes
-          </h2>
-          <p class="location-mark__brief" data-scene-brief></p>
-          <a class="location-mark__evidence" data-scene-evidence hidden></a>
-          <div class="location-mark__actions">
-            <button
-              class="scene-action"
-              data-pilot-notes
-              type="button"
-              aria-controls="chapter-content"
-              aria-expanded="false"
-            >
-              <span aria-hidden="true">＋</span> Field notes
-            </button>
-            <button
-              class="scene-action scene-action--portal"
-              data-scene-portal
-              type="button"
-              hidden></button>
-          </div>
-        </section>
-
         <main
           class="chapter-panel"
           id="chapter-content"
           data-chapter-panel
           data-mode="outer"
-          tabindex="-1"
-          aria-labelledby="chapter-title"
-          inert
+          aria-labelledby="location-name"
         >
-          <div class="chapter-panel__toolbar">
-            <span>Field notes</span>
-            <button
-              data-close-notes
-              type="button"
-              aria-label="Close field notes">−</button
-            >
-          </div>
           <div
             class="chapter-panel__body"
             data-chapter-body
             role="region"
-            aria-label="Field notes content"
+            aria-label="Location and project evidence"
             tabindex="0"
           >
-            <div class="chapter-panel__rule" aria-hidden="true"></div>
+            <header class="location-mark">
+              <div class="location-mark__overline">
+                <p class="location-mark__number" data-location-number>01</p>
+                <p class="location-mark__region" data-location-region>
+                  The Western Reach
+                </p>
+              </div>
+              <h2 id="location-name" data-location-name tabindex="-1">
+                Threshold Dunes
+              </h2>
+              <p class="location-mark__brief" data-scene-brief></p>
+              <div class="location-mark__actions">
+                <a class="location-mark__evidence" data-scene-evidence hidden
+                ></a>
+                <button
+                  class="scene-action scene-action--portal"
+                  data-scene-portal
+                  type="button"
+                  hidden></button>
+              </div>
+            </header>
             <div class="chapter-panel__meta">
               <p class="chapter-panel__eyebrow" data-chapter-eyebrow>
                 The point of entry
@@ -344,7 +337,6 @@ const structuredData = JSON.stringify({
               class="chapter-panel__inside"
               data-chapter-inside
               aria-labelledby="inside-title"
-              hidden
             >
               <div class="chapter-panel__inside-header">
                 <div>
@@ -363,7 +355,7 @@ const structuredData = JSON.stringify({
                 class="chapter-panel__tabs"
                 data-chapter-tabs
                 role="tablist"
-                aria-label="Field notes sections"
+                aria-label="Project evidence sections"
               >
               </div>
               <div
@@ -387,15 +379,6 @@ const structuredData = JSON.stringify({
             </section>
             <div class="chapter-panel__evidence" data-chapter-evidence></div>
             <div class="chapter-panel__facts" data-chapter-facts></div>
-            <button class="portal-button" data-portal-button type="button">
-              <span class="portal-button__icon" aria-hidden="true">◎</span>
-              <span class="portal-button__copy">
-                <span data-portal-action>Enter this place</span>
-                <small data-portal-caption>
-                  Open the working map behind the portfolio
-                </small>
-              </span>
-            </button>
           </div>
         </main>
 

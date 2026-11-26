@@ -48,8 +48,8 @@
         ],
         "terms": ["Typically about 3 days"],
         "example": {
-          "label": "MOEMODI manufacturer website",
-          "url": "https://bongo-seakhoa.github.io/moemodi-dev/"
+          "label": "MOEMODI website source on GitHub",
+          "url": "https://github.com/Bongo-Seakhoa/moemodi-dev"
         },
         "order": 3
       },
