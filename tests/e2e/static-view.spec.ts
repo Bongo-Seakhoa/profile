@@ -423,6 +423,51 @@ test.describe("Responsive layout", () => {
   });
 });
 
+test("compact desktop header menus switch without covering document actions", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("");
+
+  const header = page.locator(".site-header");
+  const navigation = header.locator(".mobile-navigation");
+  const navigationToggle = navigation.locator("summary");
+  const documents = header.locator(".header-documents");
+  const documentsToggle = documents.locator("summary");
+  const openMenus = header.locator("details[open]");
+
+  await navigationToggle.click();
+  await expect(navigation).toHaveAttribute("open", "");
+  await documentsToggle.press("Enter");
+  await expect(documents).toHaveAttribute("open", "");
+  await expect(openMenus).toHaveCount(1);
+
+  const curriculumVitae = documents.getByRole("link", {
+    name: "Download Curriculum vitae PDF",
+    exact: true,
+  });
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    curriculumVitae.click(),
+  ]);
+  expect(download.suggestedFilename()).toBe("bongo-seakhoa-cv.pdf");
+  expect(await download.failure()).toBeNull();
+
+  await curriculumVitae.press("Escape");
+  await expect(openMenus).toHaveCount(0);
+  await expect(documentsToggle).toBeFocused();
+
+  await documentsToggle.press("Space");
+  await expect(documents).toHaveAttribute("open", "");
+  await navigationToggle.press("Space");
+  await expect(navigation).toHaveAttribute("open", "");
+  await expect(openMenus).toHaveCount(1);
+
+  await navigation.getByRole("link", { name: "Contact" }).press("Escape");
+  await expect(openMenus).toHaveCount(0);
+  await expect(navigationToggle).toBeFocused();
+});
+
 test.describe("Shareable surname routes", () => {
   test.use({ javaScriptEnabled: false });
   test.beforeEach(async ({ page }) => {

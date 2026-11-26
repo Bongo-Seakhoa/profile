@@ -263,6 +263,17 @@ commandItems.forEach((item) => {
   item.querySelector("a")?.addEventListener("click", () => closeDialog());
 });
 
+header?.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  const disclosure = event.target?.closest?.(
+    'details[name="portfolio-header-menu"][open]',
+  );
+  if (!disclosure) return;
+  event.preventDefault();
+  disclosure.open = false;
+  disclosure.querySelector("summary")?.focus();
+});
+
 document.addEventListener("keydown", (event) => {
   const commandShortcut =
     (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";

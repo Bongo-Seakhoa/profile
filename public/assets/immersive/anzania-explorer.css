@@ -1914,6 +1914,42 @@ input:focus-visible {
   }
 }
 
+@media (1000px <= width <= 1359px) {
+  .experience[data-pilot-setting="chamber"]
+    [data-pilot-action="source-books"]
+    .pilot-waypoint__label {
+    max-width: 5.5rem;
+  }
+}
+
+@media (1000px <= width <= 1180px) {
+  .experience[data-pilot-setting="chamber"]
+    [data-pilot-action="workbench"]
+    .pilot-waypoint__label,
+  .experience[data-pilot-setting="pass"]
+    [data-pilot-action="journey-back"]
+    .pilot-waypoint__label {
+    top: 100%;
+    bottom: auto;
+    right: auto;
+    left: 0;
+    text-align: start;
+    transform: none;
+  }
+
+  .experience[data-pilot-setting="chamber"]
+    [data-pilot-action="workbench"]
+    .pilot-waypoint__label {
+    max-width: 4.65rem;
+  }
+
+  .experience[data-pilot-setting="pass"]
+    [data-pilot-action="journey-back"]
+    .pilot-waypoint__label {
+    max-width: 9rem;
+  }
+}
+
 .experience[data-pilot-setting="chamber"] .scene__foreground {
   visibility: hidden;
 }

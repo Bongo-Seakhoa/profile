@@ -2885,7 +2885,8 @@
   }
 }
 
-.experience-toast {
+.experience-toast,
+.experience-toast.is-visible {
   inset: calc(var(--safe-top) + 83px) var(--safe-right) auto auto;
   transform: none;
 }

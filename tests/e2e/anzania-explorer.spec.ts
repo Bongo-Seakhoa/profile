@@ -397,6 +397,70 @@ test.describe("Explore Anzania release experience", () => {
     });
   }
 
+  test("keeps the normal-motion guide confirmation in bounds on desktop", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "chrome-desktop");
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await beginJourney(page, "context-chamber");
+    await page.locator("[data-guide-button]").click();
+    await page.locator('[data-guide-id="dn-f-afr-02"]').click();
+    const toast = page.locator("[data-experience-toast]");
+    await expect(toast).toContainText("Nia");
+    await expect(toast).toHaveClass(/is-visible/);
+    await expect
+      .poll(() =>
+        toast.evaluate((element) => {
+          const box = element.getBoundingClientRect();
+          return (
+            Number(getComputedStyle(element).opacity) >= 0.99 &&
+            box.left >= 0 &&
+            box.top >= 0 &&
+            box.right <= window.innerWidth &&
+            box.bottom <= window.innerHeight
+          );
+        }),
+      )
+      .toBe(true);
+  });
+
+  for (const { action, name, viewport, below } of [
+    {
+      action: "workbench",
+      name: "Working table",
+      viewport: { width: 1024, height: 768 },
+      below: true,
+    },
+    {
+      action: "source-books",
+      name: "Source books",
+      viewport: { width: 1280, height: 720 },
+      below: false,
+    },
+  ]) {
+    test(`keeps the compact ${name} label attached and clear`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(testInfo.project.name !== "chrome-desktop");
+      await page.setViewportSize(viewport);
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await beginJourney(page, "context-chamber");
+      const waypoint = page.locator(`[data-pilot-action="${action}"]`);
+      const label = waypoint.locator("[data-pilot-label]");
+      await expect(label).toHaveText(name);
+      const labelBox = await label.boundingBox();
+      const pinBox = await waypoint.locator("[data-pilot-pin]").boundingBox();
+      if (!labelBox || !pinBox) throw new Error(`${name} waypoint is missing`);
+      if (below) {
+        expect(labelBox.y).toBeGreaterThanOrEqual(pinBox.y + pinBox.height);
+      } else {
+        expect(labelBox.x + labelBox.width).toBeLessThanOrEqual(pinBox.x);
+      }
+      await label.click();
+      await expect(page.locator("[data-chamber-dialog]")).toBeVisible();
+    });
+  }
+
   test("preserves full-body framing through look-back, traversal and return", async ({
     page,
   }) => {

@@ -71,7 +71,7 @@ function isActive(item: NavigationItem): boolean {
     </nav>
 
     <div class="site-header__utilities">
-      <details class="header-documents">
+      <details class="header-documents" name="portfolio-header-menu">
         <summary class="header-action">Resume &amp; CV</summary>
         <div class="header-documents__menu">
           <a href={sitePath(documentsPath)}>View all documents</a>
@@ -98,7 +98,7 @@ function isActive(item: NavigationItem): boolean {
         )
       }
 
-      <details class="mobile-navigation">
+      <details class="mobile-navigation" name="portfolio-header-menu">
         <summary aria-label="Open navigation menu">Menu</summary>
         <nav aria-label="Primary mobile">
           <ul>
