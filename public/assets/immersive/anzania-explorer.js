@@ -3278,8 +3278,7 @@ function bindEvents() {
     }
     if (
       event.key === "Enter" &&
-      event.target instanceof Element &&
-      event.target.closest("button, a[href], summary")
+      event.target?.closest?.("button, a[href], summary")
     ) {
       return;
     }
