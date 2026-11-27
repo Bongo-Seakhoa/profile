@@ -22,11 +22,15 @@ const sortedProjects = [...content.projects].sort((left, right) => {
     (right.featuredOrder ?? Number.MAX_SAFE_INTEGER)
   );
 });
-const leadProject = sortedProjects[0];
-const selectedProjects = sortedProjects.filter(
-  (project) => project.featured && project.id !== leadProject?.id,
+const [leadProject, ...supportingProjects] = sortedProjects;
+const selectedProjects = supportingProjects.filter(
+  (project) =>
+    project.featured ||
+    (project.status === "public" && project.caseStudyDepth === "full"),
 );
-const archiveProjects = sortedProjects.filter((project) => !project.featured);
+const archiveProjects = supportingProjects.filter(
+  (project) => !selectedProjects.includes(project),
+);
 const methodologies = [...content.methodologies].sort((left, right) =>
   left.title.localeCompare(right.title, "en"),
 );
@@ -128,7 +132,9 @@ const methodologies = [...content.methodologies].sort((left, right) =>
         title="Applied AI and data work"
         description="Public repositories show the code behind selected projects; professional work is summarized with client confidentiality intact."
       />
-      <div class="project-archive-grid work-record-grid">
+      <div
+        class="project-archive-grid work-record-grid work-record-grid--three-column"
+      >
         {
           selectedProjects.map((project) => (
             <ProjectCard project={project} variant="standard" />
@@ -175,7 +181,7 @@ const methodologies = [...content.methodologies].sort((left, right) =>
         description="Earlier work across recommendation, APIs, environmental data and algorithmic trading shows technical range."
       />
       <div
-        class="project-archive-grid work-record-grid work-record-grid--archive"
+        class="project-archive-grid work-record-grid work-record-grid--three-column"
       >
         {
           archiveProjects.map((project) => (
@@ -306,7 +312,7 @@ const methodologies = [...content.methodologies].sort((left, right) =>
     align-items: stretch;
   }
 
-  .work-record-grid--archive {
+  .work-record-grid--three-column {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -325,7 +331,7 @@ const methodologies = [...content.methodologies].sort((left, right) =>
       opacity: 0.15;
     }
 
-    .work-record-grid--archive {
+    .work-record-grid--three-column {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
@@ -336,7 +342,7 @@ const methodologies = [...content.methodologies].sort((left, right) =>
       gap: 0.25rem;
     }
 
-    .work-record-grid--archive {
+    .work-record-grid--three-column {
       grid-template-columns: 1fr;
     }
   }

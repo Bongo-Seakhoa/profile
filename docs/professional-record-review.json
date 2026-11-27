@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "canonicalRoot": "src/data/profile/",
-  "reviewedOn": "2026-11-26",
+  "reviewedOn": "2026-11-27",
   "sourceHashes": {
     "capabilities.json": "da75627090a46fa965373178eb62634dcd4ac6a3c5c5d1e9c4f8c4bb18cb979b",
     "credentials.json": "5ded85f406bb8a5a9baae3d13b8360d34f936f5651e4b7e701fca8b82655d6e9",
@@ -10,9 +10,9 @@
     "experience.json": "e4c0c7f4a99337c31232fd35449ae38cbe59f14236761a2386fe965f25ba237c",
     "identity.json": "6514b13673b688b4473e9810d0412353ab082c148982618fc02f7c2d4b565f72",
     "methodologies.json": "5fc5237a53ed06073666e9e3751d71291277d87331c1d76b5a33e45304431dcf",
-    "projects.json": "880ee2d19d6fcb2cd50a1f7f5d5acd90bad44ef3348407f3c0c40d33753cbcd3",
+    "projects.json": "f7ac4b2920aae59b15f11932f823e99601dae562d53f2f5decbfcb1f95ada402",
     "research.json": "91ae0d8f1a26756afe094d7ae16c3333b413fa0f0831f6c1da6f169ed9d4707e",
-    "routes.json": "4e382ab2184f39c1e7aff3d40d1659b0f5bb07643f9b80f79a82025eacbbe0fd",
+    "routes.json": "027fcc845396a80a611299367d210ee3f0915d73a762a51bb0d8445f224c7f17",
     "services.json": "dc8fd1d7d2884d89a585b05276ddef77379df02a077b897474a97091fce1ea00",
     "site-settings.json": "24401af54468aa483eec0469163686a9af91c90f66b3304ecde7bf22b64976d1",
     "skills.json": "88df9b9b3718afd42b6ca584154f2406335bb659d4bf7e4fe3d2a957ad08606e"

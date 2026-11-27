@@ -321,6 +321,7 @@ export const projectSchema = z
     limitations: z.array(z.string().min(1)),
     technologies: z.array(z.string().min(1)).min(1),
     publicUrl: httpsUrlSchema.nullable(),
+    demoUrl: httpsUrlSchema.optional(),
     problem: z.string().min(1).optional(),
     scale: z.string().min(1).optional(),
     evidenceNotes: z.array(z.string().min(1)).default([]),

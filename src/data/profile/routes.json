@@ -517,5 +517,23 @@
     "entityRef": null,
     "staticRenderable": true,
     "immersiveDestinationId": null
+  },
+  {
+    "id": "project-best-eleven",
+    "path": "work/best-eleven/",
+    "kind": "project",
+    "label": "Best Eleven",
+    "title": "Best Eleven | Bongo Seakhoa",
+    "description": "How Bongo Seakhoa built Best Eleven, a cricket analytics app that turns ball-by-ball data into explainable team selections with a live demo and public code.",
+    "navigation": false,
+    "navigationOrder": null,
+    "sitemap": true,
+    "canonicalRouteId": null,
+    "entityRef": {
+      "collection": "project",
+      "id": "best-eleven"
+    },
+    "staticRenderable": true,
+    "immersiveDestinationId": "project-best-eleven"
   }
 ]

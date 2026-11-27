@@ -367,5 +367,54 @@
     "caseStudyDepth": "full",
     "public": true,
     "lastReviewed": "2026-09-08"
+  },
+  {
+    "id": "best-eleven",
+    "slug": "best-eleven",
+    "title": "Best Eleven",
+    "type": "Cricket analytics and optimisation",
+    "status": "public",
+    "evidenceState": "public-repository",
+    "privacyStatus": "public",
+    "summary": "An interactive cricket analytics app that turns ball-by-ball records and historical career data into explainable team selections by competition, era and roster rules.",
+    "role": "Creator and primary developer",
+    "problem": "A list of the highest-rated cricketers can still leave a team short of a keeper, bowlers or eligible players. Best Eleven makes those constraints explicit and shows how each choice affects the XI.",
+    "scale": "The November 2026 build covers more than 23,000 matches across international formats and franchise competitions, with a separate view for historic international careers.",
+    "constraints": [
+      "Selection must account for playing roles, player availability and applicable roster limits.",
+      "Ball-by-ball coverage varies across eras and competitions. The historical view uses career aggregates when detailed delivery records are unavailable."
+    ],
+    "contributions": [
+      "Built a Python pipeline that ingests Cricsheet deliveries into Parquet, brings in public player and career records, and exports JSON for the browser.",
+      "Built player ratings from the run value of deliveries and adjusted them for opposition and match context. Used data from other formats to help estimate performance when a player has a short record.",
+      "Implemented an exact min-cost-flow solver in JavaScript to find the highest-scoring XI for the selected roles and rules. Added ways to inspect alternatives, swap players and compare two lineups."
+    ],
+    "validation": [
+      "The test suite checks the browser solver against SciPy’s mixed-integer solver across 120 seeded selection scenarios, including cases where no eligible XI exists.",
+      "The data pipeline reconstructs match margins from deliveries and the project reports calibration checks for lineup comparisons on later matches."
+    ],
+    "outcome": "Published a GitHub Pages app with interactive team selection, player profiles, captaincy records and shareable lineup comparisons.",
+    "limitations": [
+      "Lineup recommendations depend on the chosen weights, rules and available records.",
+      "XI vs XI probabilities are experimental estimates for hypothetical matchups. The ratings use adjustments fitted on the full archive, which limits how independently the later matches can test the projections."
+    ],
+    "evidenceNotes": [
+      "Match data comes from Cricsheet. Supplemental player, squad and historical career records come from Wikipedia and Wikidata. The public repository documents the data credits, methodology and validation."
+    ],
+    "technologies": [
+      "Python",
+      "Parquet",
+      "JavaScript",
+      "SciPy",
+      "Min-cost flow"
+    ],
+    "publicUrl": "https://github.com/Bongo-Seakhoa/best-eleven-lab",
+    "demoUrl": "https://bongo-seakhoa.github.io/best-eleven-lab/",
+    "relatedExperienceIds": [],
+    "featured": false,
+    "featuredOrder": null,
+    "caseStudyDepth": "full",
+    "public": true,
+    "lastReviewed": "2026-11-27"
   }
 ]

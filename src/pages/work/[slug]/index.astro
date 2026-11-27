@@ -191,8 +191,19 @@ const workSchema = isMethodology
       <MetadataList items={recordMetadata} />
     </div>
     {
+      project?.demoUrl && project.status !== "archived" && (
+        <ActionLink href={project.demoUrl} newTab>
+          Try the live demo
+        </ActionLink>
+      )
+    }
+    {
       record.publicUrl && project?.status !== "archived" && (
-        <ActionLink href={record.publicUrl} newTab>
+        <ActionLink
+          href={record.publicUrl}
+          variant={project?.demoUrl ? "secondary" : "primary"}
+          newTab
+        >
           {externalLinkLabel}
         </ActionLink>
       )

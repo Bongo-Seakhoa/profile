@@ -56,4 +56,20 @@ test("current professional record is consistent across public surfaces", async (
     fullPage: true,
     animations: "disabled",
   });
+
+  await page.goto("work/");
+  await page
+    .getByRole("region", { name: "Applied AI and data work" })
+    .getByRole("link", { name: "Best Eleven", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/work\/best-eleven\/$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Best Eleven" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /^Try the live demo/ }),
+  ).toHaveAttribute("href", "https://bongo-seakhoa.github.io/best-eleven-lab/");
+  await expect(
+    page.getByRole("link", { name: /^View repository/ }),
+  ).toHaveAttribute("href", "https://github.com/Bongo-Seakhoa/best-eleven-lab");
 });
