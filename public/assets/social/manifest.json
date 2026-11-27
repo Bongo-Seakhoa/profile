@@ -224,6 +224,13 @@
       "path": "assets/social/documents-bongo-kosa.jpg",
       "width": 1200,
       "height": 630
+    },
+    {
+      "routeId": "project-best-eleven",
+      "routePath": "work/best-eleven/",
+      "path": "assets/social/project-best-eleven.jpg",
+      "width": 1200,
+      "height": 630
     }
   ]
 }
